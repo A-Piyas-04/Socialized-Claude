@@ -41,6 +41,50 @@ half that for the reduced `pilot16` run.
 
 ---
 
+## 0b. Faster: let the run assistant handle the files (recommended)
+
+Instead of opening each message file and creating each response file by hand
+(§2 and §4), run:
+
+```
+python scripts/run_assistant.py evaluation/runs/pilot-2026-11-01
+```
+
+It asks once for your session settings: surface, model name, thinking setting,
+and operator. Then, for each row, in run-sheet order:
+
+1. It copies the exact message to your clipboard.
+2. In Claude: **New chat** → **Ctrl+V** → **Enter**. Wait for the answer, then
+   click the **copy** button under it.
+3. Back in the terminal, press **Enter**. The assistant saves
+   `responses/<row_id>.md` and fills the row's date, surface, model, thinking
+   setting, and operator.
+4. For skill rows, it also asks what you saw in the activity panel
+   (`y`, `n`, or `u`).
+
+At each batch boundary, it pauses and tells you to switch the skill off or on in
+**Customize → Skills**. It continues only after you type `ok`.
+
+Other commands at the `>` prompt:
+
+| Key | Action |
+|---|---|
+| `c` | Copy the message again |
+| `n <text>` | Add a note, e.g. `n regenerated once after a network error` |
+| `s` | Skip the row for now |
+| `q` | Quit |
+
+Progress is saved after every row. Rerun the same command to continue. It
+refuses to save if the clipboard still holds the message you sent, holds the
+previous response, or is empty.
+
+It never touches Claude's website. It only uses your clipboard and the files in
+the run folder. The rules in §1–§4 (new chat per row, no regenerating, same
+model) still apply. `--batch skill_off` or `--batch skill_on` limits a session to
+one batch.
+
+---
+
 ## 1. Keep everything except the condition constant
 
 | Setting | Rule |

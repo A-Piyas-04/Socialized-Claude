@@ -155,7 +155,9 @@ Full reasoning is in `research/EVIDENCE_AUDIT.md` §6–8. In short:
    tells you whether natural activation is measurable on your surface.
 3. **Generate the reduced pilot:**
    `python scripts/make_run_sheet.py --run-id pilot16 --subset pilot16 --seed 1`.
-   Then follow `evaluation/RUNBOOK.md` §1–4 (64 responses).
+   Then run `python scripts/run_assistant.py evaluation/runs/pilot16`, which
+   copies each message and saves each response for you, while following the
+   rules in `evaluation/RUNBOOK.md` §1–4 (64 responses).
 4. **Validate the run:**
    `python scripts/summarize_results.py evaluation/runs/pilot16 --check-only`.
    Fix every reported gap.

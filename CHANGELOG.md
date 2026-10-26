@@ -1,5 +1,13 @@
 # Changelog
 
+## Unreleased
+
+- Added `scripts/run_assistant.py`, an interactive clipboard helper for
+  manual response collection. It copies each message, saves each copied
+  response, fills the run sheet, pauses at skill on/off batch boundaries, and
+  can resume. It does not interact with Claude's website. Covered by 14 tests,
+  for 186 in total.
+
 ## 0.1.0 — 2026-10-26 (V0, experimental)
 
 First implementation. Not yet evaluated in Claude.

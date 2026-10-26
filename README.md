@@ -40,7 +40,7 @@ evaluation/                   Manual, no-API evaluation framework (see evaluatio
   EVALUATION_PLAN.md, RUBRIC.md, BASELINE_INSTRUCTIONS.md, RUNBOOK.md
   TEST_CASES.json             33 held-out cases
   comprehension/              Human pre/post/transfer protocol and item bank
-scripts/                      validate_skill, package_skill, make_run_sheet,
+scripts/                      validate_skill, package_skill, make_run_sheet, run_assistant,
                               prepare_blind_packet, summarize_results, assign_comprehension
 tests/                        Offline tests (pytest)
 docs/                         INSTALLATION, ARCHITECTURE, LIMITATIONS, DEVELOPMENT_REPORT
@@ -74,7 +74,7 @@ what is provisional.
 
 ```
 pip install -r requirements-dev.txt
-python -m pytest                          # 172 tests
+python -m pytest                          # 186 tests
 python scripts/validate_skill.py          # validate the skill source
 python scripts/package_skill.py           # rebuild dist/explanation-lab.zip (deterministic)
 python scripts/validate_skill.py dist/explanation-lab.zip

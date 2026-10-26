@@ -28,7 +28,7 @@ automates the Claude interface.
 ```
 python scripts/package_skill.py                                   # build dist/explanation-lab.zip
 python scripts/make_run_sheet.py --run-id pilot-1 --seed 1        # run sheet + exact messages
-#   ... generate responses by hand, following RUNBOOK.md ...
+python scripts/run_assistant.py evaluation/runs/pilot-1           # clipboard helper while you chat in Claude
 python scripts/summarize_results.py evaluation/runs/pilot-1 --check-only
 python scripts/prepare_blind_packet.py evaluation/runs/pilot-1 --raters r1,r2
 #   ... raters fill blind/ratings/*.csv using RUBRIC.md ...
