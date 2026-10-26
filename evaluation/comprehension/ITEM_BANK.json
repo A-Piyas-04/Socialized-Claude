@@ -1,0 +1,319 @@
+{
+  "version": "0.1.0",
+  "status": "Draft items. Not yet screened with participants. Run the item-screening step in PROTOCOL.md before the pilot; drop or revise items that most unexposed screeners answer correctly.",
+  "design_rules": [
+    "Items require using the mechanism (predict, transfer, correct a misconception), not recalling a term.",
+    "Pre-test and post-test use parallel items with different surface details, to limit testing effects.",
+    "Distractors encode documented misconceptions, so wrong answers are diagnostic.",
+    "Items were written before any explanation was generated and must not be edited after seeing explanations."
+  ],
+  "topics": [
+    {
+      "topic_id": "noise_cancel",
+      "stimulus_question": "How do noise-cancelling headphones cancel out sound?",
+      "audience": "General adult with no physics background",
+      "items": [
+        {
+          "item_id": "nc_pre_1", "phase": "pre", "type": "mechanism", "format": "mc",
+          "stem": "Active noise-cancelling headphones reduce the noise you hear mainly by:",
+          "options": [
+            "Playing a sound wave that is the inverse of the incoming noise, so the two cancel",
+            "Playing a louder sound that covers the noise up",
+            "Sealing your ear more tightly than ordinary headphones",
+            "Filtering the electrical signal of the music you are playing"
+          ],
+          "correct_index": 0,
+          "misconceptions": {"1": "masking", "2": "passive_isolation_only", "3": "signal_filtering"}
+        },
+        {
+          "item_id": "nc_pre_2", "phase": "pre", "type": "prediction", "format": "mc",
+          "stem": "Which sound would active noise cancellation reduce MOST effectively?",
+          "options": [
+            "The steady low hum of an aeroplane engine",
+            "A sudden door slam",
+            "A person talking next to you",
+            "All of these equally"
+          ],
+          "correct_index": 0,
+          "misconceptions": {"3": "cancels_everything_equally"}
+        },
+        {
+          "item_id": "nc_pre_3", "phase": "pre", "type": "transfer", "format": "mc",
+          "stem": "Suppose the headphones' anti-noise signal reached your ear delayed by half a wave cycle of the noise. What would happen to that noise?",
+          "options": [
+            "It would get louder",
+            "It would be cancelled even better",
+            "Nothing would change",
+            "Its pitch would change"
+          ],
+          "correct_index": 0,
+          "misconceptions": {"1": "any_added_wave_cancels", "2": "timing_irrelevant"}
+        },
+        {
+          "item_id": "nc_post_1", "phase": "post", "type": "mechanism", "format": "mc",
+          "parallel_of": "nc_pre_1",
+          "stem": "Two identical sound waves meet, but one is shifted so that its peaks line up with the other's troughs. What do you hear?",
+          "options": [
+            "Much less sound, ideally silence",
+            "Twice as much sound",
+            "The same sound at a higher pitch",
+            "The same as one wave alone"
+          ],
+          "correct_index": 0,
+          "misconceptions": {"1": "waves_always_add", "3": "no_interference"}
+        },
+        {
+          "item_id": "nc_post_2", "phase": "post", "type": "prediction", "format": "mc",
+          "parallel_of": "nc_pre_2",
+          "stem": "Why do noise-cancelling headphones do a worse job on a baby crying than on a fridge hum?",
+          "options": [
+            "The crying changes quickly and has higher frequencies, so small timing errors in the anti-noise spoil the cancellation",
+            "The crying is simply too loud to cancel",
+            "Human voices cannot be cancelled by any physical process",
+            "The headphones only work on sounds coming from in front of you"
+          ],
+          "correct_index": 0,
+          "misconceptions": {"1": "loudness_limit", "2": "voices_special"}
+        },
+        {
+          "item_id": "nc_post_3", "phase": "post", "type": "transfer", "format": "mc",
+          "stem": "A carmaker wants to quieten the low engine hum inside the cabin using the car's own speakers. What would the system need?",
+          "options": [
+            "Microphones to measure the hum and electronics to play an inverted copy of it through the speakers in time",
+            "Louder music to drown out the hum",
+            "Thicker windows and nothing else",
+            "Speakers playing steady white noise"
+          ],
+          "correct_index": 0,
+          "misconceptions": {"1": "masking", "2": "passive_isolation_only", "3": "masking"}
+        },
+        {
+          "item_id": "nc_post_4", "phase": "post", "type": "misconception", "format": "mc",
+          "stem": "A friend says: 'Noise-cancelling headphones play extra sound, so your ears must be receiving more sound energy overall.' What is the best response?",
+          "options": [
+            "The added wave cancels the incoming wave at your ear, so the pressure changes reaching your eardrum are smaller",
+            "Your friend is right; that is why they can tire your ears",
+            "The extra sound is too high-pitched for you to hear, so it doesn't count",
+            "The headphones absorb the noise into their battery"
+          ],
+          "correct_index": 0,
+          "misconceptions": {"1": "more_sound_more_energy_at_ear", "2": "inaudible_masking"}
+        },
+        {
+          "item_id": "nc_explain", "phase": "post", "type": "explain", "format": "free_text",
+          "stem": "In two or three sentences, explain to a friend how noise-cancelling headphones cancel sound.",
+          "rubric": {
+            "2": "Mentions BOTH that the headphones measure the incoming sound (microphone) AND that they produce an opposite or inverted wave that cancels it by interference.",
+            "1": "Mentions one of the two elements, or both but with a significant confusion.",
+            "0": "Neither element, or describes masking or physical sealing as the mechanism."
+          }
+        }
+      ]
+    },
+    {
+      "topic_id": "fridge",
+      "stimulus_question": "How does a refrigerator keep food cold, if it runs on electricity?",
+      "audience": "General adult with no physics background",
+      "items": [
+        {
+          "item_id": "fr_pre_1", "phase": "pre", "type": "mechanism", "format": "mc",
+          "stem": "Where does the heat removed from the food inside a refrigerator go?",
+          "options": [
+            "It is released into the kitchen, mostly through coils at the back or bottom",
+            "It is destroyed inside the cooling unit",
+            "It is stored permanently in the refrigerant",
+            "Nowhere: a fridge adds cold rather than removing heat"
+          ],
+          "correct_index": 0,
+          "misconceptions": {"1": "heat_destroyed", "2": "heat_stored", "3": "cold_added"}
+        },
+        {
+          "item_id": "fr_pre_2", "phase": "pre", "type": "mechanism", "format": "mc",
+          "stem": "Inside the fridge, the refrigerant absorbs heat mainly when it:",
+          "options": [
+            "Evaporates from a liquid into a gas",
+            "Freezes into a solid",
+            "Reacts chemically with the air",
+            "Is squeezed by the compressor"
+          ],
+          "correct_index": 0,
+          "misconceptions": {"1": "freezing_absorbs", "3": "compression_cools"}
+        },
+        {
+          "item_id": "fr_pre_3", "phase": "pre", "type": "prediction", "format": "mc",
+          "stem": "A fridge is left running with its door wide open in a closed, well-insulated room for several hours. The room will:",
+          "options": [
+            "Get slightly warmer",
+            "Get cooler",
+            "Stay at the same temperature"
+          ],
+          "correct_index": 0,
+          "misconceptions": {"1": "cold_added", "2": "ignores_energy_input"}
+        },
+        {
+          "item_id": "fr_post_1", "phase": "post", "type": "mechanism", "format": "mc",
+          "parallel_of": "fr_pre_1",
+          "stem": "Why are the coils on the back of a working fridge warm?",
+          "options": [
+            "They release the heat carried out of the inside, plus heat from the compressor's work",
+            "They are heaters that stop the fridge from freezing",
+            "They are only warmed by electrical wiring losses",
+            "They are warmed by the kitchen air around them"
+          ],
+          "correct_index": 0,
+          "misconceptions": {"1": "heater_coils", "2": "wiring_only"}
+        },
+        {
+          "item_id": "fr_post_2", "phase": "post", "type": "transfer", "format": "mc",
+          "parallel_of": "fr_pre_2",
+          "stem": "Rubbing alcohol on your skin feels cold even when the bottle is at room temperature. Why?",
+          "options": [
+            "As the alcohol evaporates, it absorbs heat from your skin",
+            "Alcohol is naturally colder than water",
+            "It reacts chemically with your skin",
+            "It blocks the nerves that sense warmth"
+          ],
+          "correct_index": 0,
+          "misconceptions": {"1": "substance_is_cold", "3": "nerve_blocking"}
+        },
+        {
+          "item_id": "fr_post_3", "phase": "post", "type": "transfer", "format": "mc",
+          "parallel_of": "fr_pre_3",
+          "stem": "A heat pump warms a house in winter using the same kind of cycle as a fridge. Where does the heat it delivers come mainly from?",
+          "options": [
+            "Heat taken from the colder outdoor air (or ground) and moved indoors, plus the work done by the compressor",
+            "Only from turning electricity into heat, like a toaster",
+            "From the house's own walls",
+            "From burning the refrigerant"
+          ],
+          "correct_index": 0,
+          "misconceptions": {"1": "resistive_heating_only", "3": "combustion"}
+        },
+        {
+          "item_id": "fr_post_4", "phase": "post", "type": "misconception", "format": "mc",
+          "stem": "A friend says: 'A fridge works by making cold and pumping it into the box.' What is the best correction?",
+          "options": [
+            "A fridge moves heat out of the box and releases it outside; 'cold' just means less heat",
+            "That is correct",
+            "It makes cold using a block of ice inside the walls",
+            "It removes the air from the box"
+          ],
+          "correct_index": 0,
+          "misconceptions": {"1": "cold_added", "2": "ice_inside", "3": "vacuum"}
+        },
+        {
+          "item_id": "fr_explain", "phase": "post", "type": "explain", "format": "free_text",
+          "stem": "In two or three sentences, explain to a friend how a fridge keeps food cold.",
+          "rubric": {
+            "2": "Explains that heat is MOVED from inside to outside, AND that a refrigerant absorbs heat inside (evaporating) and releases it outside (condensing), driven by the compressor.",
+            "1": "States that heat is moved out, without the refrigerant cycle; or describes the cycle without the heat-moving idea.",
+            "0": "Says the fridge makes or adds cold, or gives no mechanism."
+          }
+        }
+      ]
+    },
+    {
+      "topic_id": "gps",
+      "stimulus_question": "Why does a GPS receiver need signals from at least four satellites to work out where it is?",
+      "audience": "General adult with no physics or engineering background",
+      "items": [
+        {
+          "item_id": "gps_pre_1", "phase": "pre", "type": "mechanism", "format": "mc",
+          "stem": "A GPS receiver works out its distance to a satellite mainly by:",
+          "options": [
+            "Measuring how long the satellite's signal took to arrive",
+            "Measuring how strong the satellite's signal is",
+            "Having the satellite detect the receiver with radar",
+            "Reading a map stored on the satellite"
+          ],
+          "correct_index": 0,
+          "misconceptions": {"1": "signal_strength", "2": "satellite_tracks_receiver"}
+        },
+        {
+          "item_id": "gps_pre_2", "phase": "pre", "type": "mechanism", "format": "mc",
+          "stem": "Why does GPS need at least four satellites rather than three?",
+          "options": [
+            "The receiver's clock is not precise enough, so a fourth measurement is needed to work out the clock error as well as the position",
+            "One satellite is always kept as a backup",
+            "Three satellites cannot cover the whole Earth",
+            "Each satellite provides only one of the coordinates"
+          ],
+          "correct_index": 0,
+          "misconceptions": {"1": "backup", "2": "coverage", "3": "one_coordinate_each"}
+        },
+        {
+          "item_id": "gps_pre_3", "phase": "pre", "type": "prediction", "format": "mc",
+          "stem": "If a receiver's clock were wrong by one millionth of a second and nothing corrected it, roughly how large would the resulting distance error be?",
+          "options": [
+            "About 300 metres",
+            "About 1 millimetre",
+            "About 1 centimetre",
+            "There would be no effect"
+          ],
+          "correct_index": 0,
+          "misconceptions": {"1": "timing_negligible", "2": "timing_negligible", "3": "timing_irrelevant"}
+        },
+        {
+          "item_id": "gps_post_1", "phase": "post", "type": "mechanism", "format": "mc",
+          "parallel_of": "gps_pre_1",
+          "stem": "A satellite's signal says when it was sent, and the receiver notes when it arrived. What does the receiver do with the difference?",
+          "options": [
+            "Multiplies it by the signal's speed to get its distance from the satellite",
+            "Uses it to adjust the signal's volume",
+            "Uses it only to identify which satellite sent the signal",
+            "Nothing; the difference is ignored"
+          ],
+          "correct_index": 0,
+          "misconceptions": {"1": "signal_strength", "2": "identification_only"}
+        },
+        {
+          "item_id": "gps_post_2", "phase": "post", "type": "transfer", "format": "mc",
+          "parallel_of": "gps_pre_2",
+          "stem": "Imagine a receiver with a perfect clock, exactly synchronized with the satellites. In principle, how many satellites would it need for a 3D position?",
+          "options": [
+            "Three",
+            "Four",
+            "Two",
+            "One"
+          ],
+          "correct_index": 0,
+          "misconceptions": {"1": "four_is_a_fixed_rule", "2": "two_dimensions_only"}
+        },
+        {
+          "item_id": "gps_post_3", "phase": "post", "type": "transfer", "format": "mc",
+          "parallel_of": "gps_pre_3",
+          "stem": "Why do GPS satellites carry extremely precise atomic clocks?",
+          "options": [
+            "Because the signals travel at the speed of light, so a tiny timing error becomes a large distance error",
+            "To keep the satellites in their orbits",
+            "To timestamp photos taken by phones",
+            "To save battery power"
+          ],
+          "correct_index": 0,
+          "misconceptions": {"1": "clock_controls_orbit"}
+        },
+        {
+          "item_id": "gps_post_4", "phase": "post", "type": "misconception", "format": "mc",
+          "stem": "A friend says: 'My phone sends a signal up to the GPS satellites so they can tell it where it is.' What is the best correction?",
+          "options": [
+            "GPS satellites only broadcast; the phone works out its own position from the signals it receives",
+            "That is correct",
+            "The satellites use cameras to see where the phone is",
+            "Only mobile phone towers are involved; satellites play no part"
+          ],
+          "correct_index": 0,
+          "misconceptions": {"1": "two_way_gps", "2": "satellite_imaging"}
+        },
+        {
+          "item_id": "gps_explain", "phase": "post", "type": "explain", "format": "free_text",
+          "stem": "In two or three sentences, explain to a friend why a GPS receiver needs at least four satellites.",
+          "rubric": {
+            "2": "Explains that distance comes from signal travel time AND that the receiver's clock error is an extra unknown, so four measurements are needed for three position coordinates plus the clock error.",
+            "1": "Mentions timing or distances but not the clock unknown, or the clock unknown without how distances are measured.",
+            "0": "Gives coverage, backup, or one-coordinate-per-satellite reasons, or no mechanism."
+          }
+        }
+      ]
+    }
+  ]
+}

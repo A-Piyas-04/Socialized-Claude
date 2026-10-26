@@ -94,7 +94,7 @@ def build(variant: str, *, skill_dir: Path = lib.SKILL_DIR, out_dir: Path = lib.
         "zip_sha256": sha256(out_path.read_bytes()),
         "files": {rel: sha256(data) for rel, data in sorted(files.items())},
     }
-    out_path.with_suffix(".manifest.json").write_text(json.dumps(manifest, indent=2) + "\n", encoding="utf-8")
+    out_path.with_suffix(".manifest.json").write_bytes((json.dumps(manifest, indent=2) + "\n").encode("utf-8"))
     return out_path, report
 
 

@@ -1,0 +1,951 @@
+{
+  "version": "0.1.0",
+  "description": "Held-out evaluation prompts for Explanation Lab V0. Topics deliberately avoid the research archive's topics (caching, B-tree indexes, TCP handshake, vaccines, compound interest) and every topic used in the skill's own examples. Send 'question' exactly as written. For follow-up cases, send 'context' and 'question' together as one message, in the format given in RUNBOOK.md.",
+  "fields": {
+    "skill_expectation": "should_apply: an explanation request where the skill's operations are relevant. apply_briefly: explanation is secondary or a short answer is requested. should_not_apply: no teaching should be added.",
+    "expected_length": "one_sentence | short (under ~120 words) | medium (~120-450 words) | long_ok (depth requested or intrinsically multi-step). Guidance for the appropriate-depth rating, not a hard rule."
+  },
+  "cases": [
+    {
+      "id": "found_001",
+      "category": "foundational",
+      "domain": "biology",
+      "difficulty": "beginner",
+      "question": "What is DNA actually doing inside a cell? People call it a 'code', but I don't understand what it's a code for.",
+      "context": null,
+      "audience": "Adult with no biology since secondary school",
+      "skill_expectation": "should_apply",
+      "expected_length": "medium",
+      "expected_properties": [
+        "Explains that DNA stores instructions mainly for building proteins (and functional RNAs)",
+        "Connects gene to RNA to protein in order (transcription, then translation)",
+        "Explains why 'code' fits: sequences of three bases specify amino acids",
+        "Says what proteins do, so the reader knows why the instructions matter"
+      ],
+      "common_misconceptions": [
+        "DNA itself performs the cell's work",
+        "All DNA codes for proteins",
+        "Each gene is a single trait"
+      ],
+      "critical_facts": [
+        {"id": "found_001_cf1", "fact": "Genes are DNA segments that are transcribed into RNA"},
+        {"id": "found_001_cf2", "fact": "Messenger RNA is translated by ribosomes into a chain of amino acids (a protein)"},
+        {"id": "found_001_cf3", "fact": "A codon of three nucleotides specifies one amino acid or a stop signal"},
+        {"id": "found_001_cf4", "fact": "Much of the genome does not code for proteins"}
+      ],
+      "reasoning_gaps": [
+        "Jumping from 'DNA' to 'proteins' without the RNA intermediate",
+        "Using 'gene expression' or 'codon' without introducing them"
+      ]
+    },
+    {
+      "id": "found_002",
+      "category": "foundational",
+      "domain": "economics",
+      "difficulty": "beginner",
+      "question": "What is inflation, and why would printing more money cause it?",
+      "context": null,
+      "audience": "General adult reader with no economics training",
+      "skill_expectation": "should_apply",
+      "expected_length": "medium",
+      "expected_properties": [
+        "Defines inflation as a sustained rise in the general price level, or a fall in what money buys",
+        "Explains the mechanism linking more money to higher prices (more money chasing the same goods)",
+        "Preserves the nuance that the link is not automatic or proportional",
+        "Mentions that inflation has other causes"
+      ],
+      "common_misconceptions": [
+        "Printing money always raises prices immediately and proportionally",
+        "Inflation means every price rises by the same amount",
+        "A single price rising is inflation"
+      ],
+      "critical_facts": [
+        {"id": "found_002_cf1", "fact": "Inflation is a general, sustained rise in prices across the economy"},
+        {"id": "found_002_cf2", "fact": "Money growth that outpaces the economy's output of goods and services tends to push prices up"},
+        {"id": "found_002_cf3", "fact": "The relationship depends on conditions such as spare capacity and how much new money is spent; it is not mechanical"},
+        {"id": "found_002_cf4", "fact": "Inflation can also come from other sources, such as supply shocks or rising demand"}
+      ],
+      "reasoning_gaps": [
+        "Asserting 'more money means higher prices' without saying why",
+        "Dropping the hedge and presenting the relationship as a law"
+      ]
+    },
+    {
+      "id": "found_003",
+      "category": "foundational",
+      "domain": "computer_science",
+      "difficulty": "beginner",
+      "question": "What does a compiler do, and why can't a computer just run my C code directly?",
+      "context": null,
+      "audience": "Someone who has written a little code but never studied how computers execute it",
+      "skill_expectation": "should_apply",
+      "expected_length": "medium",
+      "expected_properties": [
+        "Establishes first that a processor executes only its own machine instructions",
+        "Explains that the compiler translates C into machine code ahead of time",
+        "Explains why the translation is needed (C is written for humans; the CPU decodes binary instructions)",
+        "Optionally contrasts with interpreters without derailing"
+      ],
+      "common_misconceptions": [
+        "The CPU understands C or other programming languages",
+        "Compiling just makes the same text run faster",
+        "A compiled program runs on any processor type"
+      ],
+      "critical_facts": [
+        {"id": "found_003_cf1", "fact": "A CPU executes machine instructions defined by its instruction set architecture"},
+        {"id": "found_003_cf2", "fact": "A compiler translates source code into machine code (often through intermediate steps) before the program runs"},
+        {"id": "found_003_cf3", "fact": "Machine code is specific to a processor architecture (and usually an operating system)"}
+      ],
+      "reasoning_gaps": [
+        "Saying 'translates to machine code' without saying why the CPU needs that",
+        "Introducing assembly, linking, or object files without need"
+      ]
+    },
+    {
+      "id": "found_004",
+      "category": "foundational",
+      "domain": "physics",
+      "difficulty": "beginner",
+      "question": "What is voltage? Every explanation says 'potential difference' and I don't know what that means.",
+      "context": null,
+      "audience": "Adult learner who knows that electricity involves moving charge, but no physics vocabulary",
+      "skill_expectation": "should_apply",
+      "expected_length": "medium",
+      "expected_properties": [
+        "Builds 'potential difference' from energy and charge rather than repeating the phrase",
+        "Explains that voltage is always between two points",
+        "Connects voltage to why current flows when there is a path",
+        "Any analogy (e.g. water pressure or height) states where it breaks"
+      ],
+      "common_misconceptions": [
+        "Voltage flows through a circuit",
+        "Voltage and current are the same thing",
+        "A single point has a voltage with no reference point"
+      ],
+      "critical_facts": [
+        {"id": "found_004_cf1", "fact": "Voltage is the difference in electric potential energy per unit charge between two points (one volt is one joule per coulomb)"},
+        {"id": "found_004_cf2", "fact": "Current flows when a conducting path connects points at different potentials"},
+        {"id": "found_004_cf3", "fact": "Voltage is defined between two points; 'the voltage at a point' implies a reference point such as ground"}
+      ],
+      "reasoning_gaps": [
+        "Using 'potential' or 'electric potential energy' without building it",
+        "Analogy presented as the full truth"
+      ]
+    },
+    {
+      "id": "mech_001",
+      "category": "mechanism",
+      "domain": "physics",
+      "difficulty": "beginner",
+      "question": "Why does a metal spoon feel colder than a wooden spoon when they've both been sitting in the same room?",
+      "context": null,
+      "audience": "Curious adult, no physics background",
+      "skill_expectation": "should_apply",
+      "expected_length": "short",
+      "expected_properties": [
+        "States that both spoons are at the same temperature",
+        "Explains that metal conducts heat away from the skin much faster than wood",
+        "Explains that the sensation of cold reflects heat leaving the skin, not the object's temperature"
+      ],
+      "common_misconceptions": [
+        "The metal spoon is actually colder",
+        "Metal contains or emits 'cold'"
+      ],
+      "critical_facts": [
+        {"id": "mech_001_cf1", "fact": "Objects left in the same room reach the same temperature"},
+        {"id": "mech_001_cf2", "fact": "Metal has much higher thermal conductivity than wood, so it draws heat from warmer skin faster"},
+        {"id": "mech_001_cf3", "fact": "Touch senses the rate of heat loss and skin cooling, not the object's temperature directly"}
+      ],
+      "reasoning_gaps": [
+        "Saying 'metal conducts heat better' without linking that to the sensation",
+        "Omitting that the temperatures are equal"
+      ]
+    },
+    {
+      "id": "mech_002",
+      "category": "mechanism",
+      "domain": "biology",
+      "difficulty": "intermediate",
+      "question": "How do antibiotics kill bacteria without killing our own cells?",
+      "context": null,
+      "audience": "Nursing student who knows basic cell biology",
+      "skill_expectation": "should_apply",
+      "expected_length": "medium",
+      "expected_properties": [
+        "Explains selective toxicity: antibiotics target structures or processes that differ between bacteria and human cells",
+        "Gives at least one concrete target, such as the bacterial cell wall or bacterial ribosome, with how disruption harms the bacterium",
+        "Preserves that selectivity is not perfect (side effects, effects on beneficial bacteria)",
+        "Avoids implying antibiotics work on viruses"
+      ],
+      "common_misconceptions": [
+        "Antibiotics kill viruses",
+        "Antibiotics have no effect on human cells or the microbiome",
+        "Bacteria become resistant because they 'get used to' the drug, rather than resistant variants being selected"
+      ],
+      "critical_facts": [
+        {"id": "mech_002_cf1", "fact": "Many antibiotics target features bacteria have and human cells lack or have in a different form, such as the peptidoglycan cell wall or bacterial 70S ribosomes"},
+        {"id": "mech_002_cf2", "fact": "Beta-lactams such as penicillin interfere with building the peptidoglycan cell wall"},
+        {"id": "mech_002_cf3", "fact": "Antibiotics do not treat viral infections"},
+        {"id": "mech_002_cf4", "fact": "Selectivity is not absolute; antibiotics can cause side effects and harm beneficial bacteria"}
+      ],
+      "reasoning_gaps": [
+        "Asserting 'they target bacteria' without saying what differs",
+        "Naming drug classes without the mechanism"
+      ]
+    },
+    {
+      "id": "mech_003",
+      "category": "mechanism",
+      "domain": "software_engineering",
+      "difficulty": "intermediate",
+      "question": "Why does my program sometimes give the wrong total when two threads increment the same counter variable?",
+      "context": null,
+      "audience": "Developer comfortable with single-threaded code, new to concurrency",
+      "skill_expectation": "should_apply",
+      "expected_length": "medium",
+      "expected_properties": [
+        "Explains that 'counter += 1' is a read-modify-write sequence, not one indivisible step",
+        "Walks through an interleaving where one update is lost",
+        "Explains why it is intermittent (depends on timing)",
+        "Names a fix (lock or atomic operation) and why it works"
+      ],
+      "common_misconceptions": [
+        "It can only happen on multi-core machines",
+        "Adding print statements or sleeps fixes it",
+        "The problem is the variable's data type"
+      ],
+      "critical_facts": [
+        {"id": "mech_003_cf1", "fact": "Incrementing a shared variable usually involves separate read, add, and write steps"},
+        {"id": "mech_003_cf2", "fact": "If two threads interleave those steps, one increment can overwrite the other and be lost"},
+        {"id": "mech_003_cf3", "fact": "A mutex or an atomic increment makes the update indivisible with respect to other threads"},
+        {"id": "mech_003_cf4", "fact": "The outcome depends on scheduling, so the bug appears intermittently"}
+      ],
+      "reasoning_gaps": [
+        "Saying 'race condition' without showing the interleaving",
+        "Recommending a lock without explaining what it prevents"
+      ]
+    },
+    {
+      "id": "mech_004",
+      "category": "mechanism",
+      "domain": "chemistry",
+      "difficulty": "beginner",
+      "question": "Why does spreading salt on an icy road make the ice melt?",
+      "context": null,
+      "audience": "General adult",
+      "skill_expectation": "should_apply",
+      "expected_length": "short",
+      "expected_properties": [
+        "Explains that salt dissolves into the thin film of liquid water on the ice",
+        "Explains freezing-point depression: the salt solution freezes at a lower temperature than pure water",
+        "Mentions the temperature limit below which salt stops working",
+        "Does not claim the salt generates heat"
+      ],
+      "common_misconceptions": [
+        "Salt reacts chemically with ice and releases heat",
+        "Salt works at any temperature"
+      ],
+      "critical_facts": [
+        {"id": "mech_004_cf1", "fact": "Dissolved salt lowers the freezing point of water (freezing-point depression)"},
+        {"id": "mech_004_cf2", "fact": "Salt needs some liquid water to dissolve into; ice surfaces usually have a thin liquid layer"},
+        {"id": "mech_004_cf3", "fact": "Sodium chloride stops being effective at low temperatures (theoretical limit about -21 C; practically less effective below roughly -10 C)"}
+      ],
+      "reasoning_gaps": [
+        "'Salt lowers the melting point' with no account of why that melts existing ice",
+        "Omitting the temperature limit"
+      ]
+    },
+    {
+      "id": "mech_005",
+      "category": "mechanism",
+      "domain": "finance",
+      "difficulty": "intermediate",
+      "question": "Why do bond prices fall when interest rates rise?",
+      "context": null,
+      "audience": "Someone who knows what a bond is (a loan that pays fixed interest) but not how bonds are priced",
+      "skill_expectation": "should_apply",
+      "expected_length": "medium",
+      "expected_properties": [
+        "Starts from the fact that an existing bond's coupon payments are fixed",
+        "Explains that when new bonds pay more, buyers will only buy the old bond at a lower price",
+        "Shows (ideally with illustrative numbers) that the lower price raises the old bond's effective yield to market levels",
+        "Optionally notes longer-maturity bonds are more sensitive"
+      ],
+      "common_misconceptions": [
+        "The bond's coupon rate changes when market rates change",
+        "Holding a bond to maturity means losing the principal after a price drop (absent default)"
+      ],
+      "critical_facts": [
+        {"id": "mech_005_cf1", "fact": "A fixed-rate bond's coupon payments do not change after issue"},
+        {"id": "mech_005_cf2", "fact": "Bond prices and yields move in opposite directions"},
+        {"id": "mech_005_cf3", "fact": "Absent default, a bond held to maturity still repays its face value"},
+        {"id": "mech_005_cf4", "fact": "Longer-maturity bonds are generally more sensitive to rate changes"}
+      ],
+      "reasoning_gaps": [
+        "Stating the inverse relationship without the 'competing with new bonds' step",
+        "Using 'yield' or 'duration' without introducing them"
+      ]
+    },
+    {
+      "id": "abst_001",
+      "category": "abstract",
+      "domain": "mathematics",
+      "difficulty": "intermediate",
+      "question": "How can one infinity be bigger than another? What does 'uncountably infinite' actually mean?",
+      "context": null,
+      "audience": "Adult comfortable with school algebra, no university maths",
+      "skill_expectation": "should_apply",
+      "expected_length": "long_ok",
+      "expected_properties": [
+        "Introduces comparing sizes by one-to-one pairing before applying it to infinite sets",
+        "Defines countable as pairable with the natural numbers",
+        "Gives an intuitive version of Cantor's diagonal argument for the real numbers",
+        "Avoids treating infinity as an ordinary number"
+      ],
+      "common_misconceptions": [
+        "Infinity is a single number",
+        "The rational numbers are uncountable because they are dense",
+        "A set with 'more' elements in the everyday sense (like all integers vs even integers) is larger"
+      ],
+      "critical_facts": [
+        {"id": "abst_001_cf1", "fact": "Two sets have the same size (cardinality) if their elements can be paired one-to-one"},
+        {"id": "abst_001_cf2", "fact": "A set is countably infinite if it can be paired one-to-one with the natural numbers"},
+        {"id": "abst_001_cf3", "fact": "The real numbers cannot be listed in such a pairing (Cantor's diagonal argument), so they are uncountable"},
+        {"id": "abst_001_cf4", "fact": "The even numbers and the rational numbers are both countable"}
+      ],
+      "reasoning_gaps": [
+        "Stating 'the reals are uncountable' without the pairing idea",
+        "Presenting the diagonal argument without saying what it contradicts"
+      ]
+    },
+    {
+      "id": "abst_002",
+      "category": "abstract",
+      "domain": "statistics",
+      "difficulty": "intermediate",
+      "question": "What does a p-value actually tell me? I keep seeing p < 0.05 in papers.",
+      "context": null,
+      "audience": "Graduate student in a non-quantitative field reading research papers",
+      "skill_expectation": "should_apply",
+      "expected_length": "medium",
+      "expected_properties": [
+        "Introduces the null hypothesis before the p-value",
+        "Defines the p-value as a probability of data at least this extreme assuming the null (and the model) is true",
+        "Explicitly separates it from the probability that the null hypothesis is true",
+        "Notes that 0.05 is a convention and that p does not measure effect size or importance"
+      ],
+      "common_misconceptions": [
+        "p is the probability the null hypothesis is true",
+        "p < 0.05 means the result is important or large",
+        "p > 0.05 proves there is no effect"
+      ],
+      "critical_facts": [
+        {"id": "abst_002_cf1", "fact": "A p-value is the probability, assuming the null hypothesis and model assumptions hold, of results at least as extreme as those observed"},
+        {"id": "abst_002_cf2", "fact": "A p-value is not the probability that the null hypothesis is true"},
+        {"id": "abst_002_cf3", "fact": "The 0.05 threshold is a convention, not a natural boundary"},
+        {"id": "abst_002_cf4", "fact": "A small p-value does not indicate a large or important effect"}
+      ],
+      "reasoning_gaps": [
+        "Using 'null hypothesis' without introducing it",
+        "Defining p correctly then interpreting it incorrectly"
+      ]
+    },
+    {
+      "id": "abst_003",
+      "category": "abstract",
+      "domain": "computer_science",
+      "difficulty": "beginner",
+      "question": "What is recursion, really? I can follow examples, but I don't see why a function that calls itself doesn't just loop forever.",
+      "context": null,
+      "audience": "Beginner programmer who understands functions and if-statements",
+      "skill_expectation": "should_apply",
+      "expected_length": "medium",
+      "expected_properties": [
+        "Explains the base case and that each call works on a smaller or simpler input",
+        "Explains that each call has its own variables (its own frame on the call stack) and returns to its caller",
+        "Traces a small example to show the calls stopping and unwinding",
+        "States what happens without a base case (stack overflow or a recursion limit)"
+      ],
+      "common_misconceptions": [
+        "Recursive calls share the same variables",
+        "Recursion is just a loop with different syntax",
+        "The function restarts from the top and forgets where it was"
+      ],
+      "critical_facts": [
+        {"id": "abst_003_cf1", "fact": "A recursive function needs a base case that returns without recursing"},
+        {"id": "abst_003_cf2", "fact": "Each recursive call must move toward the base case"},
+        {"id": "abst_003_cf3", "fact": "Each call has its own local variables and resumes the caller when it returns"},
+        {"id": "abst_003_cf4", "fact": "Without a reachable base case, calls accumulate until the stack overflows or a recursion limit is hit"}
+      ],
+      "reasoning_gaps": [
+        "Mentioning the base case without explaining why calls reach it",
+        "Not explaining how results flow back up"
+      ]
+    },
+    {
+      "id": "proc_001",
+      "category": "multi_step_process",
+      "domain": "finance",
+      "difficulty": "beginner",
+      "question": "What actually happens, step by step, between me tapping my card at a shop and the payment being approved?",
+      "context": null,
+      "audience": "General adult consumer",
+      "skill_expectation": "should_apply",
+      "expected_length": "long_ok",
+      "expected_properties": [
+        "Orders the participants (card, terminal, merchant's acquirer or processor, card network, issuing bank) before or as the steps use them",
+        "Explains that the issuer decides (funds or credit available, fraud checks)",
+        "Distinguishes authorization (seconds) from settlement (later)",
+        "Explains why the card produces a one-time code rather than sending static data"
+      ],
+      "common_misconceptions": [
+        "Money moves to the merchant at the moment of the tap",
+        "The shop decides whether the payment is approved",
+        "The merchant receives the full card details in a reusable form"
+      ],
+      "critical_facts": [
+        {"id": "proc_001_cf1", "fact": "The authorization request typically travels from the terminal through the merchant's acquirer or processor and the card network to the issuing bank"},
+        {"id": "proc_001_cf2", "fact": "The issuing bank approves or declines the authorization"},
+        {"id": "proc_001_cf3", "fact": "Settlement, the actual transfer of funds, typically happens later than authorization"},
+        {"id": "proc_001_cf4", "fact": "Chip and contactless cards generate a transaction-specific cryptogram, which makes copied data harder to reuse"}
+      ],
+      "reasoning_gaps": [
+        "Listing parties without saying what each one does",
+        "Conflating approval with payment"
+      ]
+    },
+    {
+      "id": "proc_002",
+      "category": "multi_step_process",
+      "domain": "biology",
+      "difficulty": "intermediate",
+      "question": "How does a nerve signal travel along a neuron?",
+      "context": null,
+      "audience": "First-year biology student",
+      "skill_expectation": "should_apply",
+      "expected_length": "medium",
+      "expected_properties": [
+        "Establishes the resting potential before the action potential",
+        "Orders the steps: depolarization via sodium channels, repolarization via potassium channels",
+        "Explains propagation: each depolarized patch triggers the next",
+        "Explains myelin's effect (saltatory conduction) and the all-or-none property"
+      ],
+      "common_misconceptions": [
+        "Electrons flow down the axon like current in a wire",
+        "A stronger stimulus makes a bigger action potential",
+        "The signal can travel backwards along the axon as easily"
+      ],
+      "critical_facts": [
+        {"id": "proc_002_cf1", "fact": "At rest the inside of the neuron is negative relative to the outside"},
+        {"id": "proc_002_cf2", "fact": "Voltage-gated sodium channels open, sodium enters, and the membrane depolarizes"},
+        {"id": "proc_002_cf3", "fact": "Potassium leaving the cell repolarizes the membrane"},
+        {"id": "proc_002_cf4", "fact": "Action potentials are all-or-none; stimulus strength is encoded mainly by firing frequency"},
+        {"id": "proc_002_cf5", "fact": "In myelinated axons the signal jumps between nodes of Ranvier (saltatory conduction), which speeds it up"}
+      ],
+      "reasoning_gaps": [
+        "Introducing 'depolarization' before the resting potential",
+        "Saying the signal 'travels' without explaining propagation"
+      ]
+    },
+    {
+      "id": "proc_003",
+      "category": "multi_step_process",
+      "domain": "software_engineering",
+      "difficulty": "intermediate",
+      "question": "How does git actually combine two branches when I run git merge?",
+      "context": null,
+      "audience": "Developer who uses git daily for commits and branches but treats merges as magic",
+      "skill_expectation": "should_apply",
+      "expected_length": "medium",
+      "expected_properties": [
+        "Introduces the merge base (common ancestor) before the three-way comparison",
+        "Explains that each side's changes are computed relative to the base",
+        "Explains when changes combine automatically and when a conflict occurs",
+        "Mentions the fast-forward case and the merge commit with two parents"
+      ],
+      "common_misconceptions": [
+        "Git compares only the two branch tips",
+        "A conflict means one branch is broken",
+        "Git merges by commit timestamps"
+      ],
+      "critical_facts": [
+        {"id": "proc_003_cf1", "fact": "Git finds a merge base, a common ancestor commit of the two branches"},
+        {"id": "proc_003_cf2", "fact": "A three-way merge compares each branch's version against the merge base"},
+        {"id": "proc_003_cf3", "fact": "Changes to different parts combine automatically; overlapping changes to the same lines produce a conflict"},
+        {"id": "proc_003_cf4", "fact": "If the current branch has no new commits, git can fast-forward instead of creating a merge commit"}
+      ],
+      "reasoning_gaps": [
+        "Explaining conflicts without the merge base",
+        "Using 'three-way merge' as a label without saying what the three versions are"
+      ]
+    },
+    {
+      "id": "comp_001",
+      "category": "comparison",
+      "domain": "computer_science",
+      "difficulty": "intermediate",
+      "question": "What's the difference between a process and a thread, and when would I use each?",
+      "context": null,
+      "audience": "Developer who has written single-threaded programs",
+      "skill_expectation": "should_apply",
+      "expected_length": "medium",
+      "expected_properties": [
+        "Identifies memory sharing as the central difference",
+        "Derives the tradeoffs from it: cheap communication versus isolation, and synchronization needs",
+        "Gives decision guidance tied to those tradeoffs"
+      ],
+      "common_misconceptions": [
+        "Threads always make a program faster",
+        "Processes cannot communicate",
+        "Threads in a process have separate memory"
+      ],
+      "critical_facts": [
+        {"id": "comp_001_cf1", "fact": "Each process has its own address space; threads of one process share it"},
+        {"id": "comp_001_cf2", "fact": "Threads are generally cheaper to create and switch than processes"},
+        {"id": "comp_001_cf3", "fact": "Shared memory between threads requires synchronization to avoid data races"},
+        {"id": "comp_001_cf4", "fact": "Process isolation means one process crashing usually does not corrupt another"}
+      ],
+      "reasoning_gaps": [
+        "A feature table without the shared-memory cause",
+        "Advice not linked to the tradeoffs"
+      ]
+    },
+    {
+      "id": "comp_002",
+      "category": "comparison",
+      "domain": "physics",
+      "difficulty": "beginner",
+      "question": "What's the difference between AC and DC electricity, and why does the power grid use AC?",
+      "context": null,
+      "audience": "General adult",
+      "skill_expectation": "should_apply",
+      "expected_length": "medium",
+      "expected_properties": [
+        "Defines both in terms of current direction",
+        "Explains that transformers change AC voltage easily",
+        "Explains why high voltage reduces transmission losses for the same power",
+        "Preserves the nuance that DC is also used, e.g. high-voltage DC links"
+      ],
+      "common_misconceptions": [
+        "AC was chosen because it is safer",
+        "DC cannot be transmitted over long distances at all"
+      ],
+      "critical_facts": [
+        {"id": "comp_002_cf1", "fact": "DC flows in one direction; AC reverses direction periodically (50 or 60 times a second on most grids)"},
+        {"id": "comp_002_cf2", "fact": "Transformers can raise or lower AC voltage efficiently"},
+        {"id": "comp_002_cf3", "fact": "For the same power, higher voltage means lower current and therefore lower resistive losses in the wires"},
+        {"id": "comp_002_cf4", "fact": "High-voltage DC is used for some long-distance and undersea links"}
+      ],
+      "reasoning_gaps": [
+        "'AC is easier to transmit' without the transformer and loss chain",
+        "Mentioning I-squared-R without explaining it to a general reader"
+      ]
+    },
+    {
+      "id": "comp_003",
+      "category": "comparison",
+      "domain": "statistics",
+      "difficulty": "beginner",
+      "question": "People say correlation isn't causation. How can two things be correlated if one doesn't cause the other?",
+      "context": null,
+      "audience": "General adult who reads news about health studies",
+      "skill_expectation": "should_apply",
+      "expected_length": "medium",
+      "expected_properties": [
+        "Explains at least confounding and reverse causation with concrete cases",
+        "Mentions chance or selection effects",
+        "Explains why randomized experiments help",
+        "Avoids implying correlation is worthless as evidence"
+      ],
+      "common_misconceptions": [
+        "Correlation is never evidence of causation",
+        "A strong correlation proves causation"
+      ],
+      "critical_facts": [
+        {"id": "comp_003_cf1", "fact": "A third factor (a confounder) can cause both variables"},
+        {"id": "comp_003_cf2", "fact": "The causal direction can run the opposite way from the one assumed"},
+        {"id": "comp_003_cf3", "fact": "Randomly assigning a treatment balances confounders on average, which supports causal conclusions"},
+        {"id": "comp_003_cf4", "fact": "Correlation can still be evidence that warrants causal investigation"}
+      ],
+      "reasoning_gaps": [
+        "Naming 'confounding' without an example",
+        "Not saying how causation is established instead"
+      ]
+    },
+    {
+      "id": "comp_004",
+      "category": "comparison",
+      "domain": "computer_science",
+      "difficulty": "intermediate",
+      "question": "What's the difference between lossless and lossy compression, and why can lossy files be so much smaller?",
+      "context": null,
+      "audience": "Tech-savvy user who edits photos and audio",
+      "skill_expectation": "should_apply",
+      "expected_length": "medium",
+      "expected_properties": [
+        "Explains that lossless compression exploits redundancy and reconstructs the original exactly",
+        "Explains that lossy compression discards information judged least noticeable",
+        "Explains why discarding information allows much smaller files (there is a limit to lossless compression)",
+        "Mentions a consequence such as generational loss from repeated re-encoding"
+      ],
+      "common_misconceptions": [
+        "Lossless compression can shrink any file",
+        "Lossy compression removes data at random",
+        "Converting a lossy file to a lossless format restores quality"
+      ],
+      "critical_facts": [
+        {"id": "comp_004_cf1", "fact": "Lossless compression lets the original data be reconstructed exactly"},
+        {"id": "comp_004_cf2", "fact": "Lossless compression works by removing redundancy and cannot shrink every possible input"},
+        {"id": "comp_004_cf3", "fact": "Lossy compression discards information, typically chosen using models of human perception"},
+        {"id": "comp_004_cf4", "fact": "Discarded information cannot be recovered by converting to a lossless format"}
+      ],
+      "reasoning_gaps": [
+        "Saying lossy 'removes data' without why it can remove more",
+        "Format lists (PNG, JPEG, MP3) without the mechanism"
+      ]
+    },
+    {
+      "id": "follow_001",
+      "category": "follow_up",
+      "domain": "mathematics",
+      "difficulty": "beginner",
+      "question": "I get that multiplying by -1 flips a number to the other side of zero, but why does flipping twice give a positive? It still feels like a rule I'm supposed to just memorize.",
+      "context": "Earlier you explained: \"Multiplying by -1 flips a number to the opposite side of zero on the number line, so -1 times 3 is -3.\"",
+      "audience": "Adult relearning school maths",
+      "skill_expectation": "should_apply",
+      "expected_length": "short",
+      "expected_properties": [
+        "Addresses only the 'flip twice' link without repeating the whole earlier explanation",
+        "Gives a reason rather than restating the rule (for example, two flips return to the start; or a distributive-law argument)",
+        "Ties the answer back to the number-line picture the user already has"
+      ],
+      "common_misconceptions": [
+        "The sign rule is an arbitrary convention",
+        "Negative numbers 'cancel' because two minus signs make a plus sign visually"
+      ],
+      "critical_facts": [
+        {"id": "follow_001_cf1", "fact": "(-1) x (-1) = 1"},
+        {"id": "follow_001_cf2", "fact": "The rule follows from requiring multiplication to distribute over addition (e.g. -1 x (1 + -1) = 0)"}
+      ],
+      "reasoning_gaps": [
+        "Restating the rule as the reason",
+        "Repeating the entire first explanation"
+      ]
+    },
+    {
+      "id": "follow_002",
+      "category": "follow_up",
+      "domain": "physics",
+      "difficulty": "beginner",
+      "question": "But if a satellite is falling, why doesn't it eventually hit the ground? Doesn't gravity win in the end?",
+      "context": "Earlier you explained: \"Satellites stay in orbit because they are falling around the Earth. They move sideways so fast that the ground curves away beneath them as they fall.\"",
+      "audience": "Curious adult",
+      "skill_expectation": "should_apply",
+      "expected_length": "short",
+      "expected_properties": [
+        "Targets the specific gap: at orbital speed the fall matches the Earth's curvature, so the distance to the ground does not shrink",
+        "Explains that in near-vacuum almost nothing slows the satellite down",
+        "Preserves the nuance that low orbits do slowly decay because of thin atmospheric drag"
+      ],
+      "common_misconceptions": [
+        "There is no gravity in orbit",
+        "Satellites need constant engine thrust to keep moving"
+      ],
+      "critical_facts": [
+        {"id": "follow_002_cf1", "fact": "Gravity in low Earth orbit is still roughly 90% of its strength at the surface"},
+        {"id": "follow_002_cf2", "fact": "At orbital speed, the satellite's path curves at the same rate as the Earth's surface curves away"},
+        {"id": "follow_002_cf3", "fact": "Satellites in low orbit experience slight atmospheric drag and their orbits decay over time unless boosted"}
+      ],
+      "reasoning_gaps": [
+        "Claiming orbits last forever (drops the drag caveat)",
+        "Re-explaining orbits from scratch"
+      ]
+    },
+    {
+      "id": "follow_003",
+      "category": "follow_up",
+      "domain": "biology",
+      "difficulty": "beginner",
+      "question": "What does 'like a thermostat' actually mean here? What does my body do when I get too hot?",
+      "context": "Earlier you explained: \"Your body keeps its temperature near 37 C because the hypothalamus works like a thermostat.\"",
+      "audience": "General adult",
+      "skill_expectation": "should_apply",
+      "expected_length": "short",
+      "expected_properties": [
+        "Unpacks the analogy into the negative-feedback loop: sensing, comparison to a set point, and correction",
+        "Names the cooling responses (sweating, widening skin blood vessels) and why they shed heat",
+        "States where the thermostat analogy breaks, e.g. the set point can shift during fever"
+      ],
+      "common_misconceptions": [
+        "The hypothalamus directly heats or cools the body",
+        "Sweat cools by being cold rather than by evaporating"
+      ],
+      "critical_facts": [
+        {"id": "follow_003_cf1", "fact": "Temperature regulation is a negative-feedback loop centred on the hypothalamus"},
+        {"id": "follow_003_cf2", "fact": "Sweating cools the body mainly through evaporation"},
+        {"id": "follow_003_cf3", "fact": "Vasodilation of skin blood vessels increases heat loss from the skin"},
+        {"id": "follow_003_cf4", "fact": "During fever the body's temperature set point is raised"}
+      ],
+      "reasoning_gaps": [
+        "Replacing one analogy with another without the mechanism",
+        "Listing responses without the feedback loop"
+      ]
+    },
+    {
+      "id": "adv_001",
+      "category": "advanced",
+      "domain": "software_engineering",
+      "difficulty": "advanced",
+      "question": "In PostgreSQL, why can a long-running transaction cause table bloat even if it only reads?",
+      "context": null,
+      "audience": "Experienced backend engineer familiar with PostgreSQL and MVCC terminology",
+      "skill_expectation": "apply_briefly",
+      "expected_length": "short",
+      "expected_properties": [
+        "Answers directly at expert level",
+        "Explains that VACUUM cannot remove dead row versions still visible to the oldest active snapshot",
+        "Does not introduce MVCC from scratch",
+        "Optionally gives monitoring or mitigation pointers"
+      ],
+      "common_misconceptions": [
+        "Read-only transactions cannot affect cleanup",
+        "VACUUM FULL is the routine fix"
+      ],
+      "critical_facts": [
+        {"id": "adv_001_cf1", "fact": "Updates and deletes leave dead tuples under MVCC"},
+        {"id": "adv_001_cf2", "fact": "VACUUM cannot remove tuples that may still be visible to the oldest running snapshot (the xmin horizon)"},
+        {"id": "adv_001_cf3", "fact": "A long-running transaction, even a read-only one, can hold back that horizon, so dead tuples accumulate"}
+      ],
+      "reasoning_gaps": [
+        "Tutorial-level MVCC introduction for an expert",
+        "Not naming the snapshot or horizon link"
+      ]
+    },
+    {
+      "id": "adv_002",
+      "category": "advanced",
+      "domain": "mathematics",
+      "difficulty": "advanced",
+      "question": "On a simple quadratic loss, why does gradient descent diverge when the learning rate is too large?",
+      "context": null,
+      "audience": "Machine-learning practitioner comfortable with calculus",
+      "skill_expectation": "apply_briefly",
+      "expected_length": "short",
+      "expected_properties": [
+        "Writes the update for f(x) = (a/2)x^2 and derives x_{k+1} = (1 - eta*a) x_k",
+        "States the divergence condition |1 - eta*a| > 1, i.e. eta > 2/a",
+        "Optionally notes oscillation for 1/a < eta < 2/a and the link to the largest curvature in higher dimensions"
+      ],
+      "common_misconceptions": [
+        "Any learning rate above 1 diverges",
+        "Divergence is caused by numerical precision"
+      ],
+      "critical_facts": [
+        {"id": "adv_002_cf1", "fact": "For f(x) = (a/2)x^2, gradient descent gives x_{k+1} = (1 - eta*a) x_k"},
+        {"id": "adv_002_cf2", "fact": "Iterates diverge when |1 - eta*a| > 1, i.e. eta > 2/a (for a > 0)"},
+        {"id": "adv_002_cf3", "fact": "In higher dimensions the limit is set by the largest eigenvalue of the Hessian"}
+      ],
+      "reasoning_gaps": [
+        "Intuition only, without the one-line derivation the audience expects",
+        "Explaining what gradient descent is"
+      ]
+    },
+    {
+      "id": "adv_003",
+      "category": "advanced",
+      "domain": "biology",
+      "difficulty": "advanced",
+      "question": "Why does Cas9 need a PAM sequence next to its target site?",
+      "context": null,
+      "audience": "Molecular biology researcher",
+      "skill_expectation": "apply_briefly",
+      "expected_length": "short",
+      "expected_properties": [
+        "Explains that Cas9 first recognizes the PAM, then unwinds adjacent DNA to test guide complementarity",
+        "Explains the evolutionary role: distinguishing invading DNA from the bacterium's own CRISPR array",
+        "Does not explain what CRISPR or a guide RNA is"
+      ],
+      "common_misconceptions": [
+        "The PAM is part of the guide RNA",
+        "The PAM is only a lab convenience with no biological role"
+      ],
+      "critical_facts": [
+        {"id": "adv_003_cf1", "fact": "SpCas9 recognizes the PAM 5'-NGG-3' adjacent to the target on the non-target strand"},
+        {"id": "adv_003_cf2", "fact": "PAM binding triggers local unwinding so the guide RNA can interrogate the adjacent sequence"},
+        {"id": "adv_003_cf3", "fact": "Requiring a PAM prevents Cas9 from cutting the bacterium's own CRISPR array, where spacers lack an adjacent PAM"}
+      ],
+      "reasoning_gaps": [
+        "Introductory CRISPR background for an expert",
+        "Only the mechanistic or only the evolutionary reason"
+      ]
+    },
+    {
+      "id": "fact_001",
+      "category": "concise_factual",
+      "domain": "everyday",
+      "difficulty": "beginner",
+      "question": "What's the boiling point of water at sea level in Fahrenheit?",
+      "context": null,
+      "audience": "Anyone",
+      "skill_expectation": "should_not_apply",
+      "expected_length": "one_sentence",
+      "expected_properties": [
+        "Answers 212 F in the first sentence",
+        "Adds at most one short clause of context"
+      ],
+      "common_misconceptions": [],
+      "critical_facts": [
+        {"id": "fact_001_cf1", "fact": "Water boils at 212 F (100 C) at standard sea-level pressure"}
+      ],
+      "reasoning_gaps": []
+    },
+    {
+      "id": "fact_002",
+      "category": "concise_factual",
+      "domain": "history",
+      "difficulty": "beginner",
+      "question": "Who wrote 'On the Origin of Species'?",
+      "context": null,
+      "audience": "Anyone",
+      "skill_expectation": "should_not_apply",
+      "expected_length": "one_sentence",
+      "expected_properties": [
+        "Answers Charles Darwin directly",
+        "Does not add an unrequested explanation of evolution"
+      ],
+      "common_misconceptions": [],
+      "critical_facts": [
+        {"id": "fact_002_cf1", "fact": "Charles Darwin wrote On the Origin of Species, published in 1859"}
+      ],
+      "reasoning_gaps": []
+    },
+    {
+      "id": "fact_003",
+      "category": "concise_factual",
+      "domain": "everyday",
+      "difficulty": "beginner",
+      "question": "In one or two sentences: why do we have leap years?",
+      "context": null,
+      "audience": "Anyone",
+      "skill_expectation": "apply_briefly",
+      "expected_length": "one_sentence",
+      "expected_properties": [
+        "Respects the one-to-two-sentence limit",
+        "Gives the cause: the year is about a quarter-day longer than 365 days, so the calendar would drift against the seasons"
+      ],
+      "common_misconceptions": [
+        "Every fourth year is always a leap year without exception"
+      ],
+      "critical_facts": [
+        {"id": "fact_003_cf1", "fact": "The solar (tropical) year is about 365.24 days"},
+        {"id": "fact_003_cf2", "fact": "Without the extra day the calendar would drift relative to the seasons"}
+      ],
+      "reasoning_gaps": [
+        "Exceeding the requested length"
+      ]
+    },
+    {
+      "id": "neg_001",
+      "category": "negative_control",
+      "domain": "language",
+      "difficulty": "beginner",
+      "question": "Translate into French: \"The meeting has been moved to Thursday afternoon.\"",
+      "context": null,
+      "audience": "Anyone",
+      "skill_expectation": "should_not_apply",
+      "expected_length": "one_sentence",
+      "expected_properties": [
+        "Gives the translation",
+        "No grammar lesson or explanation"
+      ],
+      "common_misconceptions": [],
+      "critical_facts": [
+        {"id": "neg_001_cf1", "fact": "A correct translation, e.g. \"La réunion a été déplacée à jeudi après-midi.\""}
+      ],
+      "reasoning_gaps": []
+    },
+    {
+      "id": "neg_002",
+      "category": "negative_control",
+      "domain": "language",
+      "difficulty": "beginner",
+      "question": "Rewrite this to sound more formal: \"hey, can you send me the report asap?\"",
+      "context": null,
+      "audience": "Anyone",
+      "skill_expectation": "should_not_apply",
+      "expected_length": "one_sentence",
+      "expected_properties": [
+        "Gives one or a few formal rewrites",
+        "No explanation of register unless very brief"
+      ],
+      "common_misconceptions": [],
+      "critical_facts": [
+        {"id": "neg_002_cf1", "fact": "The rewrite keeps the meaning: a polite request to send the report soon"}
+      ],
+      "reasoning_gaps": []
+    },
+    {
+      "id": "neg_003",
+      "category": "negative_control",
+      "domain": "software_engineering",
+      "difficulty": "beginner",
+      "question": "Write a Python function that returns the n-th Fibonacci number using a loop.",
+      "context": null,
+      "audience": "Developer",
+      "skill_expectation": "should_not_apply",
+      "expected_length": "short",
+      "expected_properties": [
+        "Provides working iterative code",
+        "At most a brief note (e.g. on indexing convention); no tutorial on recursion or Fibonacci"
+      ],
+      "common_misconceptions": [],
+      "critical_facts": [
+        {"id": "neg_003_cf1", "fact": "The function returns correct values for small n under its stated indexing convention (e.g. fib(0)=0, fib(1)=1, fib(10)=55)"}
+      ],
+      "reasoning_gaps": []
+    },
+    {
+      "id": "neg_004",
+      "category": "negative_control",
+      "domain": "everyday",
+      "difficulty": "beginner",
+      "question": "Hi! How's your day going?",
+      "context": null,
+      "audience": "Anyone",
+      "skill_expectation": "should_not_apply",
+      "expected_length": "one_sentence",
+      "expected_properties": [
+        "A short, natural greeting reply"
+      ],
+      "common_misconceptions": [],
+      "critical_facts": [],
+      "reasoning_gaps": []
+    },
+    {
+      "id": "mixed_001",
+      "category": "mixed_task",
+      "domain": "software_engineering",
+      "difficulty": "intermediate",
+      "question": "This should return the last n items of a list, but it returns one too many. Fix it and briefly tell me what was wrong.\n\n```python\ndef last_n(items, n):\n    return items[len(items) - n - 1:]\n```",
+      "context": null,
+      "audience": "Python developer",
+      "skill_expectation": "apply_briefly",
+      "expected_length": "short",
+      "expected_properties": [
+        "Provides the fixed code first",
+        "Explains in one or two sentences that the start index should be len(items) - n, because slices start at the given index and include it",
+        "Optionally notes the n = 0 edge case of items[-n:]"
+      ],
+      "common_misconceptions": [
+        "Python slices exclude the start index"
+      ],
+      "critical_facts": [
+        {"id": "mixed_001_cf1", "fact": "items[len(items) - n:] returns the last n items"},
+        {"id": "mixed_001_cf2", "fact": "The original start index is one position too early, so it includes one extra item"}
+      ],
+      "reasoning_gaps": [
+        "A long tutorial on slicing"
+      ]
+    }
+  ]
+}

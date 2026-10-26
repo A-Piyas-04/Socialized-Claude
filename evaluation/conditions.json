@@ -1,0 +1,50 @@
+{
+  "version": "0.1.0",
+  "note": "Machine-readable copy of BASELINE_INSTRUCTIONS.md. tests/test_evaluation_schema.py checks that the two stay identical.",
+  "conditions": {
+    "A_normal": {
+      "batch": "skill_off",
+      "prefix": null,
+      "description": "Normal Claude: the plain question, explanation-lab disabled."
+    },
+    "B_prompt": {
+      "batch": "skill_off",
+      "prefix": "When you answer, explain in a way that helps me genuinely understand, not just\nin a way that is correct:\n- Work out what I'm actually asking and answer that directly.\n- If the explanation depends on ideas I may not know, introduce them briefly\n  before you use them, and skip what I clearly already know.\n- For \"why\" or \"how\" questions, explain the cause and effect: what happens, why,\n  and what follows from it.\n- Use a concrete example only if it genuinely helps, and connect it to the idea.\n- Match the length and depth to my question. Don't pad, and don't add\n  unnecessary detail.\n- Stay accurate. Keep any uncertainty or caveats that matter.",
+      "description": "Optimized generic explanation instruction pasted above the question, explanation-lab disabled."
+    },
+    "C_skill": {
+      "batch": "skill_on",
+      "prefix": null,
+      "description": "Plain question with explanation-lab enabled; natural activation."
+    },
+    "C_skill_explicit": {
+      "batch": "skill_on",
+      "prefix": "Use the explanation-lab skill for this.",
+      "description": "Fixed explicit invocation line, explanation-lab enabled."
+    },
+    "D_skill_text": {
+      "batch": "skill_off",
+      "prefix": "@SKILL_BODY",
+      "separator": "---",
+      "description": "Body of the packaged SKILL.md pasted above the question, explanation-lab disabled. Optional."
+    },
+    "V_core": {"batch": "variant:core", "prefix": "Use the explanation-lab skill for this.", "description": "Ablation: core-only variant installed."},
+    "V_seq": {"batch": "variant:seq", "prefix": "Use the explanation-lab skill for this.", "description": "Ablation: sequencing-only variant installed."},
+    "V_mech": {"batch": "variant:mech", "prefix": "Use the explanation-lab skill for this.", "description": "Ablation: mechanism-only variant installed."},
+    "V_seq_mech": {"batch": "variant:seq-mech", "prefix": "Use the explanation-lab skill for this.", "description": "Ablation: sequencing + mechanism variant installed."},
+    "V_full": {"batch": "variant:full", "prefix": "Use the explanation-lab skill for this.", "description": "Ablation: full (production) skill installed."}
+  },
+  "default_pilot_conditions": ["A_normal", "B_prompt", "C_skill", "C_skill_explicit"],
+  "comparisons": [
+    ["C_skill", "A_normal"],
+    ["C_skill", "B_prompt"],
+    ["C_skill_explicit", "B_prompt"],
+    ["C_skill_explicit", "C_skill"],
+    ["D_skill_text", "C_skill_explicit"],
+    ["V_seq", "V_core"],
+    ["V_mech", "V_core"],
+    ["V_seq_mech", "V_seq"],
+    ["V_seq_mech", "V_mech"],
+    ["V_full", "V_seq_mech"]
+  ]
+}
