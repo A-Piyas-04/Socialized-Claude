@@ -1,0 +1,24 @@
+# Experiment 3 - Single-treatment transformations
+
+Saved runs: **60/60**. Each run used one treatment, Gemini 3.5 Flash-Lite, stages A/B/D, and saved a variant.
+
+| Treatment | Runs | Clean | Warnings | Serious concerns | Median word change |
+| --- | ---: | ---: | ---: | ---: | ---: |
+| T1 | 10 | 7 | 1 | 2 | +54 |
+| T2 | 10 | 9 | 0 | 1 | +0 |
+| T3 | 10 | 1 | 6 | 3 | +212 |
+| T4 | 10 | 3 | 2 | 5 | +95.5 |
+| T5 | 10 | 2 | 0 | 8 | +31 |
+| T6 | 10 | 7 | 1 | 2 | +0 |
+
+## Interpretation
+
+T2 had the most clean audits (9/10). Its TCP ChatGPT variant had a deterministic numeric-change warning and was excluded from the proxy study. This makes T2 a relatively safe *candidate* in this batch, not a demonstrated improvement in comprehension.
+
+A clean verdict means the automated audit detected no issue. It does not verify factual accuracy. Runs with boundary violations or factual warnings are retained in the raw files and should not be counted as clean isolation of that treatment.
+
+The diagnostic columns in `experiment-3-results.csv` describe text changes. The existing Gemini judge gave 5/5 on every dimension for all 30 imported answers, so that judge cannot establish which treatment improved teaching. No human comprehension outcomes exist.
+
+## Files
+
+`experiment-3-results.csv` has one row per saved variant. Each `transform-*.json` includes the full rewrite, per-treatment diff, pipeline stages, and fidelity warnings. Source and variant IDs connect these files to the app database.
