@@ -5,7 +5,8 @@
     "Items require using the mechanism (predict, transfer, correct a misconception), not recalling a term.",
     "Pre-test and post-test use parallel items with different surface details, to limit testing effects.",
     "Distractors encode documented misconceptions, so wrong answers are diagnostic.",
-    "Items were written before any explanation was generated and must not be edited after seeing explanations."
+    "Items were written before any explanation was generated and must not be edited after seeing explanations.",
+    "Options are stored with the correct answer first for authoring convenience. Shuffle the option order when presenting items (see PROTOCOL.md section 6)."
   ],
   "topics": [
     {

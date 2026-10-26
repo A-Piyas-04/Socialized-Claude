@@ -1,0 +1,147 @@
+"""Shared schema, constants and loaders for the evaluation scripts. Standard library only."""
+
+from __future__ import annotations
+
+import csv
+import json
+import re
+import zipfile
+from pathlib import Path
+
+REPO_ROOT = Path(__file__).resolve().parents[1]
+EVAL_DIR = REPO_ROOT / "evaluation"
+RUNS_DIR = EVAL_DIR / "runs"
+TEST_CASES_PATH = EVAL_DIR / "TEST_CASES.json"
+CONDITIONS_PATH = EVAL_DIR / "conditions.json"
+ITEM_BANK_PATH = EVAL_DIR / "comprehension" / "ITEM_BANK.json"
+DIST_ZIP = REPO_ROOT / "dist" / "explanation-lab.zip"
+
+RESULTS_COLUMNS = [
+    "run_id", "row_id", "batch", "order", "case_id", "condition", "sample_index", "message_file",
+    "response_file", "date", "surface", "model_label", "thinking_setting", "skill_zip_sha256",
+    "activation_observed", "activation_evidence", "references_loaded", "operator", "notes",
+]
+# Columns the operator must fill for every generated response.
+RESULTS_REQUIRED = ["date", "surface", "model_label", "thinking_setting", "activation_observed"]
+
+DIMENSIONS = [
+    "prerequisite_sequencing", "mechanistic_clarity", "conceptual_completeness", "directness",
+    "appropriate_depth", "example_effectiveness", "accuracy", "cognitive_load", "responsiveness_to_intent",
+]
+DIMENSIONS_ALLOWING_NA = {"prerequisite_sequencing", "mechanistic_clarity", "example_effectiveness"}
+PRIMARY_DIMENSIONS = ["mechanistic_clarity", "prerequisite_sequencing"]
+
+RATINGS_COLUMNS = [
+    "rater_id", "blind_id", "case_id", *DIMENSIONS,
+    "critical_facts_present", "critical_facts_contradicted", "critical_errors", "minor_errors",
+    "unsupported_certainty", "adherence_violations", "rank_within_case", "suspected_condition_recognized",
+    "rater_notes",
+]
+COUNT_COLUMNS = ["critical_errors", "minor_errors", "unsupported_certainty"]
+
+ADHERENCE_CODES = {
+    "SIGNPOST", "META", "VISIBLE_WORKFLOW", "INTERNAL_LABEL", "TEMPLATE_HEADINGS",
+    "NAMED_NOT_TAUGHT", "PADDING", "HIJACK", "LENGTH_IGNORED", "PATRONIZING",
+}
+ACTIVATION_VALUES = {"yes", "no", "unclear", "na"}
+SKILL_EXPECTATIONS = {"should_apply", "apply_briefly", "should_not_apply"}
+
+BLIND_KEY_COLUMNS = ["blind_id", "row_id", "case_id", "condition", "sample_index"]
+
+COMPREHENSION_RESPONSE_COLUMNS = [
+    "participant_id", "topic_id", "condition", "position", "phase", "item_id", "response", "score",
+    "grader_id", "notes",
+]
+EXPOSURE_COLUMNS = [
+    "participant_id", "topic_id", "condition", "position", "familiarity", "reading_seconds",
+    "stimulus_words", "confidence_after", "perceived_clarity", "delay_days", "attention_flag", "notes",
+]
+ASSIGNMENT_COLUMNS = ["participant_id", "position", "topic_id", "condition"]
+COMPREHENSION_PHASES = {"pre", "post", "delayed"}
+
+SUBSETS = {
+    "pilot16": [
+        "found_001", "found_004", "mech_001", "mech_003", "mech_005", "abst_002", "proc_002", "comp_002",
+        "comp_004", "follow_001", "follow_003", "adv_001", "fact_003", "neg_001", "neg_003", "mixed_001",
+    ],
+    "variance12": [
+        "found_001", "mech_003", "mech_005", "abst_002", "proc_002", "comp_002", "follow_001", "adv_001",
+        "fact_003", "neg_001", "neg_003", "mixed_001",
+    ],
+}
+
+NA_TOKENS = {"na", "n/a"}
+
+
+def load_json(path: Path) -> dict:
+    return json.loads(path.read_text(encoding="utf-8"))
+
+
+def load_cases(path: Path = TEST_CASES_PATH) -> dict[str, dict]:
+    return {case["id"]: case for case in load_json(path)["cases"]}
+
+
+def load_conditions(path: Path = CONDITIONS_PATH) -> dict:
+    return load_json(path)
+
+
+def load_item_bank(path: Path = ITEM_BANK_PATH) -> dict[str, dict]:
+    return {topic["topic_id"]: topic for topic in load_json(path)["topics"]}
+
+
+def read_csv(path: Path) -> tuple[list[str], list[dict]]:
+    with path.open(encoding="utf-8-sig", newline="") as stream:
+        reader = csv.DictReader(stream)
+        rows = [{k: (v or "").strip() for k, v in row.items() if k is not None} for row in reader]
+        return list(reader.fieldnames or []), rows
+
+
+def write_csv(path: Path, columns: list[str], rows: list[dict]) -> None:
+    path.parent.mkdir(parents=True, exist_ok=True)
+    with path.open("w", encoding="utf-8", newline="") as stream:
+        writer = csv.DictWriter(stream, fieldnames=columns, lineterminator="\n")
+        writer.writeheader()
+        for row in rows:
+            writer.writerow({c: row.get(c, "") for c in columns})
+
+
+def template_header(path: Path) -> list[str]:
+    return read_csv(path)[0]
+
+
+def skill_body_from_zip(zip_path: Path = DIST_ZIP) -> str:
+    """The packaged SKILL.md from its first H1 heading onwards (used by condition D)."""
+    with zipfile.ZipFile(zip_path) as archive:
+        text = archive.read("explanation-lab/SKILL.md").decode("utf-8")
+    match = re.search(r"^# ", text, flags=re.MULTILINE)
+    if not match:
+        raise ValueError("packaged SKILL.md has no H1 heading")
+    return text[match.start():].strip()
+
+
+def build_message(case: dict, condition: str, conditions: dict, skill_body: str | None = None) -> str:
+    spec = conditions["conditions"][condition]
+    parts: list[str] = []
+    prefix = spec.get("prefix")
+    if prefix == "@SKILL_BODY":
+        if skill_body is None:
+            raise ValueError("condition D needs the packaged skill body")
+        parts += [skill_body, spec.get("separator", "---")]
+    elif prefix:
+        parts.append(prefix)
+    if case.get("context"):
+        parts.append(case["context"])
+    parts.append(case["question"])
+    return "\n\n".join(parts) + "\n"
+
+
+def word_count(text: str) -> int:
+    return len(re.findall(r"\S+", text))
+
+
+def is_na(value: str) -> bool:
+    return value.strip().lower() in NA_TOKENS
+
+
+def split_list(value: str) -> list[str]:
+    return [item.strip() for item in re.split(r"[;,]", value or "") if item.strip()]

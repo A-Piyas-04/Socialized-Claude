@@ -56,7 +56,7 @@ skill, so that subset is not a random sample of prompts.
 | negative_control | 4 | should_not_apply |
 | mixed_task | 1 | apply_briefly |
 
-The cases cover 11 domains. Topics are disjoint from the research archive's five
+The cases cover 12 domains. Topics are disjoint from the research archive's five
 topics and from every example inside the skill. The test
 `tests/test_test_cases.py::test_cases_are_held_out` checks this with keyword
 lists.
@@ -142,6 +142,12 @@ target. Their guardrails are `accuracy`, `appropriate_depth`, and
 These thresholds are **engineering targets chosen before data collection**, not
 scientifically validated thresholds. Changing them after seeing results must be
 recorded as a deviation.
+
+`summarize_results.py` reports `INSUFFICIENT_DATA` instead of MET or NOT_MET when
+a criterion rests on fewer than 10 cases (S2, S4, S5, S6) or fewer than 6 paired
+participants (S7). This stops a handful of responses from producing a verdict.
+The `--min-cases` option exists for testing and must not be lowered for real
+runs.
 
 | ID | Criterion | Target | Evaluated by |
 |---|---|---|---|

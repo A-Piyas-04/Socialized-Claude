@@ -84,6 +84,13 @@ position. Participants are assigned in order of arrival.
 
 ## 6. Session procedure
 
+**Shuffle the answer options** of every multiple-choice item when presenting it.
+`ITEM_BANK.json` stores the correct option first for authoring convenience, so
+presenting the stored order would give the answer away. Either shuffle per
+participant, or fix one random order per item and record it in the screening log.
+The experimenter scores against the item's key, so shuffling does not affect
+`responses.csv`.
+
 For each participant, in their assigned order of 3 topics:
 
 1. **Familiarity.** "How familiar are you with how [topic] works?" (1 = not at
