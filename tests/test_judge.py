@@ -166,6 +166,16 @@ def test_gemini_sends_key_in_header_not_url():
     assert KEY not in seen[0].full_url and seen[0].get_header("X-goog-api-key") == KEY
 
 
+def test_gemini_rejects_silent_model_reroute():
+    def opener(request, timeout):
+        return FakeResponse(json.dumps({"modelVersion": "gemini-other", "candidates": [
+            {"content": {"parts": [{"text": "{}"}]}}]}).encode())
+
+    backend = jl.GeminiBackend(KEY, "gemini-3.6-flash", min_interval=0, opener=opener, sleep=lambda _: None)
+    with pytest.raises(jl.JudgeError, match="answered with gemini-other"):
+        backend.complete("hi", 0.0)
+
+
 def test_gemini_retries_then_reports_unavailable_without_leaking_key():
     waits = []
 

@@ -24,7 +24,9 @@ import urllib.request
 from pathlib import Path
 from typing import Callable, Protocol
 
-DEFAULT_GEMINI_MODEL = "gemini-3.8-flash"
+# gemini-3.8-flash is listed on the free tier but returned 503 on most calls (2026-10-27); Pro-class
+# models return quota errors on the free tier. 3.6 is the strongest model that sustained a run.
+DEFAULT_GEMINI_MODEL = "gemini-3.6-flash"
 GEMINI_URL = "https://generativelanguage.googleapis.com/v1beta/models/{model}:generateContent"
 KEY_ENV = "GEMINI_API_KEY"
 RETRY_STATUSES = {429, 500, 503}
@@ -90,6 +92,10 @@ class GeminiBackend:
                     self._sleep(self._backoff * (2 ** attempt))
                     continue
                 raise JudgeUnavailable(f"judge unreachable: {exc.reason}") from None
+            served = str(payload.get("modelVersion") or "")
+            if served and not served.startswith(self.model):
+                raise JudgeError(f"requested {self.model} but the service answered with {served}; "
+                                 "set JUDGE_MODEL to the model actually served")
             try:
                 return "".join(p.get("text", "") for p in payload["candidates"][0]["content"]["parts"])
             except (KeyError, IndexError, TypeError):
