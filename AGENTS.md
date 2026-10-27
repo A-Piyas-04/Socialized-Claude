@@ -105,3 +105,14 @@ needs to decide. No progress narrative.
 - Acceptance floor: fact removal is hand-listed (databases, immunology, interest). Caching and TCP
   facts recur across sections and cannot be removed cleanly. The TCP truncation keeps all four
   facts, so it is left out of the fact gate but kept in the pairwise floor.
+- Thresholds frozen by the user: 0.20 flip cutoff, 0.80 floor shares, TCP truncation outside the
+  fact gate. Loosening any of them after data counts as a deviation.
+- Floor adds `formatted_emptier`: the fact-removed text plus headings, bullets and bold. The judge is
+  rejected if it ever prefers it consistently, or if the original wins fewer than 80% of those pairs.
+- Fact removal now covers all five topics, every recurrence included (caching f3, tcp f3 added), as
+  exact edits that must each match once.
+- Keep the fake-judge test pattern: each gate gets a fake judge that fails only that gate
+  (shorter-preferring, position-biased, format-rewarding).
+- Before any Groq run: `scripts/judge_capacity.py --tpd <cap>` measures real tokens per call and
+  projects days. Stop and report if acceptance or the sweep would take more than about 3 days.
+- `answer_first_offset` and `passive_sentence_count` are labelled heuristics and never gate.
