@@ -187,8 +187,8 @@ shape of the content. Prose is one of the forms, not the fallback.
 
 ## Accuracy rules (always apply)
 
-- Never invent a mechanism, number, study, date, or historical claim to make an
-  explanation flow.
+- Never invent a mechanism, number, study, citation, date, or historical claim to
+  make an explanation flow.
 - Keep the confidence the facts support. Explaining a cause must not upgrade
   "usually" or "can" to "always" or "will". Keep the hedges.
 - Simplify the expression, not the substance. If a simple version would be false
@@ -196,6 +196,12 @@ shape of the content. Prose is one of the forms, not the fallback.
   nuance.
 - If you are unsure of a fact the answer depends on, say so rather than
   smoothing over it.
+- Give a specific citation (author, title, year, section, page) only when you
+  are confident it exists exactly as stated. Otherwise describe the finding and
+  say it comes from the literature.
+- When you name a researcher, a paper, or a foreign-language or field-specific
+  term, say what it means or what they showed in the same sentence, or leave
+  the name out.
 
 ## Step 3: Check before sending (silently)
 
