@@ -144,6 +144,18 @@ def test_calibration_withholds_verdicts(run_dir, tmp_path):
     assert {i["condition"] for i in items} == {"A_normal", "C_skill"}
 
 
+def test_acceptance_uses_twenty_stratified_pairs(tmp_path):
+    import judge_acceptance as ja
+    result = ja.acceptance(FakeBackend(), cache_dir=tmp_path / "cache")
+    assert result["pairs"] == 20
+    assert {r["topic"] for r in result["pair_rows"]} == {"caching", "databases", "tcp", "immunology", "interest"}
+    assert result["strata"]["claude-base vs claude-pedagogical"]["pairs"] == 5
+    assert result["max_flip_rate"] == 0.20 and result["accepted"] is True
+    biased = ja.acceptance(FakeBackend(pairwise="always_first"), cache_dir=tmp_path / "cache2")
+    assert biased["flip_rate"] == 1.0 and biased["accepted"] is False
+    assert "REJECTED" in ja.render(biased)
+
+
 # --- Gemini client (no network) ------------------------------------------------
 
 class FakeResponse(io.BytesIO):

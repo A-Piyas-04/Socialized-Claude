@@ -24,9 +24,11 @@ import urllib.request
 from pathlib import Path
 from typing import Callable, Protocol
 
-# gemini-3.8-flash is listed on the free tier but returned 503 on most calls (2026-10-27); Pro-class
-# models return quota errors on the free tier. 3.6 is the strongest model that sustained a run.
-DEFAULT_GEMINI_MODEL = "gemini-3.6-flash"
+# Free tier, 2026-10-27: Pro-class models have no quota, gemini-3.8-flash mostly returns 503, and
+# gemini-3.6-flash is capped at 20 requests/day/model, far below a sweep's ~1,300 calls. 2.5-flash
+# is served with a usable quota; forced-choice pairwise with both-order control, not model strength,
+# is what removes the archive judge's ceiling.
+DEFAULT_GEMINI_MODEL = "gemini-2.5-flash"
 GEMINI_URL = "https://generativelanguage.googleapis.com/v1beta/models/{model}:generateContent"
 KEY_ENV = "GEMINI_API_KEY"
 RETRY_STATUSES = {429, 500, 503}

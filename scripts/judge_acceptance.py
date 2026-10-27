@@ -2,10 +2,13 @@
 
     python scripts/judge_acceptance.py          # writes research/judge_acceptance.{md,json}
 
-Pairwise: Claude vs GPT for each of the 5 questions x 3 prompt styles (15 pairs), every pair
-judged in both presentation orders. The order-flip rate is the judge's own reliability estimate;
-a judge that flips often cannot separate conditions. Fact capture: each answer against the
-archive question's factual_checklist.
+Pairwise, 20 pairs stratified across all 5 topics: Claude vs GPT for each topic x 3 prompt styles
+(15 pairs), plus Claude base vs Claude pedagogical for each topic (5 pairs, so a judge that simply
+prefers one provider cannot look consistent by default). Every pair is judged in both
+presentation orders. The order-flip rate is the judge's own reliability estimate; a judge that
+flips often cannot separate conditions. The acceptance threshold was fixed before any data was
+seen: flip rate <= MAX_FLIP_RATE passes. Fact capture: each answer against the archive
+question's factual_checklist, reported separately and never combined with preference.
 
 The archive is opened read-only and never written. Rerun whenever JUDGE_MODEL changes.
 """
@@ -29,6 +32,7 @@ ARCHIVE_INPUT = es.REPO_ROOT / "research-results-2026-10-26" / "inputs" / "input
 OUT_DIR = es.REPO_ROOT / "research"
 CACHE_DIR = OUT_DIR / "judge_acceptance_cache"
 STYLES = ("base", "tutor", "pedagogical")
+MAX_FLIP_RATE = 0.20
 
 
 def load_archive(path: Path = ARCHIVE_INPUT) -> tuple[dict, list[dict]]:
@@ -56,9 +60,21 @@ def acceptance(backend: jl.Backend, cache_dir: Path = CACHE_DIR, seed: int = 0) 
     pairs = [(f"claude-{style} vs gpt-{style}", index[(cid, "claude", style)], index[(cid, "gpt", style)])
              for cid in sorted(cases) for style in STYLES
              if (cid, "claude", style) in index and (cid, "gpt", style) in index]
+    pairs += [("claude-base vs claude-pedagogical", index[(cid, "claude", "base")],
+               index[(cid, "claude", "pedagogical")]) for cid in sorted(cases)
+              if (cid, "claude", "base") in index and (cid, "claude", "pedagogical") in index]
     pair_rows = jd.run_pairwise(judge, pairs, cases, "pairwise", jd.OVERALL_QUESTION, seed)
+    for row, (_, rx, _) in zip(pair_rows, pairs):
+        row["topic"] = cases[rx["case_id"]]["topic"]
     fact_rows = jd.run_facts(judge, responses, cases)
     flips = sum(r["consistent"] == "no" for r in pair_rows)
+    strata = {}
+    for label in sorted({r["comparison"] for r in pair_rows}):
+        group = [r for r in pair_rows if r["comparison"] == label]
+        consistent = [r for r in group if r["consistent"] == "yes"]
+        strata[label] = {"pairs": len(group), "flips": len(group) - len(consistent),
+                         "x_wins": sum(r["winner"] == "x" for r in consistent),
+                         "y_wins": sum(r["winner"] == "y" for r in consistent)}
     capture: dict[str, list[float]] = defaultdict(list)
     for r in fact_rows:
         capture[r["condition"]].append(r["n_stated"] / r["n_facts"])
@@ -69,8 +85,9 @@ def acceptance(backend: jl.Backend, cache_dir: Path = CACHE_DIR, seed: int = 0) 
         "notice": es.JUDGE_NOTICE,
         "backend": backend.name, "model": backend.model,
         "pairs": len(pair_rows), "order_flips": flips, "flip_rate": flips / len(pair_rows) if pair_rows else None,
-        "consistent_claude_wins": sum(r["winner"] == "x" for r in pair_rows),
-        "consistent_gpt_wins": sum(r["winner"] == "y" for r in pair_rows),
+        "max_flip_rate": MAX_FLIP_RATE,
+        "accepted": bool(pair_rows) and flips / len(pair_rows) <= MAX_FLIP_RATE,
+        "strata": strata,
         "pair_rows": pair_rows,
         "fact_capture_by_condition": {c: {"answers": len(v), "mean": statistics.fmean(v),
                                           "median_words": statistics.median(words[c])}
@@ -87,10 +104,12 @@ def render(result: dict) -> str:
          f"Judge: `{result['backend']}` / `{result['model']}`.", "",
          "## Order-flip rate (the judge's own reliability estimate)", "",
          f"{result['order_flips']} of {result['pairs']} pairs changed verdict when the presentation order was "
-         f"reversed: flip rate **{result['flip_rate']:.2f}**. Consistent verdicts: Claude {result['consistent_claude_wins']}, "
-         f"GPT {result['consistent_gpt_wins']}.", "",
-         "| Pair | first shown | order 1 | order 2 | consistent |", "|---|---|---|---|---|"]
-    L += [f"| {r['x_row'].split('__')[0]} {r['comparison']} | {r['first_shown']} | {r['verdict_order1']} | "
+         f"reversed: flip rate **{result['flip_rate']:.2f}** against a threshold of {result['max_flip_rate']:.2f} "
+         f"fixed before the data was seen: **{'ACCEPTED' if result['accepted'] else 'REJECTED'}**.", "",
+         "| Stratum (x vs y) | pairs | flips | x wins | y wins |", "|---|---:|---:|---:|---:|"]
+    L += [f"| {k} | {v['pairs']} | {v['flips']} | {v['x_wins']} | {v['y_wins']} |" for k, v in result["strata"].items()]
+    L += ["", "| Topic | pair | first shown | order 1 | order 2 | consistent |", "|---|---|---|---|---|---|"]
+    L += [f"| {r['topic']} | {r['comparison']} | {r['first_shown']} | {r['verdict_order1']} | "
           f"{r['verdict_order2']} | {r['consistent']} |" for r in result["pair_rows"]]
     L += ["", "## Fact capture against the archive checklists", "",
           "| Condition | answers | mean fact capture | median words |", "|---|---:|---:|---:|"]
@@ -115,7 +134,7 @@ def main(argv: list[str] | None = None) -> int:
         return 1
     (OUT_DIR / "judge_acceptance.json").write_bytes((json.dumps(result, indent=2) + "\n").encode("utf-8"))
     (OUT_DIR / "judge_acceptance.md").write_bytes(render(result).encode("utf-8"))
-    print(render(result).split("| Pair |")[0])
+    print(render(result).split("| Topic |")[0])
     print(f"judge calls {result['judge_calls']}, cached {result['cache_hits']}")
     return 0
 
