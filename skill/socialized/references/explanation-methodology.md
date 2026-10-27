@@ -26,8 +26,8 @@ Signals include "I'm new to…", "explain like I've never…", basic vocabulary,
 a question about a foundational idea.
 
 <!-- op:sequencing -->
-- Start from something the reader already has: an everyday situation or a
-  concept from a neighbouring field. Bring in the formal definition after that.
+- Make sentence one a concrete situation the reader already has, and sentence
+  two the answer. Bring in the formal definition after that answer sentence.
 - Build the dependency chain explicitly. Each new idea should rest on one
   already in place. Teach each missing prerequisite briefly where it is
   needed, not in an upfront glossary.
@@ -73,9 +73,13 @@ references to specific systems or papers.
   happens. "Why does X exist?" needs the problem X solves. "How does X work?"
   needs the steps and what connects them.
 - Give the chain in order. If a step would look arbitrary, add the reason for it.
-- End with the consequence or limit that follows from the mechanism when it
-  helps the reader predict behaviour.
+- State the consequence or limit that follows from the mechanism, in the body,
+  when it helps the reader predict behaviour.
 <!-- /op:mechanism -->
+<!-- op:close -->
+- Let the close operation supply the last unit. The consequence stays in the
+  body, and the takeaway compresses it rather than restating the section.
+<!-- /op:close -->
 - If the honest answer is "this is not fully known", say so first, then give the
   best-supported account and label it as such.
 

@@ -12,8 +12,9 @@ precedence over the subscription and would be billed.
 
 Arm control: every row runs in a fresh sandbox directory outside the repository with its own
 CLAUDE_CONFIG_DIR, so user-level skills, CLAUDE.md, memory and plugins cannot leak in. The
-built skill ZIP for the row's batch is extracted to <sandbox>/.claude/skills/explanation-lab/.
-Skill-off rows additionally pass --settings {"skillOverrides": {"explanation-lab": "off"}}.
+built skill ZIP for the row's batch is extracted to <sandbox>/.claude/skills/<skill>/.
+The skill id comes from that ZIP's manifest, so a run frozen as explanation-lab
+keeps that name. Skill-off rows additionally pass --settings {"skillOverrides": {"<skill>": "off"}}.
 The arm is never trusted: the `system/init` event is parsed and the row fails, and the process
 is killed, if the observed skill state disagrees with the intended arm. A skill-off row also
 fails if the transcript shows any Skill or Read call touching the skill.
@@ -50,7 +51,6 @@ import evalschema as es  # noqa: E402
 import make_run_sheet  # noqa: E402
 from skilllib import SECRET_PATTERNS  # noqa: E402
 
-SKILL_NAME = "explanation-lab"
 SURFACE = "claude-code"
 OPERATOR = "collect_cc"
 TOKEN_ENV = "CLAUDE_CODE_OAUTH_TOKEN"
@@ -151,25 +151,30 @@ def secret_values(env: dict[str, str]) -> list[str]:
 class Arm:
     batch: str
     skill_enabled: bool
+    skill_name: str
     zip_path: Path
     manifest_path: Path
 
 
 def arm_for_batch(batch: str, dist_dir: Path | None = None) -> Arm:
     dist_dir = dist_dir or DIST_DIR
+    try:
+        skill_name = es.dist_skill_name(dist_dir)
+    except (FileNotFoundError, ValueError) as exc:
+        raise HarnessError(str(exc)) from exc
     if batch in {"skill_off", "skill_on", "variant:full"}:
-        stem, folder = SKILL_NAME, dist_dir
+        stem, folder = skill_name, dist_dir
     elif batch.startswith("variant:"):
-        stem, folder = f"{SKILL_NAME}--{batch.split(':', 1)[1]}", dist_dir / "ablation"
+        stem, folder = f"{skill_name}--{batch.split(':', 1)[1]}", dist_dir / "ablation"
     else:
         raise HarnessError(f"unknown batch '{batch}'")
-    return Arm(batch, batch != "skill_off", folder / f"{stem}.zip", folder / f"{stem}.manifest.json")
+    return Arm(batch, batch != "skill_off", skill_name, folder / f"{stem}.zip", folder / f"{stem}.manifest.json")
 
 
 def run_dist(run_dir: Path | None) -> Path:
     """The run's frozen build (<run>/skill_build) when it has one, else the repository's dist/."""
     frozen = run_dir / "skill_build" if run_dir else None
-    return frozen if frozen and (frozen / f"{SKILL_NAME}.manifest.json").is_file() else DIST_DIR
+    return frozen if frozen and any(frozen.glob("*.manifest.json")) else DIST_DIR
 
 
 def load_manifest(arm: Arm) -> dict:
@@ -192,20 +197,20 @@ def prepare_sandbox(root: Path, arm: Arm, manifest: dict) -> tuple[Path, Path, P
     with zipfile.ZipFile(arm.zip_path) as archive:
         for info in archive.infolist():
             parts = PurePosixPath(info.filename).parts
-            if not parts or parts[0] != SKILL_NAME or ".." in parts or info.filename.startswith("/"):
+            if not parts or parts[0] != arm.skill_name or ".." in parts or info.filename.startswith("/"):
                 raise HarnessError(f"unexpected entry in {arm.zip_path.name}: {info.filename}")
             if info.is_dir():
                 continue
             target = skills_dir.joinpath(*parts)
             target.parent.mkdir(parents=True, exist_ok=True)
             target.write_bytes(archive.read(info))
-    installed = skills_dir / SKILL_NAME
+    installed = skills_dir / arm.skill_name
     for rel, digest in manifest["files"].items():
         path = installed / rel
         if not path.is_file() or hashlib.sha256(path.read_bytes()).hexdigest() != digest:
             raise HarnessError(f"installed {rel} does not match the manifest for {arm.batch}")
     settings = root / "settings.json"
-    overrides = {} if arm.skill_enabled else {"skillOverrides": {SKILL_NAME: "off"}}
+    overrides = {} if arm.skill_enabled else {"skillOverrides": {arm.skill_name: "off"}}
     settings.write_text(json.dumps(overrides), encoding="utf-8")
     return work, config, settings
 
@@ -233,7 +238,7 @@ def child_env(env: dict[str, str], config: Path, *, with_token: bool) -> dict[st
 # Observing the arm (pure)
 # ---------------------------------------------------------------------------
 
-def observe_init(init: dict) -> dict:
+def observe_init(init: dict, skill_name: str) -> dict:
     skills = init.get("skills")
     slash = init.get("slash_commands") or []
     return {
@@ -241,21 +246,21 @@ def observe_init(init: dict) -> dict:
         "model": init.get("model"),
         "tools": sorted(init.get("tools") or []),
         "skills": sorted(skills) if isinstance(skills, list) else None,
-        "skill_listed": isinstance(skills, list) and SKILL_NAME in skills,
-        "slash_listed": SKILL_NAME in slash,
+        "skill_listed": isinstance(skills, list) and skill_name in skills,
+        "slash_listed": skill_name in slash,
         "api_key_source": init.get("apiKeySource"),
         "permission_mode": init.get("permissionMode"),
     }
 
 
-def arm_problems(skill_enabled: bool, observed: dict) -> list[str]:
+def arm_problems(skill_enabled: bool, observed: dict, skill_name: str) -> list[str]:
     problems = []
     if observed["skills"] is None:
         problems.append("init event has no 'skills' list, so the arm cannot be verified")
     elif skill_enabled and not observed["skill_listed"]:
-        problems.append(f"intended skill ON, but init.skills does not list {SKILL_NAME}")
+        problems.append(f"intended skill ON, but init.skills does not list {skill_name}")
     elif not skill_enabled and (observed["skill_listed"] or observed["slash_listed"]):
-        problems.append(f"intended skill OFF, but init still lists {SKILL_NAME} (skillOverrides not honoured)")
+        problems.append(f"intended skill OFF, but init still lists {skill_name} (skillOverrides not honoured)")
     if observed["api_key_source"] not in ALLOWED_API_KEY_SOURCES:
         problems.append(f"apiKeySource is '{observed['api_key_source']}', expected 'none' (subscription OAuth)")
     if observed["tools"] != sorted(TOOLS):
@@ -271,32 +276,32 @@ def tool_uses(event: dict) -> list[dict]:
             for b in content if isinstance(b, dict) and b.get("type") == "tool_use"]
 
 
-def invokes_skill(use: dict) -> bool:
+def invokes_skill(use: dict, skill_name: str) -> bool:
     if use["name"] != "Skill":
         return False
     value = str(use["input"].get("skill") or use["input"].get("command") or use["input"].get("name") or "")
-    return value.lstrip("/").split(":")[-1].strip() == SKILL_NAME
+    return value.lstrip("/").split(":")[-1].strip() == skill_name
 
 
-def reads_skill_file(use: dict) -> str | None:
+def reads_skill_file(use: dict, skill_name: str) -> str | None:
     if use["name"] != "Read":
         return None
     path = str(use["input"].get("file_path") or use["input"].get("path") or "").replace("\\", "/")
-    marker = f"/skills/{SKILL_NAME}/"
+    marker = f"/skills/{skill_name}/"
     return path.split(marker, 1)[1] if marker in path else None
 
 
-def touches_skill(use: dict) -> bool:
-    return invokes_skill(use) or reads_skill_file(use) is not None
+def touches_skill(use: dict, skill_name: str) -> bool:
+    return invokes_skill(use, skill_name) or reads_skill_file(use, skill_name) is not None
 
 
-def observed_evidence(skill_enabled: bool, observed: dict | None, activated: bool) -> str:
+def observed_evidence(skill_enabled: bool, observed: dict | None, activated: bool, skill_name: str) -> str:
     if observed is None:
         return "no system/init event observed"
     listed = "lists" if observed["skill_listed"] else "does not list"
     setting = "skillOverrides off" if not skill_enabled else "no override"
-    call = "Skill tool invoked explanation-lab" if activated else "no Skill call for explanation-lab"
-    return (f"cc init.skills {listed} {SKILL_NAME} ({setting}); {call}; "
+    call = f"Skill tool invoked {skill_name}" if activated else f"no Skill call for {skill_name}"
+    return (f"cc init.skills {listed} {skill_name} ({setting}); {call}; "
             f"model={observed['model']}; cc={observed['claude_code_version']}")
 
 
@@ -336,7 +341,7 @@ def user_line(text: str) -> bytes:
 
 
 def run_invocation(cmd: list[str], turns: list[str], cwd: Path, env: dict[str, str], skill_enabled: bool,
-                   timeout: float, *, stop_after_init: bool = False) -> RowResult:
+                   skill_name: str, timeout: float, *, stop_after_init: bool = False) -> RowResult:
     """Run one conversation in a single `claude -p` session, one user turn at a time.
 
     Each user turn is sent only after the previous turn's result event has arrived, so every
@@ -394,8 +399,8 @@ def run_invocation(cmd: list[str], turns: list[str], cwd: Path, env: dict[str, s
             if not isinstance(event, dict):
                 continue
             if event.get("type") == "system" and event.get("subtype") == "init":
-                out.observed = observe_init(event)
-                out.problems = arm_problems(skill_enabled, out.observed)
+                out.observed = observe_init(event, skill_name)
+                out.problems = arm_problems(skill_enabled, out.observed, skill_name)
                 session = str(event.get("session_id") or "")
                 if out.session_ids and session != out.session_ids[0]:
                     out.problems.append(f"turn {len(out.turns) + 1} started a new session; the conversation "
@@ -413,12 +418,12 @@ def run_invocation(cmd: list[str], turns: list[str], cwd: Path, env: dict[str, s
                 auth_error = True
             for use in tool_uses(event):
                 out.tool_calls.append(use)
-                if not skill_enabled and touches_skill(use):
+                if not skill_enabled and touches_skill(use, skill_name):
                     out.problems = [f"skill-off row touched the skill via {use['name']}: {json.dumps(use['input'])}"]
                     return finish("arm_mismatch", out.problems[0])
-                if invokes_skill(use):
+                if invokes_skill(use, skill_name):
                     out.activated = True
-                ref = reads_skill_file(use)
+                ref = reads_skill_file(use, skill_name)
                 if ref and ref not in out.references and ref != "SKILL.md":
                     out.references.append(ref)
             if event.get("type") == "result":
@@ -466,9 +471,9 @@ def save_sheet(path: Path, header: list[str], rows: list[dict]) -> None:
     os.replace(tmp, path)
 
 
-def row_fields(row: dict, result: RowResult, skill_enabled: bool, effort: str | None, zip_sha: str,
-               today: str) -> dict[str, str]:
-    evidence = observed_evidence(skill_enabled, result.observed, result.activated)
+def row_fields(row: dict, result: RowResult, skill_enabled: bool, skill_name: str, effort: str | None,
+               zip_sha: str, today: str) -> dict[str, str]:
+    evidence = observed_evidence(skill_enabled, result.observed, result.activated, skill_name)
     return {
         "date": today,
         "surface": SURFACE,
@@ -517,7 +522,7 @@ def backfill_from_meta(run_dir: Path, rows: list[dict]) -> int:
     return filled
 
 
-def write_notice(run_dir: Path, model: str, effort: str | None, claude: list[str]) -> None:
+def write_notice(run_dir: Path, model: str, effort: str | None, claude: list[str], skill_name: str) -> None:
     lines = [
         "# Collection notice", "",
         es.SURFACE_NOTICE, "",
@@ -529,8 +534,8 @@ def write_notice(run_dir: Path, model: str, effort: str | None, claude: list[str
         f"- Tools available to the model: {', '.join(TOOLS)}; permission mode `dontAsk`; no session persistence.",
         "- Each row ran in a fresh sandbox outside the repository with its own `CLAUDE_CONFIG_DIR`, so no "
         "user-level skills, CLAUDE.md, memory or plugins were present. The batch's built ZIP was installed "
-        f"as a project skill at `.claude/skills/{SKILL_NAME}/`; skill-off rows also passed "
-        f"`skillOverrides: {{\"{SKILL_NAME}\": \"off\"}}` through `--settings`.",
+        f"as a project skill at `.claude/skills/{skill_name}/`; skill-off rows also passed "
+        f"`skillOverrides: {{\"{skill_name}\": \"off\"}}` through `--settings`.",
         "- Every row's arm was verified from the `system/init` event; the observation is recorded in "
         "`activation_evidence` and in `cc_meta/<row_id>.json`.",
         f"- CLI: `{Path(claude[-1]).name}`; version per row in `cc_meta/`.",
@@ -571,7 +576,7 @@ def collect(run_dir: Path, claude: list[str], env: dict[str, str], opts: Options
     today = today or dt.date.today().isoformat()
     if backfill_from_meta(run_dir, rows):
         save_sheet(sheet, header, rows)
-    write_notice(run_dir, opts.model, opts.effort, claude)
+    write_notice(run_dir, opts.model, opts.effort, claude, es.dist_skill_name(run_dist(run_dir)))
     todo = pending_rows(run_dir, rows, only)
     if limit is not None:
         todo = todo[:limit]
@@ -597,7 +602,7 @@ def collect(run_dir: Path, claude: list[str], env: dict[str, str], opts: Options
                 work, config, settings = prepare_sandbox(root, arm, manifest)
                 cmd = build_command(claude, settings, opts.model, opts.effort)
                 result = run_invocation(cmd, turns, work, child_env(env, config, with_token=True),
-                                        arm.skill_enabled, opts.timeout)
+                                        arm.skill_enabled, arm.skill_name, opts.timeout)
             finally:
                 if not opts.keep_sandbox:
                     shutil.rmtree(root, ignore_errors=True)
@@ -611,7 +616,8 @@ def collect(run_dir: Path, claude: list[str], env: dict[str, str], opts: Options
         if result.status == "ok" and versions and version not in versions:
             result.status = "version_drift"
             result.detail = f"Claude Code is now {version}; earlier rows of this run used {sorted(versions)}"
-        fields = row_fields(row, result, arm.skill_enabled, opts.effort, manifest["zip_sha256"], today)
+        fields = row_fields(row, result, arm.skill_enabled, arm.skill_name, opts.effort,
+                            manifest["zip_sha256"], today)
         meta = {"row_id": row["row_id"], "batch": row["batch"], "intended_skill_enabled": arm.skill_enabled,
                 "status": result.status, "detail": result.detail, "observed_init": result.observed,
                 "arm_problems": result.problems, "tool_calls": result.tool_calls, "result": result.result,
@@ -677,13 +683,13 @@ def check_arms(run_dir: Path | None, batches: list[str], claude: list[str], env:
             cmd = build_command(claude, settings, opts.model, opts.effort)
             result = run_invocation(cmd, ["Reply with the word ok."], work,
                                     child_env(env, config, with_token=False), arm.skill_enabled,
-                                    min(opts.timeout, 120), stop_after_init=True)
+                                    arm.skill_name, min(opts.timeout, 120), stop_after_init=True)
         finally:
             shutil.rmtree(root, ignore_errors=True)
         verdict = "OK" if result.observed is not None and not result.problems else "MISMATCH"
         bad += verdict != "OK"
         write(f"{batch:<22} intended skill {'ON ' if arm.skill_enabled else 'OFF'} -> {verdict}: "
-              f"{observed_evidence(arm.skill_enabled, result.observed, False)}")
+              f"{observed_evidence(arm.skill_enabled, result.observed, False, arm.skill_name)}")
         for problem in result.problems:
             write(f"    problem: {problem}")
     return 1 if bad else 0
@@ -722,7 +728,8 @@ def probe(claude: list[str], env: dict[str, str], opts: Options, turns: list[str
     try:
         work, config, settings = prepare_sandbox(root, arm, load_manifest(arm))
         return run_invocation(build_command(claude, settings, opts.model, opts.effort), turns, work,
-                              child_env(env, config, with_token=True), False, min(opts.timeout, 180))
+                              child_env(env, config, with_token=True), False, arm.skill_name,
+                              min(opts.timeout, 180))
     finally:
         shutil.rmtree(root, ignore_errors=True)
 

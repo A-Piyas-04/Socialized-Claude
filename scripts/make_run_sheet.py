@@ -25,12 +25,13 @@ def freeze_build(run_dir: Path, batches: set[str], dist: Path | None = None) -> 
     """Copy the ZIPs and manifests this run needs into <run>/skill_build/, so later skill edits
     cannot change what the run measures. Returns the copied file names."""
     dist = dist or es.REPO_ROOT / "dist"
+    skill = es.dist_skill_name(dist)
     names = set()
     for batch in batches:
         if batch in {"skill_off", "skill_on", "variant:full"}:
-            names.add("explanation-lab")
+            names.add(skill)
         elif batch.startswith("variant:"):
-            names.add(f"ablation/explanation-lab--{batch.split(':', 1)[1]}")
+            names.add(f"ablation/{skill}--{batch.split(':', 1)[1]}")
     copied = []
     for name in sorted(names):
         for suffix in (".zip", ".manifest.json"):
@@ -48,12 +49,17 @@ def batch_rank(batch: str) -> tuple[int, str]:
 
 
 def manifest_sha(batch: str) -> str:
+    dist = es.REPO_ROOT / "dist"
+    try:
+        skill = es.dist_skill_name(dist)
+    except (FileNotFoundError, ValueError):
+        return ""
     if batch == "skill_on":
-        manifest = es.REPO_ROOT / "dist" / "explanation-lab.manifest.json"
+        manifest = dist / f"{skill}.manifest.json"
     elif batch.startswith("variant:"):
         variant = batch.split(":", 1)[1]
-        name = "explanation-lab" if variant == "full" else f"explanation-lab--{variant}"
-        folder = es.REPO_ROOT / "dist" if variant == "full" else es.REPO_ROOT / "dist" / "ablation"
+        name = skill if variant == "full" else f"{skill}--{variant}"
+        folder = dist if variant == "full" else dist / "ablation"
         manifest = folder / f"{name}.manifest.json"
     else:
         return ""
@@ -135,7 +141,7 @@ def main(argv: list[str] | None = None) -> int:
     skill_body = None
     if any(conditions["conditions"][c].get("prefix") == "@SKILL_BODY" for c in condition_names):
         if not es.DIST_ZIP.is_file():
-            raise SystemExit("Condition D needs dist/explanation-lab.zip; run scripts/package_skill.py first")
+            raise SystemExit(f"Condition D needs {es.DIST_ZIP.name}; run scripts/package_skill.py first")
         skill_body = es.skill_body_from_zip()
 
     case_ids = select_cases(cases, args.subset, args.cases)

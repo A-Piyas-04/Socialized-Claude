@@ -49,7 +49,7 @@ JUDGED_DIMENSIONS = {
 OVERALL_QUESTION = (
     "Which answer would leave this reader with a more accurate and usable understanding of what they "
     "actually asked? Judge substance and fit to the question, not length.")
-SKILL_MENTION_RE = re.compile(r"(?i)explanation[\s_-]*lab(?:\s+skill)?")
+SKILL_MENTION_RE = re.compile(r"(?i)explanation[\s_-]*lab(?:\s+skill)?|socialized(?:-claude)?(?:\s+skill)?")
 CALIBRATION_SIZE = 20
 
 

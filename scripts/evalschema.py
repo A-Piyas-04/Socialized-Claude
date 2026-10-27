@@ -14,7 +14,7 @@ RUNS_DIR = EVAL_DIR / "runs"
 TEST_CASES_PATH = EVAL_DIR / "TEST_CASES.json"
 CONDITIONS_PATH = EVAL_DIR / "conditions.json"
 ITEM_BANK_PATH = EVAL_DIR / "comprehension" / "ITEM_BANK.json"
-DIST_ZIP = REPO_ROOT / "dist" / "explanation-lab.zip"
+DIST_ZIP = REPO_ROOT / "dist" / "socialized.zip"
 
 RESULTS_COLUMNS = [
     "run_id", "row_id", "batch", "order", "case_id", "condition", "sample_index", "message_file",
@@ -121,10 +121,33 @@ def template_header(path: Path) -> list[str]:
     return read_csv(path)[0]
 
 
+def dist_skill_name(dist: Path | None = None) -> str:
+    """The skill id recorded in a dist or frozen skill_build directory.
+
+    A run keeps the name it was frozen with, so an older build can still be
+    explanation-lab while the current package is socialized.
+    """
+    folder = dist or (REPO_ROOT / "dist")
+    manifests = sorted(folder.glob("*.manifest.json"))
+    if not manifests:
+        raise FileNotFoundError(f"no skill manifest in {folder}")
+    chosen = manifests[0]
+    for path in manifests:
+        data = json.loads(path.read_text(encoding="utf-8"))
+        if data.get("variant") == "full":
+            chosen = path
+            break
+    name = json.loads(chosen.read_text(encoding="utf-8")).get("skill")
+    if not isinstance(name, str) or not name:
+        raise ValueError(f"{chosen} has no skill id")
+    return name
+
+
 def skill_body_from_zip(zip_path: Path = DIST_ZIP) -> str:
     """The packaged SKILL.md from its first H1 heading onwards (used by condition D)."""
     with zipfile.ZipFile(zip_path) as archive:
-        text = archive.read("explanation-lab/SKILL.md").decode("utf-8")
+        names = [n for n in archive.namelist() if n.endswith("/SKILL.md") or n.endswith("SKILL.md")]
+        text = archive.read(names[0]).decode("utf-8")
     match = re.search(r"^# ", text, flags=re.MULTILINE)
     if not match:
         raise ValueError("packaged SKILL.md has no H1 heading")

@@ -33,7 +33,7 @@ import evalschema as es  # noqa: E402
 SESSION_FIELDS = ("surface", "model_label", "thinking_setting", "operator")
 ACTIVATION_CHOICES = {"y": "yes", "n": "no", "u": "unclear"}
 DEFAULT_EVIDENCE = {
-    "yes": "activity panel showed explanation-lab/SKILL.md being read",
+    "yes": "activity panel showed socialized/SKILL.md being read",
     "no": "no sign of the skill in the activity panel",
     "unclear": "activity panel ambiguous or not shown",
 }
@@ -164,23 +164,33 @@ def save_sheet(path: Path, header: list[str], rows: list[dict]) -> None:
 
 
 def manifest_sha(batch: str) -> str:
+    dist = es.REPO_ROOT / "dist"
+    try:
+        skill = es.dist_skill_name(dist)
+    except (FileNotFoundError, ValueError):
+        return ""
     if batch == "skill_on" or batch == "variant:full":
-        manifest = es.REPO_ROOT / "dist" / "explanation-lab.manifest.json"
+        manifest = dist / f"{skill}.manifest.json"
     elif batch.startswith("variant:"):
-        manifest = es.REPO_ROOT / "dist" / "ablation" / f"explanation-lab--{batch.split(':', 1)[1]}.manifest.json"
+        manifest = dist / "ablation" / f"{skill}--{batch.split(':', 1)[1]}.manifest.json"
     else:
         return ""
     return json.loads(manifest.read_text(encoding="utf-8"))["zip_sha256"] if manifest.is_file() else ""
 
 
 def batch_instruction(batch: str) -> str:
+    skill = "socialized"
+    try:
+        skill = es.dist_skill_name(es.REPO_ROOT / "dist")
+    except (FileNotFoundError, ValueError):
+        pass
     if batch == "skill_off":
-        return f"In Claude, open {SKILL_TOGGLE} and make sure 'explanation-lab' is turned OFF."
+        return f"In Claude, open {SKILL_TOGGLE} and make sure '{skill}' is turned OFF."
     if batch == "skill_on":
-        return f"In Claude, open {SKILL_TOGGLE} and make sure 'explanation-lab' is turned ON (no other custom skills)."
+        return f"In Claude, open {SKILL_TOGGLE} and make sure '{skill}' is turned ON (no other custom skills)."
     variant = batch.split(":", 1)[1]
-    return (f"In Claude, delete the installed 'explanation-lab', upload "
-            f"dist/ablation/explanation-lab--{variant}.zip (or dist/explanation-lab.zip for 'full') and turn it ON.")
+    packaged = f"dist/{skill}.zip" if variant == "full" else f"dist/ablation/{skill}--{variant}.zip"
+    return (f"In Claude, delete the installed '{skill}', upload {packaged} and turn it ON.")
 
 
 # ---------------------------------------------------------------------------
@@ -223,7 +233,7 @@ def ask_session(defaults: dict[str, str], read: Callable[[str], str], write: Cal
 
 
 def ask_activation(read: Callable[[str], str], write: Callable[[str], None]) -> tuple[str, str, str]:
-    write("  Expand the activity/thinking panel above Claude's answer. Did it read explanation-lab/SKILL.md?")
+    write("  Expand the activity/thinking panel above Claude's answer. Did it read socialized/SKILL.md?")
     while True:
         choice = ask("  Activation [y]es / [n]o / [u]nclear: ", read).lower()[:1]
         if choice in ACTIVATION_CHOICES:

@@ -55,7 +55,7 @@ def regenerate(out: Path = BASELINE_PATH) -> dict:
     return result
 
 
-HEURISTIC_FIELDS = ("answer_first_offset", "passive_sentence_count")
+HEURISTIC_FIELDS = ("answer_first_offset", "passive_sentence_count", "visual_count")
 HEURISTIC_NOTE = "heuristic; descriptive only, never gates anything"
 
 

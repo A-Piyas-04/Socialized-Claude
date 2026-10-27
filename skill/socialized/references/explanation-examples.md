@@ -22,6 +22,11 @@ add nothing.
 - Code: explaining a debounce function
 <!-- /op:mechanism -->
 - Follow-up confusion: repairing one link
+<!-- op:visual -->
+- Visual forms: flow, contrast, proportion, change over time
+- Restraint: no visual, and no artifact unless asked
+- Opt-in: one artifact when the person asks
+<!-- /op:visual -->
 - Restraint: requests where the skill should add nothing
 
 <!-- op:sequencing,mechanism -->
@@ -247,6 +252,83 @@ quarters in 3 and grouping them.
 
 **What changed:** it targets only the link the user named and reuses the
 picture they already understand.
+
+<!-- op:visual -->
+## Visual forms
+
+Each pair is the same point as prose and as the smallest markdown form that
+shows it. The figure replaces the sentences; it does not sit on top of them.
+
+### Flow
+
+**Weak:** "The client sends a SYN, the server replies with SYN-ACK, and the
+client sends ACK. After that, data can flow."
+
+**Better:** The handshake is three messages, and data waits for the last one.
+
+`client → SYN → server → SYN-ACK → client → ACK → data`
+
+### Contrast
+
+**Weak:** a paragraph describing the broken config, then a paragraph describing
+the working one, then a paragraph describing the difference.
+
+**Better:** The only change is the timeout, and the second block is the one that
+finishes.
+
+```diff
+- timeout = 1
+```
+
+```diff
++ timeout = 30
+```
+
+### Proportion
+
+**Weak:** "Reads are about 90% of traffic and writes about 10%."
+
+**Better:** Reads dominate the traffic; the bar is the proportion.
+
+```
+reads  █████████░  90
+writes █░░░░░░░░░  10
+```
+
+### Change over time
+
+**Weak:** a paragraph narrating each moment of a retry.
+
+**Better:** Each row is one moment, and the failure is the row where the
+attempt is dropped.
+
+| Moment | Attempt | What the reader sees |
+|---|---|---|
+| t = 0 | send | request leaves |
+| t = 1 | wait | no reply |
+| t = 2 | drop | ❌ the caller gives up |
+
+## Restraint: markdown, and no artifact unless asked
+
+**No visual.**
+User: "In one sentence: why does ice float?"
+Answer with the sentence. A diagram of a lattice would cost more than it shows.
+
+**"Explain this visually" is not an artifact request.**
+User: "Explain this visually: why a pool is faster."
+Answer with the markdown form (an arrow chain or a two-column before/after).
+Leave the reply as text.
+
+## Opt-in: one artifact when the person asks
+
+User: "Make an artifact showing TCP's handshake."
+
+Answer in a few markdown sentences that name the three messages, then one
+artifact the person can step through: each click advances one message, the
+caption says what to notice, and the colours are labelled (for example green
+for a message that arrived, red for one that timed out). The next reply returns
+to markdown unless the person said to keep using artifacts.
+<!-- /op:visual -->
 
 ## Restraint: requests where the skill should add nothing
 

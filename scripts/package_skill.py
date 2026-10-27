@@ -1,10 +1,10 @@
 """Package the skill as an installable ZIP.
 
-    python scripts/package_skill.py                    # dist/explanation-lab.zip (production, all operations)
-    python scripts/package_skill.py --variant seq      # dist/ablation/explanation-lab--seq.zip
+    python scripts/package_skill.py                    # dist/socialized.zip (production, all operations)
+    python scripts/package_skill.py --variant seq      # dist/ablation/socialized--seq.zip
     python scripts/package_skill.py --all-variants     # every ablation variant
 
-The ZIP contains one top-level folder, explanation-lab/, with SKILL.md directly
+The ZIP contains one top-level folder, socialized/, with SKILL.md directly
 inside it, as claude.ai expects. Operation markers are removed. Ablation variants
 also drop the blocks of disabled operations. Every variant keeps the same name and
 description, so automatic activation sees identical metadata.
