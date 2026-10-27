@@ -21,8 +21,11 @@ REQUIRED_FIELDS = {
 CATEGORY_PREFIX = {
     "foundational": "found_", "mechanism": "mech_", "abstract": "abst_", "multi_step_process": "proc_",
     "comparison": "comp_", "follow_up": "follow_", "advanced": "adv_", "concise_factual": "fact_",
-    "negative_control": "neg_", "mixed_task": "mixed_",
+    "negative_control": "neg_", "mixed_task": "mixed_", "register": "reg_", "repair": "rep_",
+    "decorative_structure": "deco_", "persistence": "pers_", "work_report": "work_",
 }
+MULTI_TURN_CATEGORIES = {"repair", "persistence"}
+CONSTRAINT_KEYS = {"check_turns", "max_words", "no_lists", "no_math"}
 DIFFICULTIES = {"beginner", "intermediate", "advanced"}
 LENGTHS = {"one_sentence", "short", "medium", "long_ok"}
 
@@ -39,7 +42,7 @@ EXCLUDED_TOPIC_KEYWORDS.remove("leap")
 
 
 def test_case_count_in_target_range():
-    assert 24 <= len(CASES) <= 36
+    assert 24 <= len(CASES) <= 48
 
 
 def test_ids_are_unique_and_stable():
@@ -67,6 +70,40 @@ def test_case_schema(case_id):
         assert fact["fact"].strip()
     fact_ids = [f["id"] for f in case["critical_facts"]]
     assert len(fact_ids) == len(set(fact_ids))
+    assert set(case) <= set(REQUIRED_FIELDS) | {"context", "turns", "standing_constraints"}, case_id
+
+
+@pytest.mark.parametrize("case_id", sorted(CASES))
+def test_multi_turn_cases_are_real_conversations(case_id):
+    case = CASES[case_id]
+    if case["category"] in MULTI_TURN_CATEGORIES:
+        assert "turns" in case, f"{case_id}: {case['category']} cases must be real multi-turn conversations"
+    if "turns" in case:
+        turns = case["turns"]
+        assert len(turns) >= 2 and all(isinstance(t, str) and t.strip() for t in turns)
+        assert case["question"] == turns[-1], "question repeats the final turn"
+        assert case["context"] is None, "earlier turns are sent as turns, never folded into context"
+    if case["category"] == "persistence":
+        constraints = case["standing_constraints"]
+        assert set(constraints) <= CONSTRAINT_KEYS and len(constraints) >= 2
+        assert len(case["turns"]) >= 5
+        assert all(2 <= t <= len(case["turns"]) for t in constraints["check_turns"])
+    else:
+        assert "standing_constraints" not in case
+
+
+def test_register_cases_share_one_question_at_three_levels():
+    reg = sorted((c for c in CASES.values() if c["category"] == "register"), key=lambda c: c["id"])
+    assert [c["difficulty"] for c in reg] == ["beginner", "intermediate", "advanced"]
+    assert len({c["domain"] for c in reg}) == 1
+
+
+def test_decorative_structure_controls_are_short_prose():
+    deco = [c for c in CASES.values() if c["category"] == "decorative_structure"]
+    assert len(deco) == 2
+    for case in deco:
+        assert case["expected_length"] in {"one_sentence", "short"}
+        assert any("no heading, bullet" in p for p in case["expected_properties"]), case["id"]
 
 
 @pytest.mark.parametrize("case_id", sorted(CASES))
@@ -116,7 +153,7 @@ def test_difficulty_mix():
 
 def test_cases_are_held_out():
     for case in CASES.values():
-        text = f"{case['question']} {case['context'] or ''}".lower()
+        text = f"{case['question']} {case['context'] or ''} {' '.join(case.get('turns', []))}".lower()
         for keyword in EXCLUDED_TOPIC_KEYWORDS:
             assert keyword not in text, f"{case['id']} reuses a design or research topic: {keyword}"
 
@@ -127,7 +164,8 @@ def test_skill_examples_do_not_cover_test_topics():
                    "uncountabl", "p-value", "recursion", "tapping my card", "neuron", "git merge", "process and a thread",
                    "alternating current", "correlation", "lossy", "negative times", "satellite", "hypothalamus",
                    "postgresql bloat", "learning rate", "cas9", "fahrenheit", "origin of species", "leap year",
-                   "fibonacci", "last_n"]
+                   "fibonacci", "last_n", "sourdough", "tomato", "confidence interval", "fog up", "onion",
+                   "maillard", "mri", "grapefruit", "fewer calories", "httpx", "design effect"]
     for keyword in distinctive:
         assert keyword not in skill_text, f"skill examples mention a test topic: {keyword}"
 

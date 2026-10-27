@@ -41,7 +41,7 @@ skill, so that subset is not a random sample of prompts.
 
 ## 3. Test set
 
-`TEST_CASES.json` contains 33 held-out cases:
+`TEST_CASES.json` contains 45 held-out cases:
 
 | Category | n | `skill_expectation` |
 |---|---:|---|
@@ -55,8 +55,13 @@ skill, so that subset is not a random sample of prompts.
 | concise_factual | 3 | 2 should_not_apply, 1 apply_briefly |
 | negative_control | 4 | should_not_apply |
 | mixed_task | 1 | apply_briefly |
+| register | 3 | 2 should_apply, 1 apply_briefly (one question at beginner, practitioner and expert register) |
+| repair | 3 | should_apply (two-turn conversations) |
+| decorative_structure | 2 | apply_briefly (negative controls: the honest answer is two sentences of prose) |
+| persistence | 2 | should_apply (five-turn conversations with machine-checked standing constraints) |
+| work_report | 2 | should_apply |
 
-The cases cover 12 domains. Topics are disjoint from the research archive's five
+The cases cover 14 domains. Topics are disjoint from the research archive's five
 topics and from every example inside the skill. The test
 `tests/test_test_cases.py::test_cases_are_held_out` checks this with keyword
 lists.

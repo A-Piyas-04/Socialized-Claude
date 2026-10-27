@@ -62,6 +62,10 @@ def misconception_ids(case: dict) -> dict[str, str]:
 
 
 def request_text(case: dict) -> str:
+    if case.get("turns"):
+        earlier = "\n".join(f"- Turn {n}: {t.strip()}" for n, t in enumerate(case["turns"][:-1], start=1))
+        return (f"Earlier user turns in this conversation (the assistant answered each one live):\n{earlier}\n"
+                f"Final user turn, which the answer below replies to: {case['turns'][-1].strip()}")
     context = f"Earlier context: {case['context']}\n" if case.get("context") else ""
     return f"{context}Question: {case['question']}"
 

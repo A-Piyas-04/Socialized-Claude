@@ -1,6 +1,6 @@
 {
-  "version": "0.1.0",
-  "description": "Held-out evaluation prompts for Explanation Lab V0. Topics deliberately avoid the research archive's topics (caching, B-tree indexes, TCP handshake, vaccines, compound interest) and every topic used in the skill's own examples. Send 'question' exactly as written. For follow-up cases, send 'context' and 'question' together as one message, in the format given in RUNBOOK.md.",
+  "version": "0.2.0",
+  "description": "Held-out evaluation prompts for Explanation Lab V0. Topics deliberately avoid the research archive's topics (caching, B-tree indexes, TCP handshake, vaccines, compound interest) and every topic used in the skill's own examples. Send 'question' exactly as written. For follow-up cases, send 'context' and 'question' together as one message, in the format given in RUNBOOK.md. Cases with 'turns' are real multi-turn conversations: send each user turn in order, each after the previous reply, in one conversation; 'question' repeats the final turn. 'standing_constraints' (persistence cases) lists machine-checkable instructions and the turns at which they are checked.",
   "fields": {
     "skill_expectation": "should_apply: an explanation request where the skill's operations are relevant. apply_briefly: explanation is secondary or a short answer is requested. should_not_apply: no teaching should be added.",
     "expected_length": "one_sentence | short (under ~120 words) | medium (~120-450 words) | long_ok (depth requested or intrinsically multi-step). Guidance for the appropriate-depth rating, not a hard rule."
@@ -945,6 +945,482 @@
       ],
       "reasoning_gaps": [
         "A long tutorial on slicing"
+      ]
+    },
+    {
+      "id": "reg_001",
+      "category": "register",
+      "domain": "statistics",
+      "difficulty": "beginner",
+      "question": "I'm doing a stats module for my nursing degree and I don't get why surveying more people makes a result 'more accurate'. Wouldn't 100 people be enough? Why would anyone need thousands?",
+      "context": null,
+      "audience": "Nursing student with no statistics background; evident beginner",
+      "skill_expectation": "should_apply",
+      "expected_length": "medium",
+      "expected_properties": [
+        "Answers why more people helps before introducing any formula",
+        "Introduces 'sampling error' or 'margin of error' and says what it means in the sentence that first uses it",
+        "Explains that the gain shrinks as the sample grows (four times the people to halve the margin)",
+        "Keeps real terms and uses no childish analogy"
+      ],
+      "common_misconceptions": [
+        "A larger sample removes bias in who was asked",
+        "Precision improves in direct proportion to the number of people",
+        "The sample must be a large fraction of the population to be accurate"
+      ],
+      "critical_facts": [
+        {
+          "id": "reg_001_cf1",
+          "fact": "Random sampling error in an average shrinks in proportion to one over the square root of the sample size"
+        },
+        {
+          "id": "reg_001_cf2",
+          "fact": "Halving the margin of error requires roughly four times as many people"
+        },
+        {
+          "id": "reg_001_cf3",
+          "fact": "A larger sample reduces random error but does not fix a biased way of choosing people"
+        }
+      ],
+      "reasoning_gaps": [
+        "Saying 'more data is more accurate' without saying it is random noise that averages out",
+        "Using 'standard error' or 'confidence interval' without saying what it is"
+      ]
+    },
+    {
+      "id": "reg_002",
+      "category": "register",
+      "domain": "statistics",
+      "difficulty": "intermediate",
+      "question": "I run A/B tests on our checkout page. Why does the confidence interval on conversion rate shrink so slowly as traffic grows? To halve it we apparently need four times the users, and I'd like to understand why rather than just trust the calculator.",
+      "context": null,
+      "audience": "Product analyst who uses A/B-testing vocabulary daily; evident practitioner",
+      "skill_expectation": "should_apply",
+      "expected_length": "medium",
+      "expected_properties": [
+        "Uses standard error, variance and confidence interval without defining them",
+        "Gives the reason for square-root scaling: the variance of a mean of independent observations is the per-observation variance divided by n",
+        "Connects that directly to the four-times rule",
+        "No beginner analogy and no restatement of what an A/B test is"
+      ],
+      "common_misconceptions": [
+        "Interval width shrinks in proportion to n",
+        "More traffic also removes novelty or selection effects",
+        "The square root is an empirical rule of thumb rather than a consequence of independence"
+      ],
+      "critical_facts": [
+        {
+          "id": "reg_002_cf1",
+          "fact": "The variance of a sample proportion or mean of independent observations is the per-observation variance divided by n"
+        },
+        {
+          "id": "reg_002_cf2",
+          "fact": "So the standard error, and the interval width, scale with one over the square root of n"
+        },
+        {
+          "id": "reg_002_cf3",
+          "fact": "Halving the width therefore needs four times the sample"
+        }
+      ],
+      "reasoning_gaps": [
+        "Stating the formula without saying why variances of independent observations add",
+        "Explaining what a confidence interval is to someone who uses them daily"
+      ]
+    },
+    {
+      "id": "reg_003",
+      "category": "register",
+      "domain": "statistics",
+      "difficulty": "advanced",
+      "question": "Sanity check on intuition: SE of the mean is sigma/sqrt(n) because independent variances add, fine. Under positive intra-cluster correlation, is the effective n just n divided by the design effect 1+(m-1)rho, so the sqrt(n) scaling survives with a smaller n?",
+      "context": null,
+      "audience": "Statistician; evident expert asking a narrow question",
+      "skill_expectation": "apply_briefly",
+      "expected_length": "short",
+      "expected_properties": [
+        "Answers yes or no in the first sentence",
+        "Uses the field's notation and terms without teaching them",
+        "States the condition under which the simple design-effect formula holds (equal cluster sizes, common rho)",
+        "No introductory background"
+      ],
+      "common_misconceptions": [
+        "Clustering changes the exponent of n",
+        "The design effect does not depend on cluster size"
+      ],
+      "critical_facts": [
+        {
+          "id": "reg_003_cf1",
+          "fact": "With equal cluster size m and common intra-cluster correlation rho, the variance of the mean is inflated by the design effect 1+(m-1)rho"
+        },
+        {
+          "id": "reg_003_cf2",
+          "fact": "The effective sample size is n divided by the design effect, and the standard error still scales as one over its square root"
+        }
+      ],
+      "reasoning_gaps": [
+        "Re-deriving the independent-case standard error the expert already stated"
+      ]
+    },
+    {
+      "id": "rep_001",
+      "category": "repair",
+      "domain": "everyday",
+      "difficulty": "beginner",
+      "question": "Sorry, I meant the starter itself, not the loaf. My starter smells like nail polish remover and I want to know why, and whether it's ruined.",
+      "turns": [
+        "How do I make my sourdough more sour?",
+        "Sorry, I meant the starter itself, not the loaf. My starter smells like nail polish remover and I want to know why, and whether it's ruined."
+      ],
+      "context": null,
+      "audience": "Home baker",
+      "skill_expectation": "should_apply",
+      "expected_length": "short",
+      "expected_properties": [
+        "Recognises that the first answer addressed the wrong thing and answers the starter question directly",
+        "Does not repeat the bread-souring advice",
+        "Explains the smell as a sign the starter has run out of food",
+        "Says it is very likely not ruined and what to change"
+      ],
+      "common_misconceptions": [
+        "The smell means the starter is contaminated and must be thrown away",
+        "A sourer starter always means a healthier starter"
+      ],
+      "critical_facts": [
+        {
+          "id": "rep_001_cf1",
+          "fact": "A solvent or nail-polish smell usually means the starter has used up its food and is underfed"
+        },
+        {
+          "id": "rep_001_cf2",
+          "fact": "Feeding more often or with a higher ratio of fresh flour and water usually removes the smell"
+        },
+        {
+          "id": "rep_001_cf3",
+          "fact": "The smell alone does not mean the starter is ruined"
+        }
+      ],
+      "reasoning_gaps": [
+        "Re-delivering the earlier advice about making the bread more sour"
+      ]
+    },
+    {
+      "id": "rep_002",
+      "category": "repair",
+      "domain": "earth_science",
+      "difficulty": "intermediate",
+      "question": "No, I know the definitions. I mean: forecasters can't tell me next month's weather, yet scientists say they can predict the climate decades ahead. How is that not a contradiction?",
+      "turns": [
+        "What's the difference between weather and climate?",
+        "No, I know the definitions. I mean: forecasters can't tell me next month's weather, yet scientists say they can predict the climate decades ahead. How is that not a contradiction?"
+      ],
+      "context": null,
+      "audience": "Curious adult with a general science education",
+      "skill_expectation": "should_apply",
+      "expected_length": "medium",
+      "expected_properties": [
+        "Does not restate the definitions of weather and climate",
+        "Explains why day-to-day weather becomes unpredictable after about two weeks (sensitivity to initial conditions)",
+        "Explains why long-run averages are predictable from what controls the energy balance",
+        "Answers the apparent contradiction directly"
+      ],
+      "common_misconceptions": [
+        "If you cannot predict the details you cannot predict the average",
+        "Climate projections are long weather forecasts"
+      ],
+      "critical_facts": [
+        {
+          "id": "rep_002_cf1",
+          "fact": "Weather forecasts lose skill after roughly one to two weeks because small errors in the starting state grow (chaotic sensitivity to initial conditions)"
+        },
+        {
+          "id": "rep_002_cf2",
+          "fact": "Climate is the statistics of weather over long periods, which depend on factors such as greenhouse gases and solar input rather than on the starting state"
+        },
+        {
+          "id": "rep_002_cf3",
+          "fact": "Climate projections predict long-run averages and ranges, not the weather on particular days"
+        }
+      ],
+      "reasoning_gaps": [
+        "Repeating the definitional difference the person said they already know"
+      ]
+    },
+    {
+      "id": "rep_003",
+      "category": "repair",
+      "domain": "biology",
+      "difficulty": "beginner",
+      "question": "That's wrong. Botanically it's a vegetable, because it grows on a vine like a cucumber.",
+      "turns": [
+        "Is a tomato a fruit or a vegetable?",
+        "That's wrong. Botanically it's a vegetable, because it grows on a vine like a cucumber."
+      ],
+      "context": null,
+      "audience": "Adult with no biology background",
+      "skill_expectation": "should_apply",
+      "expected_length": "short",
+      "expected_properties": [
+        "Holds the correct position in one clause rather than conceding",
+        "Gives the reason: botanically a fruit is what develops from the flower's ovary and contains the seeds",
+        "Points out that the cucumber is also botanically a fruit, so the comparison supports the original answer",
+        "Acknowledges that the culinary classification differs, without escalating"
+      ],
+      "common_misconceptions": [
+        "Growing on a vine makes a plant part a vegetable",
+        "Botanical and culinary classifications are the same"
+      ],
+      "critical_facts": [
+        {
+          "id": "rep_003_cf1",
+          "fact": "Botanically, a fruit is the part that develops from the flower's ovary and contains the seeds, so a tomato is a fruit"
+        },
+        {
+          "id": "rep_003_cf2",
+          "fact": "A cucumber is also botanically a fruit"
+        },
+        {
+          "id": "rep_003_cf3",
+          "fact": "In cooking, tomatoes are usually treated as vegetables"
+        }
+      ],
+      "reasoning_gaps": [
+        "Conceding to the correction without checking it",
+        "Arguing at length instead of giving the reason once"
+      ]
+    },
+    {
+      "id": "deco_001",
+      "category": "decorative_structure",
+      "domain": "language",
+      "difficulty": "beginner",
+      "question": "Is it 'fewer calories' or 'less calories'? Just want the rule.",
+      "context": null,
+      "audience": "Adult writer",
+      "skill_expectation": "apply_briefly",
+      "expected_length": "one_sentence",
+      "expected_properties": [
+        "Gives the answer in the first sentence",
+        "Is one or two sentences of plain prose",
+        "Uses no heading, bullet, table, or bold"
+      ],
+      "common_misconceptions": [
+        "'Less' and 'fewer' are interchangeable in careful writing"
+      ],
+      "critical_facts": [
+        {
+          "id": "deco_001_cf1",
+          "fact": "'Fewer' is used with things that are counted, 'less' with amounts that are not"
+        },
+        {
+          "id": "deco_001_cf2",
+          "fact": "Calories are counted, so 'fewer calories' is the careful form"
+        }
+      ],
+      "reasoning_gaps": [
+        "Turning a one-line rule into a structured lesson"
+      ]
+    },
+    {
+      "id": "deco_002",
+      "category": "decorative_structure",
+      "domain": "physics",
+      "difficulty": "beginner",
+      "question": "Why do my glasses fog up when I come inside on a cold day?",
+      "context": null,
+      "audience": "General adult",
+      "skill_expectation": "apply_briefly",
+      "expected_length": "short",
+      "expected_properties": [
+        "States the cause in the first sentence",
+        "Keeps the single causal chain as connected prose of about two sentences",
+        "Uses no heading, bullet, table, or bold"
+      ],
+      "common_misconceptions": [
+        "The fog is coming from the lenses themselves",
+        "Cold air carries more moisture than warm air"
+      ],
+      "critical_facts": [
+        {
+          "id": "deco_002_cf1",
+          "fact": "The lenses are colder than the warm indoor air"
+        },
+        {
+          "id": "deco_002_cf2",
+          "fact": "Air touching the cold lenses cools below its dew point, so water vapour condenses on them as tiny droplets"
+        }
+      ],
+      "reasoning_gaps": [
+        "Splitting one causal chain into separate bullet points"
+      ]
+    },
+    {
+      "id": "pers_001",
+      "category": "persistence",
+      "domain": "chemistry",
+      "difficulty": "beginner",
+      "question": "Now explain in detail how the Maillard reaction works when I toast bread.",
+      "turns": [
+        "For this whole chat, keep every answer under 60 words and don't use bullet points or lists. First: why do onions make your eyes sting?",
+        "Why does chopping them with a sharp knife help?",
+        "Different topic: why does bread go stale?",
+        "Is freezing bread better than leaving it on the counter?",
+        "Now explain in detail how the Maillard reaction works when I toast bread."
+      ],
+      "standing_constraints": {
+        "check_turns": [
+          3,
+          5
+        ],
+        "max_words": 60,
+        "no_lists": true
+      },
+      "context": null,
+      "audience": "Home cook",
+      "skill_expectation": "should_apply",
+      "expected_length": "short",
+      "expected_properties": [
+        "Every answer stays under 60 words, including the final one that asks for detail",
+        "No bullet points or numbered lists in any turn after the instruction",
+        "If the detail cannot fit, says so in one clause and offers more rather than exceeding the limit",
+        "The final answer still names the reactants and the condition"
+      ],
+      "common_misconceptions": [
+        "Browning in toast is caramelisation of sugar alone",
+        "The Maillard reaction happens at any temperature"
+      ],
+      "critical_facts": [
+        {
+          "id": "pers_001_cf1",
+          "fact": "The Maillard reaction is between amino acids and reducing sugars"
+        },
+        {
+          "id": "pers_001_cf2",
+          "fact": "It needs high, dry surface heat (well above boiling point) and produces browning and flavour compounds"
+        }
+      ],
+      "reasoning_gaps": [
+        "Treating a request for detail as permission to break the stated length limit"
+      ]
+    },
+    {
+      "id": "pers_002",
+      "category": "persistence",
+      "domain": "medicine",
+      "difficulty": "intermediate",
+      "question": "Back to the scanner: why can't people with some metal implants go in, and how is the image actually built from the signal?",
+      "turns": [
+        "I'm a nurse, not a physicist. For this conversation please don't use any equations or maths symbols. Why does an MRI scanner need such a strong magnet?",
+        "Why is it so loud inside?",
+        "Unrelated: why do some medicines have to be taken with food?",
+        "And why does grapefruit juice interfere with some of them?",
+        "Back to the scanner: why can't people with some metal implants go in, and how is the image actually built from the signal?"
+      ],
+      "standing_constraints": {
+        "check_turns": [
+          3,
+          5
+        ],
+        "no_math": true
+      },
+      "context": null,
+      "audience": "Nurse with no physics background",
+      "skill_expectation": "should_apply",
+      "expected_length": "medium",
+      "expected_properties": [
+        "No equations or maths symbols in any turn after the instruction, including the technical final turn",
+        "Keeps nursing-appropriate vocabulary without condescension",
+        "Explains both the implant risk and how the signal becomes an image",
+        "Does not drop the constraint after the topic shift"
+      ],
+      "common_misconceptions": [
+        "All metal implants are equally dangerous in MRI",
+        "The scanner photographs the body like an X-ray"
+      ],
+      "critical_facts": [
+        {
+          "id": "pers_002_cf1",
+          "fact": "The strong field exerts forces on ferromagnetic metal and the radio waves can heat some implants or disturb devices"
+        },
+        {
+          "id": "pers_002_cf2",
+          "fact": "The image is built from radio signals given off by hydrogen nuclei as they return to alignment, with position encoded by additional varying magnetic fields (gradients)"
+        }
+      ],
+      "reasoning_gaps": [
+        "Falling back to formulas when the question becomes technical"
+      ]
+    },
+    {
+      "id": "work_001",
+      "category": "work_report",
+      "domain": "software_engineering",
+      "difficulty": "intermediate",
+      "question": "I applied the date-parsing fix you suggested and re-ran the suite. Output:\n\n```\ntests/test_dates.py::test_iso_basic PASSED\ntests/test_dates.py::test_iso_offset PASSED\ntests/test_dates.py::test_naive_input PASSED\ntests/test_dates.py::test_parse_dst_boundary FAILED\nE   AssertionError: expected 2026-03-29T01:30:00+00:00, got 2026-03-29T02:30:00+01:00\n3 passed, 1 failed\n```\n\nWhere are we?",
+      "context": null,
+      "audience": "Developer working with an assistant on a bug",
+      "skill_expectation": "should_apply",
+      "expected_length": "short",
+      "expected_properties": [
+        "Leads with the concrete state: three tests pass, test_parse_dst_boundary still fails",
+        "Reports the failure as its own statement, with what it shows (a local-time result where UTC was expected at a daylight-saving boundary)",
+        "States what has not been verified and what would verify it",
+        "Separates any decision the developer must make from the report; does not claim the bug is fixed"
+      ],
+      "common_misconceptions": [
+        "The fix is complete because most tests pass",
+        "The failing test is wrong rather than the code"
+      ],
+      "critical_facts": [
+        {
+          "id": "work_001_cf1",
+          "fact": "One test, test_parse_dst_boundary, still fails while the other three pass"
+        },
+        {
+          "id": "work_001_cf2",
+          "fact": "The failing result is in local time (+01:00) where UTC (+00:00) was expected, at a daylight-saving boundary"
+        }
+      ],
+      "reasoning_gaps": [
+        "Folding the failure into a narrative of progress",
+        "Describing the fix as done"
+      ]
+    },
+    {
+      "id": "work_002",
+      "category": "work_report",
+      "domain": "software_engineering",
+      "difficulty": "intermediate",
+      "question": "Great. Is that done now? Can I deploy?",
+      "turns": [
+        "Don't change anything yet. In this snippet, what would you change so requests time out after 30 seconds instead of hanging?\n\n```python\nimport httpx\n\nclient = httpx.Client(base_url=API_URL)\n\ndef fetch(path):\n    return client.get(path).json()\n```",
+        "Great. Is that done now? Can I deploy?"
+      ],
+      "context": null,
+      "audience": "Developer",
+      "skill_expectation": "should_apply",
+      "expected_length": "short",
+      "expected_properties": [
+        "States plainly that no file was changed: the change was only proposed",
+        "Restates the exact edit still to be made",
+        "Says what would verify the change before deploying",
+        "No apology paragraph and no promise about future behaviour"
+      ],
+      "common_misconceptions": [
+        "The proposed change has already been applied",
+        "Setting a timeout on one request covers every request made by the client"
+      ],
+      "critical_facts": [
+        {
+          "id": "work_002_cf1",
+          "fact": "Nothing was changed; the timeout was only proposed, as the person asked"
+        },
+        {
+          "id": "work_002_cf2",
+          "fact": "The edit is to pass timeout=30 (or an httpx.Timeout of 30 seconds) when creating the client"
+        }
+      ],
+      "reasoning_gaps": [
+        "Describing an intended action as completed"
       ]
     }
   ]
