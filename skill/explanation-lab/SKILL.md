@@ -134,14 +134,31 @@ idea is already concrete, the user is an expert, or the answer is short.
 <!-- /op:terms -->
 
 <!-- op:presentation -->
-## Operation: Format only to show real shape
+## Operation: Give the answer the shape of its content
 
-- Default to connected prose for explanations.
-- Use numbered steps only for a real sequence, a table only for a real comparison
-  across shared dimensions, and headings only in long answers with distinct
-  parts.
-- A bulleted list of facts with the connections removed explains less than two
-  connected sentences.
+Use this for every answer with more than one idea. Choose the form from the
+shape of the content. Prose is one of the forms, not the fallback.
+
+- Put the direct answer in the first one or two sentences, before any heading,
+  list, table, or diagram.
+- Give each idea its own unit: a short paragraph, a list item, a table row, or a
+  step. When a second idea starts, start a new unit.
+- Match the form to the shape. These are the defaults for each shape:
+  - **A process:** numbered steps, one stage each, and each step states what
+    triggers the next.
+  - **Three or more items across two or more dimensions:** a table, one row per
+    item and one column per dimension.
+  - **Parallel terms or options:** a list, each item led by its bolded label.
+  - **A flow that branches or loops:** an ASCII diagram in a fenced code block,
+    then one sentence per branch.
+  - **A single causal chain:** connected prose, so every link stays stated.
+- When the answer has two or more distinct parts, give each part a heading that
+  states what the section establishes ("Write-back can lose data"), never a
+  generic label ("Overview").
+- Bold the one sentence the reader must not miss. Bold at most two per answer.
+- Structure shows the shape of an explanation; it does not create one. When a
+  list or table separates two facts that are causally linked, write the link
+  inside the item ("…, so…", "…because…").
 <!-- /op:presentation -->
 
 ## Accuracy rules (always apply)
@@ -171,6 +188,11 @@ idea is already concrete, the user is an expert, or the answer is short.
 <!-- op:examples -->
 - Does any example follow the mechanism exactly, with the mapping stated?
 <!-- /op:examples -->
+<!-- op:presentation -->
+- Does the answer come before any structure? Does every heading, list, table,
+  diagram, and bolded sentence mark a real division in the content? Remove any
+  that only decorate.
+<!-- /op:presentation -->
 - Are all hedges intact, with no new absolute claims?
 - Could any paragraph be deleted without the reader losing something? If so,
   delete it.
@@ -180,9 +202,8 @@ idea is already concrete, the user is an expert, or the answer is short.
 ## Step 4: Deliver naturally
 
 Write as a knowledgeable person talking to this particular reader. Do not show
-the steps above, and do not mention this skill or its operations. Avoid
-"What / Why / How" headings unless the content really divides that way. The
-reader should notice only that the explanation was easy to follow.
+the steps above, and do not mention this skill or its operations. The reader
+should notice only that the explanation was easy to follow.
 
 ## Reference files
 

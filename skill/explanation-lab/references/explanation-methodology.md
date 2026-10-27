@@ -28,8 +28,8 @@ a question about a foundational idea.
 <!-- op:sequencing -->
 - Start from something the reader already has: an everyday situation or a
   concept from a neighbouring field. Do not start from the formal definition.
-- Build the dependency chain explicitly, but in prose. Each new idea should rest
-  on one already in place. Teach each missing prerequisite briefly where it is
+- Build the dependency chain explicitly. Each new idea should rest on one
+  already in place. Teach each missing prerequisite briefly where it is
   needed, not in an upfront glossary.
 <!-- /op:sequencing -->
 - Keep the real technical term once the idea is in place ("this is called
@@ -96,8 +96,8 @@ Examples: "What year…", "What's the default…", "Which command…".
   a feature list only describes.
 <!-- /op:mechanism -->
 <!-- op:presentation -->
-- A table helps only if several items are compared on the same dimensions.
-  Otherwise use prose.
+- Three or more items compared on two or more dimensions go in a table, one row
+  per item. Two items on one dimension go in two parallel sentences.
 <!-- /op:presentation -->
 - If one option is usually right for the user's situation, say so and why.
 

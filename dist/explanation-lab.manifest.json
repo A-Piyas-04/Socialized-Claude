@@ -9,11 +9,11 @@
     "terms"
   ],
   "zip": "explanation-lab.zip",
-  "zip_sha256": "831fa8549a98000a04b61e33220b610325ab24d954e65653320f53f525ca1a3a",
+  "zip_sha256": "808e6520dbfe4dcdf8df8afd5b54c0609559c2d43f3dac24a4a68483c4e202e2",
   "files": {
-    "SKILL.md": "dafaba9424e650923cbf2ff90c7633834cf96ae8ddef87bd65078229b0af9748",
+    "SKILL.md": "299158e5e00bf4a2f48715c13da2c408a4cd36165be757d3bf8e17c8ddc51ee1",
     "references/explanation-examples.md": "db44d634b47bb82ddf35b914ac530a1b5e7232f9e5c1dac62e2c2bd0bb8fca6d",
-    "references/explanation-methodology.md": "d745e3a3fd23ba82653d9c4fba36a159e00853c212b71ae9656a2656e41be548",
-    "references/treatment-selection.md": "06986fab06b48eccccad87a195b9d907ab30cf7b15f47263ef57487568b0ce00"
+    "references/explanation-methodology.md": "29b4072404a1da9c7dd90f7ff39156d2345facbf08d2eea8b25a44a75e893635",
+    "references/treatment-selection.md": "b084b20dc5f7a1aa65ab6d64377fb2b36f51e36ea7e29737d4d4ff9a3a5f2959"
   }
 }

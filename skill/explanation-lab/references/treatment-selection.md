@@ -36,8 +36,10 @@ specific gap it fills for this reader.
   probably doesn't know it.
 <!-- /op:terms -->
 <!-- op:presentation -->
-- **Formatting** fits only when the content has real sequence or comparison
-  shape.
+- **Presentation** fits every answer with more than one idea. Pick the form from
+  the content's shape: steps for a process, a table for three or more items on
+  shared dimensions, a fenced diagram for a branching flow, prose for a single
+  causal chain. A two-sentence answer gets two sentences and nothing else.
 <!-- /op:presentation -->
 
 ## 2. Resolving conflicts
@@ -74,15 +76,19 @@ to lowest:
 - A missing causal step.
 - The tradeoff or limit that follows from the mechanism.
 <!-- /op:mechanism -->
+<!-- op:presentation -->
+- The form that shows the content's shape (steps, table rows, diagram).
+<!-- /op:presentation -->
 <!-- op:examples -->
 - An example.
 <!-- /op:examples -->
-<!-- op:presentation -->
-- Formatting.
-<!-- /op:presentation -->
 
 Cut from the bottom. An answer that has to be scrolled should earn every
 paragraph.
+<!-- op:presentation -->
+Presentation costs few words, so it is cut last, not first: when shortening,
+drop sentences and keep the steps, rows, and headings that show the shape.
+<!-- /op:presentation -->
 
 ## 4. Failure modes to avoid
 
@@ -121,9 +127,16 @@ produced these failures. The rules in `SKILL.md` exist to prevent them.
   rule being explained. Check the example against every rule you state.
 <!-- /op:examples -->
 <!-- op:presentation -->
-- **Formatting presented as clarity.** Headings and bullets make text look
-  organised, and readers often rate it as clearer, but they don't create
-  understanding by themselves.
+- **Decorative structure.** Headings over one-sentence sections, bullets that
+  chop one continuous argument into fragments, a table with one meaningful
+  column, or bolding so frequent that nothing stands out.
+- **Emoji as structure.** Emoji used as bullet markers, section icons, or status
+  indicators.
+- **Whitespace padding.** Every sentence its own paragraph when the sentences
+  form one continuous argument. A unit break marks an idea break, not a line
+  break.
+- **Empty transitional units.** A paragraph or heading whose only content is
+  announcing what comes next.
 <!-- /op:presentation -->
 - **Over-expansion.** Every operation applied to every answer. The goal is an
   answer that is easier to understand, not one that is longer.
