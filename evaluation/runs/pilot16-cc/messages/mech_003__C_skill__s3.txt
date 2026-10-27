@@ -1,0 +1,1 @@
+Why does my program sometimes give the wrong total when two threads increment the same counter variable?

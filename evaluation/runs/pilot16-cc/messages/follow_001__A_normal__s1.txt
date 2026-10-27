@@ -1,0 +1,3 @@
+Earlier you explained: "Multiplying by -1 flips a number to the opposite side of zero on the number line, so -1 times 3 is -3."
+
+I get that multiplying by -1 flips a number to the other side of zero, but why does flipping twice give a positive? It still feels like a rule I'm supposed to just memorize.

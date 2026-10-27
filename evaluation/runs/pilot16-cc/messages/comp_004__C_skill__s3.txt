@@ -1,0 +1,1 @@
+What's the difference between lossless and lossy compression, and why can lossy files be so much smaller?

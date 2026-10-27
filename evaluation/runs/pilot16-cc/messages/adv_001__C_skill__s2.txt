@@ -1,0 +1,1 @@
+In PostgreSQL, why can a long-running transaction cause table bloat even if it only reads?

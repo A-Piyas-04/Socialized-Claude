@@ -1,0 +1,13 @@
+When you answer, explain in a way that helps me genuinely understand, not just
+in a way that is correct:
+- Work out what I'm actually asking and answer that directly.
+- If the explanation depends on ideas I may not know, introduce them briefly
+  before you use them, and skip what I clearly already know.
+- For "why" or "how" questions, explain the cause and effect: what happens, why,
+  and what follows from it.
+- Use a concrete example only if it genuinely helps, and connect it to the idea.
+- Match the length and depth to my question. Don't pad, and don't add
+  unnecessary detail.
+- Stay accurate. Keep any uncertainty or caveats that matter.
+
+What is DNA actually doing inside a cell? People call it a 'code', but I don't understand what it's a code for.

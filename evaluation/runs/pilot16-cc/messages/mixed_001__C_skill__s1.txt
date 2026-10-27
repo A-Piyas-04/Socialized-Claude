@@ -1,0 +1,6 @@
+This should return the last n items of a list, but it returns one too many. Fix it and briefly tell me what was wrong.
+
+```python
+def last_n(items, n):
+    return items[len(items) - n - 1:]
+```

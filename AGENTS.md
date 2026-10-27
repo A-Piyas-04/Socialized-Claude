@@ -48,3 +48,12 @@ needs to decide. No progress narrative.
 - A0.1: response files stay pure response text (disclaimers would corrupt word counts and judge
   input). Disclaimers go in each run's `COLLECTION_NOTICE.md`, every per-row metadata file, every
   judge/screener output, and the harness README.
+- A0.2: the automated sweep is a new run `evaluation/runs/pilot16-cc` (16 cases x 4 conditions x 3
+  samples = 192 rows). The existing `pilot16` sheet (1 sample, manual) is left untouched.
+- A0.3: judge backend Google AI Studio over stdlib `urllib`, key in the `x-goog-api-key` header
+  (never in the URL). Default model `gemini-3.5-flash-lite` (the archive's model; free-tier
+  availability unverified; override with `JUDGE_MODEL`). Calls cached on disk by exact request.
+- A0.3: misconceptions in TEST_CASES are plain strings; the judge ids them `m1..mN` by position.
+- A0.4: an item is non-diagnostic if the judge answers it correctly with no text in more than half
+  of the attempts (options shuffled, temperature 1.0). Free-text items are carried through
+  unscreened and excluded from the survival rate.

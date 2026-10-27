@@ -677,7 +677,12 @@ def summarize(run_dir: Path, n_boot: int = 10000, seed: int = 0, min_cases: int 
 
     words = words_summary(rows, comparison_pairs + [["C_skill_explicit", "A_normal"]])
     comprehension = load_comprehension(run_dir, conditions, n_boot, seed, issues)
+    judge_path = run_dir / "judge" / "judge_summary.json"
+    judge = es.load_json(judge_path) if judge_path.is_file() else None
     summary = {
+        "automated_judge_screening": judge and {"fluency_checks": judge["fluency_checks"],
+                                                "flip_rate_by_task": judge["pairwise"]["flip_rate_by_task"],
+                                                "model": judge["model"]},
         "run_dir": str(run_dir),
         "rows": len(rows),
         "responses_present": sum(r["_has_response"] for r in rows),
@@ -702,6 +707,24 @@ def summarize(run_dir: Path, n_boot: int = 10000, seed: int = 0, min_cases: int 
     return summary, issues
 
 
+def render_judge_first(judge: dict | None) -> list[str]:
+    """Preference versus fact capture from judge.py, shown before everything else when present."""
+    if not judge:
+        return []
+    L = ["## Automated screening: preference versus fact capture", "", es.SURFACE_NOTICE, "", es.JUDGE_NOTICE, "",
+         "Preference and fact capture are separate instruments and are never combined. A flag means the judge "
+         "preferred the first condition while its fact capture was flat or lower: fluency bought instead of "
+         f"understanding. Judge model: `{judge['model']}`. Order-flip rate: "
+         + (", ".join(f"{t} {r:.2f}" for t, r in judge["flip_rate_by_task"].items()) or "n/a") + ".", "",
+         "| Comparison | preferred share (x) | fact-capture diff (x - y) | flag |", "|---|---:|---:|---|"]
+    checks = sorted(judge["fluency_checks"], key=lambda c: ("pres" not in c["comparison"], c["comparison"]))
+    L += [f"| {c['comparison']} | {fmt(c['x_win_share'])} | {fmt(c['fact_capture_mean_diff'])} | "
+          f"{'PREFERENCE UP, FACTS FLAT/DOWN' if c['flag'] else ''} |" for c in checks]
+    if not checks:
+        L.append("| (none) | | | |")
+    return L + [""]
+
+
 def render_markdown(s: dict) -> str:
     L = ["# Evaluation summary", "",
          f"Run: `{s['run_dir']}`. Rows: {s['rows']}; responses present: {s['responses_present']}; "
@@ -709,6 +732,7 @@ def render_markdown(s: dict) -> str:
          "Pilot-scale descriptive statistics. Intervals are 95% bootstrap percentile intervals over cases "
          "(or participants). Rater scores are judgements of explanation quality, not measurements of "
          "comprehension. Success criteria are engineering targets, not validated thresholds.", ""]
+    L += render_judge_first(s.get("automated_judge_screening"))
     L += ["## Success criteria (engineering targets)", "", "| ID | Criterion | Status | Detail |", "|---|---|---|---|"]
     L += [f"| {c['id']} | {c['criterion']} | {c['status']} | {c['detail']} |" for c in s["criteria"]]
     L += ["", "## Data issues", ""]
@@ -794,6 +818,12 @@ def main(argv: list[str] | None = None) -> int:
 
     run_dir = Path(args.run_dir)
     summary, issues = summarize(run_dir, args.bootstrap, args.seed, min_cases=args.min_cases)
+    judge = summary.get("automated_judge_screening")
+    if judge and not args.check_only:
+        for check in sorted(judge["fluency_checks"], key=lambda c: ("pres" not in c["comparison"], c["comparison"])):
+            flag = "  <-- PREFERENCE UP, FACTS FLAT/DOWN" if check["flag"] else ""
+            print(f"JUDGE   {check['comparison']}: preferred {fmt(check['x_win_share'])}, "
+                  f"fact-capture diff {fmt(check['fact_capture_mean_diff'])}{flag}")
     for message in issues.errors:
         print(f"ERROR   {message}")
     for message in issues.warnings:
