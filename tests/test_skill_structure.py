@@ -72,7 +72,7 @@ def test_required_reference_files_exist_and_are_linked():
 def test_skill_body_is_compact():
     _, body, _ = lib.split_frontmatter(read(lib.SKILL_DIR / "SKILL.md"))
     rendered = lib.render_markers(body, lib.VARIANTS["full"])
-    assert rendered.count("\n") < 250, "SKILL.md should stay well under the 500-line limit"
+    assert rendered.count("\n") < 300, "SKILL.md should stay well under the 500-line limit"
 
 
 def test_skill_never_exposes_research_treatment_ids():
@@ -311,6 +311,8 @@ HEADINGS = {
     "presentation": "## Operation: Give the answer the shape of its content",
     "register": "## Operation: Pitch the answer at the reader's register",
     "repair": "## Operation: Repair after a clarification or correction",
+    "persistence": "## Operation: Keep standing instructions in force",
+    "work-report": "## Operation: Report work that was done",
 }
 
 

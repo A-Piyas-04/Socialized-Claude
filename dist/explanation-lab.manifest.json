@@ -4,16 +4,18 @@
   "enabled_operations": [
     "examples",
     "mechanism",
+    "persistence",
     "presentation",
     "register",
     "repair",
     "sequencing",
-    "terms"
+    "terms",
+    "work-report"
   ],
   "zip": "explanation-lab.zip",
-  "zip_sha256": "0f6b7bf8bc611950a37745c6932fa0a2d4cabadc3ecd542e3205f4fc71eb564b",
+  "zip_sha256": "c0153c3dcf5b4e4a5523b03befe411ed2525806d2618c8ab000bf145e0b2dec2",
   "files": {
-    "SKILL.md": "7d18a7514d0dd59eeeb80b682293d3624e32d925e2ac2ebdc946a42d4b39c609",
+    "SKILL.md": "8f42bb673d05cfa8048b4b09b0734948b2b1b7f6c9be015e7787c63b78477d33",
     "references/explanation-examples.md": "db44d634b47bb82ddf35b914ac530a1b5e7232f9e5c1dac62e2c2bd0bb8fca6d",
     "references/explanation-methodology.md": "29b4072404a1da9c7dd90f7ff39156d2345facbf08d2eea8b25a44a75e893635",
     "references/treatment-selection.md": "b084b20dc5f7a1aa65ab6d64377fb2b36f51e36ea7e29737d4d4ff9a3a5f2959"
