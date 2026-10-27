@@ -308,7 +308,7 @@ HEADINGS = {
     "mechanism": "## Operation: Explain the mechanism",
     "examples": "## Operation: Ground with one example",
     "terms": "## Operation: Introduce terms where they are first needed",
-    "structure": "## Operation: Format only to show real shape",
+    "presentation": "## Operation: Format only to show real shape",
 }
 
 

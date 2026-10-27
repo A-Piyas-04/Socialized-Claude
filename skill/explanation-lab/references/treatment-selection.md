@@ -35,10 +35,10 @@ specific gap it fills for this reader.
 - **Defining a term** fits when the term is load-bearing and this reader
   probably doesn't know it.
 <!-- /op:terms -->
-<!-- op:structure -->
+<!-- op:presentation -->
 - **Formatting** fits only when the content has real sequence or comparison
   shape.
-<!-- /op:structure -->
+<!-- /op:presentation -->
 
 ## 2. Resolving conflicts
 
@@ -77,9 +77,9 @@ to lowest:
 <!-- op:examples -->
 - An example.
 <!-- /op:examples -->
-<!-- op:structure -->
+<!-- op:presentation -->
 - Formatting.
-<!-- /op:structure -->
+<!-- /op:presentation -->
 
 Cut from the bottom. An answer that has to be scrolled should earn every
 paragraph.
@@ -120,10 +120,10 @@ produced these failures. The rules in `SKILL.md` exist to prevent them.
 - **Examples that break the mechanism.** An example whose details contradict the
   rule being explained. Check the example against every rule you state.
 <!-- /op:examples -->
-<!-- op:structure -->
+<!-- op:presentation -->
 - **Formatting presented as clarity.** Headings and bullets make text look
   organised, and readers often rate it as clearer, but they don't create
   understanding by themselves.
-<!-- /op:structure -->
+<!-- /op:presentation -->
 - **Over-expansion.** Every operation applied to every answer. The goal is an
   answer that is easier to understand, not one that is longer.

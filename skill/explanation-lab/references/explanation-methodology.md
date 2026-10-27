@@ -95,10 +95,10 @@ Examples: "What year…", "What's the default…", "Which command…".
 - For each difference, say what causes it. A difference with its cause explains;
   a feature list only describes.
 <!-- /op:mechanism -->
-<!-- op:structure -->
+<!-- op:presentation -->
 - A table helps only if several items are compared on the same dimensions.
   Otherwise use prose.
-<!-- /op:structure -->
+<!-- /op:presentation -->
 - If one option is usually right for the user's situation, say so and why.
 
 ## 7. Requests for examples

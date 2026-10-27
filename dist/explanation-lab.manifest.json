@@ -4,8 +4,8 @@
   "enabled_operations": [
     "examples",
     "mechanism",
+    "presentation",
     "sequencing",
-    "structure",
     "terms"
   ],
   "zip": "explanation-lab.zip",

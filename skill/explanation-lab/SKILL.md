@@ -133,7 +133,7 @@ idea is already concrete, the user is an expert, or the answer is short.
 - Do not introduce terms the answer does not need.
 <!-- /op:terms -->
 
-<!-- op:structure -->
+<!-- op:presentation -->
 ## Operation: Format only to show real shape
 
 - Default to connected prose for explanations.
@@ -142,7 +142,7 @@ idea is already concrete, the user is an expert, or the answer is short.
   parts.
 - A bulleted list of facts with the connections removed explains less than two
   connected sentences.
-<!-- /op:structure -->
+<!-- /op:presentation -->
 
 ## Accuracy rules (always apply)
 
