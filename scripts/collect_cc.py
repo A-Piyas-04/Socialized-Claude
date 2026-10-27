@@ -155,7 +155,8 @@ class Arm:
     manifest_path: Path
 
 
-def arm_for_batch(batch: str, dist_dir: Path = DIST_DIR) -> Arm:
+def arm_for_batch(batch: str, dist_dir: Path | None = None) -> Arm:
+    dist_dir = dist_dir or DIST_DIR
     if batch in {"skill_off", "skill_on", "variant:full"}:
         stem, folder = SKILL_NAME, dist_dir
     elif batch.startswith("variant:"):
@@ -163,6 +164,12 @@ def arm_for_batch(batch: str, dist_dir: Path = DIST_DIR) -> Arm:
     else:
         raise HarnessError(f"unknown batch '{batch}'")
     return Arm(batch, batch != "skill_off", folder / f"{stem}.zip", folder / f"{stem}.manifest.json")
+
+
+def run_dist(run_dir: Path | None) -> Path:
+    """The run's frozen build (<run>/skill_build) when it has one, else the repository's dist/."""
+    frozen = run_dir / "skill_build" if run_dir else None
+    return frozen if frozen and (frozen / f"{SKILL_NAME}.manifest.json").is_file() else DIST_DIR
 
 
 def load_manifest(arm: Arm) -> dict:
@@ -574,7 +581,7 @@ def collect(run_dir: Path, claude: list[str], env: dict[str, str], opts: Options
     versions = run_versions(run_dir)
     failed = incomplete = consecutive = 0
     for n, row in enumerate(todo, start=1):
-        arm = arm_for_batch(row["batch"])
+        arm = arm_for_batch(row["batch"], run_dist(run_dir))
         if arm.batch not in manifests:
             manifests[arm.batch] = load_manifest(arm)
         manifest = manifests[arm.batch]
@@ -662,7 +669,7 @@ def check_arms(run_dir: Path | None, batches: list[str], claude: list[str], env:
         raise HarnessError("\n".join(problems))
     bad = 0
     for batch in batches:
-        arm = arm_for_batch(batch)
+        arm = arm_for_batch(batch, run_dist(run_dir))
         manifest = load_manifest(arm)
         root = Path(tempfile.mkdtemp(prefix="cc_arm_"))
         try:
@@ -691,11 +698,12 @@ def dry_run(run_dir: Path, claude: list[str], env: dict[str, str], opts: Options
     for problem in environment_problems(env, need_token=True):
         write(f"A real run would refuse to start: {problem}")
     for row in todo:
-        arm = arm_for_batch(row["batch"])
+        arm = arm_for_batch(row["batch"], run_dist(run_dir))
         cmd = build_command(claude, Path("<sandbox>/settings.json"), opts.model, opts.effort)
         n_turns = len(es.read_turns(run_dir / row["message_file"]))
         write(f"{row['order']:>4} {row['row_id']}: skill {'ON ' if arm.skill_enabled else 'OFF'} "
-              f"({arm.zip_path.name}); {n_turns} user turn(s) from {row['message_file']}")
+              f"({arm.zip_path.relative_to(arm.zip_path.parents[1]).as_posix()}); "
+              f"{n_turns} user turn(s) from {row['message_file']}")
         write(f"       {' '.join(cmd)}")
     write(f"Planned invocations: {len(todo)} (of {len(rows)} rows; up to {len(todo) * (opts.max_retries + 1)} "
           f"with retries). Nothing was called.")

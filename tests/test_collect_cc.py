@@ -240,7 +240,7 @@ def test_token_never_written(tmp_path, run_dir):
 
 def test_check_arms_withholds_token(tmp_path, run_dir):
     out = []
-    assert cc.check_arms(run_dir, ["skill_off", "skill_on", "variant:seq"], CLAUDE, fake_env(tmp_path), OPTS,
+    assert cc.check_arms(None, ["skill_off", "skill_on", "variant:seq"], CLAUDE, fake_env(tmp_path), OPTS,
                          write=out.append) == 0
     assert all(" -> OK" in line for line in out)
     assert [c["has_token"] for c in calls(tmp_path)] == [False, False, False]
@@ -261,6 +261,14 @@ def test_stale_build_is_refused(tmp_path, run_dir):
     es.write_csv(run_dir / "run_sheet.csv", header, rows)
     with pytest.raises(cc.HarnessError, match="build changed"):
         cc.collect(run_dir, CLAUDE, fake_env(tmp_path), OPTS, write=lambda _: None)
+
+
+def test_run_uses_its_frozen_build_not_current_dist(tmp_path, run_dir, dist):
+    frozen = run_dir / "skill_build" / "explanation-lab.zip"
+    assert frozen.is_file()
+    (dist / "explanation-lab.zip").unlink()
+    (dist / "explanation-lab.manifest.json").unlink()
+    assert cc.collect(run_dir, CLAUDE, fake_env(tmp_path), OPTS, write=lambda _: None) == 0
 
 
 def test_dry_run_calls_nothing(tmp_path, run_dir):

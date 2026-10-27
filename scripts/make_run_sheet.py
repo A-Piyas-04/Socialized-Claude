@@ -21,6 +21,28 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 import evalschema as es  # noqa: E402
 
 
+def freeze_build(run_dir: Path, batches: set[str], dist: Path | None = None) -> list[str]:
+    """Copy the ZIPs and manifests this run needs into <run>/skill_build/, so later skill edits
+    cannot change what the run measures. Returns the copied file names."""
+    dist = dist or es.REPO_ROOT / "dist"
+    names = set()
+    for batch in batches:
+        if batch in {"skill_off", "skill_on", "variant:full"}:
+            names.add("explanation-lab")
+        elif batch.startswith("variant:"):
+            names.add(f"ablation/explanation-lab--{batch.split(':', 1)[1]}")
+    copied = []
+    for name in sorted(names):
+        for suffix in (".zip", ".manifest.json"):
+            source = dist / f"{name}{suffix}"
+            if source.is_file():
+                target = run_dir / "skill_build" / f"{name}{suffix}"
+                target.parent.mkdir(parents=True, exist_ok=True)
+                target.write_bytes(source.read_bytes())
+                copied.append(f"{name}{suffix}")
+    return copied
+
+
 def batch_rank(batch: str) -> tuple[int, str]:
     return ({"skill_off": 0, "skill_on": 1}.get(batch, 2), batch)
 
@@ -126,6 +148,7 @@ def main(argv: list[str] | None = None) -> int:
         turns = es.build_turns(cases[row["case_id"]], row["condition"], conditions, skill_body)
         es.write_turns(run_dir / row["message_file"], turns)
     es.write_csv(sheet, es.RESULTS_COLUMNS, rows)
+    freeze_build(run_dir, {r["batch"] for r in rows})
 
     batches = sorted({r["batch"] for r in rows}, key=batch_rank)
     print(f"Created {sheet} with {len(rows)} rows ({len(case_ids)} cases x {len(condition_names)} conditions "
