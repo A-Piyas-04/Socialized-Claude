@@ -65,6 +65,7 @@ SECRET_PATTERNS = {
     "Anthropic API key": re.compile(r"sk-ant-[A-Za-z0-9_\-]{10,}"),
     "OpenAI-style secret key": re.compile(r"\bsk-[A-Za-z0-9]{20,}"),
     "Google API key": re.compile(r"\bAIza[0-9A-Za-z_\-]{30,}"),
+    "Groq API key": re.compile(r"\bgsk_[A-Za-z0-9]{20,}"),
     "AWS access key": re.compile(r"\bAKIA[0-9A-Z]{16}\b"),
     "Private key block": re.compile(r"-----BEGIN [A-Z ]*PRIVATE KEY-----"),
     "Bearer token": re.compile(r"Bearer\s+[A-Za-z0-9_\-\.]{20,}"),

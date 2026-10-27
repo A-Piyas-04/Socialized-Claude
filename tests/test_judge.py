@@ -215,8 +215,82 @@ def test_daily_quota_stops_without_retrying():
 
 
 def test_backend_requires_key():
-    with pytest.raises(jl.JudgeError, match="GEMINI_API_KEY is not set"):
+    with pytest.raises(jl.JudgeError, match="GROQ_API_KEY is not set"):
         jl.backend_from_env({})
+    with pytest.raises(jl.JudgeError, match="GEMINI_API_KEY is not set"):
+        jl.backend_from_env({"JUDGE_BACKEND": "gemini"})
+    with pytest.raises(jl.JudgeError, match="unknown JUDGE_BACKEND"):
+        jl.backend_from_env({"JUDGE_BACKEND": "other"})
+
+
+GROQ_KEY = "gsk_" + "F" * 40
+
+
+def groq(opener, **kwargs):
+    return jl.OpenAICompatibleBackend("groq", jl.GROQ_URL, GROQ_KEY, "openai/gpt-oss-120b", min_interval=0,
+                                      opener=opener, **kwargs)
+
+
+def test_groq_is_the_default_and_sends_bearer_header():
+    backend = jl.backend_from_env({"GROQ_API_KEY": GROQ_KEY + "\n"})
+    assert backend.name == "groq" and backend.model == jl.DEFAULT_GROQ_MODEL
+    seen = []
+
+    def opener(request, timeout):
+        seen.append(request)
+        return FakeResponse(json.dumps({"model": "openai/gpt-oss-120b",
+                                        "choices": [{"message": {"content": '{"winner": 2}'}}]}).encode())
+
+    assert groq(opener).complete("hi", 0.0) == '{"winner": 2}'
+    body = json.loads(seen[0].data)
+    assert body["response_format"] == {"type": "json_object"} and body["messages"][0]["content"] == "hi"
+    assert GROQ_KEY not in seen[0].full_url and seen[0].get_header("Authorization") == f"Bearer {GROQ_KEY}"
+
+
+def test_groq_daily_limit_stops_and_minute_limit_waits():
+    day = json.dumps({"error": {"message": "Rate limit reached for model on requests per day (RPD): Limit 1000"}})
+
+    def daily(request, timeout):
+        raise urllib.error.HTTPError(request.full_url, 429, "Too Many", {}, io.BytesIO(day.encode()))
+
+    waits = []
+    with pytest.raises(jl.JudgeUnavailable, match="daily limit"):
+        groq(daily, sleep=waits.append).complete("hi", 0.0)
+    assert waits == []
+
+    calls = []
+
+    def minute_then_ok(request, timeout):
+        calls.append(1)
+        if len(calls) == 1:
+            raise urllib.error.HTTPError(request.full_url, 429, "Too Many", {"retry-after": "7"},
+                                         io.BytesIO(b'{"error": {"message": "requests per minute (RPM)"}}'))
+        return FakeResponse(json.dumps({"model": "openai/gpt-oss-120b",
+                                        "choices": [{"message": {"content": "{}"}}]}).encode())
+
+    assert groq(minute_then_ok, sleep=waits.append).complete("hi", 0.0) == "{}"
+    assert waits == [7.0]
+
+
+def test_groq_rejects_a_different_served_model_and_never_leaks_the_key():
+    def opener(request, timeout):
+        return FakeResponse(json.dumps({"model": "llama-other", "choices": [{"message": {"content": "{}"}}]}).encode())
+
+    with pytest.raises(jl.JudgeError, match="answered with llama-other") as info:
+        groq(opener).complete("hi", 0.0)
+    assert GROQ_KEY not in str(info.value)
+
+
+def test_gemma_requests_skip_json_mode():
+    seen = []
+
+    def opener(request, timeout):
+        seen.append(json.loads(request.data))
+        return FakeResponse(json.dumps({"modelVersion": "gemma-4-26b-a4b-it", "candidates": [
+            {"content": {"parts": [{"text": "{}"}]}}]}).encode())
+
+    jl.GeminiBackend(KEY, "gemma-4-26b-a4b-it", min_interval=0, opener=opener, sleep=lambda _: None).complete("x", 0)
+    assert "responseMimeType" not in seen[0]["generationConfig"]
 
 
 # --- item screening ----------------------------------------------------------------
