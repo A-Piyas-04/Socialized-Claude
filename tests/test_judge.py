@@ -144,16 +144,99 @@ def test_calibration_withholds_verdicts(run_dir, tmp_path):
     assert {i["condition"] for i in items} == {"A_normal", "C_skill"}
 
 
-def test_acceptance_uses_twenty_stratified_pairs(tmp_path):
+class OracleBackend:
+    """Knows which texts are the archive originals. mode: good | shorter (consistent but useless) | first."""
+
+    name, model = "oracle", "oracle-1"
+
+    def __init__(self, originals, buried, mode="good"):
+        self.originals, self.buried, self.mode = originals, buried, mode
+
+    def complete(self, prompt, temperature):
+        if "FACTS:" in prompt:
+            answer = prompt.split("ANSWER:\n<<<\n", 1)[1].split("\n>>>", 1)[0]
+            ids = re.findall(r"^- (\S+?_f\d+):", prompt, flags=re.M)
+            keep = len(ids) if answer in self.originals or answer in self.buried else len(ids) - 1
+            return json.dumps({"facts_stated": ids[:keep], "misconceptions_asserted": []})
+        one = prompt.split("ANSWER 1:\n<<<\n", 1)[1].split("\n>>>", 1)[0]
+        two = prompt.split("ANSWER 2:\n<<<\n", 1)[1].split("\n>>>", 1)[0]
+        if self.mode == "first":
+            return '{"winner": 1}'
+        if self.mode == "shorter":
+            return '{"winner": %d}' % (1 if (len(one), one) < (len(two), two) else 2)
+        if (one in self.originals) != (two in self.originals):
+            return '{"winner": %d}' % (1 if one in self.originals else 2)
+        return '{"winner": %d}' % (1 if len(one) >= len(two) else 2)
+
+
+def oracle(mode="good"):
     import judge_acceptance as ja
-    result = ja.acceptance(FakeBackend(), cache_dir=tmp_path / "cache")
-    assert result["pairs"] == 20
-    assert {r["topic"] for r in result["pair_rows"]} == {"caching", "databases", "tcp", "immunology", "interest"}
+    cases, responses = ja.load_archive()
+    base = {r["case_id"]: r for r in responses if r["style"] == "base"}
+    originals = {r["text"] for r in base.values()}
+    buried = {ja.bury(r["text"]) for r in base.values()}
+    return OracleBackend(originals, buried, mode)
+
+
+def test_acceptance_is_claude_only_with_a_floor(tmp_path):
+    import judge_acceptance as ja
+    cases, responses = ja.load_archive()
+    assert len(responses) == 15 and {r["style"] for r in responses} == {"base", "tutor", "pedagogical"}
+    result = ja.acceptance(oracle(), cache_dir=tmp_path / "c1")
     assert result["strata"]["claude-base vs claude-pedagogical"]["pairs"] == 5
-    assert result["max_flip_rate"] == 0.20 and result["accepted"] is True
-    biased = ja.acceptance(FakeBackend(pairwise="always_first"), cache_dir=tmp_path / "cache2")
-    assert biased["flip_rate"] == 1.0 and biased["accepted"] is False
-    assert "REJECTED" in ja.render(biased)
+    assert not any("gpt" in k for k in result["strata"])
+    assert len(result["floor_pairs"]) == 13, "5 truncated + 3 fact_removed + 5 buried"
+    assert result["thresholds"] == {"max_flip_rate": 0.20, "floor_min_share": 0.80}
+    assert result["floor"]["pairwise_floor_passed"] and result["floor"]["fact_floor_passed"]
+    assert result["accepted"] is True and "ACCEPTED" in ja.render(result)
+
+
+def test_a_consistent_but_useless_judge_is_rejected(tmp_path):
+    import judge_acceptance as ja
+    result = ja.acceptance(oracle("shorter"), cache_dir=tmp_path / "c2")
+    assert result["flip_rate"] == 0.0 and result["flip_rate_passed"]
+    assert not result["floor"]["pairwise_floor_passed"] and result["accepted"] is False
+
+
+def test_a_position_biased_judge_is_rejected(tmp_path):
+    import judge_acceptance as ja
+    result = ja.acceptance(oracle("first"), cache_dir=tmp_path / "c3")
+    assert result["flip_rate"] == 1.0 and result["accepted"] is False and "REJECTED" in ja.render(result)
+
+
+def test_degradations_are_deterministic_and_targeted():
+    import judge_acceptance as ja
+    cases, responses = ja.load_archive()
+    for r in (r for r in responses if r["style"] == "base"):
+        case = cases[r["case_id"]]
+        versions = {v["degradation"]: v for v in ja.degraded_versions(r, case)}
+        assert len(ja.truncate(r["text"]).split()) < 0.5 * len(r["text"].split())
+        assert ja.paragraphs(versions["buried"]["text"])[-1] == ja.paragraphs(r["text"])[0]
+        assert sorted(versions["buried"]["text"].split()) == sorted(r["text"].split())
+        if case["topic"] in ja.FACT_REMOVALS:
+            removed = versions["fact_removed"]["text"]
+            for start in ja.FACT_REMOVALS[case["topic"]][1]:
+                assert start not in removed
+        else:
+            assert "fact_removed" not in versions
+    assert ja.degraded_versions(responses[0], cases[responses[0]["case_id"]]) == \
+        ja.degraded_versions(responses[0], cases[responses[0]["case_id"]])
+
+
+def test_fact_removal_list_must_match_exactly():
+    import judge_acceptance as ja
+    with pytest.raises(ValueError, match="does not match"):
+        ja.remove_fact("Unrelated text.", "databases")
+
+
+def test_floor_verdict_thresholds():
+    import judge_acceptance as ja
+    rows = [{"winner": "x"}] * 4 + [{"winner": "y"}]
+    meta = [{"original": "o", "degraded": f"d{i}", "degradation": "fact_removed", "topic": "t"} for i in range(5)]
+    counts = {"o": 4, "d0": 3, "d1": 3, "d2": 3, "d3": 3, "d4": 4}
+    verdict = ja.floor_verdicts(rows, counts, meta)
+    assert verdict["pairwise_floor_passed"] and verdict["fact_lower_share"] == 0.8
+    assert not verdict["fact_floor_passed"], "no buried control judged, so the fact floor cannot pass"
 
 
 # --- Gemini client (no network) ------------------------------------------------
