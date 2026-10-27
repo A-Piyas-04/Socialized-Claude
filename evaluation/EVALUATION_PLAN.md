@@ -242,3 +242,13 @@ These run offline and support, but never replace, human evaluation:
 There is **no** automated "comprehension score". Word counts, heading counts,
 readability formulas, and semantic similarity are not measures of
 understanding, and the tools do not present them as such.
+
+`scripts/lint_response.py` (with `scripts/structural_metrics.py`) adds a
+table of structural descriptors to every summary: block sizes, headings, lists,
+tables, emphasis, answer-first offset, and decorative-structure flags. These are
+structural descriptors, not a comprehension score. A response can score
+perfectly on every metric here and still be wrong, and the linter cannot tell.
+The linter's output feeds no S1–S7 criterion. The same summary checks
+persistence cases' standing constraints (word limit, no lists, no maths) at the
+turns each case names; a failed check is a turn at which the person would have
+had to restate the constraint.

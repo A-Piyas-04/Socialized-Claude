@@ -338,6 +338,39 @@ def test_new_session_mid_conversation_is_a_mismatch(tmp_path, multi_run):
     assert not (multi_run / "responses" / "persist_t__B_prompt__s1.md").exists()
 
 
+def test_persistence_constraints_are_checked_on_real_transcripts(tmp_path, dist, monkeypatch):
+    import summarize_results
+    monkeypatch.setattr(make_run_sheet.es, "REPO_ROOT", tmp_path)
+    make_run_sheet.main(["--run-id", "p", "--runs-dir", str(tmp_path / "runs"), "--cases", "pers_001",
+                         "--conditions", "A_normal,C_skill_explicit", "--samples", "1"])
+    run = tmp_path / "runs" / "p"
+    assert cc.collect(run, CLAUDE, fake_env(tmp_path), OPTS, write=lambda _: None) == 0
+    transcript_file = run / "responses" / "pers_001__A_normal__s1.turns.json"
+    transcript = json.loads(transcript_file.read_text(encoding="utf-8"))
+    assert len(transcript["turns"]) == 5
+    transcript["turns"][2]["assistant"] = transcript["turns"][4]["assistant"] = "Starch recrystallises as it cools."
+    transcript_file.write_text(json.dumps(transcript), encoding="utf-8")
+    summary, _ = summarize_results.summarize(run, n_boot=10)
+    checks = summary["persistence_checks"]
+    assert checks["A_normal"]["checks"] == 2 and checks["A_normal"]["failed"] == 0
+    transcript["turns"][4]["assistant"] = "- one\n- two\n" + "word " * 70
+    transcript_file.write_text(json.dumps(transcript), encoding="utf-8")
+    summary, _ = summarize_results.summarize(run, n_boot=10)
+    failed = summary["persistence_checks"]["A_normal"]
+    assert failed["failed"] == 1 and failed["reask_rate"] == 0.5
+    assert "turn 5: max_words" in failed["failures"][0] and "no_lists" in failed["failures"][0]
+    md = summarize_results.render_markdown(summary)
+    assert summarize_results.PLAN_SECTION_9_DISCLAIMER in md and summarize_results.STRUCTURAL_EXTENSION in md
+    criteria = json.dumps(summary["criteria"]).lower()
+    assert "decorative" not in criteria and "re-ask" not in criteria and "linter" not in criteria
+
+
+def test_no_math_constraint():
+    import summarize_results as sr
+    assert sr.constraint_failures("The field lines up the protons.", {"no_math": True}) == []
+    assert sr.constraint_failures("Frequency f = γB.", {"no_math": True}) == ["no_math"]
+
+
 def test_version_drift_stops_the_run(tmp_path, run_dir):
     cc.collect(run_dir, CLAUDE, fake_env(tmp_path, "version_1.0.0"), OPTS, limit=1, write=lambda _: None)
     with pytest.raises(cc.HarnessError, match="Claude Code is now 2.0.0"):

@@ -1,0 +1,290 @@
+{
+  "branching_diagram": {
+    "question": null,
+    "expected": {
+      "word_count": 25,
+      "block_count": 3,
+      "mean_block_words": 12.5,
+      "max_block_words": 14,
+      "heading_count": 0,
+      "bullet_count": 0,
+      "numbered_count": 0,
+      "table_count": 0,
+      "code_block_count": 1,
+      "emphasis_count": 0,
+      "mean_sentence_words": 12.5,
+      "answer_first_offset": 0,
+      "decorative_structure_flags": []
+    }
+  },
+  "bullets_unconnected": {
+    "question": null,
+    "expected": {
+      "word_count": 15,
+      "block_count": 5,
+      "mean_block_words": 3.0,
+      "max_block_words": 5,
+      "heading_count": 0,
+      "bullet_count": 4,
+      "numbered_count": 0,
+      "table_count": 0,
+      "code_block_count": 0,
+      "emphasis_count": 0,
+      "mean_sentence_words": 3.0,
+      "answer_first_offset": 0,
+      "decorative_structure_flags": [
+        "bullets_unconnected"
+      ]
+    }
+  },
+  "code_block": {
+    "question": null,
+    "expected": {
+      "word_count": 26,
+      "block_count": 3,
+      "mean_block_words": 13.0,
+      "max_block_words": 13,
+      "heading_count": 0,
+      "bullet_count": 0,
+      "numbered_count": 0,
+      "table_count": 0,
+      "code_block_count": 1,
+      "emphasis_count": 0,
+      "mean_sentence_words": 13.0,
+      "answer_first_offset": 0,
+      "decorative_structure_flags": []
+    }
+  },
+  "comparison_table": {
+    "question": null,
+    "expected": {
+      "word_count": 50,
+      "block_count": 3,
+      "mean_block_words": 16.67,
+      "max_block_words": 23,
+      "heading_count": 0,
+      "bullet_count": 0,
+      "numbered_count": 0,
+      "table_count": 1,
+      "code_block_count": 0,
+      "emphasis_count": 0,
+      "mean_sentence_words": 13.5,
+      "answer_first_offset": 0,
+      "decorative_structure_flags": []
+    }
+  },
+  "decorative_headings": {
+    "question": null,
+    "expected": {
+      "word_count": 15,
+      "block_count": 4,
+      "mean_block_words": 3.75,
+      "max_block_words": 7,
+      "heading_count": 2,
+      "bullet_count": 0,
+      "numbered_count": 0,
+      "table_count": 0,
+      "code_block_count": 0,
+      "emphasis_count": 0,
+      "mean_sentence_words": 6.5,
+      "answer_first_offset": 1,
+      "decorative_structure_flags": [
+        "heading_thin",
+        "heading_thin"
+      ]
+    }
+  },
+  "emoji_structure": {
+    "question": null,
+    "expected": {
+      "word_count": 21,
+      "block_count": 4,
+      "mean_block_words": 5.25,
+      "max_block_words": 13,
+      "heading_count": 1,
+      "bullet_count": 2,
+      "numbered_count": 0,
+      "table_count": 0,
+      "code_block_count": 0,
+      "emphasis_count": 0,
+      "mean_sentence_words": 6.33,
+      "answer_first_offset": 2,
+      "decorative_structure_flags": [
+        "emoji_structure",
+        "emoji_structure",
+        "emoji_structure",
+        "bullets_unconnected"
+      ]
+    }
+  },
+  "emphasis_overuse": {
+    "question": null,
+    "expected": {
+      "word_count": 25,
+      "block_count": 1,
+      "mean_block_words": 25.0,
+      "max_block_words": 25,
+      "heading_count": 0,
+      "bullet_count": 0,
+      "numbered_count": 0,
+      "table_count": 0,
+      "code_block_count": 0,
+      "emphasis_count": 4,
+      "mean_sentence_words": 25.0,
+      "answer_first_offset": 0,
+      "decorative_structure_flags": [
+        "emphasis_overuse"
+      ]
+    }
+  },
+  "empty_transition": {
+    "question": null,
+    "expected": {
+      "word_count": 48,
+      "block_count": 3,
+      "mean_block_words": 16.0,
+      "max_block_words": 33,
+      "heading_count": 0,
+      "bullet_count": 0,
+      "numbered_count": 0,
+      "table_count": 0,
+      "code_block_count": 0,
+      "emphasis_count": 0,
+      "mean_sentence_words": 12.0,
+      "answer_first_offset": 0,
+      "decorative_structure_flags": [
+        "empty_transition"
+      ]
+    }
+  },
+  "labelled_list": {
+    "question": null,
+    "expected": {
+      "word_count": 31,
+      "block_count": 4,
+      "mean_block_words": 7.75,
+      "max_block_words": 12,
+      "heading_count": 0,
+      "bullet_count": 3,
+      "numbered_count": 0,
+      "table_count": 0,
+      "code_block_count": 0,
+      "emphasis_count": 0,
+      "mean_sentence_words": 7.75,
+      "answer_first_offset": 0,
+      "decorative_structure_flags": []
+    }
+  },
+  "preamble_restatement": {
+    "question": "Why does bread go stale faster in the fridge?",
+    "expected": {
+      "word_count": 28,
+      "block_count": 1,
+      "mean_block_words": 28.0,
+      "max_block_words": 28,
+      "heading_count": 0,
+      "bullet_count": 0,
+      "numbered_count": 0,
+      "table_count": 0,
+      "code_block_count": 0,
+      "emphasis_count": 0,
+      "mean_sentence_words": 9.33,
+      "answer_first_offset": 13,
+      "decorative_structure_flags": []
+    }
+  },
+  "process_steps": {
+    "question": null,
+    "expected": {
+      "word_count": 85,
+      "block_count": 6,
+      "mean_block_words": 14.17,
+      "max_block_words": 18,
+      "heading_count": 0,
+      "bullet_count": 0,
+      "numbered_count": 5,
+      "table_count": 0,
+      "code_block_count": 0,
+      "emphasis_count": 0,
+      "mean_sentence_words": 14.17,
+      "answer_first_offset": 0,
+      "decorative_structure_flags": []
+    }
+  },
+  "prose_causal_chain": {
+    "question": null,
+    "expected": {
+      "word_count": 102,
+      "block_count": 3,
+      "mean_block_words": 34.0,
+      "max_block_words": 40,
+      "heading_count": 0,
+      "bullet_count": 0,
+      "numbered_count": 0,
+      "table_count": 0,
+      "code_block_count": 0,
+      "emphasis_count": 0,
+      "mean_sentence_words": 14.57,
+      "answer_first_offset": 0,
+      "decorative_structure_flags": []
+    }
+  },
+  "prose_two_sentences": {
+    "question": null,
+    "expected": {
+      "word_count": 19,
+      "block_count": 1,
+      "mean_block_words": 19.0,
+      "max_block_words": 19,
+      "heading_count": 0,
+      "bullet_count": 0,
+      "numbered_count": 0,
+      "table_count": 0,
+      "code_block_count": 0,
+      "emphasis_count": 0,
+      "mean_sentence_words": 9.5,
+      "answer_first_offset": 0,
+      "decorative_structure_flags": []
+    }
+  },
+  "thin_table": {
+    "question": null,
+    "expected": {
+      "word_count": 16,
+      "block_count": 2,
+      "mean_block_words": 8.0,
+      "max_block_words": 11,
+      "heading_count": 0,
+      "bullet_count": 0,
+      "numbered_count": 0,
+      "table_count": 1,
+      "code_block_count": 0,
+      "emphasis_count": 0,
+      "mean_sentence_words": 5.0,
+      "answer_first_offset": 0,
+      "decorative_structure_flags": [
+        "table_thin"
+      ]
+    }
+  },
+  "whitespace_padding": {
+    "question": null,
+    "expected": {
+      "word_count": 27,
+      "block_count": 5,
+      "mean_block_words": 5.4,
+      "max_block_words": 7,
+      "heading_count": 0,
+      "bullet_count": 0,
+      "numbered_count": 0,
+      "table_count": 0,
+      "code_block_count": 0,
+      "emphasis_count": 0,
+      "mean_sentence_words": 5.4,
+      "answer_first_offset": 0,
+      "decorative_structure_flags": [
+        "whitespace_padding"
+      ]
+    }
+  }
+}

@@ -16,6 +16,7 @@ from __future__ import annotations
 import argparse
 import json
 import random
+import re
 import statistics
 import sys
 from collections import defaultdict
@@ -25,6 +26,7 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 
 import evalschema as es  # noqa: E402
+import structural_metrics as sm  # noqa: E402
 
 C_CONDITIONS = {"C_skill", "C_skill_explicit"}
 
@@ -700,11 +702,113 @@ def summarize(run_dir: Path, n_boot: int = 10000, seed: int = 0, min_cases: int 
         "words": words,
         "agreement": agreement(ratings),
         "comprehension": comprehension,
+        "structural_descriptors": structural_summary(run_dir, rows, cases),
+        "persistence_checks": persistence_summary(run_dir, rows, cases),
         "criteria": criteria(rows, responses, rank_levels, comparisons, words, comprehension,
                              min_cases, min_participants),
         "issues": {"errors": issues.errors, "warnings": issues.warnings},
     }
     return summary, issues
+
+
+PLAN_SECTION_9_DISCLAIMER = (
+    'There is **no** automated "comprehension score". Word counts, heading counts, readability formulas, and '
+    "semantic similarity are not measures of understanding, and the tools do not present them as such.")
+STRUCTURAL_EXTENSION = (
+    "These are structural descriptors, not a comprehension score. A response can score perfectly on every metric "
+    "here and still be wrong, and the linter cannot tell. Nothing in this table feeds any S1–S7 criterion.")
+MATH_RE = re.compile(r"[=^√×÷∑∫±≈≤≥]|\$[^$\n]+\$|\\frac|\b\d+\s*[*/]\s*\d+")
+
+
+def structural_summary(run_dir: Path, rows: list[dict], cases: dict) -> dict:
+    """Form descriptors per condition (scripts/structural_metrics.py). Never feeds S1-S7."""
+    grouped: dict[str, list[dict]] = defaultdict(list)
+    for r in rows:
+        if r["_has_response"]:
+            text = (run_dir / r["response_file"]).read_text(encoding="utf-8")
+            grouped[r["condition"]].append(sm.metrics(text, cases.get(r["case_id"], {}).get("question")))
+    out = {}
+    for condition, group in sorted(grouped.items()):
+        out[condition] = {
+            "responses": len(group),
+            "median_words": median([g["word_count"] for g in group]),
+            "median_max_block_words": median([g["max_block_words"] for g in group]),
+            "mean_headings": mean([g["heading_count"] for g in group]),
+            "mean_list_items": mean([g["bullet_count"] + g["numbered_count"] for g in group]),
+            "mean_tables": mean([g["table_count"] for g in group]),
+            "mean_answer_first_offset": mean([g["answer_first_offset"] for g in group]),
+            "share_with_decorative_flag": sum(bool(g["decorative_structure_flags"]) for g in group) / len(group),
+        }
+    return out
+
+
+def constraint_failures(text: str, constraints: dict) -> list[str]:
+    found = sm.metrics(text)
+    failures = []
+    if "max_words" in constraints and found["word_count"] > constraints["max_words"]:
+        failures.append(f"max_words ({found['word_count']} > {constraints['max_words']})")
+    if constraints.get("no_lists") and found["bullet_count"] + found["numbered_count"]:
+        failures.append("no_lists")
+    if constraints.get("no_math") and MATH_RE.search(text):
+        failures.append("no_math")
+    return failures
+
+
+def persistence_summary(run_dir: Path, rows: list[dict], cases: dict) -> dict:
+    """Standing constraints checked at the case's check_turns in each real transcript.
+
+    A failed check is a turn at which the person would have had to restate the constraint: the
+    deterministic part of the re-ask rate (A10.6)."""
+    per_condition: dict[str, dict] = defaultdict(lambda: {"conversations": 0, "checks": 0, "failed": 0,
+                                                          "conversations_with_failure": 0, "failures": []})
+    for r in rows:
+        case = cases.get(r["case_id"], {})
+        constraints = case.get("standing_constraints")
+        transcript = (run_dir / r["response_file"]).with_suffix(".turns.json")
+        if not constraints or not r["_has_response"] or not transcript.is_file():
+            continue
+        turns = es.load_json(transcript)["turns"]
+        entry = per_condition[r["condition"]]
+        entry["conversations"] += 1
+        failed_here = False
+        for turn in constraints["check_turns"]:
+            if turn > len(turns):
+                continue
+            entry["checks"] += 1
+            failures = constraint_failures(turns[turn - 1]["assistant"], constraints)
+            if failures:
+                entry["failed"] += 1
+                failed_here = True
+                entry["failures"].append(f"{r['row_id']} turn {turn}: {', '.join(failures)}")
+        entry["conversations_with_failure"] += failed_here
+    for entry in per_condition.values():
+        entry["reask_rate"] = entry["failed"] / entry["checks"] if entry["checks"] else None
+    return dict(sorted(per_condition.items()))
+
+
+def render_structural(s: dict) -> list[str]:
+    L = ["", "## Optional automated checks: structural descriptors (EVALUATION_PLAN.md §9)", "",
+         PLAN_SECTION_9_DISCLAIMER, "", STRUCTURAL_EXTENSION, ""]
+    desc = s.get("structural_descriptors") or {}
+    if desc:
+        L += ["| Condition | n | median words | median longest block | headings | list items | tables | "
+              "answer-first offset | share with decorative flag |", "|---|---:|---:|---:|---:|---:|---:|---:|---:|"]
+        L += [f"| {c} | {d['responses']} | {fmt(d['median_words'], 0)} | {fmt(d['median_max_block_words'], 0)} | "
+              f"{fmt(d['mean_headings'])} | {fmt(d['mean_list_items'])} | {fmt(d['mean_tables'])} | "
+              f"{fmt(d['mean_answer_first_offset'])} | {d['share_with_decorative_flag']:.0%} |" for c, d in desc.items()]
+    else:
+        L.append("No responses yet.")
+    pers = s.get("persistence_checks") or {}
+    L += ["", "### Standing constraints across turns (re-ask proxy)", "",
+          "Each check is a turn at which a constraint stated earlier is tested mechanically (word limit, no lists, "
+          "no maths). A failure is a turn where the person would have had to restate it.", ""]
+    if pers:
+        L += ["| Condition | conversations | checks | failed | re-ask rate |", "|---|---:|---:|---:|---:|"]
+        L += [f"| {c} | {p['conversations']} | {p['checks']} | {p['failed']} | {fmt(p['reask_rate'])} |"
+              for c, p in pers.items()]
+    else:
+        L.append("No multi-turn persistence transcripts in this run.")
+    return L
 
 
 def render_judge_first(judge: dict | None) -> list[str]:
@@ -788,6 +892,7 @@ def render_markdown(s: dict) -> str:
     for dim, a in s["agreement"].items():
         L.append(f"| {dim} | {a['pairs']} | {fmt(a['exact'])} | {fmt(a['within_one'])} | {fmt(a['mean_abs_diff'])} |")
     L.append(f"\nResponses where a rater suspected the condition: {s['recognized_condition_flags']}.")
+    L += render_structural(s)
     comp = s["comprehension"]
     L += ["", "## Human comprehension", ""]
     if not comp:
