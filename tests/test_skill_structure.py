@@ -316,6 +316,14 @@ HEADINGS = {
 }
 
 
+def test_operation_and_variant_sets():
+    assert len(lib.OPERATIONS) == 9 and set(HEADINGS) == set(lib.OPERATIONS)
+    assert lib.VARIANTS["full"] == frozenset(lib.OPERATIONS) and lib.VARIANTS["core"] == frozenset()
+    assert len(lib.VARIANTS) == 12
+    singles = {next(iter(ops)) for ops in lib.VARIANTS.values() if len(ops) == 1}
+    assert singles == {"sequencing", "mechanism", "presentation", "register", "repair", "persistence", "work-report"}
+
+
 @pytest.mark.parametrize("variant", sorted(lib.VARIANTS))
 def test_variants_contain_exactly_their_operations(tmp_path, variant):
     out, report = build(variant, out_dir=tmp_path)

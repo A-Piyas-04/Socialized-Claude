@@ -157,6 +157,13 @@ installed instead of the production skill:
 | `V_seq` | `--variant seq` | ordering by dependency |
 | `V_mech` | `--variant mech` | mechanism |
 | `V_seq_mech` | `--variant seq-mech` | ordering + mechanism |
+| `V_pres` | `--variant pres` | presentation |
+| `V_seq_pres` | `--variant seq-pres` | ordering + presentation |
+| `V_seq_mech_pres` | `--variant seq-mech-pres` | ordering + mechanism + presentation |
+| `V_reg` | `--variant reg` | register |
+| `V_rep` | `--variant rep` | repair |
+| `V_persist` | `--variant persist` | persistence |
+| `V_wrep` | `--variant wrep` | work report |
 | `V_full` | `--variant full` (production ZIP) | all |
 
 All variants share the same name and description, so only one can be installed

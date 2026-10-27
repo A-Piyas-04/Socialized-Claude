@@ -32,7 +32,14 @@
     "V_seq": {"batch": "variant:seq", "prefix": "Use the explanation-lab skill for this.", "description": "Ablation: sequencing-only variant installed."},
     "V_mech": {"batch": "variant:mech", "prefix": "Use the explanation-lab skill for this.", "description": "Ablation: mechanism-only variant installed."},
     "V_seq_mech": {"batch": "variant:seq-mech", "prefix": "Use the explanation-lab skill for this.", "description": "Ablation: sequencing + mechanism variant installed."},
-    "V_full": {"batch": "variant:full", "prefix": "Use the explanation-lab skill for this.", "description": "Ablation: full (production) skill installed."}
+    "V_full": {"batch": "variant:full", "prefix": "Use the explanation-lab skill for this.", "description": "Ablation: full (production) skill installed."},
+    "V_pres": {"batch": "variant:pres", "prefix": "Use the explanation-lab skill for this.", "description": "Ablation: presentation-only variant installed."},
+    "V_seq_pres": {"batch": "variant:seq-pres", "prefix": "Use the explanation-lab skill for this.", "description": "Ablation: sequencing + presentation variant installed."},
+    "V_seq_mech_pres": {"batch": "variant:seq-mech-pres", "prefix": "Use the explanation-lab skill for this.", "description": "Ablation: sequencing + mechanism + presentation variant installed."},
+    "V_reg": {"batch": "variant:reg", "prefix": "Use the explanation-lab skill for this.", "description": "Ablation: register-only variant installed."},
+    "V_rep": {"batch": "variant:rep", "prefix": "Use the explanation-lab skill for this.", "description": "Ablation: repair-only variant installed."},
+    "V_persist": {"batch": "variant:persist", "prefix": "Use the explanation-lab skill for this.", "description": "Ablation: persistence-only variant installed."},
+    "V_wrep": {"batch": "variant:wrep", "prefix": "Use the explanation-lab skill for this.", "description": "Ablation: work-report-only variant installed."}
   },
   "default_pilot_conditions": ["A_normal", "B_prompt", "C_skill", "C_skill_explicit"],
   "comparisons": [
@@ -45,6 +52,13 @@
     ["V_mech", "V_core"],
     ["V_seq_mech", "V_seq"],
     ["V_seq_mech", "V_mech"],
-    ["V_full", "V_seq_mech"]
+    ["V_full", "V_seq_mech"],
+    ["V_pres", "V_core"],
+    ["V_seq_pres", "V_seq"],
+    ["V_seq_mech_pres", "V_seq_mech"],
+    ["V_reg", "V_core"],
+    ["V_rep", "V_core"],
+    ["V_persist", "V_core"],
+    ["V_wrep", "V_core"]
   ]
 }

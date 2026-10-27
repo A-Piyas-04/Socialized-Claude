@@ -31,6 +31,13 @@ VARIANTS: dict[str, frozenset[str]] = {
     "seq": frozenset({"sequencing"}),
     "mech": frozenset({"mechanism"}),
     "seq-mech": frozenset({"sequencing", "mechanism"}),
+    "pres": frozenset({"presentation"}),
+    "seq-pres": frozenset({"sequencing", "presentation"}),
+    "seq-mech-pres": frozenset({"sequencing", "mechanism", "presentation"}),
+    "reg": frozenset({"register"}),
+    "rep": frozenset({"repair"}),
+    "persist": frozenset({"persistence"}),
+    "wrep": frozenset({"work-report"}),
 }
 
 ALLOWED_FRONTMATTER_KEYS = {"name", "description", "license", "allowed-tools", "metadata", "compatibility"}
