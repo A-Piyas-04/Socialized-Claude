@@ -19,6 +19,19 @@ track's definition of done is green.
 - No credentials in the repo, in committed output, or in logs.
 - No new strategy/methodology documents beyond those the briefs name.
 
+## Framing (set by the user, 2026-10-27)
+
+- The project improves Claude's explanations: structure, organisation, sentence-level
+  readability, register, persistence, repair. Track A is the deliverable.
+- Claude-vs-GPT is settled and out of the evaluation entirely. The archive's GPT answers stay
+  only as source material for COMMUNICATION_EXEMPLARS.md, never as a scoring target or baseline.
+- The judge is a regression guard, not a discovery exercise. Its acceptance test is
+  Claude-vs-Claude only, plus a floor test of deliberately degraded answers; the 0.20 flip cutoff
+  is fixed in code. Fact capture is the primary measure and is never combined with pairwise. The
+  failure to catch: answers that get prettier and emptier.
+- Priority: Track A in full; Groq backend and acceptance test in parallel; the sweep waits until
+  acceptance passes.
+
 ## Skill text rule
 
 Every rule names an action the model takes. If a rule can be satisfied by writing a plain
