@@ -58,27 +58,28 @@ def init_event(skills, api="none", tools=("Read", "Skill")):
 
 
 def test_arm_problems_accepts_matching_arms():
-    assert cc.arm_problems(True, cc.observe_init(init_event(["explanation-lab", "debug"]))) == []
-    assert cc.arm_problems(False, cc.observe_init(init_event(["debug"]))) == []
+    assert cc.arm_problems(True, cc.observe_init(init_event(["socialized", "debug"]), "socialized"), "socialized") == []
+    assert cc.arm_problems(False, cc.observe_init(init_event(["debug"]), "socialized"), "socialized") == []
 
 
 def test_arm_problems_flags_each_mismatch():
-    assert "ON" in cc.arm_problems(True, cc.observe_init(init_event(["debug"])))[0]
-    assert "skillOverrides" in cc.arm_problems(False, cc.observe_init(init_event(["explanation-lab"])))[0]
+    assert "ON" in cc.arm_problems(True, cc.observe_init(init_event(["debug"]), "socialized"), "socialized")[0]
+    assert "skillOverrides" in cc.arm_problems(False, cc.observe_init(init_event(["socialized"]), "socialized"), "socialized")[0]
     assert "cannot be verified" in cc.arm_problems(False, cc.observe_init({"apiKeySource": "none",
-                                                                           "tools": ["Read", "Skill"]}))[0]
-    assert "apiKeySource" in cc.arm_problems(True, cc.observe_init(init_event(["explanation-lab"], api="ANTHROPIC_API_KEY")))[0]
-    assert "tools" in cc.arm_problems(True, cc.observe_init(init_event(["explanation-lab"], tools=("Bash",))))[0]
+                                                                           "tools": ["Read", "Skill"]}, "socialized"), "socialized")[0]
+    assert "apiKeySource" in cc.arm_problems(True, cc.observe_init(init_event(["socialized"], api="ANTHROPIC_API_KEY"), "socialized"), "socialized")[0]
+    assert "tools" in cc.arm_problems(True, cc.observe_init(init_event(["socialized"], tools=("Bash",)), "socialized"), "socialized")[0]
 
 
 def test_skill_touch_detection():
-    assert cc.invokes_skill({"name": "Skill", "input": {"skill": "explanation-lab"}})
-    assert cc.invokes_skill({"name": "Skill", "input": {"command": "/explanation-lab"}})
-    assert not cc.invokes_skill({"name": "Skill", "input": {"skill": "debug"}})
+    assert cc.invokes_skill({"name": "Skill", "input": {"skill": "socialized"}}, "socialized")
+    assert cc.invokes_skill({"name": "Skill", "input": {"command": "/socialized"}}, "socialized")
+    assert cc.invokes_skill({"name": "Skill", "input": {"skill": "socialized"}}, "socialized")
+    assert not cc.invokes_skill({"name": "Skill", "input": {"skill": "debug"}}, "socialized")
     assert cc.reads_skill_file({"name": "Read", "input": {
-        "file_path": "C:\\t\\work\\.claude\\skills\\explanation-lab\\references\\treatment-selection.md"}}) \
+        "file_path": "C:\\t\\work\\.claude\\skills\\socialized\\references\\treatment-selection.md"}}, "socialized") \
         == "references/treatment-selection.md"
-    assert cc.reads_skill_file({"name": "Read", "input": {"file_path": "/x/notes.md"}}) is None
+    assert cc.reads_skill_file({"name": "Read", "input": {"file_path": "/x/notes.md"}}, "socialized") is None
 
 
 def test_classify_result():
@@ -139,10 +140,10 @@ def test_collects_and_fills_run_sheet(tmp_path, run_dir):
         assert row["model_label"] == "claude-fake-1" and row["date"] == "2026-10-27"
         if row["batch"] == "skill_off":
             assert row["activation_observed"] == "na"
-            assert "does not list explanation-lab (skillOverrides off)" in row["activation_evidence"]
+            assert "does not list socialized (skillOverrides off)" in row["activation_evidence"]
         else:
             assert row["activation_observed"] == "yes"
-            assert "lists explanation-lab" in row["activation_evidence"]
+            assert "lists socialized" in row["activation_evidence"]
     log = calls(tmp_path)
     assert len(log) == 4
     assert all(REPO not in Path(c["cwd"]).parents for c in log), "sandbox must be outside the repo"
@@ -166,7 +167,7 @@ def test_mismatch_fails_row_and_stops(tmp_path, run_dir):
     assert first["batch"] == "skill_off"
     assert not (run_dir / first["response_file"]).exists()
     assert "ARM MISMATCH" in first["notes"] and "skillOverrides not honoured" in first["notes"]
-    assert "lists explanation-lab" in first["activation_evidence"]
+    assert "lists socialized" in first["activation_evidence"]
     assert len(calls(tmp_path)) == 1, "no further rows after a mismatch"
 
 
@@ -264,10 +265,10 @@ def test_stale_build_is_refused(tmp_path, run_dir):
 
 
 def test_run_uses_its_frozen_build_not_current_dist(tmp_path, run_dir, dist):
-    frozen = run_dir / "skill_build" / "explanation-lab.zip"
+    frozen = run_dir / "skill_build" / "socialized.zip"
     assert frozen.is_file()
-    (dist / "explanation-lab.zip").unlink()
-    (dist / "explanation-lab.manifest.json").unlink()
+    (dist / "socialized.zip").unlink()
+    (dist / "socialized.manifest.json").unlink()
     assert cc.collect(run_dir, CLAUDE, fake_env(tmp_path), OPTS, write=lambda _: None) == 0
 
 

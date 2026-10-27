@@ -20,7 +20,8 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 
 import evalschema as es  # noqa: E402
 
-REVEALING = re.compile(r"(?i)explanation[- ]lab|SKILL\.md|\b(this|the) skill\b|\btreatment\s*T\d|\bT[1-6]\b")
+REVEALING = re.compile(
+    r"(?i)explanation[- ]lab|socialized|SKILL\.md|\b(this|the) skill\b|\btreatment\s*T\d|\bT[1-6]\b")
 
 
 def blind_ids(n: int, rng: random.Random) -> list[str]:

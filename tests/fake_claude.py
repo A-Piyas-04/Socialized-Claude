@@ -38,10 +38,12 @@ def main() -> int:
                                      "has_token": bool(os.environ.get("CLAUDE_CODE_OAUTH_TOKEN"))}) + "\n")
     assert args[args.index("--input-format") + 1] == "stream-json"
     settings = json.loads(Path(args[args.index("--settings") + 1]).read_text(encoding="utf-8"))
-    installed = (Path.cwd() / ".claude" / "skills" / "explanation-lab" / "SKILL.md").is_file()
-    off = settings.get("skillOverrides", {}).get("explanation-lab") == "off"
-    listed = installed and (not off or mode == "ignore_overrides")
-    skills = ["deep-research", "debug"] + (["explanation-lab"] if listed else [])
+    skills_root = Path.cwd() / ".claude" / "skills"
+    installed = sorted(p.name for p in skills_root.iterdir() if (p / "SKILL.md").is_file()) if skills_root.is_dir() else []
+    skill_name = installed[0] if installed else ""
+    off = bool(skill_name) and settings.get("skillOverrides", {}).get(skill_name) == "off"
+    listed = bool(skill_name) and (not off or mode == "ignore_overrides")
+    skills = ["deep-research", "debug"] + ([skill_name] if listed else [])
     tools = args[args.index("--tools") + 1].split(",")
     version = mode.split("_", 1)[1] if mode.startswith("version_") else "9.9.9"
 
@@ -71,13 +73,13 @@ def main() -> int:
                   "message": {"content": [{"type": "text", "text": "Not logged in · Please run /login"}]}})
             emit({"type": "result", "subtype": "success", "is_error": True, "result": "Not logged in · Please run /login"})
             continue
-        if listed and "explanation-lab skill" in message:
+        if listed and f"{skill_name} skill" in message:
             emit({"type": "assistant", "message": {"content": [
-                {"type": "tool_use", "name": "Skill", "input": {"skill": "explanation-lab"}}]}})
-        if mode == "read_skill_off" and off:
+                {"type": "tool_use", "name": "Skill", "input": {"skill": skill_name}}]}})
+        if mode == "read_skill_off" and off and skill_name:
             emit({"type": "assistant", "message": {"content": [
                 {"type": "tool_use", "name": "Read",
-                 "input": {"file_path": str(Path.cwd() / ".claude/skills/explanation-lab/SKILL.md")}}]}})
+                 "input": {"file_path": str(Path.cwd() / ".claude/skills" / skill_name / "SKILL.md")}}]}})
         answer = f"Fake answer to: {message.strip().splitlines()[-1]}"
         if turn > 1:
             answer += " | earlier: " + " / ".join(h.strip().splitlines()[-1] for h in history[:-1])

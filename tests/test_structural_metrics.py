@@ -47,6 +47,8 @@ def test_legitimate_answers_produce_no_flags(name):
     ("whitespace_padding", "whitespace_padding"),
     ("empty_transition", "empty_transition"),
     ("emphasis_overuse", "emphasis_overuse"),
+    ("uncaptioned_visual", "uncaptioned_visual"),
+    ("wall_of_text", "dense_paragraph"),
 ])
 def test_each_flag_fires_on_its_fixture(name, flag):
     assert flag in m(name)["decorative_structure_flags"]
@@ -103,6 +105,25 @@ def test_cli_exit_status_and_json(capsys):
     assert "not a comprehension score" in capsys.readouterr().out
     assert lint_response.main([str(FIXTURES / "thin_table.md"), "--json"]) == 1
     assert json.loads(capsys.readouterr().out)["decorative_structure_flags"] == ["table_thin"]
+
+
+def test_dense_list_item_and_legend_emoji_are_distinct():
+    long_item = "- " + " ".join(["word"] * 41) + "\n"
+    assert "dense_paragraph" in sm.decorative_structure_flags(long_item)
+    legend = "- ✅ cache hit\n- ❌ cache miss\n"
+    assert "emoji_structure" not in sm.decorative_structure_flags(legend)
+    heading = sm.decorative_structure_flags("## ✅ Title\n\nThe heading is decorated. It still carries a status mark.\n")
+    assert "emoji_structure" in heading and "heading_thin" not in heading
+    bare = "- ✅ only one marker\n- still one marker\n"
+    assert "emoji_structure" in sm.decorative_structure_flags(bare)
+
+
+def test_visual_count_is_labelled_and_never_gates(tmp_path, capsys):
+    path = tmp_path / "bars.md"
+    path.write_text("Reads dominate.\n\n```\nreads ████\nwrites █\n```\n", encoding="utf-8")
+    assert lint_response.main([str(path)]) == 0
+    out = capsys.readouterr().out
+    assert "visual_count: 1  (heuristic; descriptive only, never gates anything)" in out
 
 
 def test_passive_heuristic_is_labelled_and_never_gates(tmp_path, capsys):

@@ -1,8 +1,8 @@
 """Validate a Claude skill directory or packaged skill ZIP.
 
-    python scripts/validate_skill.py                      # validate skill/explanation-lab
+    python scripts/validate_skill.py                      # validate skill/socialized
     python scripts/validate_skill.py path/to/skill-dir
-    python scripts/validate_skill.py dist/explanation-lab.zip
+    python scripts/validate_skill.py dist/socialized.zip
     python scripts/validate_skill.py --surface api ...    # relax the claude.ai 200-char description limit
 
 Exit status is 0 when there are no errors. Warnings never fail validation unless

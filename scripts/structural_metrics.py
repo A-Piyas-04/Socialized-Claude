@@ -21,14 +21,22 @@ Definitions (all heuristics; the TypeScript port in extension/ must match them e
                "Sure", "Let me explain", ...), or restatements of the question (>= 50% of the
                sentence's content words appear in the question). Needs the question for the
                restatement test; without it only headings and preambles count.
+  visual_count A count of tables plus fenced diagrams and bar blocks. A heuristic, descriptive
+               only, and never a gate.
 
 decorative_structure_flags (each a short code):
   heading_thin          a heading whose section holds fewer than 2 sentences
   table_thin            a table with fewer than 2 data columns besides the first (label) column
   bullets_unconnected   a run of 2+ unordered list items, not a labelled list, in which no item
                         contains a connective (because, so, therefore, which means, if)
-  emoji_structure       an emoji opening a heading or list item
+  emoji_structure       an emoji opening a heading or list item. A list item is exempt when its
+                        marker is from the status legend (✅ ❌ ⚠️ 🟢 🟡 🔴) and the same list
+                        uses at least two distinct legend markers. A heading is never exempt.
   whitespace_padding    4+ prose paragraphs of which at least 75% are a single sentence
+  uncaptioned_visual    a table, or a fenced diagram or bar block, with no prose sentence
+                        directly before it
+  dense_paragraph       a prose paragraph of 5+ sentences or more than 80 words, or a list
+                        item of more than 40 words
   empty_transition      a one-sentence paragraph that only announces what follows ("Let's look
                         at...", "Here's how it works."), followed by prose or a heading
   emphasis_overuse      more than 2 bold spans (labels excluded)
@@ -50,6 +58,11 @@ LABEL_RE = re.compile(r"^\s*(\*\*[^*]+\*\*|__[^_]+__)")
 SENTENCE_SPLIT_RE = re.compile(r"(?<=[.!?])[\"')\]]*\s+")
 CONNECTIVE_RE = re.compile(r"(?i)\b(because|so|therefore|which means|if)\b")
 EMOJI_RE = re.compile("[\U0001F300-\U0001FAFF\u2600-\u27BF\u2B50\u2B55\u2705\u274C\u2714\u2716]")
+LEGEND = frozenset(mark.replace("\ufe0f", "") for mark in ("✅", "❌", "⚠️", "🟢", "🟡", "🔴"))
+VISUAL_CODE_RE = re.compile(r"```\s*mermaid\b|[█▓▒░]{2,}|-->|──>|│|├|└")
+DENSE_SENTENCES = 5
+DENSE_PARAGRAPH_WORDS = 80
+DENSE_ITEM_WORDS = 40
 PREAMBLE_RE = re.compile(
     r"(?i)^(great|good|excellent|interesting) question\b|^(sure|certainly|of course|absolutely)\b|"
     r"^(let me|let's|i'll|i will) (explain|break|walk|look|start|dive)|^here'?s (a|an|the|how|what|why)\b|"
@@ -191,6 +204,53 @@ def answer_first_offset(markdown: str, question: str | None = None) -> int:
     return offset
 
 
+def legend_mark(line: str) -> str | None:
+    stripped = re.sub(r"^\s*(#{1,6}|[-*+]|\d+[.)])\s+", "", line).lstrip("*_ ")
+    match = EMOJI_RE.match(stripped)
+    if not match:
+        return None
+    mark = match.group(0).replace("\ufe0f", "")
+    return mark if mark in LEGEND else None
+
+
+def legend_exempt(blocks: list[Block]) -> set[int]:
+    """List items whose legend marker is one of two or more distinct markers in that list."""
+    exempt: set[int] = set()
+    run: list[tuple[int, Block]] = []
+
+    def flush() -> None:
+        marks = [(i, legend_mark(b.lines[0])) for i, b in run]
+        distinct = {mark for _, mark in marks if mark}
+        if len(distinct) >= 2:
+            exempt.update(i for i, mark in marks if mark)
+        run.clear()
+
+    for i, block in enumerate(blocks):
+        if block.kind in {"bullet", "numbered"}:
+            run.append((i, block))
+        else:
+            flush()
+    flush()
+    return exempt
+
+
+def is_visual_code(block: Block) -> bool:
+    if block.kind != "code":
+        return False
+    return VISUAL_CODE_RE.search("\n".join(block.lines)) is not None
+
+
+def is_visual(block: Block) -> bool:
+    return block.kind == "table" or is_visual_code(block)
+
+
+def has_caption(blocks: list[Block], index: int) -> bool:
+    if index == 0:
+        return False
+    previous = blocks[index - 1]
+    return previous.kind == "paragraph" and len(sentences(previous.text)) >= 1
+
+
 def is_labelled(block: Block) -> bool:
     body = BULLET_RE.sub(r"\1", block.lines[0], count=1)
     return bool(LABEL_RE.match(body)) or bool(re.match(r"^\s*[^:]{1,40}:\s", block.text))
@@ -216,9 +276,18 @@ def decorative_structure_flags(markdown: str) -> list[str]:
             data_cols = sum(1 for c in range(1, width) if any(c < len(r) and r[c] for r in rows))
             if data_cols < 2:
                 flags.append("table_thin")
-        if block.kind in {"heading", "bullet", "numbered"} and EMOJI_RE.match(
-                re.sub(r"^\s*(#{1,6}|[-*+]|\d+[.)])\s+", "", block.lines[0]).lstrip("*_ ")):
+    exempt = legend_exempt(blocks)
+    for i, block in enumerate(blocks):
+        if (i not in exempt and block.kind in {"heading", "bullet", "numbered"} and EMOJI_RE.match(
+                re.sub(r"^\s*(#{1,6}|[-*+]|\d+[.)])\s+", "", block.lines[0]).lstrip("*_ "))):
             flags.append("emoji_structure")
+        if is_visual(block) and not has_caption(blocks, i):
+            flags.append("uncaptioned_visual")
+        if block.kind == "paragraph" and (len(sentences(block.text)) >= DENSE_SENTENCES
+                                           or len(words(block.text)) > DENSE_PARAGRAPH_WORDS):
+            flags.append("dense_paragraph")
+        if block.kind in {"bullet", "numbered"} and len(words(block.text)) > DENSE_ITEM_WORDS:
+            flags.append("dense_paragraph")
     run: list[Block] = []
     for block in [*blocks, Block("end", "", [])]:
         if block.kind == "bullet":
@@ -259,5 +328,6 @@ def metrics(markdown: str, question: str | None = None) -> dict:
         "max_sentence_words": max((len(words(s)) for s in prose), default=0),
         "passive_sentence_count": sum(bool(PASSIVE_RE.search(s)) for s in prose),
         "answer_first_offset": answer_first_offset(markdown, question),
+        "visual_count": sum(is_visual(b) for b in blocks),
         "decorative_structure_flags": decorative_structure_flags(markdown),
     }

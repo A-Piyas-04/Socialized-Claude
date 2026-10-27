@@ -56,7 +56,7 @@ def test_real_skill_has_no_errors():
 
 def test_metadata_meets_claude_ai_limits():
     meta = frontmatter(lib.SKILL_DIR)
-    assert meta["name"] == "explanation-lab"
+    assert meta["name"] == "socialized"
     assert len(meta["description"]) <= lib.DESCRIPTION_MAX_CLAUDE_AI
     assert "Use when" in meta["description"]
     assert set(meta) <= lib.ALLOWED_FRONTMATTER_KEYS
@@ -72,7 +72,7 @@ def test_required_reference_files_exist_and_are_linked():
 def test_skill_body_is_compact():
     _, body, _ = lib.split_frontmatter(read(lib.SKILL_DIR / "SKILL.md"))
     rendered = lib.render_markers(body, lib.VARIANTS["full"])
-    assert rendered.count("\n") < 300, "SKILL.md should stay well under the 500-line limit"
+    assert rendered.count("\n") < 380, "SKILL.md should stay well under the 500-line limit"
 
 
 def test_skill_never_exposes_research_treatment_ids():
@@ -110,7 +110,7 @@ def test_missing_frontmatter(skill_copy):
 
 def test_invalid_yaml(skill_copy):
     text = read(skill_copy / "SKILL.md")
-    write(skill_copy / "SKILL.md", text.replace("name: explanation-lab", "name: [unclosed", 1))
+    write(skill_copy / "SKILL.md", text.replace("name: socialized", "name: [unclosed", 1))
     assert any("Invalid YAML" in e for e in errors_for(skill_copy))
 
 
@@ -260,18 +260,18 @@ def zip_texts(zip_path: Path) -> dict[str, str]:
 def test_production_zip_structure(tmp_path):
     out, report = build("full", out_dir=tmp_path)
     assert report.ok, report.errors
-    assert out == tmp_path / "explanation-lab.zip"
+    assert out == tmp_path / "socialized.zip"
     texts = zip_texts(out)
     assert set(texts) == {
-        "explanation-lab/SKILL.md",
-        "explanation-lab/references/explanation-methodology.md",
-        "explanation-lab/references/treatment-selection.md",
-        "explanation-lab/references/explanation-examples.md",
+        "socialized/SKILL.md",
+        "socialized/references/explanation-methodology.md",
+        "socialized/references/treatment-selection.md",
+        "socialized/references/explanation-examples.md",
     }
     for name, text in texts.items():
         assert "op:" not in text, f"marker left in {name}"
         assert "\r\n" not in text
-    assert texts["explanation-lab/SKILL.md"].startswith("---\nname: explanation-lab\n")
+    assert texts["socialized/SKILL.md"].startswith("---\nname: socialized\n")
 
 
 def test_zip_excludes_research_and_evaluation_material(tmp_path):
@@ -296,17 +296,17 @@ def test_manifest_matches_zip(tmp_path):
 
 
 def test_committed_dist_zip_is_current(repo_root, tmp_path):
-    committed = repo_root / "dist" / "explanation-lab.zip"
+    committed = repo_root / "dist" / "socialized.zip"
     assert committed.is_file(), "run: python scripts/package_skill.py"
     fresh, _ = build("full", out_dir=tmp_path)
     assert committed.read_bytes() == fresh.read_bytes(), \
-        "dist/explanation-lab.zip is stale; run: python scripts/package_skill.py"
+        "dist/socialized.zip is stale; run: python scripts/package_skill.py"
 
 
 HEADINGS = {
     "sequencing": "## Operation: Order ideas by dependency",
     "mechanism": "## Operation: Explain the mechanism",
-    "examples": "## Operation: Ground with one example",
+    "examples": "## Operation: Ground with one running example",
     "terms": "## Operation: Introduce terms where they are first needed",
     "presentation": "## Operation: Give the answer the shape of its content",
     "register": "## Operation: Pitch the answer at the reader's register",
@@ -314,6 +314,8 @@ HEADINGS = {
     "persistence": "## Operation: Keep standing instructions in force",
     "work-report": "## Operation: Report work that was done",
     "plain": "## Operation: Write plain sentences",
+    "visual": "## Operation: Show the shape instead of describing it",
+    "close": "## Operation: Close with something to keep",
 }
 
 
@@ -328,12 +330,34 @@ def test_presentation_rules_name_actions_not_prohibitions():
 
 
 def test_operation_and_variant_sets():
-    assert len(lib.OPERATIONS) == 10 and set(HEADINGS) == set(lib.OPERATIONS)
+    assert len(lib.OPERATIONS) == 12 and set(HEADINGS) == set(lib.OPERATIONS)
     assert lib.VARIANTS["full"] == frozenset(lib.OPERATIONS) and lib.VARIANTS["core"] == frozenset()
-    assert len(lib.VARIANTS) == 13
+    assert len(lib.VARIANTS) == 15
     singles = {next(iter(ops)) for ops in lib.VARIANTS.values() if len(ops) == 1}
     assert singles == {"sequencing", "mechanism", "presentation", "register", "repair", "persistence",
-                       "work-report", "plain"}
+                       "work-report", "plain", "visual", "close"}
+
+
+def test_visual_rules_name_actions_and_keep_artifacts_opt_in():
+    text = read(lib.SKILL_DIR / "SKILL.md")
+    block = text.split("<!-- op:visual -->", 1)[1].split("<!-- /op:visual -->", 1)[0]
+    rules = [line.strip()[2:] for line in block.splitlines() if line.strip().startswith("- ")]
+    assert len(rules) >= 8
+    for rule in rules:
+        assert not rule.lower().startswith(("do not", "don't", "never", "avoid")), rule
+    assert "markdown" in block.lower()
+    assert "explicitly asks" in block
+    joined = " ".join(rules)
+    assert "artifact" in joined.lower()
+
+
+def test_close_rules_name_actions():
+    text = read(lib.SKILL_DIR / "SKILL.md")
+    block = text.split("<!-- op:close -->", 1)[1].split("<!-- /op:close -->", 1)[0]
+    rules = [line.strip()[2:] for line in block.splitlines() if line.strip().startswith("- ")]
+    assert len(rules) >= 4
+    for rule in rules:
+        assert not rule.lower().startswith(("do not", "don't", "never", "avoid")), rule
 
 
 def test_plain_language_rules_name_actions():
@@ -349,7 +373,7 @@ def test_plain_language_rules_name_actions():
 def test_variants_contain_exactly_their_operations(tmp_path, variant):
     out, report = build(variant, out_dir=tmp_path)
     assert report.ok, report.errors
-    skill_text = zip_texts(out)["explanation-lab/SKILL.md"]
+    skill_text = zip_texts(out)["socialized/SKILL.md"]
     for op, heading in HEADINGS.items():
         assert (heading in skill_text) == (op in lib.VARIANTS[variant]), (variant, op)
     for always in ("## Scope: decide first whether this applies", "## Step 2: Size the answer",
@@ -361,14 +385,14 @@ def test_variants_share_identical_metadata(tmp_path):
     metas = set()
     for variant in lib.VARIANTS:
         out, _ = build(variant, out_dir=tmp_path)
-        meta, _, _ = lib.split_frontmatter(zip_texts(out)["explanation-lab/SKILL.md"])
+        meta, _, _ = lib.split_frontmatter(zip_texts(out)["socialized/SKILL.md"])
         metas.add((meta["name"], meta["description"]))
     assert len(metas) == 1, "ablation variants must not differ in activation metadata"
 
 
 def test_single_operation_variants_drop_other_operations_examples(tmp_path):
     out, _ = build("seq", out_dir=tmp_path)
-    examples = zip_texts(out)["explanation-lab/references/explanation-examples.md"]
+    examples = zip_texts(out)["socialized/references/explanation-examples.md"]
     assert "what a derivative is" in examples
     assert "pressure cooker" not in examples.lower()
     assert "connection pool" not in examples.lower()
@@ -399,7 +423,7 @@ def test_zip_with_two_roots_fails(tmp_path):
 
 def test_zip_with_nested_skill_md_fails(tmp_path):
     skill = read(lib.SKILL_DIR / "SKILL.md")
-    bad = make_zip(tmp_path / "bad.zip", {"explanation-lab/inner/SKILL.md": skill})
+    bad = make_zip(tmp_path / "bad.zip", {"socialized/inner/SKILL.md": skill})
     assert any("SKILL.md' missing" in e for e in validate_zip(bad).errors)
 
 

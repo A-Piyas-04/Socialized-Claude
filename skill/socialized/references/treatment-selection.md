@@ -27,9 +27,9 @@ specific gap it fills for this reader.
   definition, or a procedure to follow.
 <!-- /op:mechanism -->
 <!-- op:examples -->
-- **One example** fits when the idea is abstract and the reader is not an
+- **One running example** fits when the idea is abstract and the reader is not an
   expert, when they ask for one, or when a concrete case would expose a likely
-  misconception.
+  misconception. Reuse that same case in later sections.
 <!-- /op:examples -->
 <!-- op:terms -->
 - **Defining a term** fits when the term is load-bearing and this reader
@@ -42,9 +42,20 @@ specific gap it fills for this reader.
 <!-- op:presentation -->
 - **Presentation** fits every answer with more than one idea. Pick the form from
   the content's shape: steps for a process, a table for three or more items on
-  shared dimensions, a fenced diagram for a branching flow, prose for a single
-  causal chain. A two-sentence answer gets two sentences and nothing else.
+  shared dimensions, prose for a single causal chain. Leave a blank line between
+  units, and end a paragraph by four sentences. A two-sentence answer gets two
+  sentences and nothing else.
 <!-- /op:presentation -->
+<!-- op:visual -->
+- **A visual** fits when the content has a shape that would take three or more
+  sentences to describe, and the visual replaces those sentences. Render it as
+  markdown. Build an artifact only when the person explicitly asks for one.
+<!-- /op:visual -->
+<!-- op:close -->
+- **A takeaway** fits an answer of three or more sections and any teaching
+  request. A check question fits teaching, beginners, and confusion follow-ups.
+  A quick, practitioner, or expert answer ends when the content ends.
+<!-- /op:close -->
 
 ## 2. Resolving conflicts
 
@@ -80,11 +91,17 @@ to lowest:
 - The tradeoff or limit that follows from the mechanism.
 <!-- /op:mechanism -->
 <!-- op:presentation -->
-- The form that shows the content's shape (steps, table rows, diagram).
+- The form that shows the content's shape (steps, table rows, headings).
 <!-- /op:presentation -->
 <!-- op:examples -->
 - An example.
 <!-- /op:examples -->
+<!-- op:visual -->
+- The one visual that replaced prose. Cut any further visual before this one.
+<!-- /op:visual -->
+<!-- op:close -->
+- The takeaway sentence. Cut the check question before the takeaway.
+<!-- /op:close -->
 
 Cut from the bottom. An answer that has to be scrolled should earn every
 paragraph.
@@ -140,6 +157,25 @@ produced these failures. The rules in `SKILL.md` exist to prevent them.
   break.
 - **Empty transitional units.** A paragraph or heading whose only content is
   announcing what comes next.
+- **A wall of text.** A paragraph past four sentences, or a list item that
+  carries a second idea. Split it and leave the blank line.
 <!-- /op:presentation -->
+<!-- op:visual -->
+- **A decorative diagram.** A figure that restates a shape the prose already
+  made obvious, or a second figure in a section that already has one.
+- **A visual on top of the same prose.** The sentences that describe the shape
+  stay after the figure. Delete them once the figure carries them.
+- **An uncaptioned figure.** A diagram, table, or bar block with no sentence
+  saying what it shows and what to notice.
+- **An unrequested artifact.** An HTML, SVG, or interactive file when the
+  person did not explicitly ask for an artifact, an SVG, or something to click.
+  "Explain this visually" is a request for the markdown form.
+<!-- /op:visual -->
+<!-- op:close -->
+- **A quiz on a quick answer.** A check question after a fact, a lookup, or an
+  expert reply. Those end when the content ends.
+- **A closing summary.** A paragraph that repeats the body. The takeaway is one
+  sentence or three items, and it is the last unit.
+<!-- /op:close -->
 - **Over-expansion.** Every operation applied to every answer. The goal is an
   answer that is easier to understand, not one that is longer.

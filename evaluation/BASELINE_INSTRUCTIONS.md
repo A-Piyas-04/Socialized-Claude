@@ -8,11 +8,11 @@ procedure is in `RUNBOOK.md`.
 
 | Condition | Label in results | Explanation-specific content | Mechanism | Skill state |
 |---|---|---|---|---|
-| A. Normal Claude | `A_normal` | None | Plain question in a new chat | `explanation-lab` **disabled** |
-| B. Optimized prompt | `B_prompt` | Baseline instruction below | Pasted above the question, same message | `explanation-lab` **disabled** |
-| C. Skill, natural | `C_skill` | Skill only | Plain question; Claude decides whether to load the skill | `explanation-lab` **enabled** |
-| C. Skill, explicit | `C_skill_explicit` | Skill only | One fixed invocation line above the question | `explanation-lab` **enabled** |
-| D. Skill text as prompt (optional) | `D_skill_text` | The skill's instructions pasted as text | Pasted above the question, same message | `explanation-lab` **disabled** |
+| A. Normal Claude | `A_normal` | None | Plain question in a new chat | `socialized` **disabled** |
+| B. Optimized prompt | `B_prompt` | Baseline instruction below | Pasted above the question, same message | `socialized` **disabled** |
+| C. Skill, natural | `C_skill` | Skill only | Plain question; Claude decides whether to load the skill | `socialized` **enabled** |
+| C. Skill, explicit | `C_skill_explicit` | Skill only | One fixed invocation line above the question | `socialized` **enabled** |
+| D. Skill text as prompt (optional) | `D_skill_text` | The skill's instructions pasted as text | Pasted above the question, same message | `socialized` **disabled** |
 
 In every condition, all other custom skills are disabled, memory and personal
 preferences are off (or identical across conditions), the same model is
@@ -100,7 +100,7 @@ The skill is enabled. Do not mention it.
 ## Condition C_skill_explicit — exact message
 
 ```
-Use the explanation-lab skill for this.
+Use the socialized skill for this.
 
 {question}
 ```
@@ -111,8 +111,8 @@ This line is fixed. Do not vary it.
 
 ## Condition D — exact message (optional)
 
-Paste the body of `dist/explanation-lab.zip` → `explanation-lab/SKILL.md`, from
-the first `# Explanation Lab` heading to the end of the file, then a line with
+Paste the body of `dist/socialized.zip` → `socialized/SKILL.md`, from
+the first `# Socialized-Claude` heading to the end of the file, then a line with
 `---`, then the question. Do not paste the reference files (Claude cannot read
 them in this condition, and that difference is part of what D measures).
 

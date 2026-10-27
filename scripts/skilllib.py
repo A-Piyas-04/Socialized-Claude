@@ -1,4 +1,4 @@
-"""Shared helpers for validating and packaging the Explanation Lab skill.
+"""Shared helpers for validating and packaging the Socialized-Claude skill.
 
 Standard library plus PyYAML (the same dependency Anthropic's quick_validate.py uses).
 """
@@ -15,13 +15,13 @@ except ImportError as exc:  # pragma: no cover - exercised only without PyYAML
     raise SystemExit("PyYAML is required: pip install -r requirements-dev.txt") from exc
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
-SKILL_DIR = REPO_ROOT / "skill" / "explanation-lab"
+SKILL_DIR = REPO_ROOT / "skill" / "socialized"
 DIST_DIR = REPO_ROOT / "dist"
 
 OPERATIONS = (
     "sequencing", "mechanism", "examples", "terms",
-    "presentation", "register", "repair",
-    "persistence", "work-report", "plain",
+    "presentation", "visual", "register", "repair",
+    "persistence", "work-report", "plain", "close",
 )
 
 # Temporary skill variants for ablation runs. "full" is the production build.
@@ -39,6 +39,8 @@ VARIANTS: dict[str, frozenset[str]] = {
     "persist": frozenset({"persistence"}),
     "wrep": frozenset({"work-report"}),
     "plain": frozenset({"plain"}),
+    "visual": frozenset({"visual"}),
+    "close": frozenset({"close"}),
 }
 
 ALLOWED_FRONTMATTER_KEYS = {"name", "description", "license", "allowed-tools", "metadata", "compatibility"}

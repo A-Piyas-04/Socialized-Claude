@@ -18,6 +18,6 @@ def repo_root() -> Path:
 @pytest.fixture
 def skill_copy(tmp_path: Path) -> Path:
     """A disposable copy of the real skill directory, for mutation tests."""
-    target = tmp_path / "explanation-lab"
+    target = tmp_path / "socialized"
     shutil.copytree(skilllib.SKILL_DIR, target)
     return target

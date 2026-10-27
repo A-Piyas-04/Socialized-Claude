@@ -82,7 +82,7 @@ def test_conditions_are_consistent():
 
 def test_baseline_b_does_not_mention_the_skill():
     prefix = CONDITIONS["conditions"]["B_prompt"]["prefix"].lower()
-    assert "skill" not in prefix and "explanation-lab" not in prefix
+    assert "skill" not in prefix and "socialized" not in prefix and "explanation-lab" not in prefix
 
 
 # ---------------------------------------------------------------------------
@@ -116,7 +116,7 @@ def test_run_sheet_rows_batches_and_messages(tmp_path):
         if r["condition"] == "B_prompt":
             assert message.startswith(CONDITIONS["conditions"]["B_prompt"]["prefix"])
         if r["condition"] == "C_skill_explicit":
-            assert message.startswith("Use the explanation-lab skill for this.")
+            assert message.startswith("Use the socialized skill for this.")
         if r["condition"] in {"A_normal", "C_skill"} and not case["context"]:
             assert message == case["question"] + "\n"
 
@@ -133,8 +133,8 @@ def test_condition_d_pastes_the_packaged_skill_body(tmp_path):
     run = make_run(tmp_path, ["mech_001"], conditions=["D_skill_text"])
     _, rows = es.read_csv(run / "run_sheet.csv")
     message = (run / rows[0]["message_file"]).read_text(encoding="utf-8")
-    assert message.startswith("# Explanation Lab")
-    assert "name: explanation-lab" not in message
+    assert message.startswith("# Socialized-Claude")
+    assert "name: socialized" not in message
     assert "op:" not in message
     assert "\n---\n" in message and message.rstrip().endswith(CASES["mech_001"]["question"])
 
@@ -156,7 +156,7 @@ def fill_run(run: Path, words: dict[str, int], activation: str = "yes", mention_
         n = words.get(r["condition"], 20)
         text = " ".join(["synthetic"] * (n - 1) + [f"item{r['order']}"])
         if mention_skill and r["condition"] == mention_skill:
-            text += " explanation-lab"
+            text += " socialized"
         (run / r["response_file"]).write_text(text + "\n", encoding="utf-8")
         r.update({"date": "2026-11-01", "surface": "test", "model_label": "test-model", "thinking_setting": "off"})
         if r["batch"] != "skill_off":
@@ -233,7 +233,7 @@ def test_blinding_warnings_flag_skill_mentions(tmp_path):
     fill_run(run, words={}, mention_skill="C_skill")
     prepare_blind_packet.main([str(run), "--seed", "1"])
     warnings = (run / "blind" / "blinding_warnings.txt").read_text(encoding="utf-8")
-    assert "explanation-lab" in warnings and warnings.count("\n") == 1
+    assert "socialized" in warnings and warnings.count("\n") == 1
 
 
 def test_summary_paired_differences_are_exact(rated_run):

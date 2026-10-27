@@ -16,6 +16,7 @@
       "max_sentence_words": 14,
       "passive_sentence_count": 1,
       "answer_first_offset": 0,
+      "visual_count": 1,
       "decorative_structure_flags": []
     }
   },
@@ -36,6 +37,7 @@
       "max_sentence_words": 5,
       "passive_sentence_count": 0,
       "answer_first_offset": 0,
+      "visual_count": 0,
       "decorative_structure_flags": [
         "bullets_unconnected"
       ]
@@ -58,6 +60,7 @@
       "max_sentence_words": 13,
       "passive_sentence_count": 1,
       "answer_first_offset": 0,
+      "visual_count": 0,
       "decorative_structure_flags": []
     }
   },
@@ -78,6 +81,7 @@
       "max_sentence_words": 15,
       "passive_sentence_count": 0,
       "answer_first_offset": 0,
+      "visual_count": 1,
       "decorative_structure_flags": []
     }
   },
@@ -98,6 +102,7 @@
       "max_sentence_words": 7,
       "passive_sentence_count": 0,
       "answer_first_offset": 1,
+      "visual_count": 0,
       "decorative_structure_flags": [
         "heading_thin",
         "heading_thin"
@@ -121,9 +126,8 @@
       "max_sentence_words": 13,
       "passive_sentence_count": 1,
       "answer_first_offset": 2,
+      "visual_count": 0,
       "decorative_structure_flags": [
-        "emoji_structure",
-        "emoji_structure",
         "emoji_structure",
         "bullets_unconnected"
       ]
@@ -146,6 +150,7 @@
       "max_sentence_words": 25,
       "passive_sentence_count": 1,
       "answer_first_offset": 0,
+      "visual_count": 0,
       "decorative_structure_flags": [
         "emphasis_overuse"
       ]
@@ -168,6 +173,7 @@
       "max_sentence_words": 19,
       "passive_sentence_count": 0,
       "answer_first_offset": 0,
+      "visual_count": 0,
       "decorative_structure_flags": [
         "empty_transition"
       ]
@@ -190,6 +196,7 @@
       "max_sentence_words": 12,
       "passive_sentence_count": 0,
       "answer_first_offset": 0,
+      "visual_count": 0,
       "decorative_structure_flags": []
     }
   },
@@ -210,6 +217,7 @@
       "max_sentence_words": 15,
       "passive_sentence_count": 0,
       "answer_first_offset": 13,
+      "visual_count": 0,
       "decorative_structure_flags": []
     }
   },
@@ -230,6 +238,7 @@
       "max_sentence_words": 18,
       "passive_sentence_count": 0,
       "answer_first_offset": 0,
+      "visual_count": 0,
       "decorative_structure_flags": []
     }
   },
@@ -250,6 +259,7 @@
       "max_sentence_words": 20,
       "passive_sentence_count": 0,
       "answer_first_offset": 0,
+      "visual_count": 0,
       "decorative_structure_flags": []
     }
   },
@@ -270,6 +280,7 @@
       "max_sentence_words": 12,
       "passive_sentence_count": 1,
       "answer_first_offset": 0,
+      "visual_count": 0,
       "decorative_structure_flags": []
     }
   },
@@ -290,6 +301,7 @@
       "max_sentence_words": 5,
       "passive_sentence_count": 0,
       "answer_first_offset": 0,
+      "visual_count": 1,
       "decorative_structure_flags": [
         "table_thin"
       ]
@@ -312,8 +324,55 @@
       "max_sentence_words": 7,
       "passive_sentence_count": 0,
       "answer_first_offset": 0,
+      "visual_count": 0,
       "decorative_structure_flags": [
         "whitespace_padding"
+      ]
+    }
+  },
+  "uncaptioned_visual": {
+    "question": null,
+    "expected": {
+      "word_count": 9,
+      "block_count": 1,
+      "mean_block_words": 9.0,
+      "max_block_words": 9,
+      "heading_count": 0,
+      "bullet_count": 0,
+      "numbered_count": 0,
+      "table_count": 1,
+      "code_block_count": 0,
+      "emphasis_count": 0,
+      "mean_sentence_words": 0.0,
+      "max_sentence_words": 0,
+      "passive_sentence_count": 0,
+      "answer_first_offset": 0,
+      "visual_count": 1,
+      "decorative_structure_flags": [
+        "uncaptioned_visual"
+      ]
+    }
+  },
+  "wall_of_text": {
+    "question": null,
+    "expected": {
+      "word_count": 75,
+      "block_count": 2,
+      "mean_block_words": 37.5,
+      "max_block_words": 42,
+      "heading_count": 0,
+      "bullet_count": 1,
+      "numbered_count": 0,
+      "table_count": 0,
+      "code_block_count": 0,
+      "emphasis_count": 0,
+      "mean_sentence_words": 12.5,
+      "max_sentence_words": 33,
+      "passive_sentence_count": 1,
+      "answer_first_offset": 0,
+      "visual_count": 0,
+      "decorative_structure_flags": [
+        "dense_paragraph"
       ]
     }
   }

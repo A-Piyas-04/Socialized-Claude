@@ -75,6 +75,7 @@ def test_facts_prompt_and_parse_ignore_unknown_ids():
 
 def test_blinding_removes_skill_mentions():
     assert "explanation" not in jd.blind("Using the Explanation-Lab skill, here is it. explanation_lab").lower()
+    assert "socialized" not in jd.blind("Use the socialized skill. Socialized-Claude says so.").lower()
 
 
 def test_parse_json_object_tolerates_prose_and_fences():
