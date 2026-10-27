@@ -1,6 +1,6 @@
 # Evaluation framework
 
-This folder holds everything needed to test whether Explanation Lab V0 improves
+This folder holds everything needed to test whether Socialized-Claude improves
 explanations beyond normal Claude and beyond a strong generic prompt. Every step
 runs by hand in ordinary Claude chats. No API key is needed, and nothing
 automates the Claude interface.
@@ -26,7 +26,7 @@ automates the Claude interface.
 ## Five-command workflow
 
 ```
-python scripts/package_skill.py                                   # build dist/explanation-lab.zip
+python scripts/package_skill.py                                   # build dist/socialized.zip
 python scripts/make_run_sheet.py --run-id pilot-1 --seed 1        # run sheet + exact messages
 python scripts/run_assistant.py evaluation/runs/pilot-1           # clipboard helper while you chat in Claude
 python scripts/summarize_results.py evaluation/runs/pilot-1 --check-only

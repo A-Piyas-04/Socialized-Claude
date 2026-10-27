@@ -1,21 +1,21 @@
-# Explanation Lab: install and use
+# Socialized-Claude: install and use
 
 ## The file
 
-`dist/explanation-lab.zip`. Upload it as it is; don't unzip and re-zip it.
+`dist/socialized.zip`. Upload it as it is; don't unzip and re-zip it.
 
 ## Upload it
 
 1. Open claude.ai (web or desktop app).
 2. Go to **Customize → Skills**. On some versions it is **Settings → Features**.
-3. Choose to add or upload a skill, and pick `explanation-lab.zip`.
+3. Choose to add or upload a skill, and pick `socialized.zip`.
 
 You need a plan that includes Skills, with code execution ("create and edit
 files") turned on. On Team and Enterprise plans an admin may need to allow it.
 
 ## Turn it on
 
-In the Skills list, switch **explanation-lab** on. Start a new chat afterwards;
+In the Skills list, switch **socialized** on. Start a new chat afterwards;
 chats that were already open don't pick it up.
 
 ## What changes
@@ -51,11 +51,11 @@ Claude decides on its own when to use the skill, so it won't load every time.
 To make sure it does, start your message with:
 
 ```
-Use the explanation-lab skill for this.
+Use the socialized skill for this.
 ```
 
 ## Turn it off
 
-- **For good:** switch **explanation-lab** off in Customize → Skills, or delete
+- **For good:** switch **socialized** off in Customize → Skills, or delete
   it there. New chats won't use it.
-- **For one message:** say "Answer normally, without the explanation-lab skill."
+- **For one message:** say "Answer normally, without the socialized skill."

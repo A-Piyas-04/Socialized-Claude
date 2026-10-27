@@ -1,4 +1,4 @@
-# Explanation Lab V0: a Claude Skill for better explanations
+# Socialized-Claude: a Claude Skill for better explanations
 
 An experimental, installable Claude Skill that helps Claude explain concepts so
 readers can actually build a working mental model. It does this mainly by
@@ -17,11 +17,11 @@ inside your normal Claude account.
 
 ## Install
 
-1. Get `dist/explanation-lab.zip`.
+1. Get `dist/socialized.zip`.
 2. In claude.ai, open **Customize → Skills** (or **Settings → Features**),
    upload the ZIP, and enable it. Code execution must be on.
 3. Ask a "how" or "why" question, or start a message with
-   `Use the explanation-lab skill for this.`
+   `Use the socialized skill for this.`
 
 Full instructions, eligibility, activation checks, and troubleshooting:
 [`docs/INSTALLATION.md`](docs/INSTALLATION.md).
@@ -29,10 +29,10 @@ Full instructions, eligibility, activation checks, and troubleshooting:
 ## Repository layout
 
 ```
-skill/explanation-lab/        The installable skill (source)
+skill/socialized/        The installable skill (source)
   SKILL.md                    Core workflow and operations
   references/                 Loaded on demand: methodology, examples, selection rules
-dist/explanation-lab.zip      Built package to upload (plus .manifest.json with hashes)
+dist/socialized.zip      Built package to upload (plus .manifest.json with hashes)
 research/
   EVIDENCE_AUDIT.md           What the prior experiments do and do not show; treatment decisions
   recompute_archive_stats.py  Regenerates every number in the audit from the raw archive
@@ -76,8 +76,8 @@ what is provisional.
 pip install -r requirements-dev.txt
 python -m pytest                          # 186 tests
 python scripts/validate_skill.py          # validate the skill source
-python scripts/package_skill.py           # rebuild dist/explanation-lab.zip (deterministic)
-python scripts/validate_skill.py dist/explanation-lab.zip
+python scripts/package_skill.py           # rebuild dist/socialized.zip (deterministic)
+python scripts/validate_skill.py dist/socialized.zip
 python research/recompute_archive_stats.py
 ```
 

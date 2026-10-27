@@ -1,7 +1,8 @@
 # Communication grammar
 
-The rules implemented in `skill/explanation-lab/SKILL.md` by the presentation, register, repair,
-persistence, work-report and plain-language operations, and the accuracy additions, each with its evidence label.
+The rules implemented in `skill/socialized/SKILL.md` (displayed as Socialized-Claude) by the
+presentation, visual, register, repair, persistence, work-report, plain-language and close
+operations, and the accuracy additions, each with its evidence label.
 This file documents the skill; it does not argue for it.
 
 **No rule here is a validated finding.** No comprehension evidence exists for any of them
@@ -28,6 +29,8 @@ not held in this repository, so it supports a hypothesis, never an observation.
 6. Work reports
 7. Plain language
 8. Accuracy additions
+9. Visuals
+10. Closing
 
 ## 1. The primary success signal
 
@@ -61,7 +64,11 @@ on a detector artifact. It does not show that structure helps.
 | Bold the one sentence the reader must not miss; at most two per answer. | Engineering choice | Bounds emphasis so it still marks something. |
 | When a list or table separates causally linked facts, write the link inside the item. | Hypothesis (L4), with Literature (L2) motivation | The lab's H3 predicts presentation raises perceived clarity more than comprehension (illusion of fluency, L2), `research/EVIDENCE_AUDIT.md` §6 T5. |
 | Presentation is cut last when shortening. | Engineering choice | It costs few words. |
-| Failure modes: decorative structure, emoji as structure, whitespace padding, empty transitional units. | Engineering choice | Encoded as linter flags in `scripts/structural_metrics.py`; emoji and whitespace padding come from user reports (Hypothesis (L4) that they matter). |
+| End a paragraph at four sentences or about 80 words, and leave a blank line between units. | Hypothesis (L4) | User report (2026-10-27), point 13: dense paragraphs are hard to read. The `dense_paragraph` flag encodes the threshold; `whitespace_padding` still flags the opposite. |
+| Number the headings of an answer with three or more sections, and put a one-line map after the answer sentence. | Hypothesis (L4) | User report (2026-10-27), point 7. A scoped exception to the plain-language ban on preview sentences. |
+| Move specialist code and identifiers into a fenced block or a **For implementers:** blockquote after the narrative. | Hypothesis (L4) | User report (2026-10-27), point 15. |
+| Put the main point first in a section and gather minor caveats at the end; separate major topics with a horizontal rule. | Hypothesis (L4) | User report (2026-10-27), point 16. |
+| Failure modes: decorative structure, emoji as decoration, whitespace padding, empty transitional units, a wall of text. | Engineering choice | Encoded as linter flags in `scripts/structural_metrics.py`. The emoji rule is narrowed below. |
 
 The risk these rules carry is fluency without understanding. The judge reports fact capture
 separately from preference for exactly this reason, and a presentation change that lowers fact
@@ -125,7 +132,7 @@ fidelity risk, not comprehension evidence.
 | Write in the active voice; passive only when the actor is unknown or irrelevant. | Hypothesis (L4) | Says who does what, which a causal explanation needs. |
 | Give every pronoun one clear referent; repeat the noun when two could match. | Hypothesis (L4) | T1 template ("resolve ambiguous references"). |
 | Choose the common word when it is exact; keep the technical term when it is not. | Hypothesis (L4), with an Observation of the failure | T1 replaced "pathogen" throughout (`transform-immunology-chatgpt-T1.json`), the case this rule's second half guards against. |
-| Delete any sentence whose only job is to introduce the next one. | Hypothesis (L4) | T1 template ("remove padding"); also a presentation failure mode. |
+| Delete any sentence whose only job is to introduce the next one, except the one-line section map. | Hypothesis (L4) | T1 template ("remove padding"); the map is the point-7 exception above. |
 
 ## 8. Accuracy additions (always apply)
 
@@ -133,3 +140,30 @@ fidelity risk, not comprehension evidence.
 |---|---|---|
 | Give a specific citation only when confident it exists exactly as stated; otherwise describe the finding. | Engineering choice | The addendum quotes Choi (2023) as finding incorrect citations in 69.7% of responses; that study is not in this repository and the figure is second-hand. |
 | Gloss any named researcher, paper, or foreign or field term in the same sentence, or omit it. | Hypothesis (L4) | User reports about unexplained name-dropping. |
+
+## 9. Visuals (`op:visual`)
+
+Markdown is the default on every surface. An artifact is built only when the person explicitly
+asks for one, and only where the surface can show it (claude.ai). *Engineering choice*, from the
+user's instruction on 2026-10-27: markdown everywhere, artifacts on an explicit request.
+
+| Rule | Label | Basis |
+|---|---|---|
+| Draw when the content has a shape that would take three or more sentences, and delete those sentences. | Hypothesis (L4) | User report (2026-10-27), points 1, 3 and 5. |
+| Use the smallest form: an arrow chain, a two-column or diff contrast, a Mermaid block of at most ten nodes, or block-character bars. | Engineering choice | Keeps the token cost to the visual that replaces prose. |
+| At most one visual per section and two per answer; none in a one- or two-sentence answer or an expert lookup. | Engineering choice | Same budget. |
+| Caption every visual with what it shows and the one thing to notice. | Hypothesis (L4) | User report, point 14. The `uncaptioned_visual` flag checks the sentence is present. |
+| Mark status only with ✅ ❌ ⚠️ 🟢 🟡 🔴, at least two distinct markers in the same list or table, and name them in the caption. Headings stay words. | Hypothesis (L4) | User report, point 2. Narrows the earlier emoji ban (addendum): legend markers in a list are exempt from `emoji_structure`; a heading is not. Recorded as a deviation. |
+| Show change over time as one table row per moment. | Hypothesis (L4) | User report, point 4. Markdown cannot be clicked; an artifact covers that only when asked. |
+| On an explicit artifact request, build one captioned artifact and keep a short markdown answer. The next reply returns to markdown unless the request was standing. | Engineering choice | User instruction, 2026-10-27. |
+
+`visual_count` is a heuristic and never a gate, same as `answer_first_offset` and `passive_sentence_count`.
+
+## 10. Closing (`op:close`) and the running example
+
+| Rule | Label | Basis |
+|---|---|---|
+| End a long or teaching answer with a takeaway of one sentence or at most three items. | Hypothesis (L4) | User report, point 11. |
+| End teaching, beginner, and confusion follow-ups with one question answerable from the explanation. Quick, practitioner, and expert answers end when the content ends. | Hypothesis (L4) | User report, point 10. |
+| Carry one example through the answer. For a beginner concept question, sentence one is a concrete situation and sentence two is the answer. | Hypothesis (L4) | User report, points 8 and 12. |
+| When a design is not the obvious one, name the approach a reader would try first and how it fails, before the mechanism. | Hypothesis (L4) | User report, point 17. |

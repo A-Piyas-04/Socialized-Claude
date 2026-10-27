@@ -1,17 +1,22 @@
-# Architecture — Explanation Lab V0
+# Architecture — Socialized-Claude
 
 ## What the skill does
 
-Explanation Lab is an instructions-only Claude Skill. When Claude loads it, the
-skill guides Claude to compose explanations that:
+Socialized-Claude is an instructions-only Claude Skill (id `socialized`; the
+display name cannot be the id, because a skill id may not contain "claude").
+When Claude loads it, the skill guides Claude to compose explanations that:
 
 1. **Order ideas by dependency.** Nothing is used before its groundwork, and a
    missing prerequisite is taught briefly rather than merely named.
 2. **Make the causal mechanism explicit** for why and how questions: what
    triggers what, why the mechanism exists, and the tradeoff that follows.
-3. Apply three **conditional** operations only when they fill a specific gap:
-   one mapped example, a definition at first use, and formatting that follows
-   the content's real shape.
+3. Apply further operations only when they fill a specific gap: one running
+   example, a definition at first use, formatting that follows the content's
+   real shape, a markdown visual where the content has a shape, and a takeaway
+   plus one check question when the answer taught something.
+4. Build an artifact (HTML, SVG, or an interactive widget) only on claude.ai,
+   and only when the person explicitly asks for one. Otherwise the visual stays
+   markdown.
 
 It also tells Claude to **leave non-teaching requests alone**, to keep length
 proportional, and to preserve accuracy and uncertainty.
@@ -22,7 +27,7 @@ run code.
 ## Files and progressive disclosure
 
 ```
-explanation-lab/
+socialized/
 ├── SKILL.md                              Level 2: loaded when Claude triggers the skill
 └── references/
     ├── explanation-methodology.md        Level 3: per-request-type behaviour
@@ -32,8 +37,8 @@ explanation-lab/
 
 | Level | What | When it is in Claude's context |
 |---|---|---|
-| 1 | `name` + `description` (196 characters) | Always, in every chat where the skill is enabled |
-| 2 | `SKILL.md` body (about 180 lines, 1,500 words) | Only after Claude decides the request matches the description |
+| 1 | `name` + `description` (164 characters) | Always, in every chat where the skill is enabled |
+| 2 | `SKILL.md` body (about 350 lines) | Only after Claude decides the request matches the description |
 | 3 | Reference files | Only if Claude chooses to read one for the current request |
 
 `SKILL.md` alone is a complete working skill. The references cover harder cases,

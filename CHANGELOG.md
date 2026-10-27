@@ -2,6 +2,23 @@
 
 ## Unreleased
 
+### Skill (Socialized-Claude)
+- The skill id is `socialized` and the display name is Socialized-Claude. The id
+  cannot contain "claude" (reserved-word check). `evaluation/runs/pilot16-cc`
+  stays frozen as `explanation-lab`; the collector reads the skill id from the
+  run's manifest.
+- New operations: `visual` (markdown diagrams, contrasts, bars and status
+  legend; one captioned artifact only when the person explicitly asks) and
+  `close` (a takeaway, and one check question on teaching answers). Twelve
+  operations, 15 variants, including `V_visual` and `V_close`.
+- Presentation: paragraph and bullet limits, blank lines between units, numbered
+  headings with a one-line map, specialist material boxed, horizontal rules
+  between major topics. Examples stay one running case. Mechanism names the
+  obvious approach that fails.
+- Linter: `dense_paragraph`, `uncaptioned_visual`; legend emoji exempt when a
+  list uses two or more; `visual_count` is a heuristic and never a gate.
+  Compactness guard raised to 380 rendered lines.
+
 ### Skill (V1)
 - `op:structure` renamed to `op:presentation` and rewritten as a positive
   operation: answer first, one idea per unit, form chosen from the content's

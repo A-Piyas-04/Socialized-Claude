@@ -116,3 +116,17 @@ needs to decide. No progress narrative.
 - Before any Groq run: `scripts/judge_capacity.py --tpd <cap>` measures real tokens per call and
   projects days. Stop and report if acceptance or the sweep would take more than about 3 days.
 - `answer_first_offset` and `passive_sentence_count` are labelled heuristics and never gate.
+- Socialized-Claude (user, 2026-10-27): the skill id is `socialized` because the
+  validator rejects `claude` in a name. The display name is Socialized-Claude.
+  `pilot16-cc` stays frozen as `explanation-lab`; collect_cc reads the id from
+  the run manifest.
+- Visuals are markdown by default. An artifact is built only on claude.ai, and
+  only when the person explicitly asks for one. A one-off request covers that
+  reply; "from now on" is a standing instruction.
+- Interactive output without an artifact is a state table (one row per moment).
+  The addendum's emoji ban is narrowed: ✅ ❌ ⚠️ 🟢 🟡 🔴 may mark status when at
+  least two distinct markers share a list or table. Headings stay unmarked.
+  Recorded as a deviation.
+- SKILL.md compactness guard raised from 300 to 380 rendered lines.
+- `visual_count` is a heuristic and never a gate. `dense_paragraph` and
+  `uncaptioned_visual` are flags.

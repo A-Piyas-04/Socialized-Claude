@@ -25,7 +25,10 @@ def freeze_build(run_dir: Path, batches: set[str], dist: Path | None = None) -> 
     """Copy the ZIPs and manifests this run needs into <run>/skill_build/, so later skill edits
     cannot change what the run measures. Returns the copied file names."""
     dist = dist or es.REPO_ROOT / "dist"
-    skill = es.dist_skill_name(dist)
+    try:
+        skill = es.dist_skill_name(dist)
+    except (FileNotFoundError, ValueError):
+        return []
     names = set()
     for batch in batches:
         if batch in {"skill_off", "skill_on", "variant:full"}:

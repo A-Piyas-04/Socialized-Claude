@@ -1,7 +1,8 @@
 {
-  "skill": "explanation-lab",
+  "skill": "socialized",
   "variant": "full",
   "enabled_operations": [
+    "close",
     "examples",
     "mechanism",
     "persistence",
@@ -11,14 +12,15 @@
     "repair",
     "sequencing",
     "terms",
+    "visual",
     "work-report"
   ],
-  "zip": "explanation-lab.zip",
-  "zip_sha256": "47c99de549b960442bc0d1f358aeb965e816db1da3ccb6ce799f58b946394dac",
+  "zip": "socialized.zip",
+  "zip_sha256": "4f06606731abf23b8766a1eca93ea5d2c56f2c653db46009ea17f44b941a1c40",
   "files": {
-    "SKILL.md": "182c3a2f532d920cafeac099da74ebc7b1b08edfd97259f8b3af1115ef2510ef",
-    "references/explanation-examples.md": "476a4432d6a062398e0abce5523b0e2dfc01f48765aac6bf7a2fac479f0a5b08",
-    "references/explanation-methodology.md": "12ea0ef89a1f6f874d68c8088e0dc63ca16a597e65b875d0bae46a026148a46c",
-    "references/treatment-selection.md": "14b4fbe72bbcea53ec76ddeaf6f15e12ca1119ffdfcddcdf46132a1194f5b533"
+    "SKILL.md": "76a87782b52ac45eedb1f496b0c3b887d19bb04949eb9d4f10aff52b47ac0aa2",
+    "references/explanation-examples.md": "9cde586042bac9f50188df21e920b55d13a69e31dd4bec28d1b3d67d2b882ef0",
+    "references/explanation-methodology.md": "21af09a61005f7367e90fa03c9cffc9558b31bd47d7dcaa390c992bcfad22e90",
+    "references/treatment-selection.md": "aef1cebb64c3dbfd5d217dca657ae64daf141ebf8790be6245bba2ff88b48a1f"
   }
 }

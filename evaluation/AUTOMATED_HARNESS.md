@@ -63,7 +63,7 @@ New runs: `--create --subset pilot16 --samples 3` (3 samples per cell by default
 Each row runs in a fresh sandbox outside the repository with its own `CLAUDE_CONFIG_DIR`, so
 user-level skills, CLAUDE.md, memory and plugins are absent in every arm. The batch's built
 ZIP is installed as a project skill; skill-off rows pass
-`--settings {"skillOverrides": {"explanation-lab": "off"}}`. Tools are `Read,Skill` with
+`--settings {"skillOverrides": {"<skill>": "off"}}`, where `<skill>` is the id in that run's frozen manifest (`socialized` for a new run, `explanation-lab` for `pilot16-cc`). Tools are `Read,Skill` with
 permission mode `dontAsk` in every arm.
 
 The flag is not trusted. The `system/init` event is parsed for every row, and the row fails

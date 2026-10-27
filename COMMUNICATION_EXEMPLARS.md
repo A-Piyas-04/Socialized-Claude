@@ -11,7 +11,7 @@ held-out evaluation set. The databases pair in `candidate-before-after.md` is no
 texts are identical.
 
 **What these show.** Which of two versions follows the operations in
-`skill/explanation-lab/SKILL.md`. They are not evidence that either version is understood better;
+`skill/socialized/SKILL.md`. They are not evidence that either version is understood better;
 no comprehension data exists for any of them. In exemplars 6 and 7 the better version is *less*
 structured than the weak one: the rule is to match structure to the content's shape, not to add it.
 

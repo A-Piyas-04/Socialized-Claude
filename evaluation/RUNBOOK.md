@@ -22,7 +22,7 @@ half that for the reduced `pilot16` run.
    python scripts/validate_skill.py
    python scripts/package_skill.py
    ```
-   Note the `zip_sha256` in `dist/explanation-lab.manifest.json`. Every C row
+   Note the `zip_sha256` in `dist/socialized.manifest.json`. Every C row
    records it.
 4. **Create the run sheet and message files:**
    ```
@@ -104,7 +104,7 @@ one batch.
 
 1. Open the Skills settings. This is **Customize → Skills** in current
    interfaces; some versions show it under **Settings → Features**. Make sure
-   `explanation-lab` is **not enabled**. On the first run it is not uploaded
+   `socialized` is **not enabled**. On the first run it is not uploaded
    yet, which is fine.
 2. For each `skill_off` row of `run_sheet.csv`, in order:
    1. Start a **new chat**. Never reuse a chat between rows.
@@ -123,10 +123,10 @@ one batch.
 ## 3. Install the skill (first time only)
 
 1. Go to **Customize → Skills** (or **Settings → Features**) and upload
-   `dist/explanation-lab.zip`.
+   `dist/socialized.zip`.
 2. If the upload fails, record the exact error message. Criterion S1 has failed,
    so stop and see `docs/INSTALLATION.md` → Troubleshooting.
-3. Enable `explanation-lab`. Check that no other custom skill is enabled.
+3. Enable `socialized`. Check that no other custom skill is enabled.
 
 ---
 
@@ -138,8 +138,8 @@ Repeat the §2 procedure for each `skill_on` row, with one addition.
 
 | What you see | `activation_observed` | `activation_evidence` (examples) |
 |---|---|---|
-| The tool-activity or thinking panel shows Claude reading `explanation-lab/SKILL.md` or naming the skill | `yes` | "Tool panel: read explanation-lab/SKILL.md" |
-| A reference file under `explanation-lab/references/` is also read | `yes`, and list the files in `references_loaded` | "Also read references/explanation-examples.md" |
+| The tool-activity or thinking panel shows Claude reading `socialized/SKILL.md` or naming the skill | `yes` | "Tool panel: read socialized/SKILL.md" |
+| A reference file under `socialized/references/` is also read | `yes`, and list the files in `references_loaded` | "Also read references/explanation-examples.md" |
 | No visible sign of the skill being loaded | `no` | "No tool activity shown" |
 | Something ambiguous (collapsed panel, unclear label) | `unclear` | Describe what you saw |
 
@@ -168,12 +168,12 @@ For each variant (`core`, `seq`, `mech`, `seq-mech`, `full`):
 
 1. Build it with `python scripts/package_skill.py --all-variants`. The ZIPs go to
    `dist/ablation/`.
-2. In Skills settings, **delete** the currently installed `explanation-lab`, then
-   upload `dist/ablation/explanation-lab--<variant>.zip` and enable it. All
+2. In Skills settings, **delete** the currently installed `socialized`, then
+   upload `dist/ablation/socialized--<variant>.zip` and enable it. All
    variants share one name, so only one can be installed at a time.
 3. Run that variant's rows (`batch = variant:<variant>`). Record the variant's
-   `zip_sha256` from `dist/ablation/explanation-lab--<variant>.manifest.json`.
-4. After the last variant, reinstall the production `dist/explanation-lab.zip`.
+   `zip_sha256` from `dist/ablation/socialized--<variant>.manifest.json`.
+4. After the last variant, reinstall the production `dist/socialized.zip`.
 
 ---
 

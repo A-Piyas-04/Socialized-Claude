@@ -74,7 +74,7 @@ def test_arm_problems_flags_each_mismatch():
 def test_skill_touch_detection():
     assert cc.invokes_skill({"name": "Skill", "input": {"skill": "socialized"}}, "socialized")
     assert cc.invokes_skill({"name": "Skill", "input": {"command": "/socialized"}}, "socialized")
-    assert cc.invokes_skill({"name": "Skill", "input": {"skill": "socialized"}}, "socialized")
+    assert cc.invokes_skill({"name": "Skill", "input": {"skill": "explanation-lab"}}, "explanation-lab")
     assert not cc.invokes_skill({"name": "Skill", "input": {"skill": "debug"}}, "socialized")
     assert cc.reads_skill_file({"name": "Read", "input": {
         "file_path": "C:\\t\\work\\.claude\\skills\\socialized\\references\\treatment-selection.md"}}, "socialized") \
@@ -262,6 +262,26 @@ def test_stale_build_is_refused(tmp_path, run_dir):
     es.write_csv(run_dir / "run_sheet.csv", header, rows)
     with pytest.raises(cc.HarnessError, match="build changed"):
         cc.collect(run_dir, CLAUDE, fake_env(tmp_path), OPTS, write=lambda _: None)
+
+
+def test_frozen_explanation_lab_build_still_verifies(tmp_path, run_dir):
+    historical = REPO / "evaluation" / "runs" / "pilot16-cc" / "skill_build"
+    build = run_dir / "skill_build"
+    for path in build.iterdir():
+        path.unlink()
+    for name in ("explanation-lab.zip", "explanation-lab.manifest.json"):
+        (build / name).write_bytes((historical / name).read_bytes())
+    manifest = json.loads((build / "explanation-lab.manifest.json").read_text(encoding="utf-8"))
+    header, rows = es.read_csv(run_dir / "run_sheet.csv")
+    for row in rows:
+        if row["batch"] != "skill_off":
+            row["skill_zip_sha256"] = manifest["zip_sha256"]
+    es.write_csv(run_dir / "run_sheet.csv", header, rows)
+    assert cc.collect(run_dir, CLAUDE, fake_env(tmp_path), OPTS, write=lambda _: None) == 0
+    _, rows = es.read_csv(run_dir / "run_sheet.csv")
+    enabled = [r for r in rows if r["batch"] != "skill_off"]
+    assert enabled and all("lists explanation-lab" in r["activation_evidence"] for r in enabled)
+    assert "does not list explanation-lab" in next(r["activation_evidence"] for r in rows if r["batch"] == "skill_off")
 
 
 def test_run_uses_its_frozen_build_not_current_dist(tmp_path, run_dir, dist):
