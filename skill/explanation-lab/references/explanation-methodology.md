@@ -27,15 +27,16 @@ a question about a foundational idea.
 
 <!-- op:sequencing -->
 - Start from something the reader already has: an everyday situation or a
-  concept from a neighbouring field. Do not start from the formal definition.
+  concept from a neighbouring field. Bring in the formal definition after that.
 - Build the dependency chain explicitly. Each new idea should rest on one
   already in place. Teach each missing prerequisite briefly where it is
   needed, not in an upfront glossary.
 <!-- /op:sequencing -->
 - Keep the real technical term once the idea is in place ("this is called
   *latency*"), because the reader will meet it again.
-- Don't patronise. A beginner in this field is still an adult who knows other
-  things. No "Great question!", no "simple, right?".
+- Write to an adult: a beginner in this field still knows other things. Open
+  with the content rather than praise or reassurance ("Great question!",
+  "simple, right?").
 - Stop at the level of the question. A beginner asking what something is needs a
   correct mental model, not every edge case.
 
@@ -58,7 +59,7 @@ Signals: precise terminology, a narrow scope, code or configuration, and
 references to specific systems or papers.
 
 - Answer directly and precisely in the first sentence or two.
-- No introductory background and no definitions of terms they used.
+- Start where the question starts, and use their terms without defining them.
 <!-- op:mechanism -->
 - Mechanism at their level is welcome when the question is "why". Give the exact
   causal reason, not a restatement of the behaviour.
@@ -72,8 +73,8 @@ references to specific systems or papers.
   happens. "Why does X exist?" needs the problem X solves. "How does X work?"
   needs the steps and what connects them.
 - Give the chain in order. If a step would look arbitrary, add the reason for it.
-- End with the consequence or limit that follows from the mechanism, if it helps
-  the reader predict behaviour. Don't add it if it is trivia.
+- End with the consequence or limit that follows from the mechanism when it
+  helps the reader predict behaviour.
 <!-- /op:mechanism -->
 - If the honest answer is "this is not fully known", say so first, then give the
   best-supported account and label it as such.
@@ -85,7 +86,7 @@ Examples: "What year…", "What's the default…", "Which command…".
 - Give the fact. One sentence is often the whole answer.
 - Add one more sentence only if a common misconception would otherwise mislead
   them, or if the fact is meaningless without a one-line context.
-- Do not convert a factual question into a lesson.
+- Keep a factual answer factual: the fact, plus at most that one sentence.
 
 ## 6. Comparisons
 
@@ -111,8 +112,8 @@ Examples: "What year…", "What's the default…", "Which command…".
 - If they ask for several examples, make each show something different (a typical
   case, an edge case, a non-example), not three variations of the same case.
 <!-- /op:examples -->
-- Do not re-explain the theory at length. Add only the link that makes the
-  example illuminating.
+- Add only the link that makes the example illuminating, and keep the theory
+  as brief as it already was.
 
 ## 8. Step-by-step walkthroughs
 
@@ -124,8 +125,8 @@ Examples: "What year…", "What's the default…", "Which command…".
 <!-- op:examples -->
 - Trace one concrete case through the steps when the process is abstract.
 <!-- /op:examples -->
-- Keep steps at one level of granularity. Don't mix "the CPU fetches an
-  instruction" with "the program runs".
+- Keep steps at one level of granularity: "the CPU fetches an instruction"
+  and "the program runs" belong in different walkthroughs.
 
 ## 9. Explaining code
 
@@ -137,8 +138,8 @@ Examples: "What year…", "What's the default…", "Which command…".
 <!-- /op:mechanism -->
 - Use the user's own identifiers. Quote small fragments rather than the whole code
   again.
-- Do not explain language basics the user clearly knows (what a function or a
-  loop is) unless they ask.
+- Take language basics the user clearly knows (what a function or a loop is)
+  as given unless they ask.
 
 ## 10. Follow-up confusion
 
@@ -151,7 +152,7 @@ wrong inference.
   explanation was abstract, or the underlying reason if it was procedural.
 - If they stated a misconception, say plainly and kindly that it is not quite
   right, and why.
-- Do not repeat the whole previous answer, and do not apologise at length.
+- Reply with that link alone, plus at most a one-clause acknowledgement.
 
 ## 11. Requests for concise explanations
 
@@ -160,8 +161,8 @@ wrong inference.
 - Spend the words on the single most important causal link. A one-sentence
   explanation is usually "X happens because Y", with nothing else.
 <!-- /op:mechanism -->
-- If accuracy truly needs a qualifier, keep it in a short clause. Don't drop it to
-  save words.
+- If accuracy truly needs a qualifier, keep it in a short clause, even at the
+  tightest length.
 
 ## 12. Mixed tasks (doing plus explaining)
 
@@ -171,15 +172,16 @@ why it's better".
 - Do the task the way you normally would. Its output comes first.
 - Apply this skill only to the explanation part, and keep that part proportionate:
   usually a short paragraph.
-- If no explanation was requested, do not add one beyond the normal brief note on
-  what changed.
+- If no explanation was requested, limit it to the normal brief note on what
+  changed.
 
 ## 13. Uncertain, contested, or simplified topics
 
 - Say where the established account ends. Use plain words: "this part isn't fully
   understood", "researchers disagree about…", "this is a simplification; the
   full picture also involves…".
-- Never resolve an open question with a confident-sounding mechanism.
+- Present an open question as open, with the best-supported account labelled
+  as such.
 - When simplifying, make sure the simple version is a subset of the truth, not a
   different claim. A good test: would someone who later learns the full version
   have to *unlearn* anything? If so, add the nuance now.
@@ -187,5 +189,5 @@ why it's better".
 ## 14. Non-educational tasks
 
 Greetings, translation, formatting, editing the user's own text, writing fiction,
-and data lookups do not need this skill. Respond normally. Turning these into
-lessons is a failure of this skill, not a success.
+and data lookups get a normal response. Turning these into lessons is a
+failure of this skill, not a success.

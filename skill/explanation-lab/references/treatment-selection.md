@@ -51,8 +51,7 @@ specific gap it fills for this reader.
 <!-- op:sequencing -->
 - **Directness beats strict ordering for specific questions.** If the user asked
   a specific question, answer it first. Then supply the one prerequisite that
-  makes the answer make sense. Don't make them read background before reaching
-  the answer.
+  makes the answer make sense. The answer comes before any background.
 <!-- /op:sequencing -->
 - **The user's stated length beats everything.** "Briefly" means keep the single
   most important point and drop the rest.

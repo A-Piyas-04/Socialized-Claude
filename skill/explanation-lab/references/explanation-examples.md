@@ -1,8 +1,8 @@
 # Explanation examples
 
 Each pair shows a weak explanation, a better one, and what specifically changed.
-The "better" versions illustrate the operations. They are not templates: do not
-copy their structure. The last section shows requests where the right move is to
+The "better" versions illustrate the operations. They are not templates: choose
+each answer's structure from its own content. The last section shows requests where the right move is to
 add nothing.
 
 ## Contents
@@ -252,7 +252,7 @@ picture they already understand.
 
 **Direct fact.**
 User: "What's the default port for HTTPS?"
-Answer: "443." Do not add a history of TLS.
+Answer: "443." That one word is the whole answer.
 
 **Narrow expert question.**
 User: "Why isn't `Rc<T>` `Send` in Rust?"
@@ -262,7 +262,7 @@ Answer:
 > corrupt the count, leading to a use-after-free or a leak. `Arc<T>` covers that
 > case with atomic count updates, at some cost per clone and drop.
 
-Do not introduce ownership, threads, or traits. The user's wording shows they
+Leave ownership, threads, and traits implicit. The user's wording shows they
 know them.
 
 **Requested brevity.**
@@ -278,5 +278,5 @@ Do the task. No explanation of register or grammar unless asked.
 
 **Doing first, explaining briefly.**
 User: "Fix the off-by-one error in this loop."
-Fix it and add a short note on what was wrong, at most a sentence or two. Do not
-write a tutorial on loop bounds.
+Fix it and add a short note on what was wrong, at most a sentence or two. That
+note is the whole explanation.

@@ -14,11 +14,11 @@
     "work-report"
   ],
   "zip": "explanation-lab.zip",
-  "zip_sha256": "c13593c32544d0b0a768ba9d651ea54bc872eaaef6d73d807b2cce34789e3497",
+  "zip_sha256": "47c99de549b960442bc0d1f358aeb965e816db1da3ccb6ce799f58b946394dac",
   "files": {
-    "SKILL.md": "407e66086bde7ec6d78512d48cf61a02cf9b0241f4be108710133af7655e7fad",
-    "references/explanation-examples.md": "db44d634b47bb82ddf35b914ac530a1b5e7232f9e5c1dac62e2c2bd0bb8fca6d",
-    "references/explanation-methodology.md": "29b4072404a1da9c7dd90f7ff39156d2345facbf08d2eea8b25a44a75e893635",
-    "references/treatment-selection.md": "6cec7ef6330eddb800669d5c8bf1c6dd6ea3f3ac5bbd1ad2367cee28e9ee99f5"
+    "SKILL.md": "182c3a2f532d920cafeac099da74ebc7b1b08edfd97259f8b3af1115ef2510ef",
+    "references/explanation-examples.md": "476a4432d6a062398e0abce5523b0e2dfc01f48765aac6bf7a2fac479f0a5b08",
+    "references/explanation-methodology.md": "12ea0ef89a1f6f874d68c8088e0dc63ca16a597e65b875d0bae46a026148a46c",
+    "references/treatment-selection.md": "14b4fbe72bbcea53ec76ddeaf6f15e12ca1119ffdfcddcdf46132a1194f5b533"
   }
 }
