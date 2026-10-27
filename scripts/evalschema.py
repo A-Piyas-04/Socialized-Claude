@@ -27,6 +27,7 @@ RESULTS_REQUIRED = ["date", "surface", "model_label", "thinking_setting", "activ
 DIMENSIONS = [
     "prerequisite_sequencing", "mechanistic_clarity", "conceptual_completeness", "directness",
     "appropriate_depth", "example_effectiveness", "accuracy", "cognitive_load", "responsiveness_to_intent",
+    "navigability", "register_fit",
 ]
 DIMENSIONS_ALLOWING_NA = {"prerequisite_sequencing", "mechanistic_clarity", "example_effectiveness"}
 PRIMARY_DIMENSIONS = ["mechanistic_clarity", "prerequisite_sequencing"]

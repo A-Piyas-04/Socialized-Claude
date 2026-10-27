@@ -15,7 +15,7 @@ automates the Claude interface.
 | `BASELINE_INSTRUCTIONS.md` | Exact text and product mechanism for each condition (A, B, C natural, C explicit, optional D, ablation variants) |
 | `conditions.json` | Machine-readable copy of the conditions, used by the scripts (a test keeps it identical to the Markdown) |
 | `TEST_CASES.json` | 33 held-out cases with expected properties, misconceptions, critical facts, and reasoning gaps |
-| `RUBRIC.md` | Anchored 1–5 scores for 9 dimensions, critical-fact coding, adherence codes, ranking, and rater calibration |
+| `RUBRIC.md` | Anchored 1–5 scores for 11 dimensions, critical-fact coding, adherence codes, ranking, and rater calibration |
 | `RUNBOOK.md` | Step-by-step operator procedure: settings, batches, activation evidence, blinding, summarizing |
 | `RESULTS_TEMPLATE.csv` | Columns of the run sheet (generation log) |
 | `RATINGS_TEMPLATE.csv` | Columns of a rater's sheet |

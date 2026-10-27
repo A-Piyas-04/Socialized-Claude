@@ -8,7 +8,7 @@ The rubric has four separate instruments. **Never average them into one score.**
 
 | Instrument | What it measures | Filled by | File |
 |---|---|---|---|
-| A. Dimension scores (9 dimensions, 1–5) | Explanation quality as judged by an informed reader | Blind raters | `RATINGS_TEMPLATE.csv` |
+| A. Dimension scores (11 dimensions, 1–5) | Explanation quality as judged by an informed reader | Blind raters | `RATINGS_TEMPLATE.csv` |
 | B. Critical-fact and error coding | Factual accuracy against the case's critical facts | Blind raters | `RATINGS_TEMPLATE.csv` |
 | C. Adherence codes | Specific behaviours the skill is meant to avoid | Blind raters | `RATINGS_TEMPLATE.csv` |
 | D. Within-case rank | Overall preference among the responses to one case | Blind raters | `RATINGS_TEMPLATE.csv` |
@@ -27,8 +27,9 @@ explanation "seems clear" is not evidence that anyone learned from it.
 2. Score each response on its own before ranking any of them.
 3. **Do not reward length.** A longer answer earns a higher score only if the extra
    content is something this reader needed.
-4. **Do not reward formatting.** Headings, bullets, and bold text are not
-   evidence of understanding. Ask what the reader would know afterwards.
+4. **Do not reward formatting outside `navigability`.** Headings, bullets, and
+   bold text are not evidence of understanding. On every other dimension, ask
+   what the reader would know afterwards.
 5. Use the case's `critical_facts`, `common_misconceptions`, and
    `expected_properties` (in the rater sheet) as the reference. If you believe a
    reference fact is wrong, note it in `rater_notes` and score against what is
@@ -37,6 +38,16 @@ explanation "seems clear" is not evidence that anyone learned from it.
 7. Use `NA` only where a dimension says it is allowed.
 8. If you recognise the writing style of a condition, do not let that influence
    you. Note it in `rater_notes` so blinding failures can be counted.
+
+### Preference versus comprehension
+
+Dimension scores (A) and within-case ranks (D) are **preference-class**
+measures: they record what an informed reader judges better. The critical-fact
+coding in §B is the **comprehension-class** measure available in this rubric: it
+records what the response actually conveys. Presentation changes are expected to
+move the first. A presentation change counts as a **regression** if it moves the
+second downward, however much it raises the first. Raters score both, and the
+two are never averaged or combined into one number.
 
 ---
 
@@ -145,6 +156,28 @@ format?
 | 1 | Wrong kind of response, such as a lesson instead of a translation, or a long essay when one sentence was requested. |
 | 3 | Right kind of response, but partly misreads the intent, for example by answering a more general question. |
 | 5 | Exactly what was asked, including the evident implicit intent. |
+
+### 10. `navigability`
+
+Can this reader find the part of the answer they need without reading it
+linearly? Judge whether the form shows the shape of the content, not how much
+formatting there is.
+
+| Score | Anchor |
+|---|---|
+| 1 | An undifferentiated block: several distinct ideas, stages, or items run together with nothing to show where one ends. Or structure that misleads: headings over one-sentence sections, bullets that break a single argument apart. |
+| 3 | The main divisions are findable, but one part that has its own shape (a process, a comparison across shared dimensions, a branching flow) is buried in prose, or some structure is decorative. |
+| 5 | The structure of the content is visible at a glance, and every heading, list, table, or diagram marks a real division. A short answer that is honestly two sentences of prose scores 5. |
+
+### 11. `register_fit`
+
+Is the technical level matched to this reader?
+
+| Score | Anchor |
+|---|---|
+| 1 | Invented jargon, unexplained name-drops or foreign terms, or condescension (a children's analogy for an adult, characterising what the reader "really" thinks). |
+| 3 | Mostly at the reader's level, but some terms are left unexplained for a beginner, or a practitioner is taught things they evidently know. |
+| 5 | The reader's own level throughout: the field's correct terms, explained only where this reader needs it, nothing talked down. |
 
 ---
 
