@@ -88,7 +88,7 @@ def screen_item(judge: jl.CachedJudge, topic: dict, item: dict, attempts: int, s
 
 def screen_bank(bank: dict, backend: jl.Backend, attempts: int = 5, seed: int = 0,
                 cache_dir: Path = CACHE_DIR) -> dict:
-    judge = jl.CachedJudge(backend, cache_dir)
+    judge = jl.CachedJudge(backend, cache_dir, progress=True)
     results, topics = [], []
     for topic in bank["topics"]:
         kept = []

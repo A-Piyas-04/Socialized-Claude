@@ -17,13 +17,14 @@ import hashlib
 import json
 import os
 import re
+import sys
 import time
 import urllib.error
 import urllib.request
 from pathlib import Path
 from typing import Callable, Protocol
 
-DEFAULT_GEMINI_MODEL = "gemini-3.5-flash-lite"
+DEFAULT_GEMINI_MODEL = "gemini-3.8-flash"
 GEMINI_URL = "https://generativelanguage.googleapis.com/v1beta/models/{model}:generateContent"
 KEY_ENV = "GEMINI_API_KEY"
 RETRY_STATUSES = {429, 500, 503}
@@ -56,6 +57,7 @@ class GeminiBackend:
         self._min_interval, self._max_retries, self._backoff = min_interval, max_retries, backoff
         self._sleep, self._open = sleep, opener
         self._last = 0.0
+        self.log: Callable[[str], None] = lambda message: print(message, file=sys.stderr, flush=True)
 
     def complete(self, prompt: str, temperature: float) -> str:
         body = json.dumps({
@@ -71,17 +73,20 @@ class GeminiBackend:
                                              headers={"Content-Type": "application/json",
                                                       "x-goog-api-key": self._key})
             try:
-                with self._open(request, timeout=120) as response:
+                with self._open(request, timeout=300) as response:
                     payload = json.loads(response.read().decode("utf-8"))
             except urllib.error.HTTPError as exc:
                 if exc.code in RETRY_STATUSES and attempt < self._max_retries:
-                    self._sleep(self._backoff * (2 ** attempt))
+                    wait = self._backoff * (2 ** attempt)
+                    self.log(f"judge HTTP {exc.code}; retry {attempt + 1}/{self._max_retries} in {wait:.0f}s")
+                    self._sleep(wait)
                     continue
                 if exc.code in RETRY_STATUSES:
                     raise JudgeUnavailable(f"judge HTTP {exc.code} after {attempt + 1} attempts") from None
                 raise JudgeError(f"judge HTTP {exc.code}: {exc.reason}") from None
-            except urllib.error.URLError as exc:
+            except (urllib.error.URLError, TimeoutError) as exc:
                 if attempt < self._max_retries:
+                    self.log(f"judge network error ({getattr(exc, 'reason', exc)}); retry {attempt + 1}")
                     self._sleep(self._backoff * (2 ** attempt))
                     continue
                 raise JudgeUnavailable(f"judge unreachable: {exc.reason}") from None
@@ -106,8 +111,8 @@ def backend_from_env(env: dict[str, str] | None = None, **kwargs) -> Backend:
 class CachedJudge:
     """Wraps a backend with an on-disk cache keyed by the exact request."""
 
-    def __init__(self, backend: Backend, cache_dir: Path) -> None:
-        self.backend, self.cache_dir = backend, cache_dir
+    def __init__(self, backend: Backend, cache_dir: Path, progress: bool = False) -> None:
+        self.backend, self.cache_dir, self.progress = backend, cache_dir, progress
         self.calls = self.hits = 0
 
     def ask(self, prompt: str, *, temperature: float = 0.0, sample: int = 0) -> str:
@@ -117,8 +122,11 @@ class CachedJudge:
         if path.is_file():
             self.hits += 1
             return json.loads(path.read_text(encoding="utf-8"))["text"]
+        started = time.monotonic()
         text = self.backend.complete(prompt, temperature)
         self.calls += 1
+        if self.progress:
+            print(f"judge call {self.calls} ({time.monotonic() - started:.0f}s)", file=sys.stderr, flush=True)
         path.parent.mkdir(parents=True, exist_ok=True)
         path.write_bytes(json.dumps({"backend": self.backend.name, "model": self.backend.model,
                                      "temperature": temperature, "sample": sample, "text": text},

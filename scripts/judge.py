@@ -330,7 +330,7 @@ def judge_run(run_dir: Path, backend: jl.Backend, tasks: tuple[str, ...] = TASKS
     conditions = es.load_conditions()
     responses = load_responses(run_dir)
     out_dir = run_dir / "judge"
-    judge = jl.CachedJudge(backend, out_dir / "cache")
+    judge = jl.CachedJudge(backend, out_dir / "cache", progress=True)
     present = {r["condition"] for r in responses}
     comparisons = [p for p in conditions["comparisons"] if p[0] in present and p[1] in present]
     fact_rows = run_facts(judge, responses, cases) if "facts" in tasks else []

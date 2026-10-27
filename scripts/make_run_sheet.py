@@ -54,17 +54,18 @@ def select_cases(cases: dict[str, dict], subset: str, explicit: str | None) -> l
 
 
 def build_rows(run_id: str, case_ids: list[str], condition_names: list[str], samples: int,
-               seed: int, conditions: dict) -> list[dict]:
+               seed: int, conditions: dict, multi_turn: frozenset[str] = frozenset()) -> list[dict]:
     rows = []
     for case_id in case_ids:
         for condition in condition_names:
             for sample in range(1, samples + 1):
                 batch = conditions["conditions"][condition]["batch"]
                 row_id = f"{case_id}__{condition}__s{sample}"
+                suffix = ".json" if case_id in multi_turn else ".txt"
                 rows.append({
                     "run_id": run_id, "row_id": row_id, "batch": batch, "case_id": case_id,
                     "condition": condition, "sample_index": str(sample),
-                    "message_file": f"messages/{row_id}.txt", "response_file": f"responses/{row_id}.md",
+                    "message_file": f"messages/{row_id}{suffix}", "response_file": f"responses/{row_id}.md",
                     "skill_zip_sha256": manifest_sha(batch),
                     "activation_observed": "na" if batch == "skill_off" else "",
                 })
@@ -116,13 +117,14 @@ def main(argv: list[str] | None = None) -> int:
         skill_body = es.skill_body_from_zip()
 
     case_ids = select_cases(cases, args.subset, args.cases)
-    rows = build_rows(args.run_id, case_ids, condition_names, args.samples, args.seed, conditions)
+    multi_turn = frozenset(c for c in case_ids if cases[c].get("turns"))
+    rows = build_rows(args.run_id, case_ids, condition_names, args.samples, args.seed, conditions, multi_turn)
 
     (run_dir / "messages").mkdir(parents=True, exist_ok=True)
     (run_dir / "responses").mkdir(parents=True, exist_ok=True)
     for row in rows:
-        message = es.build_message(cases[row["case_id"]], row["condition"], conditions, skill_body)
-        (run_dir / row["message_file"]).write_bytes(message.encode("utf-8"))
+        turns = es.build_turns(cases[row["case_id"]], row["condition"], conditions, skill_body)
+        es.write_turns(run_dir / row["message_file"], turns)
     es.write_csv(sheet, es.RESULTS_COLUMNS, rows)
 
     batches = sorted({r["batch"] for r in rows}, key=batch_rank)

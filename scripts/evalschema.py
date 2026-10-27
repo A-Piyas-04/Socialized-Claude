@@ -146,6 +146,31 @@ def build_message(case: dict, condition: str, conditions: dict, skill_body: str 
     return "\n\n".join(parts) + "\n"
 
 
+def build_turns(case: dict, condition: str, conditions: dict, skill_body: str | None = None) -> list[str]:
+    """User turns for a case. Multi-turn cases carry `turns`; the condition prefix goes on turn one only."""
+    if not case.get("turns"):
+        return [build_message(case, condition, conditions, skill_body)]
+    first = build_message({**case, "context": None, "question": case["turns"][0]}, condition, conditions, skill_body)
+    return [first, *(t.strip() + "\n" for t in case["turns"][1:])]
+
+
+def message_suffix(case: dict) -> str:
+    return ".json" if case.get("turns") else ".txt"
+
+
+def write_turns(path: Path, turns: list[str]) -> None:
+    if path.suffix == ".json":
+        path.write_bytes((json.dumps({"turns": turns}, indent=2, ensure_ascii=False) + "\n").encode("utf-8"))
+    else:
+        path.write_bytes(turns[0].encode("utf-8"))
+
+
+def read_turns(path: Path) -> list[str]:
+    if path.suffix == ".json":
+        return list(load_json(path)["turns"])
+    return [path.read_text(encoding="utf-8")]
+
+
 def word_count(text: str) -> int:
     return len(re.findall(r"\S+", text))
 

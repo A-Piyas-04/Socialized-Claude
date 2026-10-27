@@ -62,7 +62,12 @@ SMOKE_DIR = es.REPO_ROOT / ".scratch" / "cc-smoke"
 SMOKE_CASE = "mech_001"
 SMOKE_CONDITIONS = ("A_normal", "C_skill_explicit")
 RATE_LIMIT_RE = re.compile(r"(?i)rate.?limit|usage limit|overloaded|too many requests|429|529")
-AUTH_RE = re.compile(r"(?i)not logged in|please run /login|invalid api key|oauth token|authentication")
+AUTH_RE = re.compile(r"(?i)not logged in|please run /login|invalid api key|auth token|authorization header|"
+                     r"authentication")
+PINNED_GLOBS = (
+    "$LOCALAPPDATA/smart-claude/cc-*/node_modules/@anthropic-ai/claude-code-*/claude*",
+    "~/.local/share/smart-claude/cc-*/node_modules/@anthropic-ai/claude-code-*/claude*",
+)
 EXTENSION_GLOBS = (
     "~/.vscode/extensions/anthropic.claude-code-*/resources/native-binary/claude*",
     "~/.cursor/extensions/anthropic.claude-code-*/resources/native-binary/claude*",
@@ -89,15 +94,37 @@ def environment_problems(env: dict[str, str], *, need_token: bool) -> list[str]:
         problems.append(
             f"{TOKEN_ENV} is not set. Run `claude setup-token` once, then set the printed token in this "
             f"shell's environment (never in a file inside the repository).")
+    elif need_token and re.search(r"\s", env[TOKEN_ENV].strip()):
+        problems.append(
+            f"{TOKEN_ENV} contains spaces or line breaks, so it is not a single token. Re-run "
+            f"`claude setup-token` and store only the token itself: one line, which for Claude Code "
+            f"2.1.x begins 'sk-ant-oat'.")
     return problems
 
 
+def normalize_token(env: dict[str, str]) -> bool:
+    """Strip surrounding whitespace from the token in place; report whether anything changed."""
+    token = env.get(TOKEN_ENV)
+    if not token:
+        return False
+    env[TOKEN_ENV] = token.strip()
+    return env[TOKEN_ENV] != token
+
+
+def globbed(patterns: tuple[str, ...]) -> str | None:
+    found = sorted(p for pattern in patterns for p in glob.glob(os.path.expanduser(os.path.expandvars(pattern)))
+                   if Path(p).is_file() and Path(p).suffix in {"", ".exe"})
+    return found[-1] if found else None
+
+
 def find_claude(explicit: str | None, env: dict[str, str]) -> list[str]:
-    candidate = explicit or env.get("CLAUDE_BIN") or shutil.which("claude")
-    if not candidate:
-        found = sorted(p for pattern in EXTENSION_GLOBS for p in glob.glob(os.path.expanduser(pattern))
-                       if Path(p).is_file() and Path(p).suffix in {"", ".exe"})
-        candidate = found[-1] if found else None
+    """Explicit path, then CLAUDE_BIN, then the pinned install, then PATH, then an editor extension.
+
+    Editor extensions update themselves (and briefly remove the binary) while running, so a sweep
+    should use the pinned install: npm install --prefix <PINNED_HOME>/cc-<version> @anthropic-ai/claude-code@<version>
+    """
+    candidate = (explicit or env.get("CLAUDE_BIN") or globbed(PINNED_GLOBS) or shutil.which("claude")
+                 or globbed(EXTENSION_GLOBS))
     if not candidate or not Path(candidate).is_file() and not shutil.which(candidate):
         raise HarnessError("Claude Code CLI not found. Pass --claude PATH or set CLAUDE_BIN.")
     return [candidate]
@@ -177,7 +204,8 @@ def prepare_sandbox(root: Path, arm: Arm, manifest: dict) -> tuple[Path, Path, P
 
 
 def build_command(claude: list[str], settings: Path, model: str, effort: str | None) -> list[str]:
-    cmd = [*claude, "-p", "--output-format", "stream-json", "--verbose", "--model", model,
+    cmd = [*claude, "-p", "--input-format", "stream-json", "--output-format", "stream-json", "--verbose",
+           "--model", model,
            "--settings", str(settings), "--tools", ",".join(TOOLS), "--permission-mode", "dontAsk",
            "--no-session-persistence"]
     if effort:
@@ -280,6 +308,8 @@ class RowResult:
     tool_calls: list[dict] = field(default_factory=list)
     result: dict = field(default_factory=dict)
     detail: str = ""
+    turns: list[dict] = field(default_factory=list)   # [{"user": ..., "assistant": ...}] in order
+    session_ids: list[str] = field(default_factory=list)
 
 
 def classify_result(event: dict, auth_error: bool) -> tuple[str, str]:
@@ -294,9 +324,20 @@ def classify_result(event: dict, auth_error: bool) -> tuple[str, str]:
     return "error", text[:300] or f"subtype={event.get('subtype')}"
 
 
-def run_invocation(cmd: list[str], message: str, cwd: Path, env: dict[str, str], skill_enabled: bool,
+def user_line(text: str) -> bytes:
+    return (json.dumps({"type": "user", "message": {"role": "user", "content": text}}) + "\n").encode("utf-8")
+
+
+def run_invocation(cmd: list[str], turns: list[str], cwd: Path, env: dict[str, str], skill_enabled: bool,
                    timeout: float, *, stop_after_init: bool = False) -> RowResult:
-    """Run one `claude -p` call, verifying the arm from the stream as it arrives."""
+    """Run one conversation in a single `claude -p` session, one user turn at a time.
+
+    Each user turn is sent only after the previous turn's result event has arrived, so every
+    assistant turn is generated live with the real conversation before it. Claude Code emits a
+    system/init event per turn; every one is verified, and all must share one session id.
+    """
+    if not turns:
+        raise ValueError("a conversation needs at least one user turn")
     with tempfile.TemporaryFile() as stderr_file:
         proc = subprocess.Popen(cmd, cwd=cwd, env=env, stdin=subprocess.PIPE, stdout=subprocess.PIPE,
                                 stderr=stderr_file)
@@ -307,15 +348,20 @@ def run_invocation(cmd: list[str], message: str, cwd: Path, env: dict[str, str],
                 lines.put(raw)
             lines.put(None)
 
+        def send(index: int) -> None:
+            try:
+                proc.stdin.write(user_line(turns[index]))
+                proc.stdin.flush()
+                if index == len(turns) - 1:
+                    proc.stdin.close()
+            except OSError:
+                pass
+
         threading.Thread(target=pump, daemon=True).start()
-        try:
-            proc.stdin.write(message.encode("utf-8"))
-            proc.stdin.close()
-        except OSError:
-            pass
+        send(0)
         out = RowResult(status="error")
         auth_error = False
-        deadline = time.monotonic() + timeout
+        deadline = time.monotonic() + timeout * len(turns)
 
         def finish(status: str, detail: str = "") -> RowResult:
             if proc.poll() is None:
@@ -343,8 +389,13 @@ def run_invocation(cmd: list[str], message: str, cwd: Path, env: dict[str, str],
             if event.get("type") == "system" and event.get("subtype") == "init":
                 out.observed = observe_init(event)
                 out.problems = arm_problems(skill_enabled, out.observed)
+                session = str(event.get("session_id") or "")
+                if out.session_ids and session != out.session_ids[0]:
+                    out.problems.append(f"turn {len(out.turns) + 1} started a new session; the conversation "
+                                        "is not continuous")
+                out.session_ids.append(session)
                 if out.problems:
-                    return finish("arm_mismatch", "; ".join(out.problems))
+                    return finish("arm_mismatch", f"turn {len(out.turns) + 1}: " + "; ".join(out.problems))
                 if stop_after_init:
                     return finish("ok", "arm verified at init; stopped before generation")
                 continue
@@ -368,9 +419,14 @@ def run_invocation(cmd: list[str], message: str, cwd: Path, env: dict[str, str],
                                                         "total_cost_usd", "usage", "api_error_status",
                                                         "terminal_reason")}
                 status, detail = classify_result(event, auth_error)
-                if status == "ok":
-                    out.text = str(event["result"]).replace("\r\n", "\n").strip()
-                return finish(status, detail)
+                if status != "ok":
+                    return finish(status, f"turn {len(out.turns) + 1}: {detail}" if len(turns) > 1 else detail)
+                text = str(event["result"]).replace("\r\n", "\n").strip()
+                out.turns.append({"user": turns[len(out.turns)], "assistant": text})
+                if len(out.turns) == len(turns):
+                    out.text = text
+                    return finish("ok")
+                send(len(out.turns))
         proc.wait()
         if out.observed is None:
             out.problems = ["process exited without a system/init event"]
@@ -417,6 +473,20 @@ def row_fields(row: dict, result: RowResult, skill_enabled: bool, effort: str | 
         "references_loaded": ";".join(result.references),
         "operator": OPERATOR,
     }
+
+
+def transcript_path(run_dir: Path, row: dict) -> Path:
+    return (run_dir / row["response_file"]).with_suffix(".turns.json")
+
+
+def run_versions(run_dir: Path) -> set[str]:
+    """Claude Code versions of the rows already collected in this run."""
+    found = set()
+    for path in sorted((run_dir / "cc_meta").glob("*.json")):
+        meta = json.loads(path.read_text(encoding="utf-8"))
+        if meta.get("status") == "ok" and (meta.get("observed_init") or {}).get("claude_code_version"):
+            found.add(meta["observed_init"]["claude_code_version"])
+    return found
 
 
 def write_meta(run_dir: Path, row_id: str, payload: dict, secrets: list[str]) -> None:
@@ -501,6 +571,7 @@ def collect(run_dir: Path, claude: list[str], env: dict[str, str], opts: Options
     write(f"{run_dir.name}: {len(rows) - len(pending_rows(run_dir, rows))}/{len(rows)} done, "
           f"{len(todo)} to run now.")
     manifests: dict[str, dict] = {}
+    versions = run_versions(run_dir)
     failed = incomplete = consecutive = 0
     for n, row in enumerate(todo, start=1):
         arm = arm_for_batch(row["batch"])
@@ -511,14 +582,14 @@ def collect(run_dir: Path, claude: list[str], env: dict[str, str], opts: Options
             raise HarnessError(f"{row['row_id']}: run sheet records skill ZIP {row['skill_zip_sha256'][:12]}… but "
                                f"{arm.zip_path.name} is now {manifest['zip_sha256'][:12]}…; the build changed "
                                "mid-run. Start a new run.")
-        message = (run_dir / row["message_file"]).read_text(encoding="utf-8")
+        turns = es.read_turns(run_dir / row["message_file"])
         result = RowResult(status="error")
         for attempt in range(opts.max_retries + 1):
             root = Path(tempfile.mkdtemp(prefix="cc_row_"))
             try:
                 work, config, settings = prepare_sandbox(root, arm, manifest)
                 cmd = build_command(claude, settings, opts.model, opts.effort)
-                result = run_invocation(cmd, message, work, child_env(env, config, with_token=True),
+                result = run_invocation(cmd, turns, work, child_env(env, config, with_token=True),
                                         arm.skill_enabled, opts.timeout)
             finally:
                 if not opts.keep_sandbox:
@@ -529,18 +600,30 @@ def collect(run_dir: Path, claude: list[str], env: dict[str, str], opts: Options
             write(f"  {row['row_id']}: {result.status} ({scrub(result.detail, secrets)[:120]}); "
                   f"retry {attempt + 1}/{opts.max_retries} in {wait:.0f}s")
             sleep(wait)
+        version = (result.observed or {}).get("claude_code_version")
+        if result.status == "ok" and versions and version not in versions:
+            result.status = "version_drift"
+            result.detail = f"Claude Code is now {version}; earlier rows of this run used {sorted(versions)}"
         fields = row_fields(row, result, arm.skill_enabled, opts.effort, manifest["zip_sha256"], today)
         meta = {"row_id": row["row_id"], "batch": row["batch"], "intended_skill_enabled": arm.skill_enabled,
                 "status": result.status, "detail": result.detail, "observed_init": result.observed,
                 "arm_problems": result.problems, "tool_calls": result.tool_calls, "result": result.result,
-                "row_fields": fields if result.status == "ok" else None}
+                "user_turns": len(turns), "row_fields": fields if result.status == "ok" else None}
         write_meta(run_dir, row["row_id"], meta, secrets)
         if result.status == "auth":
             raise HarnessError(f"authentication failed ({scrub(result.detail, secrets)}). Check {TOKEN_ENV}.")
+        if result.status == "version_drift":
+            raise HarnessError(f"{result.detail}. Pin the CLI with --claude (or CLAUDE_BIN) to the version the "
+                               "run started with, or start a new run.")
         if result.status == "ok":
+            versions.add(version)
             response_path = run_dir / row["response_file"]
             response_path.parent.mkdir(parents=True, exist_ok=True)
             response_path.write_bytes((scrub(result.text, secrets) + "\n").encode("utf-8"))
+            if len(turns) > 1:
+                transcript = json.dumps({"notice": es.SURFACE_NOTICE, "turns": result.turns}, indent=2,
+                                        ensure_ascii=False) + "\n"
+                transcript_path(run_dir, row).write_bytes(scrub(transcript, secrets).encode("utf-8"))
             row.update(fields)
             row["notes"] = ""
             consecutive = 0
@@ -585,7 +668,7 @@ def check_arms(run_dir: Path | None, batches: list[str], claude: list[str], env:
         try:
             work, config, settings = prepare_sandbox(root, arm, manifest)
             cmd = build_command(claude, settings, opts.model, opts.effort)
-            result = run_invocation(cmd, "Reply with the word ok.", work,
+            result = run_invocation(cmd, ["Reply with the word ok."], work,
                                     child_env(env, config, with_token=False), arm.skill_enabled,
                                     min(opts.timeout, 120), stop_after_init=True)
         finally:
@@ -610,12 +693,49 @@ def dry_run(run_dir: Path, claude: list[str], env: dict[str, str], opts: Options
     for row in todo:
         arm = arm_for_batch(row["batch"])
         cmd = build_command(claude, Path("<sandbox>/settings.json"), opts.model, opts.effort)
+        n_turns = len(es.read_turns(run_dir / row["message_file"]))
         write(f"{row['order']:>4} {row['row_id']}: skill {'ON ' if arm.skill_enabled else 'OFF'} "
-              f"({arm.zip_path.name}); stdin={row['message_file']}")
+              f"({arm.zip_path.name}); {n_turns} user turn(s) from {row['message_file']}")
         write(f"       {' '.join(cmd)}")
     write(f"Planned invocations: {len(todo)} (of {len(rows)} rows; up to {len(todo) * (opts.max_retries + 1)} "
           f"with retries). Nothing was called.")
     return 0
+
+
+STDIN_PROBE = "naïve café — 日本語 — ½ °C — Ωμέγα — “quotes”"
+
+
+CONTEXT_PROBE_WORD = "marmalade-417"
+
+
+def probe(claude: list[str], env: dict[str, str], opts: Options, turns: list[str]) -> RowResult:
+    arm = arm_for_batch("skill_off")
+    root = Path(tempfile.mkdtemp(prefix="cc_probe_"))
+    try:
+        work, config, settings = prepare_sandbox(root, arm, load_manifest(arm))
+        return run_invocation(build_command(claude, settings, opts.model, opts.effort), turns, work,
+                              child_env(env, config, with_token=True), False, min(opts.timeout, 180))
+    finally:
+        shutil.rmtree(root, ignore_errors=True)
+
+
+def stdin_probe(claude: list[str], env: dict[str, str], opts: Options) -> tuple[bool, str]:
+    """Ask the model to echo a non-ASCII string, to prove stdin keeps UTF-8."""
+    result = probe(claude, env, opts, [f"Reply with exactly this text and nothing else:\n{STDIN_PROBE}\n"])
+    if result.status != "ok":
+        return False, f"probe call {result.status}: {result.detail}"
+    return STDIN_PROBE in result.text, "round-trip intact" if STDIN_PROBE in result.text else "text altered in transit"
+
+
+def context_probe(claude: list[str], env: dict[str, str], opts: Options) -> tuple[bool, str]:
+    """Two live turns: the second can only be answered if the first is in the conversation."""
+    result = probe(claude, env, opts, [f"Remember this code word: {CONTEXT_PROBE_WORD}. Reply only with: noted.",
+                                       "What was the code word? Reply with the code word only."])
+    if result.status != "ok":
+        return False, f"probe call {result.status}: {result.detail}"
+    kept = CONTEXT_PROBE_WORD in result.text and len(result.turns) == 2 and len(set(result.session_ids)) == 1
+    return kept, (f"turn 2 recalled turn 1 in one session ({len(result.session_ids)} init events)" if kept
+                  else f"context lost: turn 2 replied {result.text[:60]!r}")
 
 
 def create_smoke_run(base: Path = SMOKE_DIR) -> Path:
@@ -650,7 +770,10 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--keep-sandbox", action="store_true")
     args = parser.parse_args(argv)
 
+    sys.stdout.reconfigure(line_buffering=True)
     env = dict(os.environ)
+    if normalize_token(env):
+        print(f"Note: surrounding whitespace was removed from {TOKEN_ENV} for this run.")
     opts = Options(model=args.model, effort=args.effort, timeout=args.timeout, max_retries=args.max_retries,
                    backoff=args.backoff, keep_sandbox=args.keep_sandbox)
     only = {r.strip() for r in args.rows.split(",") if r.strip()} if args.rows else None
@@ -664,7 +787,16 @@ def main(argv: list[str] | None = None) -> int:
                 print("Arm check failed; not generating.")
                 return 1
             print("== Generation (2 rows) ==")
-            return collect(run_dir, claude, env, opts)
+            code = collect(run_dir, claude, env, opts)
+            if code:
+                return code
+            failures = 0
+            for title, check in (("Non-ASCII stdin round-trip", stdin_probe),
+                                 ("Multi-turn context retention", context_probe)):
+                ok, detail = check(claude, env, opts)
+                failures += not ok
+                print(f"== {title} ==\n{'OK' if ok else 'FAILED'}: {detail}")
+            return 1 if failures else 0
         if not args.run_dir:
             parser.error("run_dir is required unless --smoke is given")
         run_dir = Path(args.run_dir)

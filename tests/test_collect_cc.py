@@ -107,6 +107,19 @@ def test_main_refuses_api_key(tmp_path, run_dir, monkeypatch, capsys):
     assert "ANTHROPIC_API_KEY is set" in capsys.readouterr().err
 
 
+def test_rejects_multiline_token(tmp_path, run_dir):
+    env = fake_env(tmp_path, **{cc.TOKEN_ENV: "abc def\nghi"})
+    with pytest.raises(cc.HarnessError, match="not a single token"):
+        cc.collect(run_dir, CLAUDE, env, OPTS, write=lambda _: None)
+    env = {cc.TOKEN_ENV: "  tok\n"}
+    assert cc.normalize_token(env) and env[cc.TOKEN_ENV] == "tok"
+
+
+def test_invalid_token_message_is_auth_not_retry():
+    status, _ = cc.classify_result({"is_error": True, "result": "Invalid auth token · Fix external auth token"}, False)
+    assert status == "auth"
+
+
 def test_requires_token(tmp_path, run_dir):
     env = fake_env(tmp_path)
     del env[cc.TOKEN_ENV]
@@ -255,6 +268,74 @@ def test_dry_run_calls_nothing(tmp_path, run_dir):
     assert cc.dry_run(run_dir, CLAUDE, fake_env(tmp_path), OPTS, None, None, write=out.append) == 0
     assert calls(tmp_path) == []
     assert out[-1].startswith("Planned invocations: 4")
+
+
+# --- multi-turn conversations ------------------------------------------------------
+
+MULTI = {"id": "persist_t", "category": "persistence", "domain": "x", "difficulty": "beginner",
+         "question": "Q", "context": None, "audience": "a", "skill_expectation": "should_apply",
+         "expected_length": "short", "expected_properties": [], "common_misconceptions": [],
+         "critical_facts": [], "reasoning_gaps": [],
+         "turns": ["From now on answer in one sentence. What is TCP?", "Unrelated: what is DNS?",
+                   "And how does a TCP handshake work?"]}
+
+
+@pytest.fixture
+def multi_run(tmp_path, dist, monkeypatch):
+    monkeypatch.setattr(make_run_sheet.es, "REPO_ROOT", tmp_path)
+    real = es.load_cases()
+    monkeypatch.setattr(make_run_sheet.es, "load_cases", lambda *a: {**real, "persist_t": MULTI})
+    make_run_sheet.main(["--run-id", "m", "--runs-dir", str(tmp_path / "runs"), "--cases", "persist_t,fact_003",
+                         "--conditions", "B_prompt,C_skill_explicit", "--samples", "1"])
+    return tmp_path / "runs" / "m"
+
+
+def test_multi_turn_message_files(multi_run):
+    turns = es.read_turns(multi_run / "messages" / "persist_t__B_prompt__s1.json")
+    assert len(turns) == 3
+    assert turns[0].startswith("When you answer") and turns[0].rstrip().endswith("What is TCP?")
+    assert turns[1] == "Unrelated: what is DNS?\n", "the condition prefix goes on turn one only"
+    assert (multi_run / "messages" / "fact_003__B_prompt__s1.txt").is_file()
+
+
+def test_multi_turn_is_a_live_conversation(tmp_path, multi_run):
+    assert cc.collect(multi_run, CLAUDE, fake_env(tmp_path), OPTS, write=lambda _: None) == 0
+    final = (multi_run / "responses" / "persist_t__C_skill_explicit__s1.md").read_text(encoding="utf-8")
+    assert final.startswith("Fake answer to: And how does a TCP handshake work?")
+    assert "earlier: What is TCP?" in final.replace("From now on answer in one sentence. ", ""), \
+        "turn three must be generated with turns one and two in context"
+    transcript = json.loads((multi_run / "responses" / "persist_t__C_skill_explicit__s1.turns.json")
+                            .read_text(encoding="utf-8"))
+    assert transcript["notice"] == es.SURFACE_NOTICE
+    assert [t["user"].strip().splitlines()[-1] for t in transcript["turns"]] == [
+        "From now on answer in one sentence. What is TCP?", "Unrelated: what is DNS?",
+        "And how does a TCP handshake work?"]
+    assert all(t["assistant"].startswith("Fake answer") for t in transcript["turns"])
+    assert not (multi_run / "responses" / "fact_003__B_prompt__s1.turns.json").exists()
+    _, rows = es.read_csv(multi_run / "run_sheet.csv")
+    assert summarize_ok(multi_run)
+
+
+def summarize_ok(run):
+    import summarize_results
+    return summarize_results.main([str(run), "--check-only"]) == 0
+
+
+def test_new_session_mid_conversation_is_a_mismatch(tmp_path, multi_run):
+    code = cc.collect(multi_run, CLAUDE, fake_env(tmp_path, "new_session"), OPTS,
+                      only={"persist_t__B_prompt__s1"}, write=lambda _: None)
+    assert code == 3
+    _, rows = es.read_csv(multi_run / "run_sheet.csv")
+    assert any("not continuous" in r["notes"] for r in rows)
+    assert not (multi_run / "responses" / "persist_t__B_prompt__s1.md").exists()
+
+
+def test_version_drift_stops_the_run(tmp_path, run_dir):
+    cc.collect(run_dir, CLAUDE, fake_env(tmp_path, "version_1.0.0"), OPTS, limit=1, write=lambda _: None)
+    with pytest.raises(cc.HarnessError, match="Claude Code is now 2.0.0"):
+        cc.collect(run_dir, CLAUDE, fake_env(tmp_path, "version_2.0.0"), OPTS, write=lambda _: None)
+    _, rows = es.read_csv(run_dir / "run_sheet.csv")
+    assert sum(bool(r["date"]) for r in rows) == 1
 
 
 # --- optional: the real Claude Code binary (no quota: the token is withheld) ------
