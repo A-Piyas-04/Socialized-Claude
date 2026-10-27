@@ -12,6 +12,10 @@ Definitions (all heuristics; the TypeScript port in extension/ must match them e
   emphasis     Bold spans (**x** or __x__), not counting a bold label that opens a list item
                ("- **Term:** ..."), which is the labelled-list form.
   sentences    Prose in paragraphs and list items split after . ! or ? followed by whitespace.
+  passive_sentence_count
+               Sentences containing a form of "to be" followed, within one optional adverb, by a
+               word ending in -ed or -en ("is sent", "was quickly written"). A heuristic that also
+               catches some adjectives ("is open" is missed, "is broken" is counted).
   answer_first_offset
                Words in the leading units that are headings, stock preambles ("Great question",
                "Sure", "Let me explain", ...), or restatements of the question (>= 50% of the
@@ -52,6 +56,7 @@ PREAMBLE_RE = re.compile(
     r"^in this (answer|explanation|response)\b|^to (understand|answer) (this|that|your)\b")
 TRANSITION_RE = re.compile(
     r"(?i)^(now,?\s+)?(let's|let me|here's|here is|below|the following|next,|in the next|we'll|we will)\b")
+PASSIVE_RE = re.compile(r"(?i)\b(is|are|was|were|be|been|being|gets|got)\s+(\w+ly\s+)?\w+(ed|en)\b")
 STOPWORDS = frozenset(
     "a an the is are was were be been being of to in on for and or but with as at by from it its this that "
     "these those do does did why how what when where which who whom i you we they he she my your our their "
@@ -251,6 +256,8 @@ def metrics(markdown: str, question: str | None = None) -> dict:
         "code_block_count": sum(b.kind == "code" for b in blocks),
         "emphasis_count": bold_spans(markdown),
         "mean_sentence_words": round(sum(len(words(s)) for s in prose) / len(prose), 2) if prose else 0.0,
+        "max_sentence_words": max((len(words(s)) for s in prose), default=0),
+        "passive_sentence_count": sum(bool(PASSIVE_RE.search(s)) for s in prose),
         "answer_first_offset": answer_first_offset(markdown, question),
         "decorative_structure_flags": decorative_structure_flags(markdown),
     }

@@ -35,6 +35,10 @@ specific gap it fills for this reader.
 - **Defining a term** fits when the term is load-bearing and this reader
   probably doesn't know it.
 <!-- /op:terms -->
+<!-- op:plain -->
+- **Plain sentences** fit every explanation. They change how each sentence is
+  built, not what it says, and they cost no extra words.
+<!-- /op:plain -->
 <!-- op:presentation -->
 - **Presentation** fits every answer with more than one idea. Pick the form from
   the content's shape: steps for a process, a table for three or more items on

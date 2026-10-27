@@ -32,7 +32,7 @@
 - 12 new cases (45 in total): register, repair, decorative-structure controls,
   persistence (machine-checked standing constraints), work report.
 - `scripts/structural_metrics.py` and `scripts/lint_response.py`, with a
-  baseline for the 10 archive base answers; summaries add structural
+  baseline for the 15 archive Claude answers (GPT answers are exemplar source only); summaries add structural
   descriptors and a persistence re-ask proxy, none of which feed S1–S7.
 
 ### Docs

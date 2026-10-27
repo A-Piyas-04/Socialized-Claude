@@ -13,6 +13,8 @@
       "code_block_count": 1,
       "emphasis_count": 0,
       "mean_sentence_words": 12.5,
+      "max_sentence_words": 14,
+      "passive_sentence_count": 1,
       "answer_first_offset": 0,
       "decorative_structure_flags": []
     }
@@ -31,6 +33,8 @@
       "code_block_count": 0,
       "emphasis_count": 0,
       "mean_sentence_words": 3.0,
+      "max_sentence_words": 5,
+      "passive_sentence_count": 0,
       "answer_first_offset": 0,
       "decorative_structure_flags": [
         "bullets_unconnected"
@@ -51,6 +55,8 @@
       "code_block_count": 1,
       "emphasis_count": 0,
       "mean_sentence_words": 13.0,
+      "max_sentence_words": 13,
+      "passive_sentence_count": 1,
       "answer_first_offset": 0,
       "decorative_structure_flags": []
     }
@@ -69,6 +75,8 @@
       "code_block_count": 0,
       "emphasis_count": 0,
       "mean_sentence_words": 13.5,
+      "max_sentence_words": 15,
+      "passive_sentence_count": 0,
       "answer_first_offset": 0,
       "decorative_structure_flags": []
     }
@@ -87,6 +95,8 @@
       "code_block_count": 0,
       "emphasis_count": 0,
       "mean_sentence_words": 6.5,
+      "max_sentence_words": 7,
+      "passive_sentence_count": 0,
       "answer_first_offset": 1,
       "decorative_structure_flags": [
         "heading_thin",
@@ -108,6 +118,8 @@
       "code_block_count": 0,
       "emphasis_count": 0,
       "mean_sentence_words": 6.33,
+      "max_sentence_words": 13,
+      "passive_sentence_count": 1,
       "answer_first_offset": 2,
       "decorative_structure_flags": [
         "emoji_structure",
@@ -131,6 +143,8 @@
       "code_block_count": 0,
       "emphasis_count": 4,
       "mean_sentence_words": 25.0,
+      "max_sentence_words": 25,
+      "passive_sentence_count": 1,
       "answer_first_offset": 0,
       "decorative_structure_flags": [
         "emphasis_overuse"
@@ -151,6 +165,8 @@
       "code_block_count": 0,
       "emphasis_count": 0,
       "mean_sentence_words": 12.0,
+      "max_sentence_words": 19,
+      "passive_sentence_count": 0,
       "answer_first_offset": 0,
       "decorative_structure_flags": [
         "empty_transition"
@@ -171,6 +187,8 @@
       "code_block_count": 0,
       "emphasis_count": 0,
       "mean_sentence_words": 7.75,
+      "max_sentence_words": 12,
+      "passive_sentence_count": 0,
       "answer_first_offset": 0,
       "decorative_structure_flags": []
     }
@@ -189,6 +207,8 @@
       "code_block_count": 0,
       "emphasis_count": 0,
       "mean_sentence_words": 9.33,
+      "max_sentence_words": 15,
+      "passive_sentence_count": 0,
       "answer_first_offset": 13,
       "decorative_structure_flags": []
     }
@@ -207,6 +227,8 @@
       "code_block_count": 0,
       "emphasis_count": 0,
       "mean_sentence_words": 14.17,
+      "max_sentence_words": 18,
+      "passive_sentence_count": 0,
       "answer_first_offset": 0,
       "decorative_structure_flags": []
     }
@@ -225,6 +247,8 @@
       "code_block_count": 0,
       "emphasis_count": 0,
       "mean_sentence_words": 14.57,
+      "max_sentence_words": 20,
+      "passive_sentence_count": 0,
       "answer_first_offset": 0,
       "decorative_structure_flags": []
     }
@@ -243,6 +267,8 @@
       "code_block_count": 0,
       "emphasis_count": 0,
       "mean_sentence_words": 9.5,
+      "max_sentence_words": 12,
+      "passive_sentence_count": 1,
       "answer_first_offset": 0,
       "decorative_structure_flags": []
     }
@@ -261,6 +287,8 @@
       "code_block_count": 0,
       "emphasis_count": 0,
       "mean_sentence_words": 5.0,
+      "max_sentence_words": 5,
+      "passive_sentence_count": 0,
       "answer_first_offset": 0,
       "decorative_structure_flags": [
         "table_thin"
@@ -281,6 +309,8 @@
       "code_block_count": 0,
       "emphasis_count": 0,
       "mean_sentence_words": 5.4,
+      "max_sentence_words": 7,
+      "passive_sentence_count": 0,
       "answer_first_offset": 0,
       "decorative_structure_flags": [
         "whitespace_padding"

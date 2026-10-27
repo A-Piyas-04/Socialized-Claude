@@ -4,7 +4,7 @@
     python scripts/lint_response.py response.md --json          # machine-readable
     type response.md | python scripts/lint_response.py -        # stdin
     python scripts/lint_response.py --question "Why ...?" response.md
-    python scripts/lint_response.py --regenerate                # research/baseline_structural_metrics.json
+    python scripts/lint_response.py --regenerate                # research/baseline_structural_metrics.json (Claude only)
 
 Exit status is 1 when any decorative-structure flag fires, 0 otherwise.
 
@@ -31,19 +31,22 @@ DISCLAIMER = ("Structural descriptors, not a comprehension score. A response can
 
 
 def regenerate(out: Path = BASELINE_PATH) -> dict:
-    """Metrics for the archive's 10 base answers (5 questions x 2 providers), read-only."""
+    """Metrics for the archive's 15 Claude answers (5 questions x 3 prompt styles), read-only.
+
+    The archive's GPT answers are deliberately excluded: they are exemplar source material only,
+    never a comparison target."""
     data = json.loads(ARCHIVE_INPUT.read_text(encoding="utf-8"))
     questions = {q["id"]: q for q in data["questions"]}
     answers = []
     for a in data["imported_answers"]:
-        if a["label"].split(" - ", 1)[1].strip().lower() != "base":
+        if a["provider"] != "anthropic":
             continue
         q = questions[a["question_id"]]
-        answers.append({"topic": q["topic"], "provider": a["provider"], "model_id": a["model_id"],
-                        "metrics": sm.metrics(a["text"], q["text"])})
-    answers.sort(key=lambda r: (r["topic"], r["provider"]))
+        answers.append({"topic": q["topic"], "style": a["label"].split(" - ", 1)[1].strip().lower(),
+                        "model_id": a["model_id"], "metrics": sm.metrics(a["text"], q["text"])})
+    answers.sort(key=lambda r: (r["topic"], r["style"]))
     result = {"disclaimer": DISCLAIMER,
-              "source": ARCHIVE_INPUT.relative_to(REPO_ROOT).as_posix() + " (base answers; read-only)",
+              "source": ARCHIVE_INPUT.relative_to(REPO_ROOT).as_posix() + " (Claude answers only; read-only)",
               "caveat": "The archive answers were copied from web chat with unknown settings. No heading survives "
                         "in any of them, so markdown structure was probably lost in copying; heading counts here "
                         "understate what the reader saw.",

@@ -69,6 +69,14 @@ def test_block_sizes():
     assert m("prose_two_sentences")["mean_block_words"] == 19.0
 
 
+def test_sentence_level_descriptors():
+    assert m("prose_causal_chain")["max_sentence_words"] == 20
+    assert m("code_block")["passive_sentence_count"] == 1, "'Nothing has been changed yet'"
+    assert m("process_steps")["passive_sentence_count"] == 0
+    assert sm.metrics("The server rejects the request.")["passive_sentence_count"] == 0
+    assert sm.metrics("The request is rejected by the server.")["passive_sentence_count"] == 1
+
+
 def test_emphasis_ignores_list_labels():
     assert m("labelled_list")["emphasis_count"] == 0
     assert m("emphasis_overuse")["emphasis_count"] == 4
@@ -103,8 +111,9 @@ def test_cli_help_carries_the_disclaimer(capsys):
     assert "not a comprehension score" in capsys.readouterr().out
 
 
-def test_regenerate_reads_the_ten_archive_base_answers(tmp_path):
+def test_regenerate_reads_only_the_archive_claude_answers(tmp_path):
     result = lint_response.regenerate(tmp_path / "baseline.json")
-    assert len(result["answers"]) == 10
-    assert {a["provider"] for a in result["answers"]} == {"anthropic", "openai"}
+    assert len(result["answers"]) == 15
+    assert {a["style"] for a in result["answers"]} == {"base", "tutor", "pedagogical"}
+    assert all(a["model_id"].startswith("claude") for a in result["answers"])
     assert "not a comprehension score" in result["disclaimer"]

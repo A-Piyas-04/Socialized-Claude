@@ -295,6 +295,9 @@ rather than explaining a concept.
 <!-- op:examples -->
 - Does any example follow the mechanism exactly, with the mapping stated?
 <!-- /op:examples -->
+<!-- op:plain -->
+- Does any sentence carry two claims or more than two clauses? Split it.
+<!-- /op:plain -->
 <!-- op:presentation -->
 - Does the answer come before any structure? Does every heading, list, table,
   diagram, and bolded sentence mark a real division in the content? Remove any

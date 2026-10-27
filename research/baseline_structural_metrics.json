@@ -1,11 +1,11 @@
 {
   "disclaimer": "Structural descriptors, not a comprehension score. A response can score perfectly on every metric here and still be wrong, and the linter cannot tell.",
-  "source": "research-results-2026-10-26/inputs/input-dataset.json (base answers; read-only)",
+  "source": "research-results-2026-10-26/inputs/input-dataset.json (Claude answers only; read-only)",
   "caveat": "The archive answers were copied from web chat with unknown settings. No heading survives in any of them, so markdown structure was probably lost in copying; heading counts here understate what the reader saw.",
   "answers": [
     {
       "topic": "caching",
-      "provider": "anthropic",
+      "style": "base",
       "model_id": "claude-sonnet-5-5",
       "metrics": {
         "word_count": 459,
@@ -19,38 +19,59 @@
         "code_block_count": 0,
         "emphasis_count": 0,
         "mean_sentence_words": 15.3,
+        "max_sentence_words": 38,
+        "passive_sentence_count": 7,
         "answer_first_offset": 0,
         "decorative_structure_flags": []
       }
     },
     {
       "topic": "caching",
-      "provider": "openai",
-      "model_id": "gpt-6-luna",
+      "style": "pedagogical",
+      "model_id": "claude-sonnet-5-5",
       "metrics": {
-        "word_count": 602,
-        "block_count": 57,
-        "mean_block_words": 10.56,
-        "max_block_words": 69,
+        "word_count": 822,
+        "block_count": 20,
+        "mean_block_words": 41.1,
+        "max_block_words": 146,
         "heading_count": 0,
-        "bullet_count": 16,
-        "numbered_count": 12,
+        "bullet_count": 0,
+        "numbered_count": 0,
         "table_count": 0,
         "code_block_count": 0,
         "emphasis_count": 0,
-        "mean_sentence_words": 9.26,
+        "mean_sentence_words": 17.12,
+        "max_sentence_words": 49,
+        "passive_sentence_count": 6,
         "answer_first_offset": 0,
-        "decorative_structure_flags": [
-          "bullets_unconnected",
-          "bullets_unconnected",
-          "bullets_unconnected",
-          "whitespace_padding"
-        ]
+        "decorative_structure_flags": []
+      }
+    },
+    {
+      "topic": "caching",
+      "style": "tutor",
+      "model_id": "claude-sonnet-5-5",
+      "metrics": {
+        "word_count": 589,
+        "block_count": 23,
+        "mean_block_words": 25.61,
+        "max_block_words": 102,
+        "heading_count": 0,
+        "bullet_count": 0,
+        "numbered_count": 0,
+        "table_count": 0,
+        "code_block_count": 0,
+        "emphasis_count": 0,
+        "mean_sentence_words": 12.02,
+        "max_sentence_words": 34,
+        "passive_sentence_count": 4,
+        "answer_first_offset": 0,
+        "decorative_structure_flags": []
       }
     },
     {
       "topic": "databases",
-      "provider": "anthropic",
+      "style": "base",
       "model_id": "claude-sonnet-5-5",
       "metrics": {
         "word_count": 486,
@@ -64,33 +85,59 @@
         "code_block_count": 0,
         "emphasis_count": 0,
         "mean_sentence_words": 16.2,
+        "max_sentence_words": 41,
+        "passive_sentence_count": 5,
         "answer_first_offset": 0,
         "decorative_structure_flags": []
       }
     },
     {
       "topic": "databases",
-      "provider": "openai",
-      "model_id": "gpt-6-luna",
+      "style": "pedagogical",
+      "model_id": "claude-sonnet-5-5",
       "metrics": {
-        "word_count": 597,
-        "block_count": 38,
-        "mean_block_words": 15.71,
-        "max_block_words": 60,
+        "word_count": 804,
+        "block_count": 14,
+        "mean_block_words": 57.43,
+        "max_block_words": 193,
         "heading_count": 0,
         "bullet_count": 0,
-        "numbered_count": 8,
+        "numbered_count": 0,
         "table_count": 0,
         "code_block_count": 0,
         "emphasis_count": 0,
-        "mean_sentence_words": 11.26,
+        "mean_sentence_words": 16.08,
+        "max_sentence_words": 45,
+        "passive_sentence_count": 7,
+        "answer_first_offset": 0,
+        "decorative_structure_flags": []
+      }
+    },
+    {
+      "topic": "databases",
+      "style": "tutor",
+      "model_id": "claude-sonnet-5-5",
+      "metrics": {
+        "word_count": 817,
+        "block_count": 26,
+        "mean_block_words": 31.42,
+        "max_block_words": 151,
+        "heading_count": 0,
+        "bullet_count": 0,
+        "numbered_count": 4,
+        "table_count": 0,
+        "code_block_count": 0,
+        "emphasis_count": 0,
+        "mean_sentence_words": 11.19,
+        "max_sentence_words": 55,
+        "passive_sentence_count": 2,
         "answer_first_offset": 0,
         "decorative_structure_flags": []
       }
     },
     {
       "topic": "immunology",
-      "provider": "anthropic",
+      "style": "base",
       "model_id": "claude-sonnet-5-5",
       "metrics": {
         "word_count": 435,
@@ -104,33 +151,59 @@
         "code_block_count": 0,
         "emphasis_count": 0,
         "mean_sentence_words": 14.5,
+        "max_sentence_words": 36,
+        "passive_sentence_count": 3,
         "answer_first_offset": 0,
         "decorative_structure_flags": []
       }
     },
     {
       "topic": "immunology",
-      "provider": "openai",
-      "model_id": "gpt-6-luna",
+      "style": "pedagogical",
+      "model_id": "claude-sonnet-5-5",
       "metrics": {
-        "word_count": 604,
-        "block_count": 28,
-        "mean_block_words": 21.57,
-        "max_block_words": 83,
+        "word_count": 1102,
+        "block_count": 26,
+        "mean_block_words": 42.38,
+        "max_block_words": 193,
         "heading_count": 0,
         "bullet_count": 0,
-        "numbered_count": 5,
+        "numbered_count": 0,
         "table_count": 0,
         "code_block_count": 0,
         "emphasis_count": 0,
-        "mean_sentence_words": 13.42,
+        "mean_sentence_words": 13.28,
+        "max_sentence_words": 36,
+        "passive_sentence_count": 7,
+        "answer_first_offset": 0,
+        "decorative_structure_flags": []
+      }
+    },
+    {
+      "topic": "immunology",
+      "style": "tutor",
+      "model_id": "claude-sonnet-5-5",
+      "metrics": {
+        "word_count": 562,
+        "block_count": 17,
+        "mean_block_words": 33.06,
+        "max_block_words": 110,
+        "heading_count": 0,
+        "bullet_count": 0,
+        "numbered_count": 0,
+        "table_count": 0,
+        "code_block_count": 0,
+        "emphasis_count": 0,
+        "mean_sentence_words": 11.71,
+        "max_sentence_words": 26,
+        "passive_sentence_count": 5,
         "answer_first_offset": 0,
         "decorative_structure_flags": []
       }
     },
     {
       "topic": "interest",
-      "provider": "anthropic",
+      "style": "base",
       "model_id": "claude-sonnet-5-5",
       "metrics": {
         "word_count": 316,
@@ -144,33 +217,62 @@
         "code_block_count": 0,
         "emphasis_count": 0,
         "mean_sentence_words": 14.36,
+        "max_sentence_words": 33,
+        "passive_sentence_count": 4,
         "answer_first_offset": 0,
         "decorative_structure_flags": []
       }
     },
     {
       "topic": "interest",
-      "provider": "openai",
-      "model_id": "gpt-6-luna",
+      "style": "pedagogical",
+      "model_id": "claude-sonnet-5-5",
       "metrics": {
-        "word_count": 411,
-        "block_count": 36,
-        "mean_block_words": 11.42,
-        "max_block_words": 41,
+        "word_count": 593,
+        "block_count": 22,
+        "mean_block_words": 26.95,
+        "max_block_words": 65,
         "heading_count": 0,
-        "bullet_count": 8,
-        "numbered_count": 8,
+        "bullet_count": 0,
+        "numbered_count": 0,
         "table_count": 0,
         "code_block_count": 0,
         "emphasis_count": 0,
-        "mean_sentence_words": 8.93,
+        "mean_sentence_words": 11.63,
+        "max_sentence_words": 29,
+        "passive_sentence_count": 3,
         "answer_first_offset": 0,
         "decorative_structure_flags": []
       }
     },
     {
+      "topic": "interest",
+      "style": "tutor",
+      "model_id": "claude-sonnet-5-5",
+      "metrics": {
+        "word_count": 564,
+        "block_count": 24,
+        "mean_block_words": 23.5,
+        "max_block_words": 78,
+        "heading_count": 0,
+        "bullet_count": 0,
+        "numbered_count": 0,
+        "table_count": 0,
+        "code_block_count": 0,
+        "emphasis_count": 0,
+        "mean_sentence_words": 12.53,
+        "max_sentence_words": 33,
+        "passive_sentence_count": 9,
+        "answer_first_offset": 0,
+        "decorative_structure_flags": [
+          "empty_transition",
+          "empty_transition"
+        ]
+      }
+    },
+    {
       "topic": "tcp",
-      "provider": "anthropic",
+      "style": "base",
       "model_id": "claude-sonnet-5-5",
       "metrics": {
         "word_count": 489,
@@ -184,26 +286,52 @@
         "code_block_count": 0,
         "emphasis_count": 0,
         "mean_sentence_words": 16.86,
+        "max_sentence_words": 34,
+        "passive_sentence_count": 3,
         "answer_first_offset": 0,
         "decorative_structure_flags": []
       }
     },
     {
       "topic": "tcp",
-      "provider": "openai",
-      "model_id": "gpt-6-luna",
+      "style": "pedagogical",
+      "model_id": "claude-sonnet-5-5",
       "metrics": {
-        "word_count": 794,
-        "block_count": 63,
-        "mean_block_words": 12.6,
-        "max_block_words": 43,
+        "word_count": 1066,
+        "block_count": 30,
+        "mean_block_words": 35.53,
+        "max_block_words": 126,
         "heading_count": 0,
-        "bullet_count": 10,
-        "numbered_count": 10,
+        "bullet_count": 0,
+        "numbered_count": 0,
         "table_count": 0,
         "code_block_count": 0,
         "emphasis_count": 0,
-        "mean_sentence_words": 10.18,
+        "mean_sentence_words": 16.66,
+        "max_sentence_words": 46,
+        "passive_sentence_count": 7,
+        "answer_first_offset": 0,
+        "decorative_structure_flags": []
+      }
+    },
+    {
+      "topic": "tcp",
+      "style": "tutor",
+      "model_id": "claude-sonnet-5-5",
+      "metrics": {
+        "word_count": 546,
+        "block_count": 21,
+        "mean_block_words": 26.0,
+        "max_block_words": 100,
+        "heading_count": 0,
+        "bullet_count": 0,
+        "numbered_count": 0,
+        "table_count": 0,
+        "code_block_count": 0,
+        "emphasis_count": 0,
+        "mean_sentence_words": 13.32,
+        "max_sentence_words": 36,
+        "passive_sentence_count": 4,
         "answer_first_offset": 0,
         "decorative_structure_flags": []
       }

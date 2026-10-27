@@ -737,6 +737,8 @@ def structural_summary(run_dir: Path, rows: list[dict], cases: dict) -> dict:
             "mean_list_items": mean([g["bullet_count"] + g["numbered_count"] for g in group]),
             "mean_tables": mean([g["table_count"] for g in group]),
             "mean_answer_first_offset": mean([g["answer_first_offset"] for g in group]),
+            "median_max_sentence_words": median([g["max_sentence_words"] for g in group]),
+            "mean_passive_sentences": mean([g["passive_sentence_count"] for g in group]),
             "share_with_decorative_flag": sum(bool(g["decorative_structure_flags"]) for g in group) / len(group),
         }
     return out
@@ -792,10 +794,12 @@ def render_structural(s: dict) -> list[str]:
     desc = s.get("structural_descriptors") or {}
     if desc:
         L += ["| Condition | n | median words | median longest block | headings | list items | tables | "
-              "answer-first offset | share with decorative flag |", "|---|---:|---:|---:|---:|---:|---:|---:|---:|"]
+              "answer-first offset | median longest sentence | passive sentences | share with decorative flag |",
+              "|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|"]
         L += [f"| {c} | {d['responses']} | {fmt(d['median_words'], 0)} | {fmt(d['median_max_block_words'], 0)} | "
               f"{fmt(d['mean_headings'])} | {fmt(d['mean_list_items'])} | {fmt(d['mean_tables'])} | "
-              f"{fmt(d['mean_answer_first_offset'])} | {d['share_with_decorative_flag']:.0%} |" for c, d in desc.items()]
+              f"{fmt(d['mean_answer_first_offset'])} | {fmt(d['median_max_sentence_words'], 0)} | "
+              f"{fmt(d['mean_passive_sentences'])} | {d['share_with_decorative_flag']:.0%} |" for c, d in desc.items()]
     else:
         L.append("No responses yet.")
     pers = s.get("persistence_checks") or {}
