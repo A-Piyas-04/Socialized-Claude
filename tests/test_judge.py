@@ -253,6 +253,33 @@ def test_floor_verdict_thresholds():
     assert not verdict["fact_floor_passed"], "no buried control judged, so the fact floor cannot pass"
 
 
+class UsageBackend(FakeBackend):
+    name, model = "fake-groq", "fake-model"
+
+    def complete(self, prompt, temperature):
+        self.last_usage = {"prompt_tokens": len(prompt) // 4, "completion_tokens": 300,
+                           "total_tokens": len(prompt) // 4 + 300}
+        self.last_limits = {"x-ratelimit-limit-requests": "1000"}
+        return '{"winner": 1}' if "ANSWER 1:" in prompt else '{"facts_stated": [], "misconceptions_asserted": []}'
+
+
+def test_capacity_projection_measures_real_usage_and_stops_when_too_slow(tmp_path, monkeypatch, capsys):
+    import judge_acceptance as ja
+    import judge_capacity as jc
+    monkeypatch.setattr(ja, "CACHE_DIR", tmp_path / "cache")
+    monkeypatch.setattr(jc, "OUT_PATH", tmp_path / "capacity.json")
+    monkeypatch.setattr(jl, "backend_from_env", lambda **kw: UsageBackend())
+    assert jc.main(["--tpd", "10000000"]) == 0
+    result = json.loads((tmp_path / "capacity.json").read_text(encoding="utf-8"))
+    assert [m["kind"] for m in result["measured"]] == ["pairwise", "facts"]
+    assert result["requests_per_day"] == 1000 and result["mean_completion_tokens"] == 300
+    assert result["plans"]["acceptance"]["calls"] == 95, "15 + 20 pairs in both orders, 25 fact prompts"
+    assert result["plans"]["pilot sweep"]["calls"] == 192 + 16 * 3 * 4 * 3 * 2
+    monkeypatch.setattr(ja, "CACHE_DIR", tmp_path / "cache2")
+    assert jc.main(["--tpd", "100000"]) == 3
+    assert "STOP:" in capsys.readouterr().out
+
+
 # --- Gemini client (no network) ------------------------------------------------
 
 class FakeResponse(io.BytesIO):

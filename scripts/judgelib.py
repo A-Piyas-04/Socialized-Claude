@@ -131,6 +131,8 @@ class OpenAICompatibleBackend:
         self._sleep, self._open = sleep, opener
         self._last = 0.0
         self.log: Callable[[str], None] = lambda message: print(message, file=sys.stderr, flush=True)
+        self.last_usage: dict = {}
+        self.last_limits: dict = {}
 
     def complete(self, prompt: str, temperature: float) -> str:
         body = json.dumps({"model": self.model, "temperature": temperature,
@@ -147,6 +149,10 @@ class OpenAICompatibleBackend:
             try:
                 with self._open(request, timeout=300) as response:
                     payload = json.loads(response.read().decode("utf-8"))
+                    headers = getattr(response, "headers", None) or {}
+                    self.last_limits = {k.lower(): v for k, v in dict(headers).items()
+                                        if k.lower().startswith("x-ratelimit")}
+                self.last_usage = dict(payload.get("usage") or {})
             except urllib.error.HTTPError as exc:
                 message = error_message(exc)
                 if exc.code == 429 and re.search(r"(?i)per day|\bRPD\b|\bTPD\b", message):
