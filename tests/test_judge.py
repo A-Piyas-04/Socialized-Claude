@@ -188,6 +188,20 @@ def test_gemini_retries_then_reports_unavailable_without_leaking_key():
     assert waits == [1, 2] and KEY not in str(info.value)
 
 
+def test_daily_quota_stops_without_retrying():
+    waits = []
+    body = json.dumps({"error": {"details": [{"violations": [
+        {"quotaId": "GenerateRequestsPerDayPerProjectPerModel-FreeTier", "quotaValue": "20"}]}]}}).encode()
+
+    def opener(request, timeout):
+        raise urllib.error.HTTPError(request.full_url, 429, "Too Many Requests", {}, io.BytesIO(body))
+
+    backend = jl.GeminiBackend(KEY, "m", min_interval=0, max_retries=3, opener=opener, sleep=waits.append)
+    with pytest.raises(jl.JudgeUnavailable, match="daily quota .* \\(20 requests per day\\)"):
+        backend.complete("hi", 0.0)
+    assert waits == []
+
+
 def test_backend_requires_key():
     with pytest.raises(jl.JudgeError, match="GEMINI_API_KEY is not set"):
         jl.backend_from_env({})

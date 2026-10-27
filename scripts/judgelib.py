@@ -78,6 +78,10 @@ class GeminiBackend:
                 with self._open(request, timeout=300) as response:
                     payload = json.loads(response.read().decode("utf-8"))
             except urllib.error.HTTPError as exc:
+                daily = daily_quota(exc)
+                if daily:
+                    raise JudgeUnavailable(f"free-tier daily quota for {self.model} exhausted ({daily} requests "
+                                           "per day); not retrying until it resets") from None
                 if exc.code in RETRY_STATUSES and attempt < self._max_retries:
                     wait = self._backoff * (2 ** attempt)
                     self.log(f"judge HTTP {exc.code}; retry {attempt + 1}/{self._max_retries} in {wait:.0f}s")
@@ -101,6 +105,21 @@ class GeminiBackend:
             except (KeyError, IndexError, TypeError):
                 raise JudgeError(f"judge returned no text (finish: {json.dumps(payload)[:200]})") from None
         raise JudgeUnavailable("judge retries exhausted")
+
+
+def daily_quota(exc: urllib.error.HTTPError) -> str | None:
+    """The per-day request limit named in a 429 body, if that is the limit that was hit."""
+    if exc.code != 429:
+        return None
+    try:
+        body = json.loads(exc.read().decode("utf-8") or "{}")
+    except (ValueError, OSError):
+        return None
+    for detail in body.get("error", {}).get("details", []):
+        for violation in detail.get("violations", []):
+            if "PerDay" in str(violation.get("quotaId", "")):
+                return str(violation.get("quotaValue", "?"))
+    return None
 
 
 def backend_from_env(env: dict[str, str] | None = None, **kwargs) -> Backend:
