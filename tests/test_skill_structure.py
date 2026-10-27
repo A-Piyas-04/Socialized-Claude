@@ -316,6 +316,16 @@ HEADINGS = {
 }
 
 
+def test_presentation_rules_name_actions_not_prohibitions():
+    text = read(lib.SKILL_DIR / "SKILL.md")
+    block = text.split("<!-- op:presentation -->", 1)[1].split("<!-- /op:presentation -->", 1)[0]
+    rules = [line.strip()[2:] for line in block.splitlines() if line.strip().startswith("- ")]
+    assert len(rules) >= 6
+    for rule in rules:
+        assert not rule.lower().startswith(("do not", "don't", "never", "avoid", "only")), rule
+    assert "Default to connected prose" not in text
+
+
 def test_operation_and_variant_sets():
     assert len(lib.OPERATIONS) == 9 and set(HEADINGS) == set(lib.OPERATIONS)
     assert lib.VARIANTS["full"] == frozenset(lib.OPERATIONS) and lib.VARIANTS["core"] == frozenset()
