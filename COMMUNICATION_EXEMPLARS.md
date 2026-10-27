@@ -29,6 +29,7 @@ structured than the weak one: the rule is to match structure to the content's sh
 10. Follow-up repair: re-read the request
 11. Persistence: a standing limit at turn three
 12. Work report: what changed, what did not
+13. Plain sentences: one claim each
 
 ---
 
@@ -325,3 +326,23 @@ Where are we?
 
 **The difference.** The better version names what changed and what did not, separates the
 decision, and drops the apology and the promise; the weak version describes intent as done.
+
+## 13. Plain sentences: one claim each (constructed)
+
+**Request.** Why does my laptop slow down when the battery is low?
+
+**Weak.**
+
+> It should be noted that when the battery level is reduced, power management features are
+> typically utilised by the operating system, which means that the processor's clock speed may be
+> lowered, and this, along with reduced screen brightness, is done so that it can last longer.
+
+**Better.**
+
+> Your operating system switches to a power-saving mode when the battery runs low. In that mode it
+> lowers the processor's clock speed, so each task takes longer. It does this to make the
+> remaining charge last.
+
+**The difference.** The weak version packs four clauses, two passives, a throat-clearing opener
+and an ambiguous "it" into one sentence; the better version gives each claim its own active
+sentence with a clear subject.
