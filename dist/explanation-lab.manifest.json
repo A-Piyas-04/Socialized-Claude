@@ -5,6 +5,7 @@
     "examples",
     "mechanism",
     "persistence",
+    "plain",
     "presentation",
     "register",
     "repair",
@@ -13,9 +14,9 @@
     "work-report"
   ],
   "zip": "explanation-lab.zip",
-  "zip_sha256": "c0153c3dcf5b4e4a5523b03befe411ed2525806d2618c8ab000bf145e0b2dec2",
+  "zip_sha256": "e9b7262dcf5df5a4880c360148ba6b883faee63b4cdcc85c9b33a0bb6bcf5cc0",
   "files": {
-    "SKILL.md": "8f42bb673d05cfa8048b4b09b0734948b2b1b7f6c9be015e7787c63b78477d33",
+    "SKILL.md": "7e0294d415cf2c30931d0c6f9eb3760d37c5cc81bb3049a9fcbc51e47c52c8b8",
     "references/explanation-examples.md": "db44d634b47bb82ddf35b914ac530a1b5e7232f9e5c1dac62e2c2bd0bb8fca6d",
     "references/explanation-methodology.md": "29b4072404a1da9c7dd90f7ff39156d2345facbf08d2eea8b25a44a75e893635",
     "references/treatment-selection.md": "b084b20dc5f7a1aa65ab6d64377fb2b36f51e36ea7e29737d4d4ff9a3a5f2959"

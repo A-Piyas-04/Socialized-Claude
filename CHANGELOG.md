@@ -11,12 +11,12 @@
   prose-default prohibitions are gone; decorative structure, emoji as
   structure, whitespace padding and empty transitions are failure modes.
 - New operations: `register` (three registers, practitioner default, with scope
-  discipline folded in), `repair`, `persistence`, `work-report`. Nine
+  discipline folded in), `repair`, `persistence`, `work-report`, and`n  `plain` (sentence-level readability, reinstating T1's sentence rules). Ten
   operations in total.
 - Accuracy rules: specific citations only when confident they exist; named
   researchers, papers and foreign or field terms glossed in the same sentence.
 - Variants `pres`, `seq-pres`, `seq-mech-pres`, `reg`, `rep`, `persist`,
-  `wrep` (12 in total), mirrored as `V_*` conditions with their contrasts.
+  `wrep`, `plain` (13 in total), mirrored as `V_*` conditions with their contrasts.
 
 ### Evaluation
 - Automated collection with Claude Code (`scripts/collect_cc.py`): isolated

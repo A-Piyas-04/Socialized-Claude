@@ -49,7 +49,8 @@ so a short factual exchange never pays their context cost.
 3. **Size the answer.** Defaults per request type. An explicit length request
    overrides all of them.
 4. **Operations.** Dependency ordering, mechanism, example, terms,
-   presentation, register, repair, persistence, work report. Each carries its
+   presentation, register, repair, persistence, work report, plain language.
+   Each carries its
    own "use when" and "skip when" rules, and every rule names an action.
 5. **Accuracy rules.** No invented mechanisms or facts, hedges preserved,
    simplify expression rather than substance.
@@ -87,6 +88,7 @@ Labels follow `research/EVIDENCE_AUDIT.md`.
 | Presentation: answer first, one idea per unit, form matched to shape (from T5) | V0's deferral rested on a detector artifact (**Observed**: 8/10 serious T5 verdicts were list-number triggers); illusion-of-fluency literature (L2) motivates the guardrail | **Provisional (hypothesis)** |
 | Register: three registers, practitioner default, no characterising the person | User reports; expertise-reversal literature (L2) | **Provisional (hypothesis)** |
 | Repair, persistence, work reports | User reports (not held in this repository) | **Provisional (hypothesis)** |
+| Plain language (sentence level, from T1) | T1's fidelity record (**Observed**: 7/10 clean, no no-op outputs); cognitive-load literature (L2) | **Provisional (hypothesis)** |
 | Citation integrity | Second-hand figure quoted in the V1 addendum | Engineering choice |
 | Audience calibration (from T6) | Expertise-reversal literature (L2); T6 itself was barely exercised (6/7 clean outputs unchanged) | Engineering choice |
 | Length budget and scope gate | The brief's anti-patterns; Experiment 2 length inflation | Engineering choice |
@@ -125,7 +127,8 @@ when all of them are enabled.
 | `rep` | repair |
 | `persist` | persistence |
 | `wrep` | work report |
-| `full` | all nine (production) |
+| `plain` | plain language |
+| `full` | all ten (production) |
 
 All variants keep **identical name and description**, so automatic activation
 sees the same metadata. Tests enforce this, and also that each variant contains

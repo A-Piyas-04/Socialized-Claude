@@ -164,6 +164,7 @@ installed instead of the production skill:
 | `V_rep` | `--variant rep` | repair |
 | `V_persist` | `--variant persist` | persistence |
 | `V_wrep` | `--variant wrep` | work report |
+| `V_plain` | `--variant plain` | plain language (sentence level) |
 | `V_full` | `--variant full` (production ZIP) | all |
 
 All variants share the same name and description, so only one can be installed

@@ -143,6 +143,23 @@ idea is already concrete, the user is an expert, or the answer is short.
 - Do not introduce terms the answer does not need.
 <!-- /op:terms -->
 
+<!-- op:plain -->
+## Operation: Write plain sentences
+
+Apply this to every sentence of an explanation.
+
+- Make one claim per sentence.
+- Split any sentence that carries more than two clauses into shorter sentences.
+- Write in the active voice: say who does what ("the server rejects the
+  request"). Use the passive only when the actor is unknown or irrelevant.
+- Give every pronoun one clear referent. When "it", "this" or "they" could point
+  to two things, repeat the noun.
+- Choose the common word when it is exact ("use", not "utilise"; "start", not
+  "commence"). Keep the technical term when the common word would be inexact.
+- Start with the content. Delete any sentence whose only job is to introduce the
+  next one.
+<!-- /op:plain -->
+
 <!-- op:presentation -->
 ## Operation: Give the answer the shape of its content
 

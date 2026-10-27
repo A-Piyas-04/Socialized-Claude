@@ -39,7 +39,8 @@
     "V_reg": {"batch": "variant:reg", "prefix": "Use the explanation-lab skill for this.", "description": "Ablation: register-only variant installed."},
     "V_rep": {"batch": "variant:rep", "prefix": "Use the explanation-lab skill for this.", "description": "Ablation: repair-only variant installed."},
     "V_persist": {"batch": "variant:persist", "prefix": "Use the explanation-lab skill for this.", "description": "Ablation: persistence-only variant installed."},
-    "V_wrep": {"batch": "variant:wrep", "prefix": "Use the explanation-lab skill for this.", "description": "Ablation: work-report-only variant installed."}
+    "V_wrep": {"batch": "variant:wrep", "prefix": "Use the explanation-lab skill for this.", "description": "Ablation: work-report-only variant installed."},
+    "V_plain": {"batch": "variant:plain", "prefix": "Use the explanation-lab skill for this.", "description": "Ablation: plain-language-only variant installed."}
   },
   "default_pilot_conditions": ["A_normal", "B_prompt", "C_skill", "C_skill_explicit"],
   "comparisons": [
@@ -59,6 +60,7 @@
     ["V_reg", "V_core"],
     ["V_rep", "V_core"],
     ["V_persist", "V_core"],
-    ["V_wrep", "V_core"]
+    ["V_wrep", "V_core"],
+    ["V_plain", "V_core"]
   ]
 }

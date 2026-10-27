@@ -313,6 +313,7 @@ HEADINGS = {
     "repair": "## Operation: Repair after a clarification or correction",
     "persistence": "## Operation: Keep standing instructions in force",
     "work-report": "## Operation: Report work that was done",
+    "plain": "## Operation: Write plain sentences",
 }
 
 
@@ -327,11 +328,21 @@ def test_presentation_rules_name_actions_not_prohibitions():
 
 
 def test_operation_and_variant_sets():
-    assert len(lib.OPERATIONS) == 9 and set(HEADINGS) == set(lib.OPERATIONS)
+    assert len(lib.OPERATIONS) == 10 and set(HEADINGS) == set(lib.OPERATIONS)
     assert lib.VARIANTS["full"] == frozenset(lib.OPERATIONS) and lib.VARIANTS["core"] == frozenset()
-    assert len(lib.VARIANTS) == 12
+    assert len(lib.VARIANTS) == 13
     singles = {next(iter(ops)) for ops in lib.VARIANTS.values() if len(ops) == 1}
-    assert singles == {"sequencing", "mechanism", "presentation", "register", "repair", "persistence", "work-report"}
+    assert singles == {"sequencing", "mechanism", "presentation", "register", "repair", "persistence",
+                       "work-report", "plain"}
+
+
+def test_plain_language_rules_name_actions():
+    text = read(lib.SKILL_DIR / "SKILL.md")
+    block = text.split("<!-- op:plain -->", 1)[1].split("<!-- /op:plain -->", 1)[0]
+    rules = [line.strip()[2:] for line in block.splitlines() if line.strip().startswith("- ")]
+    assert len(rules) == 6
+    for rule in rules:
+        assert not rule.lower().startswith(("do not", "don't", "never", "avoid")), rule
 
 
 @pytest.mark.parametrize("variant", sorted(lib.VARIANTS))

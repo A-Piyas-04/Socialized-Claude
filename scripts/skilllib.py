@@ -21,7 +21,7 @@ DIST_DIR = REPO_ROOT / "dist"
 OPERATIONS = (
     "sequencing", "mechanism", "examples", "terms",
     "presentation", "register", "repair",
-    "persistence", "work-report",
+    "persistence", "work-report", "plain",
 )
 
 # Temporary skill variants for ablation runs. "full" is the production build.
@@ -38,6 +38,7 @@ VARIANTS: dict[str, frozenset[str]] = {
     "rep": frozenset({"repair"}),
     "persist": frozenset({"persistence"}),
     "wrep": frozenset({"work-report"}),
+    "plain": frozenset({"plain"}),
 }
 
 ALLOWED_FRONTMATTER_KEYS = {"name", "description", "license", "allowed-tools", "metadata", "compatibility"}

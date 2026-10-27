@@ -1,7 +1,7 @@
 # Communication grammar
 
 The rules implemented in `skill/explanation-lab/SKILL.md` by the presentation, register, repair,
-persistence and work-report operations, and the accuracy additions, each with its evidence label.
+persistence, work-report and plain-language operations, and the accuracy additions, each with its evidence label.
 This file documents the skill; it does not argue for it.
 
 **No rule here is a validated finding.** No comprehension evidence exists for any of them
@@ -26,7 +26,8 @@ not held in this repository, so it supports a hypothesis, never an observation.
 4. Repair
 5. Persistence
 6. Work reports
-7. Accuracy additions
+7. Plain language
+8. Accuracy additions
 
 ## 1. The primary success signal
 
@@ -107,7 +108,26 @@ capture counts as a regression (`evaluation/RUBRIC.md`, "Preference versus compr
 | Report each failure as its own sentence; never describe an intended action as completed. | Hypothesis (L4) | User report of an announced change that was never made; tested by `work_002`. |
 | No apology paragraph, tally of past mistakes, or promise about future behaviour. | Engineering choice | Same rule as repair. |
 
-## 7. Accuracy additions (always apply)
+## 7. Plain language (`op:plain`)
+
+This operation reinstates the sentence-level half of the archive's T1 treatment ("one claim per
+sentence, plain equivalents, resolve ambiguous references, remove padding"), which V0 reduced to
+defining terms only. Of the six treatments, T1 is the one whose archive record supports it in the
+sense this project uses: 7 of 10 rewrites clean, no unchanged (no-op) outputs, both serious
+verdicts numeric triggers with no semantic finding (*Observation*, `research/EVIDENCE_AUDIT.md`
+§6 T1), plus cognitive-load literature (*Literature (L2)*, same section). That is support for low
+fidelity risk, not comprehension evidence.
+
+| Rule | Label | Basis |
+|---|---|---|
+| Make one claim per sentence. | Hypothesis (L4), with Literature (L2) motivation | T1 template; cognitive load theory, scoped "reduce load ≠ reduce content". |
+| Split any sentence carrying more than two clauses. | Engineering choice | Makes "one claim per sentence" checkable; the threshold is a choice. |
+| Write in the active voice; passive only when the actor is unknown or irrelevant. | Hypothesis (L4) | Says who does what, which a causal explanation needs. |
+| Give every pronoun one clear referent; repeat the noun when two could match. | Hypothesis (L4) | T1 template ("resolve ambiguous references"). |
+| Choose the common word when it is exact; keep the technical term when it is not. | Hypothesis (L4), with an Observation of the failure | T1 replaced "pathogen" throughout (`transform-immunology-chatgpt-T1.json`), the case this rule's second half guards against. |
+| Delete any sentence whose only job is to introduce the next one. | Hypothesis (L4) | T1 template ("remove padding"); also a presentation failure mode. |
+
+## 8. Accuracy additions (always apply)
 
 | Rule | Label | Basis |
 |---|---|---|

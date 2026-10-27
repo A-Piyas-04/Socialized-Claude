@@ -58,7 +58,7 @@ Read this before drawing any conclusion from using or testing the skill.
   equivalent.
 - **Rater scores are judgements.** They can be biased by length, style, or
   recognising a condition. Blinding and anchors help but do not eliminate this.
-- **The presentation, register, repair, persistence and work-report operations
+- **The presentation, register, repair, persistence, work-report and plain-language operations
   are untested hypotheses, and the structural linter measures form only.** No
   data of any kind supports them yet. A response can pass every linter check and
   still be wrong; the linter cannot tell.
