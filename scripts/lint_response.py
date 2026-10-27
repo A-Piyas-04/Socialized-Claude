@@ -55,8 +55,13 @@ def regenerate(out: Path = BASELINE_PATH) -> dict:
     return result
 
 
+HEURISTIC_FIELDS = ("answer_first_offset", "passive_sentence_count")
+HEURISTIC_NOTE = "heuristic; descriptive only, never gates anything"
+
+
 def render(result: dict) -> str:
-    lines = [f"{k}: {v}" for k, v in result.items() if k != "decorative_structure_flags"]
+    lines = [f"{k}: {v}" + (f"  ({HEURISTIC_NOTE})" if k in HEURISTIC_FIELDS else "")
+             for k, v in result.items() if k != "decorative_structure_flags"]
     flags = result["decorative_structure_flags"]
     lines.append("decorative_structure_flags: " + (", ".join(flags) if flags else "none"))
     lines.append(f"({DISCLAIMER})")
@@ -79,7 +84,11 @@ def main(argv: list[str] | None = None) -> int:
         parser.error("a response path (or -) is required")
     text = sys.stdin.read() if args.path == "-" else Path(args.path).read_text(encoding="utf-8")
     result = sm.metrics(text, args.question)
-    print(json.dumps(result, indent=2) if args.json else render(result))
+    if args.json:
+        print(json.dumps({**result, "heuristic_fields": list(HEURISTIC_FIELDS), "heuristic_note": HEURISTIC_NOTE},
+                         indent=2))
+    else:
+        print(render(result))
     return 1 if result["decorative_structure_flags"] else 0
 
 

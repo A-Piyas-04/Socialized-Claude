@@ -13,12 +13,18 @@ judged in both presentation orders; the order-flip rate measures consistency.
 
 Floor test: each Claude base answer against three deterministic degradations of itself:
   truncated      the first ~40% of its words, cut at a sentence boundary
-  fact_removed   every sentence stating one checklist fact deleted (hand-listed in FACT_REMOVALS;
-                 3 of the 5 topics, the ones where a single fact can be removed cleanly)
+  fact_removed   every statement of one checklist fact removed, recurrences included (hand-listed
+                 exact edits in FACT_REMOVALS, all 5 topics)
   buried         the opening (answer) paragraph moved to the end
+  formatted_emptier
+                 the fact_removed text with headings, bullets and bold added: it looks more
+                 organised and contains less. This is the failure presentation changes risk.
 A consistent judge can still be useless, so the floor is required whatever the flip rate:
-  - pairwise: the original wins in both orders on >= FLOOR_MIN_SHARE of floor pairs;
-  - fact capture: fact_removed, and truncations hand-checked to drop a fact
+  - pairwise: the original wins in both orders on >= FLOOR_MIN_SHARE of the truncated,
+    fact_removed and buried pairs;
+  - presentation: the original wins in both orders on >= FLOOR_MIN_SHARE of formatted_emptier
+    pairs, and the formatted-and-emptier version is never preferred consistently;
+  - fact capture: fact_removed, formatted_emptier, and truncations hand-checked to drop a fact
     (TRUNCATION_LOSES_FACTS), capture fewer facts than the original in >= FLOOR_MIN_SHARE of
     cases and never more; buried (all facts kept) captures the same number in >= FLOOR_MIN_SHARE
     of cases.
@@ -49,22 +55,58 @@ ARCHIVE_INPUT = es.REPO_ROOT / "research-results-2026-10-26" / "inputs" / "input
 OUT_DIR = es.REPO_ROOT / "research"
 CACHE_DIR = OUT_DIR / "judge_acceptance_cache"
 STYLE_PAIRS = (("base", "tutor"), ("base", "pedagogical"), ("tutor", "pedagogical"))
-DEGRADATIONS = ("truncated", "fact_removed", "buried")
+DEGRADATIONS = ("truncated", "fact_removed", "buried", "formatted_emptier")
 MAX_FLIP_RATE = 0.20
 FLOOR_MIN_SHARE = 0.80
 TRUNCATE_SHARE = 0.40
-# Hand-chosen from the archive's Claude base answers: one checklist fact per topic, and the start of
-# every sentence that states or directly implies it. Caching and TCP have none: each of their
-# checklist facts recurs across steps, examples and summary tables, so it cannot be removed cleanly.
-FACT_REMOVALS: dict[str, tuple[str, tuple[str, ...]]] = {
-    "databases": ("databases_f4", ("Storage space.", "An index stores a copy", "Wide or numerous indexes",
-                                   "Rule of thumb: indexes trade")),
-    "immunology": ("immunology_f3", ("Memory.", "This is the key payoff.", "After the response winds down",
-                                     "They are the “trained” part", "Memory cells recognize it",
-                                     "Because of this, some vaccines need boosters")),
-    "interest": ("interest_f1", ("Simple interest is calculated only", "Simple interest: you earn",
-                                 "After 10 years: $1,000 + $500", "Simple: A = P(1 + rt)",
-                                 "Simple interest grows by the same")),
+# Hand-chosen from the archive's Claude base answers: one checklist fact per topic, and an exact
+# (old, new) edit for every place that states or directly implies it, including recurrences in
+# summary tables and closing paragraphs. Each `old` must occur exactly once.
+FACT_REMOVALS: dict[str, tuple[str, tuple[tuple[str, str], ...]]] = {
+    "caching": ("caching_f3", (
+        ("Crash recovery is easier because memory holds the latest data.", ""),
+        ("A crash or power loss can lose data that was only in the cache.", ""),
+        ("Data-loss risk on crash\tLow\tHigher\n", ""),
+        (", embedded systems, and storage or database layers that need durability guarantees.",
+         ", and embedded systems."),
+        (", while “write-through” modes are offered when you can’t afford to lose recent writes.", "."),
+    )),
+    "databases": ("databases_f4", (
+        ("Storage space.", ""),
+        ("An index stores a copy of the indexed columns plus pointers.", ""),
+        ("Wide or numerous indexes can rival or exceed the size of the table itself, and they compete with "
+         "table data for buffer cache memory.", ""),
+        ("indexes trade write speed and space for read speed", "indexes trade write speed for read speed"),
+    )),
+    "immunology": ("immunology_f3", (
+        ("Memory.", ""),
+        ("This is the key payoff.", ""),
+        ("After the response winds down, long-lived memory B and T cells remain, sometimes for decades.", ""),
+        ("They are the “trained” part of the system.", ""),
+        ("Memory cells recognize it right away.", ""),
+        ("Because of this, some vaccines need boosters: for some pathogens, memory fades over time, or the "
+         "pathogen mutates (as with flu and COVID-19), so the immune system needs a refresher or an update.", ""),
+    )),
+    "interest": ("interest_f1", (
+        ("Simple interest is calculated only on your original amount (the principal).", ""),
+        ("Simple interest: you earn $50 every year, always 5% of the original $1,000.", ""),
+        ("After 10 years: $1,000 + $500 = $1,500.", ""),
+        ("Simple: A = P(1 + rt)\n", ""),
+        ("Simple interest grows by the same fixed amount each period, which is a straight line.", ""),
+    )),
+    "tcp": ("tcp_f3", (
+        ("ACK (client → server): The client sends a segment with ACK set and acknowledgment number y+1. This says: "
+         "“I got yours too.” The connection is now established, and data can flow in both directions (the third "
+         "segment can already carry data).", ""),
+        ("That’s four pieces of information: two SYNs and two ACKs. The server combines its ACK of the client’s "
+         "SYN with its own SYN into one segment, which is why four messages collapse into three.", ""),
+        ("Step 3 proves to the server that the client can actually receive its packets, so the return path "
+         "works. Without it, the server could not be sure its SYN-ACK arrived, and each side would not have "
+         "confirmation that the other has agreed on its numbers.", ""),
+        ("With three steps, the client’s final ACK must carry y+1; if the client didn’t send the original SYN, "
+         "it responds to the SYN-ACK with a reset (RST), and the server drops the half-open connection.", ""),
+        ("Defenses like SYN cookies avoid allocating state until the final ACK arrives.", ""),
+    )),
 }
 # Hand-checked: in these topics the truncated text drops at least one checklist fact. TCP's truncation
 # keeps its opening purpose statement and all three steps, so it is excluded from the fact gate (it
@@ -122,26 +164,37 @@ def truncate(text: str, share: float = TRUNCATE_SHARE) -> str:
 
 
 def remove_fact(text: str, topic: str) -> tuple[str, str | None]:
-    """Delete the hand-listed sentences that state this topic's chosen fact."""
+    """Apply the hand-listed edits that remove every statement of this topic's chosen fact."""
     if topic not in FACT_REMOVALS:
         return text, None
-    fact_id, starts = FACT_REMOVALS[topic]
-    matched = {start: 0 for start in starts}
-    kept = []
-    for para in paragraphs(text):
-        sentences_kept = []
-        for sentence in split_sentences(para):
-            hit = next((s for s in starts if sentence.strip().startswith(s)), None)
-            if hit:
-                matched[hit] += 1
-            else:
-                sentences_kept.append(sentence)
-        if sentences_kept:
-            kept.append(" ".join(sentences_kept))
-    missing = [s for s, n in matched.items() if n != 1]
+    fact_id, edits = FACT_REMOVALS[topic]
+    missing = [old[:50] for old, _ in edits if text.count(old) != 1]
     if missing:
         raise ValueError(f"{topic}: removal list does not match the answer exactly once: {missing}")
-    return "\n\n".join(kept), fact_id
+    for old, new in edits:
+        text = text.replace(old, new)
+    text = re.sub(r"(?m)^ +| +$", "", re.sub(r" {2,}", " ", text))
+    return re.sub(r"\n{3,}", "\n\n", text).strip(), fact_id
+
+
+def is_title(paragraph: str) -> bool:
+    return "\n" not in paragraph and len(sm.words(paragraph)) <= 8 and not paragraph.endswith(".")
+
+
+def prettify(text: str) -> str:
+    """Headings, bullets and bold on the same content: the look of organisation, nothing added."""
+    blocks = ["## Overview"]
+    for i, para in enumerate(paragraphs(text)):
+        if is_title(para):
+            blocks.append("## " + para.rstrip(":"))
+        elif "\t" in para:
+            blocks.append(para)
+        elif i == 0:
+            blocks.append(f"**{para}**")
+        else:
+            items = [s.strip() for line in para.split("\n") for s in split_sentences(line) if s.strip()]
+            blocks.append("\n".join(f"- **{s}**" if j == 0 else f"- {s}" for j, s in enumerate(items)))
+    return "\n\n".join(blocks)
 
 
 def bury(text: str) -> str:
@@ -152,11 +205,12 @@ def bury(text: str) -> str:
 def degraded_versions(original: dict, case: dict) -> list[dict]:
     removed_text, removed_id = remove_fact(original["text"], case["topic"])
     versions = {"truncated": (truncate(original["text"]), None), "fact_removed": (removed_text, removed_id),
-                "buried": (bury(original["text"]), None)}
+                "buried": (bury(original["text"]), None),
+                "formatted_emptier": (prettify(removed_text), removed_id)}
     out = []
     for kind in DEGRADATIONS:
         text, fact_id = versions[kind]
-        if kind == "fact_removed" and fact_id is None:
+        if kind in {"fact_removed", "formatted_emptier"} and fact_id is None:
             continue
         out.append({**original, "row_id": f"{original['row_id']}__{kind}", "condition": f"base_{kind}",
                     "degradation": kind, "removed_fact": fact_id, "text": text})
@@ -168,13 +222,14 @@ def degraded_versions(original: dict, case: dict) -> list[dict]:
 # ---------------------------------------------------------------------------
 
 def floor_verdicts(floor_rows: list[dict], fact_by_row: dict[str, int], pairs_meta: list[dict]) -> dict:
-    pairwise_ok = [r["winner"] == "x" for r in floor_rows]
+    pairwise_ok = [r["winner"] == "x" for r, m in zip(floor_rows, pairs_meta) if m["degradation"] != "formatted_emptier"]
+    pretty = [r["winner"] for r, m in zip(floor_rows, pairs_meta) if m["degradation"] == "formatted_emptier"]
     by_kind: dict[str, list[tuple[int, int]]] = defaultdict(list)
     must_drop: list[tuple[int, int]] = []
     for meta in pairs_meta:
         counts = (fact_by_row[meta["original"]], fact_by_row[meta["degraded"]])
         by_kind[meta["degradation"]].append(counts)
-        if meta["degradation"] == "fact_removed" or (
+        if meta["degradation"] in {"fact_removed", "formatted_emptier"} or (
                 meta["degradation"] == "truncated" and meta["topic"] in TRUNCATION_LOSES_FACTS):
             must_drop.append(counts)
     lower = [d < o for o, d in must_drop]
@@ -183,6 +238,8 @@ def floor_verdicts(floor_rows: list[dict], fact_by_row: dict[str, int], pairs_me
     share = lambda xs: sum(xs) / len(xs) if xs else None  # noqa: E731
     result = {
         "pairwise_original_wins_share": share(pairwise_ok),
+        "formatted_emptier_original_wins_share": share([w == "x" for w in pretty]),
+        "formatted_emptier_preferred_count": sum(w == "y" for w in pretty),
         "fact_lower_share": share(lower),
         "fact_higher_count": sum(higher),
         "buried_fact_same_share": share(same),
@@ -190,6 +247,9 @@ def floor_verdicts(floor_rows: list[dict], fact_by_row: dict[str, int], pairs_me
     }
     result["pairwise_floor_passed"] = result["pairwise_original_wins_share"] is not None and \
         result["pairwise_original_wins_share"] >= FLOOR_MIN_SHARE
+    result["presentation_floor_passed"] = (result["formatted_emptier_original_wins_share"] is not None
+                                           and result["formatted_emptier_original_wins_share"] >= FLOOR_MIN_SHARE
+                                           and result["formatted_emptier_preferred_count"] == 0)
     result["fact_floor_passed"] = (result["fact_lower_share"] is not None and result["fact_lower_share"] >= FLOOR_MIN_SHARE
                                    and result["fact_higher_count"] == 0
                                    and result["buried_fact_same_share"] is not None
@@ -259,7 +319,8 @@ def acceptance(backend: jl.Backend, cache_dir: Path = CACHE_DIR, seed: int = 0,
         "thresholds": {"max_flip_rate": MAX_FLIP_RATE, "floor_min_share": FLOOR_MIN_SHARE},
         "pairs": len(all_pairs), "order_flips": flips, "flip_rate": flip_rate, "flip_rate_passed": flip_ok,
         "floor": floor_result,
-        "accepted": flip_ok and floor_result["pairwise_floor_passed"] and floor_result["fact_floor_passed"],
+        "accepted": (flip_ok and floor_result["pairwise_floor_passed"] and floor_result["presentation_floor_passed"]
+                     and floor_result["fact_floor_passed"]),
         "strata": strata(all_pairs),
         "floor_pairs": floor_meta,
         "pair_rows": all_pairs,
@@ -286,6 +347,9 @@ def render(result: dict) -> str:
          f"{'yes' if result['flip_rate_passed'] else 'no'} |",
          f"| Pairwise floor: original preferred in both orders | {fmt(f['pairwise_original_wins_share'])} | "
          f"{'yes' if f['pairwise_floor_passed'] else 'no'} |",
+         f"| Presentation floor: original beats formatted-and-emptier | "
+         f"{fmt(f['formatted_emptier_original_wins_share'])}; prettier version preferred "
+         f"{f['formatted_emptier_preferred_count']} time(s) | {'yes' if f['presentation_floor_passed'] else 'no'} |",
          f"| Fact floor: truncated/fact-removed capture fewer facts | {fmt(f['fact_lower_share'])} (more in "
          f"{f['fact_higher_count']}); buried unchanged {fmt(f['buried_fact_same_share'])} | "
          f"{'yes' if f['fact_floor_passed'] else 'no'} |", "",

@@ -105,6 +105,17 @@ def test_cli_exit_status_and_json(capsys):
     assert json.loads(capsys.readouterr().out)["decorative_structure_flags"] == ["table_thin"]
 
 
+def test_passive_heuristic_is_labelled_and_never_gates(tmp_path, capsys):
+    path = tmp_path / "passive.md"
+    path.write_text("The request is rejected by the server. The log is written by the worker.\n", encoding="utf-8")
+    assert lint_response.main([str(path)]) == 0, "passive sentences must not change the exit status"
+    out = capsys.readouterr().out
+    assert "passive_sentence_count: 2  (heuristic; descriptive only, never gates anything)" in out
+    assert lint_response.main([str(path), "--json"]) == 0
+    data = json.loads(capsys.readouterr().out)
+    assert "passive_sentence_count" in data["heuristic_fields"] and data["decorative_structure_flags"] == []
+
+
 def test_cli_help_carries_the_disclaimer(capsys):
     with pytest.raises(SystemExit):
         lint_response.main(["--help"])

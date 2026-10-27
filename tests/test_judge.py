@@ -162,6 +162,10 @@ class OracleBackend:
         two = prompt.split("ANSWER 2:\n<<<\n", 1)[1].split("\n>>>", 1)[0]
         if self.mode == "first":
             return '{"winner": 1}'
+        if self.mode == "pretty":
+            markup = lambda t: t.count("**") + t.count("\n- ") + t.count("## ")  # noqa: E731
+            if markup(one) != markup(two):
+                return '{"winner": %d}' % (1 if markup(one) > markup(two) else 2)
         if self.mode == "shorter":
             return '{"winner": %d}' % (1 if (len(one), one) < (len(two), two) else 2)
         if (one in self.originals) != (two in self.originals):
@@ -185,10 +189,20 @@ def test_acceptance_is_claude_only_with_a_floor(tmp_path):
     result = ja.acceptance(oracle(), cache_dir=tmp_path / "c1")
     assert result["strata"]["claude-base vs claude-pedagogical"]["pairs"] == 5
     assert not any("gpt" in k for k in result["strata"])
-    assert len(result["floor_pairs"]) == 13, "5 truncated + 3 fact_removed + 5 buried"
+    assert len(result["floor_pairs"]) == 20, "5 topics x truncated, fact_removed, buried, formatted_emptier"
     assert result["thresholds"] == {"max_flip_rate": 0.20, "floor_min_share": 0.80}
     assert result["floor"]["pairwise_floor_passed"] and result["floor"]["fact_floor_passed"]
+    assert result["floor"]["presentation_floor_passed"]
     assert result["accepted"] is True and "ACCEPTED" in ja.render(result)
+
+
+def test_a_judge_that_rewards_formatting_is_rejected(tmp_path):
+    import judge_acceptance as ja
+    result = ja.acceptance(oracle("pretty"), cache_dir=tmp_path / "c4")
+    assert result["flip_rate"] == 0.0
+    assert result["floor"]["pairwise_floor_passed"], "it handles truncation, removal and burying correctly"
+    assert result["floor"]["formatted_emptier_preferred_count"] == 5
+    assert not result["floor"]["presentation_floor_passed"] and result["accepted"] is False
 
 
 def test_a_consistent_but_useless_judge_is_rejected(tmp_path):
@@ -213,12 +227,12 @@ def test_degradations_are_deterministic_and_targeted():
         assert len(ja.truncate(r["text"]).split()) < 0.5 * len(r["text"].split())
         assert ja.paragraphs(versions["buried"]["text"])[-1] == ja.paragraphs(r["text"])[0]
         assert sorted(versions["buried"]["text"].split()) == sorted(r["text"].split())
-        if case["topic"] in ja.FACT_REMOVALS:
-            removed = versions["fact_removed"]["text"]
-            for start in ja.FACT_REMOVALS[case["topic"]][1]:
-                assert start not in removed
-        else:
-            assert "fact_removed" not in versions
+        removed = versions["fact_removed"]["text"]
+        for old, new in ja.FACT_REMOVALS[case["topic"]][1]:
+            assert old not in removed and (not new or new in removed)
+        pretty = versions["formatted_emptier"]["text"]
+        assert pretty.startswith("## Overview") and "\n- " in pretty and "**" in pretty
+        assert len(pretty.split()) < len(r["text"].split()), "looks more organised, contains less"
     assert ja.degraded_versions(responses[0], cases[responses[0]["case_id"]]) == \
         ja.degraded_versions(responses[0], cases[responses[0]["case_id"]])
 

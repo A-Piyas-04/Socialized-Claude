@@ -794,7 +794,8 @@ def render_structural(s: dict) -> list[str]:
     desc = s.get("structural_descriptors") or {}
     if desc:
         L += ["| Condition | n | median words | median longest block | headings | list items | tables | "
-              "answer-first offset | median longest sentence | passive sentences | share with decorative flag |",
+              "answer-first offset (heuristic) | median longest sentence | passive sentences (heuristic) | "
+              "share with decorative flag |",
               "|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|"]
         L += [f"| {c} | {d['responses']} | {fmt(d['median_words'], 0)} | {fmt(d['median_max_block_words'], 0)} | "
               f"{fmt(d['mean_headings'])} | {fmt(d['mean_list_items'])} | {fmt(d['mean_tables'])} | "
