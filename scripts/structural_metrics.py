@@ -23,6 +23,12 @@ Definitions (all heuristics; the TypeScript port in extension/ must match them e
                restatement test; without it only headings and preambles count.
   visual_count A count of tables plus fenced diagrams and bar blocks. A heuristic, descriptive
                only, and never a gate.
+  visuals_first_half, visuals_second_half
+               visual_count split at the middle block (by block order). Heuristics, never gates.
+  max_table_cell_words
+               The most words in any table cell, header included. A heuristic, never a gate.
+  heading_depth_max
+               The deepest heading level used (0 when there is none). A heuristic, never a gate.
 
 decorative_structure_flags (each a short code):
   heading_thin          a heading whose section holds fewer than 2 sentences
@@ -37,6 +43,15 @@ decorative_structure_flags (each a short code):
                         directly before it
   dense_paragraph       a prose paragraph of 5+ sentences or more than 80 words, or a list
                         item of more than 40 words
+  dense_table_cell      a table whose cells include one of more than 6 words or more than one
+                        sentence
+  wide_table            a table with more than 4 columns
+  bold_as_heading       a paragraph that is a single bold span of 10 words or fewer, followed by
+                        a paragraph or list (a bold title above a code block or table is a label)
+  uncaptioned_specimen  a fenced block that is not a diagram, with no paragraph or list item
+                        directly before it to name it
+  flat_visual           a Mermaid flowchart of 4+ nodes with no classDef, class, style, and no
+                        distinct node shape ([[ ]], (( )), {{ }}, [( )], [/ /], or { })
   empty_transition      a one-sentence paragraph that only announces what follows ("Let's look
                         at...", "Here's how it works."), followed by prose or a heading
   emphasis_overuse      more than 2 bold spans (labels excluded)
@@ -63,6 +78,19 @@ VISUAL_CODE_RE = re.compile(r"```\s*mermaid\b|[█▓▒░]{2,}|-->|──>|│
 DENSE_SENTENCES = 5
 DENSE_PARAGRAPH_WORDS = 80
 DENSE_ITEM_WORDS = 40
+TABLE_CELL_WORDS = 6
+TABLE_MAX_COLUMNS = 4
+BOLD_HEADING_WORDS = 10
+FLAT_VISUAL_NODES = 4
+HEADING_LEVEL_RE = re.compile(r"^\s{0,3}(#{1,6})\s")
+BOLD_LINE_RE = re.compile(r"^\s*(\*\*[^*]+\*\*|__[^_]+__)\s*:?\s*$")
+MERMAID_RE = re.compile(r"^\s*(```|~~~)\s*mermaid\b")
+MERMAID_FLOW_RE = re.compile(r"^\s*(flowchart|graph)\b")
+MERMAID_STYLED_RE = re.compile(r"\bclassDef\b|^\s*class\s|:::|^\s*style\s", re.MULTILINE)
+MERMAID_SHAPE_RE = re.compile(r"\[\[|\(\(|\{\{|\[\(|\[/|\[\\|[A-Za-z0-9_]\{(?!\{)")
+MERMAID_ARROW_RE = re.compile(r"\s*(?:-->|---|-\.->|==>|-\.-|--[^-|>]*-->)\s*(?:\|[^|]*\|)?\s*")
+MERMAID_NODE_RE = re.compile(r"^\s*([A-Za-z0-9_]+)")
+MERMAID_SKIP_RE = re.compile(r"^\s*(flowchart|graph|classDef|class|style|subgraph|end|%%|click|linkStyle)\b")
 PREAMBLE_RE = re.compile(
     r"(?i)^(great|good|excellent|interesting) question\b|^(sure|certainly|of course|absolutely)\b|"
     r"^(let me|let's|i'll|i will) (explain|break|walk|look|start|dive)|^here'?s (a|an|the|how|what|why)\b|"
@@ -251,6 +279,68 @@ def has_caption(blocks: list[Block], index: int) -> bool:
     return previous.kind == "paragraph" and len(sentences(previous.text)) >= 1
 
 
+def has_specimen_label(blocks: list[Block], index: int) -> bool:
+    if index == 0:
+        return False
+    previous = blocks[index - 1]
+    return previous.kind in {"paragraph", "bullet", "numbered"} and bool(words(previous.text))
+
+
+def table_rows(block: Block) -> list[list[str]]:
+    return [table_cells(r) for j, r in enumerate(block.lines) if j != 1]
+
+
+def cell_words(cell: str) -> int:
+    return len(words(strip_inline(cell)))
+
+
+def is_dense_table(block: Block) -> bool:
+    return any(cell_words(c) > TABLE_CELL_WORDS or len(sentences(strip_inline(c))) > 1
+               for row in table_rows(block) for c in row)
+
+
+def is_wide_table(block: Block) -> bool:
+    return max((len(row) for row in table_rows(block)), default=0) > TABLE_MAX_COLUMNS
+
+
+def is_bold_heading(blocks: list[Block], index: int) -> bool:
+    block = blocks[index]
+    if block.kind != "paragraph" or len(block.lines) != 1 or not BOLD_LINE_RE.match(block.lines[0]):
+        return False
+    if len(words(block.text)) > BOLD_HEADING_WORDS or index + 1 >= len(blocks):
+        return False
+    return blocks[index + 1].kind in {"paragraph", "bullet", "numbered"}
+
+
+def mermaid_nodes(block: Block) -> set[str]:
+    nodes: set[str] = set()
+    for line in block.lines[1:-1]:
+        if not line.strip() or MERMAID_SKIP_RE.match(line):
+            continue
+        for part in MERMAID_ARROW_RE.split(line):
+            match = MERMAID_NODE_RE.match(part)
+            if match:
+                nodes.add(match.group(1))
+    return nodes
+
+
+def is_flat_visual(block: Block) -> bool:
+    if block.kind != "code" or not MERMAID_RE.match(block.lines[0]):
+        return False
+    body = block.lines[1:-1]
+    if not body or not MERMAID_FLOW_RE.match(next((l for l in body if l.strip()), "")):
+        return False
+    text = "\n".join(body)
+    if MERMAID_STYLED_RE.search(text) or MERMAID_SHAPE_RE.search(text):
+        return False
+    return len(mermaid_nodes(block)) >= FLAT_VISUAL_NODES
+
+
+def heading_level(block: Block) -> int:
+    match = HEADING_LEVEL_RE.match(block.lines[0]) if block.kind == "heading" else None
+    return len(match.group(1)) if match else 0
+
+
 def is_labelled(block: Block) -> bool:
     body = BULLET_RE.sub(r"\1", block.lines[0], count=1)
     return bool(LABEL_RE.match(body)) or bool(re.match(r"^\s*[^:]{1,40}:\s", block.text))
@@ -283,6 +373,16 @@ def decorative_structure_flags(markdown: str) -> list[str]:
             flags.append("emoji_structure")
         if is_visual(block) and not has_caption(blocks, i):
             flags.append("uncaptioned_visual")
+        if block.kind == "code" and not is_visual(block) and not has_specimen_label(blocks, i):
+            flags.append("uncaptioned_specimen")
+        if block.kind == "table" and is_dense_table(block):
+            flags.append("dense_table_cell")
+        if block.kind == "table" and is_wide_table(block):
+            flags.append("wide_table")
+        if is_bold_heading(blocks, i):
+            flags.append("bold_as_heading")
+        if is_flat_visual(block):
+            flags.append("flat_visual")
         if block.kind == "paragraph" and (len(sentences(block.text)) >= DENSE_SENTENCES
                                            or len(words(block.text)) > DENSE_PARAGRAPH_WORDS):
             flags.append("dense_paragraph")
@@ -329,5 +429,10 @@ def metrics(markdown: str, question: str | None = None) -> dict:
         "passive_sentence_count": sum(bool(PASSIVE_RE.search(s)) for s in prose),
         "answer_first_offset": answer_first_offset(markdown, question),
         "visual_count": sum(is_visual(b) for b in blocks),
+        "visuals_first_half": sum(is_visual(b) for b in blocks[:len(blocks) // 2]),
+        "visuals_second_half": sum(is_visual(b) for b in blocks[len(blocks) // 2:]),
+        "max_table_cell_words": max((cell_words(c) for b in blocks if b.kind == "table"
+                                     for row in table_rows(b) for c in row), default=0),
+        "heading_depth_max": max((heading_level(b) for b in blocks), default=0),
         "decorative_structure_flags": decorative_structure_flags(markdown),
     }

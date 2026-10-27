@@ -34,7 +34,8 @@ def test_every_fixture_has_an_expected_entry():
 
 
 @pytest.mark.parametrize("name", ["prose_two_sentences", "prose_causal_chain", "process_steps",
-                                  "comparison_table", "labelled_list", "code_block", "branching_diagram"])
+                                  "comparison_table", "labelled_list", "code_block", "branching_diagram",
+                                  "scannable_table", "classed_diagram"])
 def test_legitimate_answers_produce_no_flags(name):
     assert m(name)["decorative_structure_flags"] == []
 
@@ -49,6 +50,11 @@ def test_legitimate_answers_produce_no_flags(name):
     ("emphasis_overuse", "emphasis_overuse"),
     ("uncaptioned_visual", "uncaptioned_visual"),
     ("wall_of_text", "dense_paragraph"),
+    ("dense_table_cell", "dense_table_cell"),
+    ("wide_table", "wide_table"),
+    ("bold_as_heading", "bold_as_heading"),
+    ("flat_visual", "flat_visual"),
+    ("uncaptioned_specimen", "uncaptioned_specimen"),
 ])
 def test_each_flag_fires_on_its_fixture(name, flag):
     assert flag in m(name)["decorative_structure_flags"]
@@ -116,6 +122,31 @@ def test_dense_list_item_and_legend_emoji_are_distinct():
     assert "emoji_structure" in heading and "heading_thin" not in heading
     bare = "- ✅ only one marker\n- still one marker\n"
     assert "emoji_structure" in sm.decorative_structure_flags(bare)
+
+
+def test_bold_title_above_a_block_is_a_label_not_a_heading():
+    specimen = "**Example: the client setting**\n\n```toml\ntimeout = 30\n```\n"
+    assert sm.decorative_structure_flags(specimen) == []
+
+
+def test_sequence_and_decision_diagrams_are_not_flat():
+    sequence = ("Each arrow is one message.\n\n```mermaid\nsequenceDiagram\n  A->>B: one\n  B->>C: two\n"
+                "  C->>D: three\n```\n")
+    decision = ("Writes go to the primary.\n\n```mermaid\nflowchart TD\n  Req --> Q{Write?}\n"
+                "  Q --> Primary\n  Q --> Replica\n```\n")
+    assert "flat_visual" not in sm.decorative_structure_flags(sequence)
+    assert "flat_visual" not in sm.decorative_structure_flags(decision)
+
+
+def test_new_heuristics_are_labelled_and_never_gate(tmp_path, capsys):
+    path = tmp_path / "late_visual.md"
+    path.write_text("## One\n\nIntro sentence here. It sets up the gap.\n\n### Two\n\nThe table shows the gap.\n\n"
+                    "| Kind | Cost | Risk |\n|---|---|---|\n| A | low | none |\n", encoding="utf-8")
+    assert lint_response.main([str(path)]) == 0
+    out = capsys.readouterr().out
+    for field, value in (("visuals_first_half", 0), ("visuals_second_half", 1),
+                         ("max_table_cell_words", 1), ("heading_depth_max", 3)):
+        assert f"{field}: {value}  (heuristic; descriptive only, never gates anything)" in out
 
 
 def test_visual_count_is_labelled_and_never_gates(tmp_path, capsys):

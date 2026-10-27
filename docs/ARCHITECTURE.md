@@ -38,7 +38,7 @@ socialized/
 | Level | What | When it is in Claude's context |
 |---|---|---|
 | 1 | `name` + `description` (164 characters) | Always, in every chat where the skill is enabled |
-| 2 | `SKILL.md` body (about 350 lines) | Only after Claude decides the request matches the description |
+| 2 | `SKILL.md` body (about 395 lines) | Only after Claude decides the request matches the description |
 | 3 | Reference files | Only if Claude chooses to read one for the current request |
 
 `SKILL.md` alone is a complete working skill. The references cover harder cases,

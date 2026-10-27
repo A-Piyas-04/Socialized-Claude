@@ -47,14 +47,17 @@ specific gap it fills for this reader.
   sentences and nothing else.
 <!-- /op:presentation -->
 <!-- op:visual -->
-- **A visual** fits when the content has a shape that would take three or more
-  sentences to describe, and the visual replaces those sentences. Render it as
-  markdown. Build an artifact only when the person explicitly asks for one.
+- **A visual** fits each idea whose content has a shape that would take three or
+  more sentences to describe, and it replaces those sentences. There is no cap
+  per answer; the cost stays flat because each figure deletes its prose. Spend
+  the first one on the hardest idea. Render it as markdown. Build an artifact
+  only when the person explicitly asks for one.
 <!-- /op:visual -->
 <!-- op:close -->
 - **A takeaway** fits an answer of three or more sections and any teaching
-  request. A check question fits teaching, beginners, and confusion follow-ups.
-  A quick, practitioner, or expert answer ends when the content ends.
+  request. A check question, with its answer, fits teaching, beginners, and
+  confusion follow-ups. A quick, practitioner, or expert answer ends when the
+  content ends.
 <!-- /op:close -->
 
 ## 2. Resolving conflicts
@@ -97,7 +100,8 @@ to lowest:
 - An example.
 <!-- /op:examples -->
 <!-- op:visual -->
-- The one visual that replaced prose. Cut any further visual before this one.
+- Visuals that replaced prose. When one must go, cut the visual on the easiest
+  idea and keep the one on the hardest.
 <!-- /op:visual -->
 <!-- op:close -->
 - The takeaway sentence. Cut the check question before the takeaway.
@@ -150,8 +154,8 @@ produced these failures. The rules in `SKILL.md` exist to prevent them.
 - **Decorative structure.** Headings over one-sentence sections, bullets that
   chop one continuous argument into fragments, a table with one meaningful
   column, or bolding so frequent that nothing stands out.
-- **Emoji as structure.** Emoji used as bullet markers, section icons, or status
-  indicators.
+- **Emoji as structure.** Emoji used as bullet markers or section icons, or a
+  status marker that is not from the legend or stands alone in its list.
 - **Whitespace padding.** Every sentence its own paragraph when the sentences
   form one continuous argument. A unit break marks an idea break, not a line
   break.
@@ -159,6 +163,19 @@ produced these failures. The rules in `SKILL.md` exist to prevent them.
   announcing what comes next.
 - **A wall of text.** A paragraph past four sentences, or a list item that
   carries a second idea. Split it and leave the blank line.
+- **Effort that decays.** The first screen gets spacing and figures, and the
+  back half reverts to dense paragraphs. Give the last section the treatment of
+  the first.
+- **A congested table.** Sentences in cells, more than four columns, or a header
+  that names nothing. Shorten the cells and move the rest to a list.
+- **A bold line for a heading.** A bold phrase on its own line that announces a
+  section. Use `##` or `###`.
+- **A specimen left inline.** Sample data, a snippet, or an output folded into a
+  sentence. Lift it into a titled fenced block.
+- **Depth with no layer.** Specialist detail interleaved with the core thread.
+  Put it in a **Deeper:** block the reader can skip.
+- **Identifiers at body weight.** A path, flag, or product name in plain text
+  mid-sentence. Put it in backticks.
 <!-- /op:presentation -->
 <!-- op:visual -->
 - **A decorative diagram.** A figure that restates a shape the prose already
@@ -170,12 +187,32 @@ produced these failures. The rules in `SKILL.md` exist to prevent them.
 - **An unrequested artifact.** An HTML, SVG, or interactive file when the
   person did not explicitly ask for an artifact, an SVG, or something to click.
   "Explain this visually" is a request for the markdown form.
+- **One diagram carrying the whole answer.** A single early figure, then prose
+  for every later and harder idea. Each idea with a shape gets its own.
+- **A figure whose parts all look alike.** Identical boxes with nothing marking
+  the key node, the peers, or a different kind of thing.
+- **Structure without time.** A box-and-arrow map of a process whose point is
+  order or waiting. Use a `sequenceDiagram`.
+- **Colour used once.** One coloured element, so nothing else in the answer is
+  encoded. Name one code and reuse it in every figure.
+- **Quantities left in sentences.** Ratios and ranges stated as numbers when
+  their scale is the point. Draw the bars.
 <!-- /op:visual -->
 <!-- op:close -->
 - **A quiz on a quick answer.** A check question after a fact, a lookup, or an
   expert reply. Those end when the content ends.
-- **A closing summary.** A paragraph that repeats the body. The takeaway is one
-  sentence or three items, and it is the last unit.
+- **A question nobody can check.** An open prompt with no options and no answer.
+  Give three options or a short factual answer, then the answer itself.
+- **A recap instead of a compression.** A closing paragraph that restates the
+  body. The takeaway is an arrow chain or one line of 25 words or fewer.
 <!-- /op:close -->
+<!-- op:examples -->
+- **An abandoned example.** A case introduced early that vanishes in the middle
+  sections. Carry it into every section that teaches.
+<!-- /op:examples -->
+<!-- op:mechanism -->
+- **Motivation given once.** The obvious approach and its failure shown for the
+  first mechanism only. Repeat the move for each one.
+<!-- /op:mechanism -->
 - **Over-expansion.** Every operation applied to every answer. The goal is an
   answer that is easier to understand, not one that is longer.

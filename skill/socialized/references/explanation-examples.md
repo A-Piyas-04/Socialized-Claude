@@ -23,7 +23,9 @@ add nothing.
 <!-- /op:mechanism -->
 - Follow-up confusion: repairing one link
 <!-- op:visual -->
-- Visual forms: flow, contrast, proportion, change over time
+- Visual forms: flow, contrast, proportion, change over time, order in time,
+  differentiated parts, two states, specimens, scannable tables, a checkable
+  question
 - Restraint: no visual, and no artifact unless asked
 - Opt-in: one artifact when the person asks
 <!-- /op:visual -->
@@ -276,9 +278,13 @@ the working one, then a paragraph describing the difference.
 **Better:** The only change is the timeout, and the second block is the one that
 finishes.
 
+**Broken: times out**
+
 ```diff
 - timeout = 1
 ```
+
+**Working: finishes**
 
 ```diff
 + timeout = 30
@@ -304,9 +310,98 @@ attempt is dropped.
 
 | Moment | Attempt | What the reader sees |
 |---|---|---|
-| t = 0 | send | request leaves |
-| t = 1 | wait | no reply |
-| t = 2 | drop | ❌ the caller gives up |
+| t = 0 | send | ✅ request leaves |
+| t = 1 | wait | ⚠️ no reply yet |
+| t = 2 | drop | ❌ caller gives up |
+
+The answer then ends with one line: "Want an interactive version you can step
+through?"
+
+### Order in time
+
+**Weak:** a flowchart of client, server, and database boxes with unlabelled
+arrows. It shows what connects, not what happens first or what waits.
+
+**Better:** The caption says the client waits on the server, which waits on the
+database, and only the last arrow carries data back.
+
+```mermaid
+sequenceDiagram
+  Client->>Server: request arrives
+  Server->>Database: query on cache miss
+  Database-->>Server: rows
+  Server-->>Client: response
+```
+
+### A figure whose parts differ
+
+**Weak:** five identical boxes, so the reader reads every label to find the one
+that matters.
+
+**Better:** The caption names the code: blue boxes are caches, grey boxes are
+storage, and the double-bordered box is the one that fails.
+
+```mermaid
+flowchart LR
+  App --> L1[L1 cache]
+  L1 --> L2[[L2 cache]]
+  L2 --> Disk[Disk]
+  classDef cache fill:#dbeafe
+  classDef store fill:#e5e7eb
+  class L1,L2 cache
+  class Disk store
+```
+
+### Two states at one moment
+
+**Weak:** "Before the fix the counter reads 3; after the fix it reads 4, because
+the second write is no longer lost."
+
+**Better:** Each row is one element; the only row that differs is the counter.
+
+| Element | Before the fix | After the fix |
+|---|---|---|
+| Writes sent | 2 | 2 |
+| Counter | ❌ 3 | ✅ 4 |
+
+### A specimen lifted out of the prose
+
+**Weak:** "Set it with something like timeout equals thirty in the client
+block, then the output shows a 200."
+
+**Better:** The narrative stays in prose; the specimen sits in its own titled
+block the reader can skip or copy.
+
+**Example: the client setting that stops the timeout**
+
+```toml
+[client]
+timeout = 30
+```
+
+### A table built for scanning
+
+**Weak:** cells holding whole sentences, six columns, and a header row that
+reads like the body.
+
+**Better:** three columns, one short idea per cell, and the header naming each
+dimension.
+
+| Cache | Write cost | Risk on crash |
+|---|---|---|
+| Write-through | slow | none |
+| Write-back | fast | lost writes |
+
+### A question the reader can check
+
+**Weak:** "What do you think would happen if the cache crashed?"
+
+**Better:**
+
+> Which write policy can lose data on a crash?
+> A. write-through  B. write-back  C. neither
+>
+> **Answer:** B, because its writes sit only in the cache until flushed.
 
 ## Restraint: markdown, and no artifact unless asked
 

@@ -130,3 +130,17 @@ needs to decide. No progress narrative.
 - SKILL.md compactness guard raised from 300 to 380 rendered lines.
 - `visual_count` is a heuristic and never a gate. `dense_paragraph` and
   `uncaptioned_visual` are flags.
+- Visual budget (user, 2026-10-27, second report): the "one per section, two per
+  answer" cap is superseded. Each idea with a shape gets one visual and each
+  visual deletes the prose it replaces. The hardest section gets its visual
+  first; the last third gets at least the first third's support.
+- Interactive offer (user, 2026-10-27): artifacts stay opt-in. Content that
+  changes over time gets a state table and one closing line offering an
+  interactive version.
+- Mermaid `classDef` classes carry colour as one code per answer, named once.
+  The emoji legend stays limited to status in lists and tables.
+- SKILL.md compactness guard raised from 380 to 460 rendered lines (394 now).
+- New flags: `dense_table_cell`, `wide_table`, `bold_as_heading`,
+  `uncaptioned_specimen`, `flat_visual`. New heuristics that never gate:
+  `visuals_first_half`, `visuals_second_half`, `max_table_cell_words`,
+  `heading_depth_max`.

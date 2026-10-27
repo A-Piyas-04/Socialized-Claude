@@ -72,7 +72,7 @@ def test_required_reference_files_exist_and_are_linked():
 def test_skill_body_is_compact():
     _, body, _ = lib.split_frontmatter(read(lib.SKILL_DIR / "SKILL.md"))
     rendered = lib.render_markers(body, lib.VARIANTS["full"])
-    assert rendered.count("\n") < 380, "SKILL.md should stay well under the 500-line limit"
+    assert rendered.count("\n") < 460, "SKILL.md should stay well under the 500-line limit"
 
 
 def test_skill_never_exposes_research_treatment_ids():
@@ -349,15 +349,29 @@ def test_visual_rules_name_actions_and_keep_artifacts_opt_in():
     assert "explicitly asks" in block
     joined = " ".join(rules)
     assert "artifact" in joined.lower()
+    for required in ("for each such idea", "hardest section", "sequenceDiagram", "classDef",
+                     "one colour code", "interactive"):
+        assert required in block, required
+    assert "at most two in an answer" not in block, "the per-answer cap was replaced by a per-idea budget"
 
 
 def test_close_rules_name_actions():
     text = read(lib.SKILL_DIR / "SKILL.md")
     block = text.split("<!-- op:close -->", 1)[1].split("<!-- /op:close -->", 1)[0]
     rules = [line.strip()[2:] for line in block.splitlines() if line.strip().startswith("- ")]
-    assert len(rules) >= 4
+    assert len(rules) >= 5
     for rule in rules:
         assert not rule.lower().startswith(("do not", "don't", "never", "avoid")), rule
+    for required in ("three lettered", "**Answer:**", "25 words"):
+        assert required in block, required
+
+
+def test_presentation_names_scanning_rules():
+    text = read(lib.SKILL_DIR / "SKILL.md")
+    block = text.split("<!-- op:presentation -->", 1)[1].split("<!-- /op:presentation -->", 1)[0]
+    for required in ("backticks", "`##`", "`###`", "bold title line", "six words", "four columns",
+                     "**Deeper:**", "last section"):
+        assert required in block, required
 
 
 def test_plain_language_rules_name_actions():

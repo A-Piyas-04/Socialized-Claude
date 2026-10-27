@@ -68,6 +68,12 @@ on a detector artifact. It does not show that structure helps.
 | Number the headings of an answer with three or more sections, and put a one-line map after the answer sentence. | Hypothesis (L4) | User report (2026-10-27), point 7. A scoped exception to the plain-language ban on preview sentences. |
 | Move specialist code and identifiers into a fenced block or a **For implementers:** blockquote after the narrative. | Hypothesis (L4) | User report (2026-10-27), point 15. |
 | Put the main point first in a section and gather minor caveats at the end; separate major topics with a horizontal rule. | Hypothesis (L4) | User report (2026-10-27), point 16. |
+| Wrap every identifier, path, flag, command, and product-specific token in backticks, and gloss it the first time. | Hypothesis (L4) | Second user report (2026-10-27), item 12. |
+| Use `##` for a major section and `###` for a subsection, with no skipped level and no bold line standing in for a heading. | Hypothesis (L4) | Second user report, item 14. The `bold_as_heading` flag checks the second half. |
+| Put specialist depth in a **Deeper:** or **For implementers:** block, and keep the narrative complete without it. | Hypothesis (L4) | Second user report, item 16. |
+| Lift every example, sample, snippet, and quoted structure into its own fenced block under a bold title line. | Hypothesis (L4) | Second user report, item 18. The `uncaptioned_specimen` flag checks a label is present. |
+| Tables: at most four columns; each cell one idea of six words or fewer; the header names the dimension. | Engineering choice, from Hypothesis (L4) | Second user report, item 19. The thresholds are a choice; `dense_table_cell` and `wide_table` encode them. |
+| Give the last section the same paragraph sizes, visuals, and spacing as the first. | Hypothesis (L4) | Second user report, item 7. `visuals_first_half` and `visuals_second_half` describe it and never gate. |
 | Failure modes: decorative structure, emoji as decoration, whitespace padding, empty transitional units, a wall of text. | Engineering choice | Encoded as linter flags in `scripts/structural_metrics.py`. The emoji rule is narrowed below. |
 
 The risk these rules carry is fluency without understanding. The judge reports fact capture
@@ -149,21 +155,28 @@ user's instruction on 2026-10-27: markdown everywhere, artifacts on an explicit 
 
 | Rule | Label | Basis |
 |---|---|---|
-| Draw when the content has a shape that would take three or more sentences, and delete those sentences. | Hypothesis (L4) | User report (2026-10-27), points 1, 3 and 5. |
+| Draw one visual for each idea whose content has a shape that would take three or more sentences, and delete those sentences. | Hypothesis (L4) | User report (2026-10-27), points 1, 3 and 5; second report, items 1 and 8. |
 | Use the smallest form: an arrow chain, a two-column or diff contrast, a Mermaid block of at most ten nodes, or block-character bars. | Engineering choice | Keeps the token cost to the visual that replaces prose. |
-| At most one visual per section and two per answer; none in a one- or two-sentence answer or an expert lookup. | Engineering choice | Same budget. |
+| No per-answer cap. Give the hardest section its visual before any section gets a second, and give the last third at least the support of the first. None in a one- or two-sentence answer or an expert lookup. | Engineering choice | Replaces the earlier "one per section, two per answer" cap (superseded, user decision 2026-10-27). Each visual deletes its prose, so the cost stays flat. |
+| Order in time goes in a `sequenceDiagram` with each arrow labelled by its trigger; parallel work is shown as branches with a note. | Hypothesis (L4) | Second user report, item 3. |
+| Mark the load-bearing node with a distinct shape; give peers one shared `classDef` class and a different kind of thing its own. | Hypothesis (L4) | Second user report, item 2. The `flat_visual` flag catches a flowchart of four or more nodes with neither. |
+| Two states at one moment go side by side: a two-column table or two labelled fenced blocks. | Hypothesis (L4) | Second user report, item 5. |
+| One colour code per answer, named once in a legend line and reused in every visual. | Hypothesis (L4) | Second user report, item 6. |
+| Every range, ratio, or magnitude comparison becomes bars. | Hypothesis (L4) | Second user report, item 13. |
 | Caption every visual with what it shows and the one thing to notice. | Hypothesis (L4) | User report, point 14. The `uncaptioned_visual` flag checks the sentence is present. |
 | Mark status only with ✅ ❌ ⚠️ 🟢 🟡 🔴, at least two distinct markers in the same list or table, and name them in the caption. Headings stay words. | Hypothesis (L4) | User report, point 2. Narrows the earlier emoji ban (addendum): legend markers in a list are exempt from `emoji_structure`; a heading is not. Recorded as a deviation. |
-| Show change over time as one table row per moment. | Hypothesis (L4) | User report, point 4. Markdown cannot be clicked; an artifact covers that only when asked. |
+| Show change over time as one table row per moment, then end with one line offering an interactive version. | Hypothesis (L4) | User report, point 4; second report, item 4. Markdown cannot be clicked; the offer lets the person opt in to an artifact with one word (user decision 2026-10-27). |
 | On an explicit artifact request, build one captioned artifact and keep a short markdown answer. The next reply returns to markdown unless the request was standing. | Engineering choice | User instruction, 2026-10-27. |
 
-`visual_count` is a heuristic and never a gate, same as `answer_first_offset` and `passive_sentence_count`.
+`visual_count`, `visuals_first_half`, `visuals_second_half`, `max_table_cell_words` and
+`heading_depth_max` are heuristics and never gate, same as `answer_first_offset` and
+`passive_sentence_count`.
 
 ## 10. Closing (`op:close`) and the running example
 
 | Rule | Label | Basis |
 |---|---|---|
-| End a long or teaching answer with a takeaway of one sentence or at most three items. | Hypothesis (L4) | User report, point 11. |
-| End teaching, beginner, and confusion follow-ups with one question answerable from the explanation. Quick, practitioner, and expert answers end when the content ends. | Hypothesis (L4) | User report, point 10. |
-| Carry one example through the answer. For a beginner concept question, sentence one is a concrete situation and sentence two is the answer. | Hypothesis (L4) | User report, points 8 and 12. |
-| When a design is not the obvious one, name the approach a reader would try first and how it fails, before the mechanism. | Hypothesis (L4) | User report, point 17. |
+| End a long or teaching answer with a takeaway compressed to an arrow chain or one line of 25 words or fewer, written fresh. | Hypothesis (L4) | User report, point 11; second report, item 11. |
+| End teaching, beginner, and confusion follow-ups with one verifiable question (three lettered options or one short factual answer), then its answer led by **Answer:**. Quick, practitioner, and expert answers end when the content ends. | Hypothesis (L4) | User report, point 10; second report, items 9 and 10. |
+| Carry one example through every section that teaches. For a beginner concept question, sentence one is a concrete situation and sentence two is the answer. | Hypothesis (L4) | User report, points 8 and 12; second report, item 15. |
+| For every mechanism, not only the first, name the approach a reader would try first and how it fails. | Hypothesis (L4) | User report, point 17; second report, item 17. |

@@ -2,6 +2,28 @@
 
 ## Unreleased
 
+### Skill (Socialized-Claude, visual depth)
+- Visual budget: one visual per idea with a shape, no per-answer cap (the
+  earlier two-per-answer cap is superseded). The hardest section gets its visual
+  first, and the last third is supported at least as well as the first.
+- Visuals show time (`sequenceDiagram` with labelled arrows), mark the key node
+  with a distinct shape, group peers with shared `classDef` classes, use one
+  colour code per answer, place two states side by side, and draw every
+  quantity as bars. Content that changes over time ends with a one-line offer of
+  an interactive version; artifacts stay opt-in.
+- Presentation: backticked and glossed identifiers, `##`/`###` hierarchy with no
+  bold line as a heading, **Deeper:** blocks over a complete narrative, specimens
+  lifted into titled fenced blocks, tables capped at four columns and six words
+  per cell, and the same treatment for the last section as the first.
+- Close: a verifiable question (three options or one short answer) followed by
+  its **Answer:**, and a takeaway compressed to an arrow chain or 25 words.
+- The running example reaches every teaching section; the obvious-approach move
+  repeats for every mechanism.
+- Linter: `dense_table_cell`, `wide_table`, `bold_as_heading`,
+  `uncaptioned_specimen`, `flat_visual`; heuristics `visuals_first_half`,
+  `visuals_second_half`, `max_table_cell_words`, `heading_depth_max` never gate.
+  Compactness guard raised to 460 rendered lines.
+
 ### Skill (Socialized-Claude)
 - The skill id is `socialized` and the display name is Socialized-Claude. The id
   cannot contain "claude" (reserved-word check). `evaluation/runs/pilot16-cc`
