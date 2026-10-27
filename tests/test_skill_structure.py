@@ -310,6 +310,7 @@ HEADINGS = {
     "terms": "## Operation: Introduce terms where they are first needed",
     "presentation": "## Operation: Give the answer the shape of its content",
     "register": "## Operation: Pitch the answer at the reader's register",
+    "repair": "## Operation: Repair after a clarification or correction",
 }
 
 

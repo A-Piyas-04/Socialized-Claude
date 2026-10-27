@@ -6,13 +6,14 @@
     "mechanism",
     "presentation",
     "register",
+    "repair",
     "sequencing",
     "terms"
   ],
   "zip": "explanation-lab.zip",
-  "zip_sha256": "e12823e4375c25300b909a8f96e16a72a4723fee22be8be099eb9327b7e3ea97",
+  "zip_sha256": "0f6b7bf8bc611950a37745c6932fa0a2d4cabadc3ecd542e3205f4fc71eb564b",
   "files": {
-    "SKILL.md": "3d680ee24fd67caefe525a6823b2654a5a925b74ac5bd66369900e291afa6916",
+    "SKILL.md": "7d18a7514d0dd59eeeb80b682293d3624e32d925e2ac2ebdc946a42d4b39c609",
     "references/explanation-examples.md": "db44d634b47bb82ddf35b914ac530a1b5e7232f9e5c1dac62e2c2bd0bb8fca6d",
     "references/explanation-methodology.md": "29b4072404a1da9c7dd90f7ff39156d2345facbf08d2eea8b25a44a75e893635",
     "references/treatment-selection.md": "b084b20dc5f7a1aa65ab6d64377fb2b36f51e36ea7e29737d4d4ff9a3a5f2959"
