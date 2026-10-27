@@ -5,13 +5,14 @@
     "examples",
     "mechanism",
     "presentation",
+    "register",
     "sequencing",
     "terms"
   ],
   "zip": "explanation-lab.zip",
-  "zip_sha256": "808e6520dbfe4dcdf8df8afd5b54c0609559c2d43f3dac24a4a68483c4e202e2",
+  "zip_sha256": "e50c12dd68b87594b158d3ef1cff9cc0d2ea259f372e63bd425e558db11bf353",
   "files": {
-    "SKILL.md": "299158e5e00bf4a2f48715c13da2c408a4cd36165be757d3bf8e17c8ddc51ee1",
+    "SKILL.md": "2bd040c13d040f0f6887d55f3648b88804876db20172e66a7c1a457785271e9a",
     "references/explanation-examples.md": "db44d634b47bb82ddf35b914ac530a1b5e7232f9e5c1dac62e2c2bd0bb8fca6d",
     "references/explanation-methodology.md": "29b4072404a1da9c7dd90f7ff39156d2345facbf08d2eea8b25a44a75e893635",
     "references/treatment-selection.md": "b084b20dc5f7a1aa65ab6d64377fb2b36f51e36ea7e29737d4d4ff9a3a5f2959"

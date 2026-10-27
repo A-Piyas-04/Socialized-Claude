@@ -18,7 +18,7 @@ REPO_ROOT = Path(__file__).resolve().parents[1]
 SKILL_DIR = REPO_ROOT / "skill" / "explanation-lab"
 DIST_DIR = REPO_ROOT / "dist"
 
-OPERATIONS = ("sequencing", "mechanism", "examples", "terms", "presentation")
+OPERATIONS = ("sequencing", "mechanism", "examples", "terms", "presentation", "register")
 
 # Temporary skill variants for ablation runs. "full" is the production build.
 VARIANTS: dict[str, frozenset[str]] = {

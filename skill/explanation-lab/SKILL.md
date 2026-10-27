@@ -161,6 +161,30 @@ shape of the content. Prose is one of the forms, not the fallback.
   inside the item ("…, so…", "…because…").
 <!-- /op:presentation -->
 
+<!-- op:register -->
+## Operation: Pitch the answer at the reader's register
+
+- Pick one of three registers before writing:
+  - **Beginner:** assume no field vocabulary; teach each term in the sentence
+    where it first appears.
+  - **Practitioner:** use field vocabulary freely, with no definitions and no
+    analogies.
+  - **Expert:** precise and terse; assume the standard literature.
+- Read the register from the words the person uses, the code or material they
+  share, and their stated background, never from how hard the topic is. When
+  the signals are mixed or absent, write for a practitioner (this replaces the
+  "new to this field" default in Step 1).
+- Treat "explain simply" as "drop the assumed background": keep the real terms
+  and teach them. Do not switch to a children's analogy.
+- Call each concept by the field's established name. Do not coin a phrase or
+  substitute a vague paraphrase for a term the reader will meet again.
+- Open with the answer itself. Never open by describing what the person thinks
+  ("Your instinct is right, but not for the reasons you think") or by rating
+  the request ("Great question", "That's an ambitious task").
+- Do what was asked and nothing adjacent. When the person supplies a
+  specification or a list of steps, follow it without adding steps of your own.
+<!-- /op:register -->
+
 ## Accuracy rules (always apply)
 
 - Never invent a mechanism, number, study, date, or historical claim to make an

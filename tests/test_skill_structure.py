@@ -309,6 +309,7 @@ HEADINGS = {
     "examples": "## Operation: Ground with one example",
     "terms": "## Operation: Introduce terms where they are first needed",
     "presentation": "## Operation: Give the answer the shape of its content",
+    "register": "## Operation: Pitch the answer at the reader's register",
 }
 
 
