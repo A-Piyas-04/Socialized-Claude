@@ -57,3 +57,28 @@ needs to decide. No progress narrative.
 - A0.4: an item is non-diagnostic if the judge answers it correctly with no text in more than half
   of the attempts (options shuffled, temperature 1.0). Free-text items are carried through
   unscreened and excluded from the survival rate.
+- A0.2: the stored CLAUDE_CODE_OAUTH_TOKEN was 3 lines with internal spaces and no `sk-ant-oat`
+  prefix (401 after stripping whitespace). collect_cc now refuses any token with internal
+  whitespace instead of mangling it. Only surrounding whitespace is stripped.
+- A0.2: the VS Code extension updated Claude Code mid-session and briefly removed the binary. The
+  harness prefers a pinned install (`%LOCALAPPDATA%\smart-claude\cc-2.1.311`, npm
+  `@anthropic-ai/claude-code@2.1.311`) and stops a run if the version changes between rows.
+- A0.2 multi-turn: rows are sent as `--input-format stream-json` user turns, each only after the
+  previous turn's result, in one session. Claude Code emits an init event per turn; each is verified
+  and all must share one session id. Transcripts go to `responses/<row>.turns.json`.
+- A0.2: each run freezes its skill build under `<run>/skill_build/`; pilot16-cc pins V0.
+- A0.3: free tier, 2026-10-27: Pro-class models return 429 on the first call; gemini-3.8-flash is
+  listed but mostly 503; gemini-3.6-flash serves but has a 20 requests/day/model cap; requests for
+  3.5 and 3.7 are silently answered by 3.6 and 3.8. Default judge is gemini-3.6-flash; the backend
+  refuses rerouted answers and stops at once on a per-day 429.
+- A0.3: the judge acceptance test runs on the 30 archive answers (judge_acceptance.py), because no
+  smoke output exists yet.
+- A1: explanation-methodology.md also carried `op:structure` markers and was renamed with the rest.
+- A3/A10.3: scope discipline folded into op:register. The gloss-or-omit rule for names and
+  foreign terms lives in the always-on accuracy rules, not in op:register.
+- A3: register's practitioner default explicitly overrides Step 1's "new to this field" default.
+- A8: SKILL.md compactness test raised from 250 to 300 rendered lines (277 with nine operations).
+- A9: 12 variants (10 from the brief plus persist and wrep) and 45 cases (33 + 8 + 2 persistence +
+  2 work_report).
+- A6: archive answers lost their markdown headings in copying; recorded as a caveat in the
+  structural baseline.
