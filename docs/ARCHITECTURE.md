@@ -48,8 +48,9 @@ so a short factual exchange never pays their context cost.
    one to three missing ideas, and the requested size.
 3. **Size the answer.** Defaults per request type. An explicit length request
    overrides all of them.
-4. **Operations.** Dependency ordering, mechanism, example, terms, structure.
-   Each carries its own "use when" and "skip when" rules.
+4. **Operations.** Dependency ordering, mechanism, example, terms,
+   presentation, register, repair, persistence, work report. Each carries its
+   own "use when" and "skip when" rules, and every rule names an action.
 5. **Accuracy rules.** No invented mechanisms or facts, hedges preserved,
    simplify expression rather than substance.
 6. **Check before sending (silently).**
@@ -83,13 +84,17 @@ Labels follow `research/EVIDENCE_AUDIT.md`.
 | Ban on signposting and naming-without-teaching | **Observed**: T2's template produced 13 signposting phrases and one false dependency claim | Evidence-driven guardrail |
 | Ban on meta-commentary; hedges preserved; no certainty creep | **Observed**: T3 produced 8 meta-comments, 4 certainty and 2 hedge-loss flags, and a corrupted phrase | Evidence-driven guardrail |
 | Example rules (one, mapped, illustrative numbers marked) | **Observed**: T4's added examples carried invented specifics; worked-example literature (L2) | Guardrail plus hypothesis |
-| Formatting only for real shape (from T5) | Lab hypothesis H3 and illusion-of-fluency literature (L2) | Engineering choice |
+| Presentation: answer first, one idea per unit, form matched to shape (from T5) | V0's deferral rested on a detector artifact (**Observed**: 8/10 serious T5 verdicts were list-number triggers); illusion-of-fluency literature (L2) motivates the guardrail | **Provisional (hypothesis)** |
+| Register: three registers, practitioner default, no characterising the person | User reports; expertise-reversal literature (L2) | **Provisional (hypothesis)** |
+| Repair, persistence, work reports | User reports (not held in this repository) | **Provisional (hypothesis)** |
+| Citation integrity | Second-hand figure quoted in the V1 addendum | Engineering choice |
 | Audience calibration (from T6) | Expertise-reversal literature (L2); T6 itself was barely exercised (6/7 clean outputs unchanged) | Engineering choice |
 | Length budget and scope gate | The brief's anti-patterns; Experiment 2 length inflation | Engineering choice |
 | 196-character description | claude.ai Help Center limit of 200 characters | Platform requirement |
 
 **Nothing in the skill is validated as improving comprehension.** The evaluation
-framework exists to test it.
+framework exists to test it. Every V1 rule and its label is listed in
+`COMMUNICATION_GRAMMAR.md`.
 
 ## Ablation support
 
@@ -113,7 +118,14 @@ when all of them are enabled.
 | `seq` | ordering |
 | `mech` | mechanism |
 | `seq-mech` | ordering + mechanism |
-| `full` | all five (production) |
+| `pres` | presentation |
+| `seq-pres` | ordering + presentation |
+| `seq-mech-pres` | ordering + mechanism + presentation |
+| `reg` | register |
+| `rep` | repair |
+| `persist` | persistence |
+| `wrep` | work report |
+| `full` | all nine (production) |
 
 All variants keep **identical name and description**, so automatic activation
 sees the same metadata. Tests enforce this, and also that each variant contains
@@ -164,6 +176,16 @@ API-key variables, SDK imports, and HTTP-client code inside the skill folder.
 
 See `evaluation/README.md`. Conditions A (normal), B (strong generic prompt),
 C (skill, natural and explicit), and optional D (skill text pasted as a prompt)
-run by hand. Responses are blinded and scored on 9 anchored dimensions, with
-separate accuracy coding, adherence codes, and ranks. Activation is recorded by
-the operator. Comprehension is measured only with human pre/post/transfer tests.
+can be run by hand. Responses are blinded and scored on 11 anchored dimensions,
+with separate accuracy coding, adherence codes, and ranks. Activation is
+recorded by the operator. Comprehension is measured only with human
+pre/post/transfer tests.
+
+The automated harness (`evaluation/AUTOMATED_HARNESS.md`) collects the same run
+sheets with Claude Code instead: one sandbox per row, the arm verified from the
+`system/init` event, multi-turn cases sent as live turns in one session, and each
+run pinned to its own frozen skill build (`<run>/skill_build/`). An automated
+non-Anthropic judge then screens fact capture and both-orders pairwise
+preference, and `scripts/lint_response.py` adds structural descriptors. These
+characterise the skill text on the Claude Code surface, are screening
+instruments rather than the human evaluation, and never feed S1–S7.

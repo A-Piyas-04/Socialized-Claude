@@ -58,7 +58,19 @@ Read this before drawing any conclusion from using or testing the skill.
   equivalent.
 - **Rater scores are judgements.** They can be biased by length, style, or
   recognising a condition. Blinding and anchors help but do not eliminate this.
-- **The pilot is small.** 33 cases, 2 raters, and 12–18 comprehension
+- **The presentation, register, repair, persistence and work-report operations
+  are untested hypotheses, and the structural linter measures form only.** No
+  data of any kind supports them yet. A response can pass every linter check and
+  still be wrong; the linter cannot tell.
+- **Automated results characterise Claude Code, not claude.ai.** The harness
+  runs `claude -p`, whose system prompt and scaffolding differ from claude.ai's;
+  activation rates in particular do not transfer. The judge is a free-tier
+  non-Anthropic model with a small daily quota, a screening instrument whose own
+  reliability is reported as its order-flip rate.
+- **The operations reach beyond the skill's trigger.** Persistence and work
+  reports matter outside explanations, but the skill's description only triggers
+  on explanation requests, so natural activation will rarely load them there.
+- **The pilot is small.** 45 cases, 2 raters, and 12–18 comprehension
   participants can show direction and expose problems with the instruments. They
   cannot establish superiority. Criteria are engineering targets.
 - **Comprehension items are unscreened drafts.** They must pass the screening
@@ -73,3 +85,7 @@ Read this before drawing any conclusion from using or testing the skill.
 There is no chatbot, API client, proxy, browser extension, or automated UI
 control. There is no LLM-judge pipeline: an LLM judge may be added later, only
 as a labelled secondary analysis.
+
+(V1 adds that labelled secondary analysis: `scripts/judge.py`, a screening
+instrument that never feeds S1–S7. A browser extension is planned as a separate
+deliverable that restyles and measures text and never rewrites it.)
