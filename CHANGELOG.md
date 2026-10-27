@@ -27,6 +27,11 @@
   `register_fit`; `scripts/judge_acceptance.py` tests the judge on archive
   answers; `scripts/screen_items.py` screens comprehension items for diagnostic
   power.
+- Reframe: the evaluation is Claude-vs-Claude only. The judge is a regression guard; its
+  acceptance test uses Claude answers under different conditions plus a floor of deliberately
+  degraded answers, with the 0.20 flip cutoff and 0.80 floor shares fixed in code. Earlier
+  cross-provider acceptance runs are kept in `research/judge_acceptance_superseded/`.
+- Groq judge backend (default) behind the same interface; Gemini kept for the Gemma fallback.
 - Rubric: `navigability` and `register_fit` (11 dimensions) and the
   preference-versus-comprehension rule.
 - 12 new cases (45 in total): register, repair, decorative-structure controls,

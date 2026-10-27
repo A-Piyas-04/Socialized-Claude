@@ -8,6 +8,9 @@
   not transfer.
 - The judge is an automated, non-Anthropic model. Its outputs are a **screening instrument**,
   not the human evaluation that `EVALUATION_PLAN.md` specifies. They never feed S1–S7.
+- The judge is a **regression guard** for changes to Claude's explanations. Every comparison is
+  Claude against Claude; Claude-vs-GPT is not part of the evaluation. Fact capture is the primary
+  measure and is never combined with pairwise preference.
 
 Nothing here asks a person to copy, paste, or rate anything.
 
@@ -15,9 +18,25 @@ Nothing here asks a person to copy, paste, or rate anything.
 
 | Variable | Source | Used by |
 |---|---|---|
-| `CLAUDE_CODE_OAUTH_TOKEN` | `claude setup-token` (Claude subscription) | `collect_cc.py` |
-| `GEMINI_API_KEY` | Google AI Studio, free tier | `judge.py`, `screen_items.py` |
-| `JUDGE_MODEL` (optional) | default `gemini-3.5-flash-lite` | judge backend |
+| `CLAUDE_CODE_OAUTH_TOKEN` | `claude setup-token` (Claude subscription); one line, `sk-ant-oat01-…` | `collect_cc.py` |
+| `GROQ_API_KEY` | console.groq.com, free tier | judge (default backend) |
+| `GEMINI_API_KEY` | Google AI Studio, free tier | judge with `JUDGE_BACKEND=gemini` (Gemma fallback) |
+| `JUDGE_BACKEND`, `JUDGE_MODEL` (optional) | defaults `groq`, `openai/gpt-oss-120b` | judge backend |
+
+Gemini's free tier caps each model at 20 requests per day per project, far below a sweep's
+judge volume, so Gemini is a fallback only.
+
+## Judge acceptance (required before any sweep is judged)
+
+```
+python scripts/judge_acceptance.py      # research/judge_acceptance/<backend>-<model>.md
+```
+
+Claude-vs-Claude pairs only (the archive's Claude answers under different prompt styles, and
+later V0 vs V1 via `--run`/`--pair`), plus a floor of deliberately degraded answers (truncated, a
+fact removed, the answer buried at the end). A judge is accepted only if its order-flip rate is
+at most 0.20 **and** it passes the floor in both pairwise preference and fact capture. A
+consistent judge can still be useless; the floor catches that.
 
 Set them in the shell environment only, never in a file in the repository. `collect_cc.py`
 refuses to start while `ANTHROPIC_API_KEY` or `ANTHROPIC_AUTH_TOKEN` is set, because a set key

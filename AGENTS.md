@@ -95,3 +95,13 @@ needs to decide. No progress narrative.
   2 work_report).
 - A6: archive answers lost their markdown headings in copying; recorded as a caveat in the
   structural baseline.
+- Reframe (user, 2026-10-27): Claude-vs-GPT removed. Structural baseline now covers the 15 archive
+  Claude answers. Cross-provider acceptance runs kept as superseded.
+- op:plain added (10 operations, 13 variants); linter gains max_sentence_words and
+  passive_sentence_count; SKILL.md renders at about 295 lines (guard 300).
+- Judge backend: Groq (OpenAI-compatible) is the default; model default openai/gpt-oss-120b, to be
+  confirmed against Groq's model list when the key arrives. Groq's free tier also has per-day
+  token caps; the backend stops on any per-day limit.
+- Acceptance floor: fact removal is hand-listed (databases, immunology, interest). Caching and TCP
+  facts recur across sections and cannot be removed cleanly. The TCP truncation keeps all four
+  facts, so it is left out of the fact gate but kept in the pairwise floor.
