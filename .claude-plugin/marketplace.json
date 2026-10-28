@@ -1,0 +1,15 @@
+{
+  "name": "socialized-claude",
+  "owner": {
+    "name": "A-Piyas-04",
+    "url": "https://github.com/A-Piyas-04/Socialized-Claude"
+  },
+  "description": "Local marketplace for the Socialized-Claude communication plugin.",
+  "plugins": [
+    {
+      "name": "socialized",
+      "source": "./plugins/socialized",
+      "description": "Clear, adaptive explanations and intent-aware communication, packaged as a Claude Code plugin."
+    }
+  ]
+}

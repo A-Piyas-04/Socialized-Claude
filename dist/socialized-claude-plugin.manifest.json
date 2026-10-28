@@ -1,0 +1,13 @@
+{
+  "plugin": "socialized",
+  "zip": "socialized-claude-plugin.zip",
+  "zip_root": "socialized/",
+  "zip_sha256": "2cd6eb1fd17cc803e5e15bfab1bdb985475566750767f3fe357727ebd290ddc9",
+  "files": {
+    ".claude-plugin/plugin.json": "ff81ccd95c9703bb67b8cf3891450ae817f1fadeed3fe6f0b84a6f54687933b3",
+    "skills/socialized/SKILL.md": "7d8d4a34be3ecbc806705e77fd590d20f77721382ed2cab929787dcf3cc86be7",
+    "skills/socialized/references/explanation-examples.md": "b060f359100e9e5f0a0718be376a29bd8d37e424f80f07b34e301858ddcfefec",
+    "skills/socialized/references/explanation-methodology.md": "21af09a61005f7367e90fa03c9cffc9558b31bd47d7dcaa390c992bcfad22e90",
+    "skills/socialized/references/treatment-selection.md": "25b5d093f60532aaeec46fe7b459869ccec3eacd5a8fa408b466f3b0fd66f50a"
+  }
+}
