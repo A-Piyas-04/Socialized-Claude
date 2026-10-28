@@ -1,0 +1,55 @@
+# The same offline gate a contributor runs locally: python scripts/verify.py
+#
+# No secrets, no Claude authentication, no model calls, so it runs unchanged on forks.
+# It validates internal consistency - source, packages, plugin metadata, policy text,
+# local token estimates - and establishes nothing about the quality of Claude's answers.
+# Publishing, releasing and the optional Claude CLI tier are deliberately not here.
+name: validate
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: validate-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  offline:
+    name: offline validation (python ${{ matrix.python-version }})
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    strategy:
+      fail-fast: false
+      matrix:
+        # The oldest version the code's syntax supports, and a current one.
+        python-version: ["3.11", "3.13"]
+    steps:
+      # actions/checkout v7 is the current major (v7.0.0 verified on the upstream
+      # releases page); actions/setup-python v6 is the newest major verified here.
+      - uses: actions/checkout@v7
+
+      - uses: actions/setup-python@v6
+        with:
+          python-version: ${{ matrix.python-version }}
+          cache: pip
+          cache-dependency-path: requirements-dev.txt
+
+      - name: Install development dependencies
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install -r requirements-dev.txt
+
+      - name: Offline validation gate
+        run: python scripts/verify.py
+
+      - name: Confirm the checks changed nothing
+        if: always()
+        run: |
+          git status --porcelain
+          test -z "$(git status --porcelain)"

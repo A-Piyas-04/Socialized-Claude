@@ -1,0 +1,16 @@
+{
+  "_comment": [
+    "Change control for the two installable packages. The version in",
+    "plugins/socialized/.claude-plugin/plugin.json pins what an installed copy is, so a",
+    "changed distributable needs a deliberate version decision. tests/test_release_integrity.py",
+    "fails when a package's bytes no longer match the version recorded here.",
+    "Documentation-only edits change no package and need no bump.",
+    "After an intentional change: rebuild the packages, bump plugin_version, then run",
+    "python scripts/version_lock.py --update."
+  ],
+  "plugin_version": "0.5.1",
+  "packages": {
+    "dist/socialized.zip": "97c67cad7328bea5e58075e6d4be65325f880d7263c7d5f0a86f23f5ca8c5786",
+    "dist/socialized-claude-plugin.zip": "621df120b2db461b5a5140010f17429ceb4b10e2cc25269ee30ebe512484a8a3"
+  }
+}

@@ -183,3 +183,25 @@ needs to decide. No progress narrative.
  cross-implementation carry-over. No new operation (still 12 and 15 variants).
 - Phase 4C calibration: `activation` 5,543 legacy / 5,588 heuristic, inside the 5,600
  gate with about 12 heuristic tokens spare; the gate was not raised again.
+- Phase 5: one offline entry point, `python scripts/verify.py` (pytest, skill validation
+ on source and ZIP, both `--check` drift modes, token budgets, version lock, archive
+ recomputation, working-tree check). The optional `claude` CLI tier is `--with-cli` and
+ reports skipped, never passed, when the CLI is unavailable. No new dependency: pytest and
+ pyyaml were already in requirements-dev.txt.
+- Phase 5: `package_skill.py` gained the `--check` mode it lacked, matching
+ `build_plugin.py`. A missing ablation ZIP is not drift, because `dist/ablation/` is
+ git-ignored; an ablation ZIP that is present is still checked.
+- Phase 5: change control moved from a hardcoded version literal in
+ `test_multiturn_policy.py` to `scripts/version_lock.json`, which ties the plugin
+ `version` to the SHA-256 of both packages. A changed package needs a version decision; a
+ documentation-only edit needs none. The pre-1.0 guard stays.
+- Phase 5: `.github/workflows/validate.yml` runs the same gate on push to `main`, on pull
+ requests and on demand, Python 3.11 and 3.13, `permissions: contents: read`, no secrets,
+ no publishing. `actions/checkout@v7` (v7.0.0 verified upstream) and
+ `actions/setup-python@v6` (newest major verified). No hosted run has been observed.
+- Phase 5: `docs/VALIDATION.md` is the canonical validation explanation; README and
+ ARCHITECTURE link to it. `docs/REGRESSION_INVENTORY.md` marks each regression as
+ structurally tested, observable only in conversation, or heuristic only.
+ `docs/RELEASE_READINESS.md` is the Phase 6 checklist and was not executed.
+- Phase 5: there is no `LICENSE` file in the repository. "Open source" is not a claim this
+ repository can make yet; it is item 6 of the release-readiness checklist.

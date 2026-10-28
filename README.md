@@ -91,17 +91,28 @@ what is provisional.
 
 ## Run the offline checks
 
+One command, no network, no API key, no Claude authentication:
+
 ```
 pip install -r requirements-dev.txt
-python -m pytest                          # 186 tests
-python scripts/validate_skill.py          # validate the skill source
-python scripts/package_skill.py           # rebuild dist/socialized.zip (deterministic)
-python scripts/validate_skill.py dist/socialized.zip
-python research/recompute_archive_stats.py
+python scripts/verify.py
 ```
 
-Offline validation shows the package is well-formed. It does **not** show that
-Claude loads or follows the skill.
+It runs the test suite, validates the skill source and the committed ZIP, checks
+both distributables against the source without rebuilding them, checks the local
+token budgets and the package version lock, and confirms it changed nothing. Add
+`--with-cli` for the optional `claude plugin validate` tier, which reports **skipped**
+rather than passed when the CLI is unavailable. `--list` shows the checks.
+
+The same command runs in CI on pushes to `main` and on pull requests
+([`.github/workflows/validate.yml`](.github/workflows/validate.yml)).
+
+Offline validation shows the project is internally consistent: the skill is
+well-formed, the packages match the source, and the policy contracts are still in
+the text. It does **not** show that Claude loads the skill, follows it, or explains
+anything better. Full detail, including how to rebuild the distributables after a
+source edit: [`docs/VALIDATION.md`](docs/VALIDATION.md). What past failure is
+protected by what check: [`docs/REGRESSION_INVENTORY.md`](docs/REGRESSION_INVENTORY.md).
 
 ## Evaluate it
 

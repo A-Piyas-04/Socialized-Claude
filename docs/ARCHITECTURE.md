@@ -166,6 +166,15 @@ exactly its operations.
   sorted entries, LF line endings) and validates the ZIP itself after building.
   It writes a manifest with SHA-256 hashes, which evaluation rows record so
   results trace back to an exact skill build.
+- `scripts/package_skill.py --check` and `scripts/build_plugin.py --check` are the
+  read-only counterparts: they render the skill in memory and report drift instead of
+  rebuilding, so a stale package is never silently refreshed.
+- `scripts/version_lock.py` ties the plugin `version` to the bytes of both packages, so
+  a changed distributable needs a deliberate version decision.
+- `scripts/verify.py` is the single entry point that runs all of the above plus the test
+  suite. One canonical explanation, including the optional `claude` CLI tier and what the
+  gate does not establish, is in [`VALIDATION.md`](VALIDATION.md); what each past
+  regression is protected by is in [`REGRESSION_INVENTORY.md`](REGRESSION_INVENTORY.md).
 - Anthropic's own `skill-creator/scripts/quick_validate.py` was also run against
   the extracted production and `seq` ZIPs during development, and reported
   "Skill is valid!" for both. It is not vendored here.

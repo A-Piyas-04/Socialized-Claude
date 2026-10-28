@@ -189,6 +189,39 @@ the explanation operations (`docs/phase-4-implementation.md`):
   workloads and cross-implementation carry-over as things to scope; nothing checks a
   claim against a source.
 
+## Phase 5 (validation and CI) limitations
+
+- **A green gate is not evidence about answers.** `python scripts/verify.py` shows the
+  source, both packages, the plugin metadata and the protected policy text are
+  internally consistent. It says nothing about activation, adherence, or whether any
+  reader understands an explanation better. `docs/REGRESSION_INVENTORY.md` marks, row
+  by row, which past failures are structurally tested and which remain observable only
+  in a real conversation; three of them have no offline protection at all.
+- **The policy tests protect wording, not obedience.** They fail when a rule leaves the
+  text or the shipped package. A model that reads the rule and ignores it passes
+  every one of them.
+- **Hosted CI has not been observed running.** The workflow is syntax-checked and
+  asserted against by `tests/test_release_integrity.py`, and the same command it runs
+  passes locally on Windows with Python 3.12. The 3.11 and 3.13 matrix legs and the
+  Ubuntu runner are unverified until the first hosted run.
+- **The optional Claude CLI tier cannot be relied on.** It passed locally against
+  `claude plugin validate`, but the CLI needs an install and may need authentication,
+  so it is a local developer command, reported as *skipped* rather than passed when
+  unavailable, and never a required CI check.
+- **The version lock is a change-control guard, not provenance.** It records that the
+  committed packages are the ones locked under the current version. It cannot tell
+  whether a bump was the right size, and anyone editing the lock and the packages
+  together passes it.
+- **Determinism is checked on one platform at a time.** The builds fix timestamps,
+  sort entries and normalise line endings, and `--check` compares bytes, so a
+  platform-dependent difference would surface as drift rather than as a silent pass.
+  Cross-platform byte-identity is asserted by the first green hosted run, not before.
+- **Token checks stay local estimates.** `--check` gates the 5,600 regression ceiling
+  only; the 5,000 advisory target never gates, and `visual_count`,
+  `answer_first_offset` and `passive_sentence_count` never gate at all.
+- **No licence yet.** There is no `LICENSE` file, so "open source" is not yet a claim
+  this repository can make. It is item 6 of `docs/RELEASE_READINESS.md`.
+
 ## Not in scope for V0
 
 There is no chatbot, API client, proxy, browser extension, or automated UI

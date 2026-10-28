@@ -2,6 +2,38 @@
 
 ## Unreleased
 
+### Validation, CI and regression protection (Phase 5)
+- One offline entry point: `python scripts/verify.py` runs the test suite,
+  `validate_skill.py` on the source and on the committed ZIP, both `--check` drift
+  modes, the token budgets, the new version lock, and the archive recomputation, then
+  confirms the working tree is unchanged. It needs no network, no Claude
+  authentication and no API key, prints the exact command for each failure, and
+  propagates a non-zero exit status. `--project-root` lets it run from anywhere.
+- An optional Claude CLI tier, `--with-cli`, runs `claude plugin validate` on the
+  plugin and the marketplace. An unavailable CLI reports **skipped**, never passed;
+  `--require-cli` turns that into a failure on a machine where it should work.
+- `scripts/package_skill.py --check`: the read-only drift check the skill ZIP lacked.
+  It renders the skill in memory and compares the committed archive and manifest
+  member by member, including unsafe-path and root checks, without writing anything.
+- `scripts/version_lock.py` and `scripts/version_lock.json`: a changed distributable
+  now needs a deliberate version decision. Documentation-only edits change no package
+  and need no bump. The hardcoded `0.5.1` assertion in `test_multiturn_policy.py` now
+  reads the lock instead.
+- `tests/test_release_integrity.py`: 58 tests over the gaps the earlier suites left -
+  every defect `--check` should catch, member hygiene in both packages, marketplace
+  and plugin metadata agreement, the version lock, the gate's own skip/fail handling,
+  the CI workflow's permissions and contents, and broken relative links in the docs.
+- `.github/workflows/validate.yml`: runs the same offline gate on pushes to `main`,
+  on pull requests and on demand, for Python 3.11 and 3.13, with `contents: read`
+  and no secrets, so it runs unchanged on forks. It publishes nothing.
+- `docs/VALIDATION.md` is now the canonical explanation of how to check the
+  repository; README and `docs/ARCHITECTURE.md` link to it instead of repeating it.
+  `docs/REGRESSION_INVENTORY.md` maps each past regression to its policy source, its
+  deterministic protection, and whether it is observable only in conversation.
+  `docs/RELEASE_READINESS.md` is the Phase 6 checklist, unexecuted.
+- No communication policy, operation, variant or reference file changed. Still 12
+  operations and 15 variants; both packages are byte-identical to before.
+
 ### Final calibration (Phase 4C, plugin v0.5.1)
 - Live conversational tests accepted the restoration below and found several restored
   rules too prescriptive. The requirements are now strong, context-sensitive

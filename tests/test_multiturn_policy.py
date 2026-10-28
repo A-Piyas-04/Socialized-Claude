@@ -245,7 +245,13 @@ def test_policy_modules_are_versioned_and_document_across_turns(repo_root):
 
 def test_plugin_version_tracks_the_shipped_content(repo_root):
     import json
+
+    import version_lock as vl
     meta = json.loads(read(repo_root / "plugins" / "socialized" / ".claude-plugin" / "plugin.json"))
-    # Bumped because `version` pins installs: new skill content needs a new version.
-    assert meta["version"] == "0.5.1"
+    # `version` pins installs, so new skill content needs a new version. Phase 5 moved
+    # the pin from a literal here to scripts/version_lock.json, which ties the version to
+    # the bytes of both packages: an intended bump now needs one deliberate edit, not two,
+    # and a docs-only change needs none. See docs/VALIDATION.md.
+    assert meta["version"] == vl.load_lock()["plugin_version"]
+    assert vl.problems() == [], "run: python scripts/version_lock.py"
     assert not meta["version"].startswith("1.")
