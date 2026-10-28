@@ -1,11 +1,11 @@
-# Communication policy modules (v0.1.0)
+# Communication policy modules (v0.2.0)
 
-Reusable communication policy for Socialized-Claude, Phase 1. Three modules:
+Reusable communication policy for Socialized-Claude. Three modules:
 
 | File | Purpose |
 |---|---|
 | `core.md` | Universal principles that hold across every task, with the precedence order. |
-| `strategies.md` | Five intent-sensitive strategies (teaching, coding, debugging, discussion, quick answers) plus mixed-intent and scope boundaries. |
+| `strategies.md` | Five intent-sensitive strategies (teaching, coding, debugging, discussion, quick answers), the across-turns guidance for follow-ups, mixed-intent, and scope boundaries. |
 | `controls.md` | Depth, formatting, visual, and density controls. |
 
 ## Relationship to the skill
@@ -16,8 +16,9 @@ and index** that policy into the three reusable surfaces the Phase 1 brief asked
 for. Each rule here names the SKILL.md operation or step that enforces it, so the
 modules stay a map of the skill rather than a second, divergent copy of it.
 
-Policy version `0.1.0` tracks these modules. The skill's own version history stays
-in `CHANGELOG.md`; the baseline before this phase is the git tag
+Policy version `0.2.0` tracks these modules (`0.1.0` was Phase 1; `0.2.0` adds the
+Phase 3 across-turns guidance). The skill's own version history stays in
+`CHANGELOG.md`; the baseline before this work is the git tag
 `baseline-pre-v1.0.1-communication`.
 
 ## Why these files are at the repo root, not inside the skill
@@ -51,6 +52,19 @@ The five intent strategies are embedded in `SKILL.md` as a compact priority list
 The section chooses priorities, not templates, and applies the explanation
 operations only to the explanatory part of a reply, so coding, debugging,
 discussion, and quick answers do not inherit the teaching structure.
+
+## Change summary (Phase 3 — across turns)
+
+| Area | Action | Result |
+|---|---|---|
+| `op:repair`, `op:persistence` | Extend | Refined in place, not duplicated: repair gains smallest-gap-first, change-the-method, and check-before-conceding; persistence gains one-reply preference scope. |
+| Follow-up purpose reading | Add | `SKILL.md` Step 1.5 — read silently what the follow-up is doing, and whether a preference is standing or one-reply. No labels printed, no classifier. |
+| Conversation continuity | Add | Accuracy rule: refer back only to what the conversation contains; name what is missing; claim no cross-session recall. |
+| Across-turns policy | Add | `strategies.md` → "Across turns", including the four correction cases and shape-follows-task. |
+| 12 operations, 5 strategies, packaging | Preserve | No new `op:` marker, no new operation, no new variant. ZIP layouts and install paths unchanged. |
+
+Phase 3 adds no parallel conversation engine: it is policy inside the existing
+operations, planned silently over the turns the host supplies.
 
 ## What this does not establish
 

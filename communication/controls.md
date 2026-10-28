@@ -1,6 +1,6 @@
 # Communication controls — depth, formatting, visuals, density
 
-Version 0.1.0. These controls decide how much to say and how to present it. They
+Version 0.2.0. These controls decide how much to say and how to present it. They
 preserve the skill's adaptive presentation while keeping elaboration proportionate.
 Each control names an action and points to the rule in
 `skill/socialized/SKILL.md` that enforces it. Presentation is a capability to

@@ -95,7 +95,23 @@ Read this before drawing any conclusion from using or testing the skill.
   directory needs a `LICENSE`/`license` and a listing icon; neither is added,
   because the license is the owner's decision.
 
-**Phase 4 backlog — communication refinements deliberately not changed in Phase 2.**
+## Phase 3 (multi-turn) limitations
+
+- **No memory of any kind.** The multi-turn policy plans a reply from the turns
+  the host actually supplies. There is no durable memory, no hidden state, no
+  cross-session recall, and no retrieval. Where a referred-to turn is absent, the
+  skill is instructed to say what is missing rather than reconstruct it.
+- **Follow-up reading is silent and unobservable.** Whether Claude actually
+  classifies a follow-up as confusion, a correction, or feedback cannot be seen,
+  only inferred from the reply — the same limit as the Step 1 and Step 3 checks.
+- **Offline tests prove presence, not behaviour.** `tests/test_multiturn_policy.py`
+  shows the policy ships in the loaded `SKILL.md` and in both artifacts. It cannot
+  show that Claude adapts across turns. The scenarios in
+  `docs/phase-3-implementation.md` are regression spot-checks, not measurements.
+- **`SKILL.md` is near its size guards** (443/460 rendered, 492/500 raw). Further
+  additions require consolidating duplicate prose, not raising the guards.
+
+**Phase 4 backlog — communication refinements deliberately not changed in Phase 2 or 3.**
 The owner's real-chat sanity checks were strong but noted these, to fix in Phase 4
 (a communication-engine phase), not during plugin packaging:
 

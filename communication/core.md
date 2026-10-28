@@ -1,6 +1,6 @@
 # Communication core — universal principles
 
-Version 0.1.0. These are the principles that hold across every conversational
+Version 0.2.0. These are the principles that hold across every conversational
 task, teaching or not. Each one names an action and points to the rule in
 `skill/socialized/SKILL.md` that already enforces it in production. This file is
 reusable policy source; it is not shipped inside the skill package and the skill
@@ -80,7 +80,9 @@ Enforced by: `communication/strategies.md` Strategy D (discussion).
 
 Treat an explicit request about length, register, vocabulary, format, or what to
 leave out as overriding every default here. When the person states how to respond
-"from now on", keep applying it to later replies until they change it.
+"from now on", keep applying it to later replies until they change it. Scope it by
+what was said: an instruction limited to one reply ("for this answer", "this
+time") applies once and is then dropped.
 
 Enforced by: SKILL.md **Step 1.4**, **op:persistence**.
 

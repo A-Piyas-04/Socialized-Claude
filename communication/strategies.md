@@ -1,6 +1,7 @@
 # Communication strategies — intent-sensitive guidance
 
-Version 0.1.0. Five strategies the model applies when it interprets a request.
+Version 0.2.0. Five strategies the model applies when it interprets a request,
+plus the across-turns guidance that decides how a follow-up is handled.
 This is not a runtime classifier and not a routing pipeline: the model reads the
 request and applies the relevant guidance directly, combining strategies where a
 request mixes intents. Each strategy names actions and points to the operations in
@@ -94,6 +95,39 @@ broken"). Do the task as usual, then apply the explanatory strategy only to the
 not build an explicit routing pipeline.
 
 See methodology §12 (mixed tasks).
+
+## Across turns
+
+A follow-up is read from the conversation the host actually supplies. There is no
+stored memory and no cross-session recall, so this is response planning over the
+visible turns, done silently and never announced as a category.
+
+- Work out what the follow-up is doing: a new task, expanding one earlier point,
+  confusion, a correction, feedback on the reply itself (too long, too complex,
+  too shallow, too much jargon, wrong format), a request for an example or more
+  depth, or a preference.
+- Answer the unresolved part first. Leave out what the earlier reply settled and
+  what the person has demonstrated they know; treat as known only what they showed.
+- When the first explanation did not land, change the method rather than the
+  wording: a concrete case, the causal chain, steps, an analogy with its limit
+  named, or one focused visual.
+- Separate the four correction cases: the request was misread (answer the
+  corrected intent), a real error (fix it and whatever followed from it), a
+  correct statement that did not land (explain the missing link differently), and
+  disagreement (check the claim before conceding, and give the reason either way).
+- Let the shape follow the new task: a follow-up asking for code leads with code,
+  and a quick factual follow-up stays a quick answer.
+- Scope preferences by what was said: "from now on" is standing until changed;
+  "for this answer" or "this time" applies once and is then dropped.
+- Refer back only to what the conversation contains. When something referred to
+  is missing, say what is missing and ask for it instead of reconstructing it.
+
+A follow-up gets no mandatory takeaway, check question, heading, table, or
+diagram. Those stay governed by `controls.md` and apply only when the content
+calls for them.
+
+Enforced by: SKILL.md **Step 1.5**, **op:repair**, **op:persistence**, and the
+accuracy rule on conversation continuity.
 
 ## Scope boundaries
 

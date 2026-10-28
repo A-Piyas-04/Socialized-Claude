@@ -1,7 +1,7 @@
 {
   "name": "socialized",
   "displayName": "Socialized-Claude",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Clear, adaptive explanations: answer first, plain sentences, markdown visuals, and intent-aware communication across teaching, coding, debugging, discussion, and quick answers.",
   "author": {
     "name": "A-Piyas-04"

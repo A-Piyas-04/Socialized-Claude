@@ -2,6 +2,35 @@
 
 ## Unreleased
 
+### Adaptive conversation behaviour (Phase 3, policy v0.2.0, plugin v0.2.0)
+- `SKILL.md` Step 1 gains item 5, "The conversation so far": read silently what a
+  follow-up is doing (new task, expanding a point, confusion, a correction,
+  feedback on the reply itself, a request for an example or depth, a preference)
+  and whether a preference is standing or for one reply. No label is printed and
+  no classifier is added.
+- `op:repair` extended in place (not duplicated): answer the unresolved part first
+  and drop what the earlier reply settled or the person has shown they know;
+  change the explanatory method rather than the wording when the first attempt did
+  not land; check a disputed claim before conceding, then correct it and whatever
+  followed from it, or keep it with a reason.
+- `op:persistence` extended: an instruction scoped to one reply ("for this
+  answer", "this time") applies once and is dropped; unscoped ones carry forward.
+- New accuracy rule: refer back only to what the conversation contains, say what
+  is missing instead of reconstructing it, and claim no cross-session recall.
+- Step 3 gains two gated checks (follow-up non-repetition; one-reply scope).
+- `communication/strategies.md` gains an "Across turns" section with the four
+  correction cases and shape-follows-task; `core.md` principle 9 gains preference
+  scope; all three modules and the policy README move to version 0.2.0.
+- Plugin `version` 0.1.0 → 0.2.0, because `version` pins installs and the shipped
+  skill content changed. Both artifacts regenerated from the canonical skill via
+  `package_skill.py` and `build_plugin.py`; the two copies stay byte-identical.
+- No new operation, marker, or variant: still 12 operations and 15 variants. New
+  `tests/test_multiturn_policy.py` (14 tests, suite now 434 passed); no existing
+  test modified. `SKILL.md` is at 443/460 rendered and 492/500 raw lines — the
+  next addition needs a consolidation (see `docs/phase-3-implementation.md`).
+- Phase 4 still owns the closing-quiz, intro-preview, rigid-tutorial and
+  duplicate-visual refinements; Phase 3 changed none of them.
+
 ### Claude Code plugin MVP (Phase 2, plugin v0.1.0)
 - New `plugins/socialized/` plugin: `.claude-plugin/plugin.json` (name
   `socialized`, display name Socialized-Claude, version 0.1.0) and a
