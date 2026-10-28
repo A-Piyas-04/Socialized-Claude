@@ -2,6 +2,27 @@
 
 ## Unreleased
 
+### Claude Code plugin MVP (Phase 2, plugin v0.1.0)
+- New `plugins/socialized/` plugin: `.claude-plugin/plugin.json` (name
+  `socialized`, display name Socialized-Claude, version 0.1.0) and a
+  `skills/socialized/` skill generated from the canonical `skill/socialized/`.
+  The generated skill is byte-identical to `dist/socialized.zip`, so the plugin
+  and the claude.ai skill behave the same.
+- New `.claude-plugin/marketplace.json` (local marketplace) and
+  `dist/socialized-claude-plugin.zip` (archive root `socialized/`).
+- New `scripts/build_plugin.py` renders the plugin from the skill and, with
+  `--check`, fails on drift. `tests/test_plugin_structure.py` adds 11 offline
+  tests (manifest, sync, ZIP shape, marketplace); suite is now 410 passed.
+- `claude plugin validate` passes for the plugin and the marketplace (CLI
+  2.1.311). Directory-submission advisories (missing LICENSE and icon) are noted
+  and do not affect the verdict or local/claude.ai install.
+- No communication behaviour changed: the 12 operations, the Phase 1 intent
+  section, the reference files, and `dist/socialized.zip` are untouched; no
+  existing test was modified. Compatibility matrix, honest activation limits, and
+  opt-in persistent-guidance options are in `docs/phase-2-implementation.md`.
+  Communication refinements (intro previews, closing quizzes, rigid tutorials,
+  redundant visuals) are recorded for Phase 4 in `docs/LIMITATIONS.md`.
+
 ### Communication policy modules (Phase 1, v0.1.0)
 - New `communication/` modules at the repo root: `core.md` (universal
   principles and precedence), `strategies.md` (five intent strategies plus

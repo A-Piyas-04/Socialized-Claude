@@ -106,6 +106,50 @@ The answer should not mention the skill, its steps, or labels such as
 - **Claude Code.** Place the folder (rendered, or the source folder; the
   `<!-- op:… -->` markers in the source are HTML comments and harmless) at
   `~/.claude/skills/socialized/` or `.claude/skills/socialized/` in a
-  project.
+  project. Or install the plugin (next section), which is the maintained path.
 - **Claude API.** Possible through the Skills API, but that requires an API key,
   so it is outside V0's no-key scope.
+
+## 9. Claude Code plugin (Phase 2)
+
+Socialized-Claude is also packaged as a Claude Code plugin. The plugin's skill is
+generated from the same source as `dist/socialized.zip`, so behaviour is identical.
+
+**Try it in one session (no install):**
+
+```
+claude --plugin-dir ./plugins/socialized
+```
+
+Then run `/socialized:socialized`, or just ask a "how"/"why" question.
+
+**Install it from the bundled local marketplace:**
+
+```
+claude plugin marketplace add .
+/plugin install socialized@socialized-claude
+```
+
+**Validate the plugin yourself:**
+
+```
+claude plugin validate ./plugins/socialized
+```
+
+**Distributable archive:** `dist/socialized-claude-plugin.zip`. Its root folder is
+`socialized/`. Rebuild both artifacts after any skill change:
+
+```
+python scripts/package_skill.py        # dist/socialized.zip (claude.ai skill)
+python scripts/build_plugin.py         # plugins/socialized/** + dist/socialized-claude-plugin.zip
+python scripts/build_plugin.py --check # fail if the generated plugin is stale
+```
+
+**What runs where, and persistent-guidance options** (Projects, an opt-in
+`CLAUDE.md` block): see [`docs/phase-2-implementation.md`](phase-2-implementation.md).
+Installing the plugin makes the skill *available*; it is selected per request, not
+forced on every answer. There is no always-on guarantee in claude.ai normal chat.
+
+**Uninstall:** `/plugin uninstall socialized@socialized-claude`, or
+`claude plugin marketplace remove socialized-claude`. For a `--plugin-dir`
+session, just start Claude Code without the flag.

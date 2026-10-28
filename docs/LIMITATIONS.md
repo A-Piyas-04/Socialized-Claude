@@ -80,6 +80,32 @@ Read this before drawing any conclusion from using or testing the skill.
   show skill loading, natural activation cannot be measured, and only explicit
   invocation results are interpretable.
 
+## Phase 2 (plugin) limitations and Phase 4 backlog
+
+- **No always-on communication.** The Phase 2 plugin makes the skill *available*
+  on supported surfaces; skills are selected when Claude judges them relevant, not
+  forced on every answer. No supported plugin component gives always-on behaviour
+  in claude.ai normal chat. The best supported standing guidance is scoped: a
+  claude.ai Project's instructions, or an opt-in `CLAUDE.md` block in Claude Code.
+  See `docs/phase-2-implementation.md`.
+- **Plugin runtime behaviour is unverified.** `claude plugin validate` passes and
+  the structure is sound, but structural checks cannot show the skill changes
+  Claude's behaviour. Confirm with ordinary conversations.
+- **Directory submission not prepared.** Submitting to Anthropic's public plugin
+  directory needs a `LICENSE`/`license` and a listing icon; neither is added,
+  because the license is the owner's decision.
+
+**Phase 4 backlog — communication refinements deliberately not changed in Phase 2.**
+The owner's real-chat sanity checks were strong but noted these, to fix in Phase 4
+(a communication-engine phase), not during plugin packaging:
+
+- repeated introductory section previews;
+- unnecessary closing quiz / comprehension questions on answers that don't need them;
+- occasionally rigid tutorial structure;
+- redundant visualizations.
+
+These require editing the explanation operations, which Phase 2 must preserve.
+
 ## Not in scope for V0
 
 There is no chatbot, API client, proxy, browser extension, or automated UI

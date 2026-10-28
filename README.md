@@ -26,13 +26,32 @@ inside your normal Claude account.
 Full instructions, eligibility, activation checks, and troubleshooting:
 [`docs/INSTALLATION.md`](docs/INSTALLATION.md).
 
+### As a Claude Code plugin
+
+Socialized-Claude is also packaged as a Claude Code plugin (same skill, same
+behaviour):
+
+```
+claude --plugin-dir ./plugins/socialized          # try it for one session
+claude plugin marketplace add .                    # or install from the local marketplace
+/plugin install socialized@socialized-claude
+```
+
+Installing makes the skill *available*; it is selected per request, not forced on
+every answer. What runs on each surface, and the opt-in standing-guidance options,
+are in [`docs/phase-2-implementation.md`](docs/phase-2-implementation.md).
+
 ## Repository layout
 
 ```
-skill/socialized/        The installable skill (source)
+skill/socialized/        The installable skill (source of truth)
   SKILL.md                    Core workflow and operations
   references/                 Loaded on demand: methodology, examples, selection rules
-dist/socialized.zip      Built package to upload (plus .manifest.json with hashes)
+communication/           Reusable policy modules (core, strategies, controls) — Phase 1
+plugins/socialized/      Claude Code plugin (manifest + generated skill) — Phase 2
+.claude-plugin/          Local marketplace listing the plugin
+dist/socialized.zip      claude.ai skill package (plus .manifest.json with hashes)
+dist/socialized-claude-plugin.zip   Claude Code plugin archive (root folder: socialized/)
 research/
   EVIDENCE_AUDIT.md           What the prior experiments do and do not show; treatment decisions
   recompute_archive_stats.py  Regenerates every number in the audit from the raw archive
