@@ -1,6 +1,6 @@
 # Communication strategies — intent-sensitive guidance
 
-Version 0.2.0. Five strategies the model applies when it interprets a request,
+Version 0.3.0. Five strategies the model applies when it interprets a request,
 plus the across-turns guidance that decides how a follow-up is handled.
 This is not a runtime classifier and not a routing pipeline: the model reads the
 request and applies the relevant guidance directly, combining strategies where a
@@ -25,8 +25,9 @@ Objective: help the reader build an accurate mental model.
 Apply: **op:sequencing**, **op:mechanism**, **op:examples**, **op:visual**,
 **op:close**. See methodology §1–4, §7–8.
 
-Avoid: upfront prerequisite lists, forced quizzes on non-teaching replies,
-diagrams that restate obvious prose, headings over one-sentence sections.
+Avoid: upfront prerequisite lists, mechanical intro previews when headings already
+show the structure, forced closing quizzes by category alone, diagrams that restate
+obvious prose or repeat the same mechanism, headings over one-sentence sections.
 
 ## Strategy B — Programming and implementation
 

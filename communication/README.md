@@ -1,4 +1,4 @@
-# Communication policy modules (v0.2.0)
+# Communication policy modules (v0.3.0)
 
 Reusable communication policy for Socialized-Claude. Three modules:
 
@@ -16,8 +16,10 @@ and index** that policy into the three reusable surfaces the Phase 1 brief asked
 for. Each rule here names the SKILL.md operation or step that enforces it, so the
 modules stay a map of the skill rather than a second, divergent copy of it.
 
-Policy version `0.2.0` tracks these modules (`0.1.0` was Phase 1; `0.2.0` adds the
-Phase 3 across-turns guidance). The skill's own version history stays in
+Policy version `0.3.0` tracks these modules (`0.1.0` was Phase 1; `0.2.0` added the
+Phase 3 across-turns guidance; `0.3.0` adds the Phase 4 communication refinements —
+selective quizzes, previews, and visuals, and tighter epistemic scoping). The
+skill's own version history stays in
 `CHANGELOG.md`; the baseline before this work is the git tag
 `baseline-pre-v1.0.1-communication`.
 
@@ -65,6 +67,21 @@ discussion, and quick answers do not inherit the teaching structure.
 
 Phase 3 adds no parallel conversation engine: it is policy inside the existing
 operations, planned silently over the turns the host supplies.
+
+## Change summary (Phase 4 — communication refinement)
+
+| Area | Action | Result |
+|---|---|---|
+| Closing quizzes | Conditionalize | `op:close` and `controls.md` add a check question only when the person asks for practice, the exchange is a tutorial, or a focused check resolves a real uncertainty — never on code, fixes, decisions, or quick answers by category. "I don't understand X" gets a clearer explanation, not a quiz. |
+| Intro previews / section maps | Make optional | `op:plain` no longer keeps a mandatory section map; `op:presentation` adds a heading map only when a long answer needs orienting. |
+| Redundant visuals | Value-based selection | `op:visual` draws a figure only when it clarifies, prefers one strong representation per idea, and drops the every-section / final-third requirement. Colour, status emoji, and legends only when they speed a comparison. |
+| Automatic demo offers | Remove default | The interactive-version offer is made only when asked or clearly useful, never appended by default. |
+| Overgeneralized claims | Scope assumptions | Accuracy rules and `core.md` scope product-specific implementations, separate mental models from internals, and state concurrency/replication assumptions instead of categorical guarantees. |
+| 12 operations, 5 strategies, packaging | Preserve | No new `op:` marker, operation, or variant; `SKILL.md` stays within its line budgets; both install paths regenerated. |
+
+Phase 4 removes formatting that served the policy rather than the reader; it keeps
+the strengths of Phases 1–3 (causal mechanism, running examples, visual literacy,
+adaptive register, multi-turn repair).
 
 ## What this does not establish
 

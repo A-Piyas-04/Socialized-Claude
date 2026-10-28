@@ -231,7 +231,7 @@ def test_both_installation_paths_stay_in_sync():
 def test_policy_modules_are_versioned_and_document_across_turns(repo_root):
     comms = repo_root / "communication"
     for name in ("core.md", "strategies.md", "controls.md"):
-        assert "Version 0.2.0" in read(comms / name), name
+        assert "Version 0.3.0" in read(comms / name), name
     strategies = read(comms / "strategies.md")
     across = norm(section(strategies, "## Across turns")).lower()
     # The brief's required cases are documented in the reusable module.
@@ -247,5 +247,5 @@ def test_plugin_version_tracks_the_shipped_content(repo_root):
     import json
     meta = json.loads(read(repo_root / "plugins" / "socialized" / ".claude-plugin" / "plugin.json"))
     # Bumped because `version` pins installs: new skill content needs a new version.
-    assert meta["version"] == "0.2.0"
+    assert meta["version"] == "0.3.0"
     assert not meta["version"].startswith("1.")

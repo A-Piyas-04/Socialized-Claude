@@ -111,16 +111,33 @@ Read this before drawing any conclusion from using or testing the skill.
 - **`SKILL.md` is near its size guards** (443/460 rendered, 492/500 raw). Further
   additions require consolidating duplicate prose, not raising the guards.
 
-**Phase 4 backlog — communication refinements deliberately not changed in Phase 2 or 3.**
-The owner's real-chat sanity checks were strong but noted these, to fix in Phase 4
-(a communication-engine phase), not during plugin packaging:
+**Phase 4 backlog — now addressed (policy v0.3.0, plugin v0.3.0).**
+The owner's real-chat sanity checks noted these; Phase 4 conditionalized each one in
+the explanation operations (`docs/phase-4-implementation.md`):
 
-- repeated introductory section previews;
-- unnecessary closing quiz / comprehension questions on answers that don't need them;
-- occasionally rigid tutorial structure;
-- redundant visualizations.
+- repeated introductory section previews → `op:plain` / `op:presentation` add a map
+  only when a complex answer needs orienting;
+- unnecessary closing quiz / comprehension questions → `op:close` adds a check only
+  when asked, in a tutorial, or to resolve a real uncertainty;
+- occasionally rigid tutorial structure → intent strategies lead; quick answers are
+  natural, not a one-sentence cap;
+- redundant visualizations → `op:visual` prefers one strong representation per idea
+  and drops the every-section / final-third requirement;
+- over-confident simplifications → the accuracy rules scope product-specific and
+  concurrency claims.
 
-These require editing the explanation operations, which Phase 2 must preserve.
+## Phase 4 (communication refinement) limitations
+
+- **Selective, not proven.** Offline tests show the forced-quiz, forced-preview,
+  forced-visual and forced-demo directives are gone from the loaded `SKILL.md` and
+  both artifacts, and the conditional ones are present. They cannot show that Claude
+  actually withholds a quiz or a redundant diagram in a live chat. The spot-checks
+  in `docs/phase-4-implementation.md` are regression prompts, not measurements, and
+  no controlled comparison was run.
+- **Epistemic scoping has no verifier.** The new accuracy rules are instructions;
+  nothing checks a claim against a source. Accuracy still rests on the model.
+- **`SKILL.md` is at 498/500 raw lines.** The next behavioural rule needs a
+  consolidation first; no guard was raised to fit this phase.
 
 ## Not in scope for V0
 

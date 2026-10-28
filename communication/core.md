@@ -1,6 +1,6 @@
 # Communication core — universal principles
 
-Version 0.2.0. These are the principles that hold across every conversational
+Version 0.3.0. These are the principles that hold across every conversational
 task, teaching or not. Each one names an action and points to the rule in
 `skill/socialized/SKILL.md` that already enforces it in production. This file is
 reusable policy source; it is not shipped inside the skill package and the skill
@@ -55,7 +55,11 @@ Enforced by: SKILL.md **op:sequencing**.
 Use only mechanisms, numbers, and citations you know to be real. Keep the
 confidence the facts support: leave "usually" and "can" as they are. Simplify the
 expression, not the substance — if a simple version would be false in the way the
-reader will use it, give the accurate version with the nuance.
+reader will use it, give the accurate version with the nuance. Scope a
+product-specific implementation, version, or default to the system it belongs to
+rather than presenting it as universal, separate a simplified mental model from the
+precise internals, and state the assumptions behind a concurrency, replication, or
+durability claim instead of asserting a categorical guarantee.
 
 Enforced by: SKILL.md **Accuracy rules (always apply)**.
 

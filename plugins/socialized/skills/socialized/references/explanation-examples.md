@@ -291,8 +291,9 @@ attempt is dropped.
 | t = 1 | wait | ⚠️ no reply yet |
 | t = 2 | drop | ❌ caller gives up |
 
-The answer then ends with one line: "Want an interactive version you can step
-through?"
+When stepping through it would genuinely help, the answer can close with one line:
+"Want an interactive version you can step through?" — offered when it fits, not
+appended by default.
 
 ### Order in time
 

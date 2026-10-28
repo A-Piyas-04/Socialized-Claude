@@ -2,6 +2,40 @@
 
 ## Unreleased
 
+### Communication refinement (Phase 4, policy v0.3.0, plugin v0.3.0)
+- `op:close`: a check question is added **only** when the person asks to practise or
+  be tested, the exchange is explicitly a tutorial, or one focused question resolves
+  a real uncertainty — never on a coding deliverable, a fix, a decision, or a quick
+  answer by category. The takeaway is optional. "I don't understand X" gets a
+  clearer explanation of X, not a quiz. The forced per-category quiz is gone.
+- `op:plain` / `op:presentation`: the mandatory retained section map is removed; a
+  sentence roadmap or heading map is added only when a complex, multi-part answer
+  genuinely needs orienting.
+- `op:visual`: draw a visual only when it clarifies; prefer one strong
+  representation per idea and add a second only for a materially different dimension;
+  dropped the every-shaped-idea / every-section / final-third requirement; colour,
+  status emoji and legends only when they speed a comparison; a diagram must not
+  imply a guarantee the mechanism lacks. The interactive-version offer is made only
+  when asked or clearly useful, never appended by default; artifacts stay opt-in.
+- Accuracy rules + `core.md`: scope a product-specific implementation, version or
+  default to its system; flag a common implementation as common not universal;
+  separate a simplified mental model from precise internals; state concurrency,
+  replication and durability assumptions instead of a categorical guarantee; keep
+  the causal steps a requested mechanism needs.
+- Quick-answer strategy: "answer directly and naturally", with "one sentence and
+  stop" as the usual shape, not a rigid cap. The five strategies are preserved.
+- The mandatory horizontal-rule-between-topics decoration was removed (compulsory
+  formatting that served the policy, not the reader).
+- `communication/core.md`, `strategies.md`, `controls.md`, and the policy README
+  move to version 0.3.0 with the Phase 4 change table.
+- Plugin `version` 0.2.0 → 0.3.0 (`version` pins installs). Both artifacts
+  regenerated from the canonical skill; the two copies stay byte-identical.
+- No new operation, marker, or variant: still 12 operations and 15 variants. New
+  `tests/test_refinement_policy.py` (14 tests, suite now 448 passed, 1 skipped);
+  `test_multiturn_policy.py` updated only for the two version pins. `SKILL.md` is at
+  450/460 rendered and 498/500 raw lines — net +7 rendered, offset by consolidating
+  redundant prose; no guard raised (see `docs/phase-4-implementation.md`).
+
 ### Adaptive conversation behaviour (Phase 3, policy v0.2.0, plugin v0.2.0)
 - `SKILL.md` Step 1 gains item 5, "The conversation so far": read silently what a
   follow-up is doing (new task, expanding a point, confusion, a correction,

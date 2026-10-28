@@ -1,6 +1,6 @@
 # Communication controls — depth, formatting, visuals, density
 
-Version 0.2.0. These controls decide how much to say and how to present it. They
+Version 0.3.0. These controls decide how much to say and how to present it. They
 preserve the skill's adaptive presentation while keeping elaboration proportionate.
 Each control names an action and points to the rule in
 `skill/socialized/SKILL.md` that enforces it. Presentation is a capability to
@@ -26,6 +26,9 @@ Enforced by: SKILL.md **Step 2**; `references/treatment-selection.md` §3.
   paragraph by four sentences or about 80 words.
 - Put a heading where a section begins, using `##` then `###` without skipping a
   level. Wrap every identifier, path, flag, and command in backticks.
+- Answer directly first. Add a one-line roadmap or heading map only when a complex,
+  multi-part answer genuinely needs orienting; do not preview a structure the
+  headings already make clear.
 
 Enforced by: SKILL.md **op:presentation**.
 
@@ -48,25 +51,34 @@ Enforced by: SKILL.md **op:examples**.
 
 ## Visualizations
 
-- Draw a visual for each idea whose shape would take three or more sentences to
-  describe, and delete the sentences it replaces.
-- Give the hardest idea its visual first, and support the last third of the answer
-  at least as well as the first.
+- Draw a visual for an idea whose shape would take three or more sentences to
+  describe and where a figure clarifies it, and delete the sentences it replaces.
+  Prefer one strong representation per idea; add a second only when it carries a
+  materially different dimension, and do not require a visual for every idea or
+  section.
+- Give the hardest idea its visual first. Add colour, status emoji, or a legend
+  only where it makes a comparison genuinely faster.
 - Render visuals as markdown; build an artifact only when the person explicitly
-  asks for one.
+  asks for one, and offer an interactive version only when asked or clearly useful
+  rather than by default.
 - Caption every visual with one sentence naming what it shows and the one thing to
-  notice. Do not draw a diagram just because the topic describes a process.
+  notice, and do not let a diagram imply a guarantee the mechanism does not provide.
+  Do not draw a diagram just because the topic describes a process.
 
 Enforced by: SKILL.md **op:visual**.
 
 ## Conclusions and takeaways
 
-- Close an answer of three or more sections, and any teaching request, with a
-  takeaway that compresses the mechanism — an arrow chain or one line of 25 words
-  or fewer, written fresh rather than copied from the body.
+- Close a long or multi-section teaching answer with a takeaway that compresses the
+  mechanism — an arrow chain or one line of 25 words or fewer, written fresh rather
+  than copied from the body. Leave it out when the last sentence already lands the
+  point or the answer is short.
 - End a quick, practitioner, or expert answer when the content ends.
-- Add a check question only on teaching, beginner, or confusion-follow-up answers;
-  do not append one to a fact, a lookup, or an expert reply.
+- Add a check question only when the person asks to practise or be tested, the
+  exchange is explicitly a tutorial, or one focused question resolves a real
+  uncertainty — not on a coding deliverable, a fix, a decision, a fact, or an
+  expert reply by category alone. Treat "I don't understand X" as a request to
+  explain X again, not a prompt for a quiz.
 
 Enforced by: SKILL.md **op:close**.
 
