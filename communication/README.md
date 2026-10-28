@@ -41,14 +41,16 @@ What the brief asked to preserve, relax, or add, and what was actually done:
 |---|---|---|
 | Language, grammar, mechanism, sequencing, visuals | Preserve | Unchanged; already enforced by `op:plain`, `op:mechanism`, `op:sequencing`, `op:presentation`, `op:visual`. |
 | Mandatory headings / summaries / quizzes / examples / diagrams | Relax | Already conditional in SKILL.md (3+ sections for numbered headings; teaching/beginner/confusion for check questions; shape-driven for visuals). No further relaxation needed. |
-| Five intent strategies | Add | Articulated in `strategies.md`, each mapped to existing operations. |
+| Five intent strategies | Add | Full guidance in `strategies.md`; a compact priority list is also embedded in `SKILL.md` ("Match the communication strategy to the intent") so the installed skill carries it. |
 | Universal principles + precedence | Add | `core.md`. |
 | Depth / formatting / density controls | Add | `controls.md`, mapped to `op:presentation`, `op:visual`, `op:close`, Step 2. |
-| SKILL.md entry point and packaging | Preserve | Untouched; the 4-file package and 12-operation set are unchanged, so structural tests stay green. |
+| SKILL.md entry point and packaging | Preserve | The 4-file package and 12-operation set are unchanged; one non-operation, always-on section was added. Structural tests stay green with no edits. |
 
-Because the skill already satisfied the brief's relaxation goals, Phase 1 adds the
-reusable modules and documentation without editing `SKILL.md`. This is the smallest
-change that delivers the brief's modules while preserving the working skill.
+The five intent strategies are embedded in `SKILL.md` as a compact priority list
+(which intent leads with what), while their full detail stays in `strategies.md`.
+The section chooses priorities, not templates, and applies the explanation
+operations only to the explanatory part of a reply, so coding, debugging,
+discussion, and quick answers do not inherit the teaching structure.
 
 ## What this does not establish
 

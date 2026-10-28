@@ -12,10 +12,15 @@
   is tested to contain exactly SKILL.md and its three references) and the skill
   does not load them at runtime, per the brief's "independent of Claude-specific
   packaging" and Risk D requirements.
-- `SKILL.md` is unchanged: its operations already met the brief's relaxation
-  goals (conditional headings, check questions, and visuals), so Phase 1 adds the
-  reusable modules and documentation without editing the working skill. Baseline
-  preserved as the git tag `baseline-pre-v1.0.1-communication`.
+- `SKILL.md` gains one compact, always-on section, "Match the communication
+  strategy to the intent", exposing the five intent strategies as a priority list
+  (teaching, coding, debugging, discussion, quick answers) so the installed skill
+  carries them. It is not an operation, adds no markers, and applies the
+  explanation operations only to the explanatory part of a reply, so non-teaching
+  intents do not inherit the teaching structure. The 12 operations, the 4-file
+  package, and the reference files are unchanged; all 399 tests pass with no test
+  modified. Baseline preserved as the git tag
+  `baseline-pre-v1.0.1-communication`.
 
 ### Skill (Socialized-Claude, visual depth)
 - Visual budget: one visual per idea with a shape, no per-answer cap (the
