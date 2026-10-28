@@ -30,8 +30,34 @@ scripts/build_plugin.py                  renders the plugin from the skill; --ch
 skill (full variant, operation markers stripped) into
 `plugins/socialized/skills/socialized/`. The result is byte-for-byte the same as
 the files inside `dist/socialized.zip`. `python scripts/build_plugin.py --check`
-fails if the committed plugin tree or ZIP is stale, and the test suite asserts the
-same, so the two copies cannot drift unnoticed.
+fails if the committed plugin tree **or** the distributable ZIP **or** its sidecar
+manifest is stale, and the test suite asserts the same, so the copies cannot drift
+unnoticed.
+
+### `--check` now verifies the ZIP, not just its existence
+
+Earlier `--check` only confirmed `dist/socialized-claude-plugin.zip` existed on
+disk. A hand-edited, truncated, or stale archive would have passed. `--check` now
+opens the archive and verifies it against the canonical generated files:
+
+- **Invalid archive / corruption** — a non-ZIP or a ZIP with a bad CRC
+  (`zipfile.testzip`) is reported instead of crashing.
+- **Incorrect root** — the archive must have exactly one top-level folder,
+  `socialized/`.
+- **Missing / extra / modified files** — every member (minus the `socialized/`
+  prefix) is compared by exact bytes against `zip_files(plugin_files())`.
+- **Metadata drift** — once contents line up, the whole archive is compared
+  byte-for-byte against a fresh deterministic rebuild, catching timestamp,
+  permission, or ordering drift. Builds are already deterministic (fixed
+  `1980-01-01` entry dates, fixed mode bits, sorted entries), so a clean tree
+  rebuilds identically.
+- **Manifest consistency** — `dist/socialized-claude-plugin.manifest.json` must
+  agree with the archive: `plugin`, `zip`, `zip_root`, the archive `zip_sha256`,
+  and every per-file hash.
+
+`--check` is strictly read-only: it never rebuilds or rewrites an archive it finds
+invalid (a dedicated test asserts a tampered ZIP is left untouched). Rebuilds
+happen only on a bare `python scripts/build_plugin.py`.
 
 ## Changed and new files
 
@@ -41,9 +67,9 @@ same, so the two copies cannot drift unnoticed.
 | `.claude-plugin/marketplace.json` | new (source) | Local marketplace for one-command install in Claude Code. |
 | `plugins/socialized/skills/socialized/**` | new (generated) | The plugin's skill, rendered from `skill/socialized/`. |
 | `plugins/socialized/README.md` | new | Maintainer note; marks generated files; excluded from the ZIP. |
-| `scripts/build_plugin.py` | new | Reproducible build + `--check` sync guard. |
+| `scripts/build_plugin.py` | updated | Reproducible build + `--check` sync guard; `--check` now verifies the ZIP contents and manifest, not just existence. |
 | `dist/socialized-claude-plugin.zip` (+ `.manifest.json`) | new (generated) | Distributable plugin archive. |
-| `tests/test_plugin_structure.py` | new | 11 offline tests (manifest, sync, ZIP shape, marketplace). |
+| `tests/test_plugin_structure.py` | updated | 21 offline tests (manifest, sync, ZIP shape, marketplace, and ZIP/manifest corruption + drift). |
 | `skill/socialized/**`, `dist/socialized.zip` | unchanged | Phase 1 skill and claude.ai package preserved. |
 
 No existing test was modified or weakened.
@@ -112,16 +138,76 @@ required by any Phase 2 deliverable. Recorded as out of scope.
 
 ## Validation results
 
-Run locally on 2026-10-28, Claude Code 2.1.311, Windows.
+Run locally on 2026-10-28, Claude Code 2.1.311, Windows (PowerShell).
 
 | Check | Command | Result |
 |---|---|---|
-| Full test suite | `python -m pytest` | **410 passed, 1 skipped** |
+| Full test suite | `python -m pytest` | **420 passed, 1 skipped** |
 | Canonical skill validator | `python scripts/validate_skill.py` | PASSED (0 errors, 0 warnings) |
 | claude.ai skill ZIP | `python scripts/validate_skill.py dist/socialized.zip` | PASSED (0 errors, 0 warnings) |
-| Plugin ↔ skill sync | `python scripts/build_plugin.py --check` | In sync |
+| Plugin ↔ skill + ZIP + manifest sync | `python scripts/build_plugin.py --check` | In sync |
 | **Plugin manifest (CLI)** | `claude plugin validate ./plugins/socialized` | **✔ Validation passed** |
 | **Marketplace (CLI)** | `claude plugin validate ./.claude-plugin/marketplace.json` | **✔ Validation passed** |
+
+> Note: `python scripts/validate_skill.py dist/socialized-claude-plugin.zip`
+> *fails by design* — that tool validates a **claude.ai skill** layout (SKILL.md at
+> the ZIP root). The plugin archive has a different, correct shape (`socialized/`
+> → `.claude-plugin/plugin.json` + `skills/socialized/…`). The plugin ZIP is
+> validated by `build_plugin.py --check` and `tests/test_plugin_structure.py`, not
+> by the skill validator.
+
+## Plugin installation acceptance (Claude Code CLI)
+
+Run locally on 2026-10-28, Claude Code 2.1.311, Windows. All steps below are
+**non-model** CLI operations: no Anthropic API key, no credits, and no model
+conversation was started.
+
+| Step | Command | Result |
+|---|---|---|
+| CLI version | `claude --version` | `2.1.311 (Claude Code)` |
+| Local marketplace add | `claude plugin marketplace add ./ --scope local` | ✔ Added marketplace `socialized-claude` (local settings) |
+| Install from marketplace | `claude plugin install socialized@socialized-claude --scope local -y` | ✔ Installed `socialized@socialized-claude` (scope: local) |
+| Installed list | `claude plugin list` | `socialized@socialized-claude` 0.1.0, enabled, read from `plugins/socialized` |
+| Component inventory | `claude plugin details socialized` | **Skills (1) socialized**; Agents/Hooks/MCP/LSP all 0; always-on ~47 tok, on-invoke ~5.8k tok |
+| Cleanup | `claude plugin uninstall … --scope local` + `claude plugin marketplace remove socialized-claude` | ✔ Uninstalled and marketplace removed; `plugin list` back to empty, only the built-in `anthropic-plugin-directory` marketplace remains |
+
+**What this proves:** the marketplace manifest and plugin manifest are accepted by
+the real CLI; the plugin installs cleanly from the local marketplace; and the
+installed package exposes exactly one skill component, `socialized`, with its files
+read from the plugin folder. The skill is therefore **discoverable** to Claude Code
+as `/socialized:socialized`.
+
+**CLI quirks observed:**
+
+- `claude plugin marketplace add .` is rejected (`Invalid marketplace source
+  format`); the CLI requires an explicit `./` (or `owner/repo` / URL). Use
+  `claude plugin marketplace add ./`.
+- `/plugin install socialized@socialized-claude` is an interactive in-session
+  slash command. The headless equivalent used here is
+  `claude plugin install socialized@socialized-claude`.
+- Install used `--scope local` so nothing in the user's global plugin config was
+  touched; the install also wrote **nothing** to the git working tree.
+
+**Runtime invocation was NOT executed.** Confirming that typing
+`/socialized:socialized` in a live session actually loads and applies the skill
+requires an authenticated, interactive Claude model session, which would start a
+model conversation. Per the task constraints (no silent paid/model conversation),
+that was deliberately not run. Discoverability is verified; behavioural activation
+is not.
+
+### Shortest manual runtime check (owner, one session)
+
+```text
+claude --plugin-dir ./plugins/socialized
+# in the session, open the activity/thinking panel, then:
+/socialized:socialized
+# ask an ordinary "how does X work?" question and confirm the skill fires
+```
+
+(Or, after `claude plugin marketplace add ./` + `/plugin install
+socialized@socialized-claude`, run `/socialized:socialized` the same way.) This is
+the only step that needs a real, signed-in session; everything else above is
+reproducible offline or with non-model CLI calls.
 
 `claude plugin validate ./plugins/socialized` additionally reported two
 **directory-submission** advisories that it states "do not change the result":

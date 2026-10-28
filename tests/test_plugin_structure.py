@@ -127,6 +127,119 @@ def test_plugin_zip_excludes_research_and_tooling():
         assert forbidden not in blob
 
 
+# ---------------------------------------------------------------------------
+# `--check` verifies the ZIP against the canonical files (not just existence)
+# ---------------------------------------------------------------------------
+
+def _write_dist(tmp: Path, files: dict[str, bytes]) -> Path:
+    """Write a ZIP of `files` plus a matching sidecar manifest, as build() would."""
+    import hashlib
+
+    zip_path = tmp / bp.PLUGIN_ZIP.name
+    write_zip(files, bp.PLUGIN_NAME, zip_path)
+    manifest = {
+        "plugin": bp.PLUGIN_NAME,
+        "zip": zip_path.name,
+        "zip_root": f"{bp.PLUGIN_NAME}/",
+        "zip_sha256": hashlib.sha256(zip_path.read_bytes()).hexdigest(),
+        "files": {rel: hashlib.sha256(data).hexdigest() for rel, data in sorted(files.items())},
+    }
+    zip_path.with_suffix(".manifest.json").write_text(
+        json.dumps(manifest, indent=2) + "\n", encoding="utf-8")
+    return zip_path
+
+
+def test_check_passes_on_a_freshly_built_zip(tmp_path, monkeypatch):
+    files = bp.zip_files(bp.plugin_files())
+    monkeypatch.setattr(bp, "PLUGIN_ZIP", _write_dist(tmp_path, files))
+    assert bp.check_zip(files) == []
+
+
+def test_check_detects_missing_zip(tmp_path, monkeypatch):
+    files = bp.zip_files(bp.plugin_files())
+    monkeypatch.setattr(bp, "PLUGIN_ZIP", tmp_path / bp.PLUGIN_ZIP.name)
+    problems = bp.check_zip(files)
+    assert problems and all("missing" in p for p in problems)
+
+
+def test_check_detects_a_corrupt_archive(tmp_path, monkeypatch):
+    files = bp.zip_files(bp.plugin_files())
+    bogus = tmp_path / bp.PLUGIN_ZIP.name
+    bogus.write_bytes(b"PK\x03\x04 this is not really a zip")
+    monkeypatch.setattr(bp, "PLUGIN_ZIP", bogus)
+    assert any("not a valid ZIP archive" in p for p in bp.check_zip(files))
+
+
+def test_check_detects_a_missing_file_in_the_zip(tmp_path, monkeypatch):
+    files = bp.zip_files(bp.plugin_files())
+    short = dict(files)
+    short.pop("skills/socialized/references/explanation-examples.md")
+    zip_path = tmp_path / bp.PLUGIN_ZIP.name
+    write_zip(short, bp.PLUGIN_NAME, zip_path)
+    monkeypatch.setattr(bp, "PLUGIN_ZIP", zip_path)
+    assert any("missing archived file" in p for p in bp.check_zip(files))
+
+
+def test_check_detects_an_unexpected_extra_file_in_the_zip(tmp_path, monkeypatch):
+    files = bp.zip_files(bp.plugin_files())
+    extra = dict(files)
+    extra["skills/socialized/sneaky.md"] = b"not part of the build\n"
+    zip_path = tmp_path / bp.PLUGIN_ZIP.name
+    write_zip(extra, bp.PLUGIN_NAME, zip_path)
+    monkeypatch.setattr(bp, "PLUGIN_ZIP", zip_path)
+    assert any("unexpected archived file" in p for p in bp.check_zip(files))
+
+
+def test_check_detects_modified_file_contents_in_the_zip(tmp_path, monkeypatch):
+    files = bp.zip_files(bp.plugin_files())
+    tampered = dict(files)
+    tampered["skills/socialized/SKILL.md"] = files["skills/socialized/SKILL.md"] + b"\ntampered\n"
+    zip_path = tmp_path / bp.PLUGIN_ZIP.name
+    write_zip(tampered, bp.PLUGIN_NAME, zip_path)
+    monkeypatch.setattr(bp, "PLUGIN_ZIP", zip_path)
+    assert any("differs from the canonical build" in p for p in bp.check_zip(files))
+
+
+def test_check_detects_an_incorrect_root_directory(tmp_path, monkeypatch):
+    files = bp.zip_files(bp.plugin_files())
+    zip_path = tmp_path / bp.PLUGIN_ZIP.name
+    write_zip(files, "wrong-root", zip_path)
+    monkeypatch.setattr(bp, "PLUGIN_ZIP", zip_path)
+    assert any("single root folder" in p for p in bp.check_zip(files))
+
+
+def test_check_detects_manifest_sha_drift(tmp_path, monkeypatch):
+    files = bp.zip_files(bp.plugin_files())
+    zip_path = _write_dist(tmp_path, files)
+    manifest_path = zip_path.with_suffix(".manifest.json")
+    manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+    manifest["zip_sha256"] = "0" * 64
+    manifest_path.write_text(json.dumps(manifest, indent=2) + "\n", encoding="utf-8")
+    monkeypatch.setattr(bp, "PLUGIN_ZIP", zip_path)
+    assert any("zip_sha256 does not match" in p for p in bp.check_zip(files))
+
+
+def test_check_detects_a_missing_manifest(tmp_path, monkeypatch):
+    files = bp.zip_files(bp.plugin_files())
+    zip_path = _write_dist(tmp_path, files)
+    zip_path.with_suffix(".manifest.json").unlink()
+    monkeypatch.setattr(bp, "PLUGIN_ZIP", zip_path)
+    assert any("manifest.json" in p and "missing" in p for p in bp.check_zip(files))
+
+
+def test_check_does_not_rebuild_or_mutate_the_archive(tmp_path, monkeypatch):
+    """`--check` must be read-only: a tampered ZIP stays tampered after a check."""
+    files = bp.zip_files(bp.plugin_files())
+    tampered = dict(files)
+    tampered["skills/socialized/SKILL.md"] = b"tampered\n"
+    zip_path = tmp_path / bp.PLUGIN_ZIP.name
+    write_zip(tampered, bp.PLUGIN_NAME, zip_path)
+    before = zip_path.read_bytes()
+    monkeypatch.setattr(bp, "PLUGIN_ZIP", zip_path)
+    assert bp.check_zip(files), "a tampered archive must be reported"
+    assert zip_path.read_bytes() == before, "check must not rewrite the archive"
+
+
 def test_committed_plugin_zip_is_current(tmp_path):
     fresh = _build_zip_to(tmp_path)
     assert bp.PLUGIN_ZIP.is_file(), "run: python scripts/build_plugin.py"
