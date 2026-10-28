@@ -205,3 +205,9 @@ needs to decide. No progress narrative.
  `docs/RELEASE_READINESS.md` is the Phase 6 checklist and was not executed.
 - Phase 5: there is no `LICENSE` file in the repository. "Open source" is not a claim this
  repository can make yet; it is item 6 of the release-readiness checklist.
+- CI fix: ZIP builds were platform-dependent — `zipfile` defaults `create_system` to 0 on
+ Windows and 3 elsewhere, so a Linux rebuild differed from the Windows-built committed
+ archives in the central directory's "version made by" host byte alone, failing both
+ `--check` drift gates and 5 tests. `package_skill.zip_bytes` now pins
+ `ZIP_CREATE_SYSTEM = 0`, the value the committed archives already carry, so no package
+ changed, no version decision was needed, and the version lock still holds.

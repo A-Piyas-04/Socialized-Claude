@@ -303,6 +303,18 @@ def test_committed_dist_zip_is_current(repo_root, tmp_path):
         "dist/socialized.zip is stale; run: python scripts/package_skill.py"
 
 
+def test_zip_headers_do_not_depend_on_the_build_platform(repo_root, tmp_path):
+    """zipfile picks the "version made by" host byte from the build OS (0 on Windows,
+    3 elsewhere). The packager pins it, so a Linux CI rebuild is byte-identical to the
+    committed Windows-built archive."""
+    fresh, _ = build("full", out_dir=tmp_path)
+    for archive_path in (fresh, repo_root / "dist" / "socialized.zip",
+                         repo_root / "dist" / "socialized-claude-plugin.zip"):
+        with zipfile.ZipFile(archive_path) as archive:
+            systems = {info.create_system for info in archive.infolist()}
+        assert systems == {0},             f"{archive_path.name} carries platform-dependent host bytes: {sorted(systems)}"
+
+
 HEADINGS = {
     "sequencing": "## Operation: Order ideas by dependency",
     "mechanism": "## Operation: Explain the mechanism",

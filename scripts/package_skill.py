@@ -31,6 +31,10 @@ import skilllib as lib  # noqa: E402
 from validate_skill import print_report, validate_dir, validate_zip  # noqa: E402
 
 ZIP_DATE = (1980, 1, 1, 0, 0, 0)
+# zipfile defaults ZipInfo.create_system to 0 on Windows and 3 elsewhere, which puts a
+# different "version made by" host byte in every header. Pinning it keeps a rebuild
+# byte-identical on any platform, so the --check drift gates mean the same thing in CI.
+ZIP_CREATE_SYSTEM = 0
 TEXT_SUFFIXES = {".md", ".txt", ".json", ".yaml", ".yml"}
 
 
@@ -55,10 +59,12 @@ def zip_bytes(files: dict[str, bytes], root: str) -> bytes:
     buffer = io.BytesIO()
     with zipfile.ZipFile(buffer, "w", compression=zipfile.ZIP_DEFLATED) as archive:
         folder = zipfile.ZipInfo(f"{root}/", date_time=ZIP_DATE)
+        folder.create_system = ZIP_CREATE_SYSTEM
         folder.external_attr = (0o40755 << 16) | 0x10
         archive.writestr(folder, b"")
         for rel in sorted(files):
             info = zipfile.ZipInfo(f"{root}/{rel}", date_time=ZIP_DATE)
+            info.create_system = ZIP_CREATE_SYSTEM
             info.external_attr = 0o100644 << 16
             info.compress_type = zipfile.ZIP_DEFLATED
             archive.writestr(info, files[rel])
