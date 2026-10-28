@@ -77,8 +77,8 @@ references to specific systems or papers.
   when it helps the reader predict behaviour.
 <!-- /op:mechanism -->
 <!-- op:close -->
-- Let the close operation supply the last unit. The consequence stays in the
-  body, and the takeaway compresses it rather than restating the section.
+- Keep the consequence in the body. When a takeaway earns its place, it
+  compresses the consequence rather than restating the section.
 <!-- /op:close -->
 - If the honest answer is "this is not fully known", say so first, then give the
   best-supported account and label it as such.

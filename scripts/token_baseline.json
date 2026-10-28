@@ -1,0 +1,59 @@
+{
+  "counts": {
+    "claude-legacy": {
+      "activation": 5946,
+      "dev:AGENTS.md": 2623,
+      "metadata": 37,
+      "persistent:claude-md": 101,
+      "persistent:project-instructions": 126,
+      "ref:explanation-examples.md": 4190,
+      "ref:explanation-methodology.md": 1814,
+      "ref:treatment-selection.md": 2198,
+      "repo:communication/README.md": 1571,
+      "repo:communication/controls.md": 1089,
+      "repo:communication/core.md": 1214,
+      "repo:communication/strategies.md": 1601,
+      "repo:skill-source/SKILL.md": 6274,
+      "repo:skill-source/references/explanation-examples.md": 4392,
+      "repo:skill-source/references/explanation-methodology.md": 1986,
+      "repo:skill-source/references/treatment-selection.md": 2539
+    },
+    "heuristic": {
+      "activation": 5966,
+      "dev:AGENTS.md": 2652,
+      "metadata": 36,
+      "persistent:claude-md": 99,
+      "persistent:project-instructions": 127,
+      "ref:explanation-examples.md": 4299,
+      "ref:explanation-methodology.md": 1767,
+      "ref:treatment-selection.md": 2250,
+      "repo:communication/README.md": 1597,
+      "repo:communication/controls.md": 1056,
+      "repo:communication/core.md": 1182,
+      "repo:communication/strategies.md": 1580,
+      "repo:skill-source/SKILL.md": 6513,
+      "repo:skill-source/references/explanation-examples.md": 4590,
+      "repo:skill-source/references/explanation-methodology.md": 2036,
+      "repo:skill-source/references/treatment-selection.md": 2812
+    }
+  },
+  "source": "Phase 4 tree (commit 92e8eb8), before Phase 4B",
+  "totals": {
+    "claude-legacy": {
+      "always_on_metadata": 37,
+      "distributable_skill": 14148,
+      "loaded_on_activation": 5946,
+      "persistent_opt_in": 227,
+      "references_on_demand": 8202,
+      "repository_instructions": 23516
+    },
+    "heuristic": {
+      "always_on_metadata": 36,
+      "distributable_skill": 14282,
+      "loaded_on_activation": 5966,
+      "persistent_opt_in": 226,
+      "references_on_demand": 8316,
+      "repository_instructions": 24244
+    }
+  }
+}

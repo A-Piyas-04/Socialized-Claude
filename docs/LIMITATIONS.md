@@ -139,6 +139,20 @@ the explanation operations (`docs/phase-4-implementation.md`):
 - **`SKILL.md` is at 498/500 raw lines.** The next behavioural rule needs a
   consolidation first; no guard was raised to fit this phase.
 
+## Phase 4B (token efficiency) limitations
+
+- **Counts are local estimates.** `scripts/token_budget.py` uses Anthropic's legacy
+  public tokenizer or a heuristic calibrated to it. The real tokenizer of current
+  models is unpublished, and Claude Code's own estimator runs about 8% higher.
+  Runtime savings were not measured.
+- **Activation is still above the documented 5,000-token target** (5,379 by the
+  legacy count). In long Claude Code sessions the tail of Step 3, and possibly part
+  of `op:close`, can fall outside what is re-attached after compaction. Going lower
+  would mean moving the visual drawing grammar into an on-demand reference, which
+  was proposed and not implemented (`docs/phase-4b-token-efficiency.md`, §4).
+- **Order and wording changes are unmeasured.** The text moved and was tightened
+  without a behavioural comparison.
+
 ## Not in scope for V0
 
 There is no chatbot, API client, proxy, browser extension, or automated UI

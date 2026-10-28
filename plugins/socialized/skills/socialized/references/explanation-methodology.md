@@ -68,8 +68,8 @@ references to specific systems or papers.
 - Give the chain in order. If a step would look arbitrary, add the reason for it.
 - State the consequence or limit that follows from the mechanism, in the body,
   when it helps the reader predict behaviour.
-- Let the close operation supply the last unit. The consequence stays in the
-  body, and the takeaway compresses it rather than restating the section.
+- Keep the consequence in the body. When a takeaway earns its place, it
+  compresses the consequence rather than restating the section.
 - If the honest answer is "this is not fully known", say so first, then give the
   best-supported account and label it as such.
 

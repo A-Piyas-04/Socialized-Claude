@@ -142,5 +142,15 @@ needs to decide. No progress narrative.
 - SKILL.md compactness guard raised from 380 to 460 rendered lines (394 now).
 - New flags: `dense_table_cell`, `wide_table`, `bold_as_heading`,
   `uncaptioned_specimen`, `flat_visual`. New heuristics that never gate:
-  `visuals_first_half`, `visuals_second_half`, `max_table_cell_words`,
-  `heading_depth_max`.
+ `visuals_first_half`, `visuals_second_half`, `max_table_cell_words`,
+ `heading_depth_max`.
+- Phase 4B: token counts use Anthropic's legacy public tokenizer
+ (`Xenova/claude-tokenizer`, local cache only) or a stdlib heuristic calibrated to
+ it; both are labelled local estimates. The activation budget is `max` 5,500
+ (regression gate) and `target` 5,000 (advisory, from the documented compaction
+ re-attach limit), configurable in `scripts/token_budgets.json`.
+- Phase 4B: the always-on core (Scope, Strategies, Steps 1–2, Accuracy rules,
+ Reference files) precedes the operations so it survives Claude Code's 5,000-token
+ compaction re-attach. Option B (visual drawing grammar moved to an on-demand
+ reference) is documented, not implemented: about 400 tokens saved against a real
+ risk of losing owner-set visual rules when the reference is not read.

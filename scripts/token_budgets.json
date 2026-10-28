@@ -1,0 +1,40 @@
+{
+  "_about": "Budgets for scripts/token_budget.py, in local-estimate tokens. 'max' gates --check; 'target' is advisory and only reported. null means no limit. Override a max with --budget ID=N. Raise a max deliberately, in this file, when new text earns its place.",
+  "budgets": {
+    "metadata": {
+      "max": 100,
+      "target": 100,
+      "why": "Agent Skills overview: Level 1 metadata costs about 100 tokens per skill and sits in context on every turn while the skill is enabled."
+    },
+    "activation": {
+      "max": 5500,
+      "target": 5000,
+      "why": "max: regression ceiling about 2% above the Phase 4B size, so growth is a deliberate decision. target: the Agent Skills overview puts Level 2 instructions under 5k tokens, and Claude Code re-attaches only the first 5,000 tokens of an invoked skill after auto-compaction."
+    },
+    "ref:explanation-examples.md": {
+      "max": null,
+      "target": null,
+      "why": "On demand. The overview states bundled files cost nothing until read."
+    },
+    "ref:explanation-methodology.md": {
+      "max": null,
+      "target": null,
+      "why": "On demand."
+    },
+    "ref:treatment-selection.md": {
+      "max": null,
+      "target": null,
+      "why": "On demand."
+    },
+    "persistent:project-instructions": {
+      "max": 250,
+      "target": 150,
+      "why": "Opt-in standing guidance, paid on every turn of every chat in the Project."
+    },
+    "persistent:claude-md": {
+      "max": 250,
+      "target": 150,
+      "why": "Opt-in standing guidance, loaded in full at every Claude Code session launch."
+    }
+  }
+}

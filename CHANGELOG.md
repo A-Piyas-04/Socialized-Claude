@@ -2,6 +2,30 @@
 
 ## Unreleased
 
+### Token efficiency (Phase 4B, plugin v0.4.0)
+- The shipped `SKILL.md` that loads on activation drops from 5,946 to 5,379
+  local-estimate tokens (−9.5%, Anthropic's legacy public tokenizer). Claude Code's
+  `plugin details` estimate drops from about 6.4k to about 5.8k. These are not
+  measured API usage.
+- The always-on core (Scope, Strategies, Steps 1–2, Accuracy rules, Reference files)
+  now precedes the twelve operations, and Step 3 stays last. Claude Code re-attaches
+  only the first 5,000 tokens of a skill after auto-compaction; the old layout lost
+  part of the accuracy rules and all reference pointers there.
+- Duplicates merged (mixed-task rule, two repair pushback bullets, two
+  presentation unit bullets, a work-report restatement), Step 3 shortened, reference
+  pointers say when to read each file. No rule removed; every phrase pinned by the
+  Phase 3 and Phase 4 tests is unchanged. Still 12 operations and 15 variants.
+- `treatment-selection.md` and `explanation-methodology.md` no longer contradict
+  Phase 4 (they still prescribed a check question for beginners and confusion
+  follow-ups, a takeaway on every teaching answer, and a figure per shaped idea).
+- New `scripts/token_budget.py` reports every instruction surface by how it loads,
+  with configurable budgets (`scripts/token_budgets.json`: `max` gates `--check`,
+  `target` is advisory) and the pre-4B baseline (`scripts/token_baseline.json`).
+  New `tests/test_token_budget.py` (15 tests; suite 463 passed, 1 skipped).
+- Plugin `version` 0.3.0 → 0.4.0. Both artifacts regenerated. Moving the visual
+  drawing grammar into an on-demand reference was evaluated and not implemented
+  (see `docs/phase-4b-token-efficiency.md`).
+
 ### Communication refinement (Phase 4, policy v0.3.0, plugin v0.3.0)
 - `op:close`: a check question is added **only** when the person asks to practise or
   be tested, the exchange is explicitly a tutorial, or one focused question resolves
