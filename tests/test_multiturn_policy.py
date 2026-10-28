@@ -247,5 +247,5 @@ def test_plugin_version_tracks_the_shipped_content(repo_root):
     import json
     meta = json.loads(read(repo_root / "plugins" / "socialized" / ".claude-plugin" / "plugin.json"))
     # Bumped because `version` pins installs: new skill content needs a new version.
-    assert meta["version"] == "0.5.0"
+    assert meta["version"] == "0.5.1"
     assert not meta["version"].startswith("1.")

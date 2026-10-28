@@ -104,6 +104,21 @@ without reinstating anything Phase 4 was right to remove.
 | Quizzes, previews, demo offers, artifacts | Preserve | Unchanged from Phase 4: no mandatory check question, no automatic section map, no appended interactive offer, artifacts opt-in. |
 | Technical depth | Preserve | `core.md` principle 11 splits a dense paragraph into connected units rather than dropping a mechanism. No word caps were added. |
 
+### Final calibration
+
+Live conversational tests accepted the restoration and found the restored rules too
+prescriptive. The requirements became strong, context-sensitive preferences. No
+operation, marker, variant or module was added, so the modules stay at v0.4.0.
+
+| Area | Action | Result |
+|---|---|---|
+| Visual coverage | Soften to a preference | "**Prefer** a visual for such an idea … **leave one out where the prose already makes the relationship plain**". No quota and no cap, and no per-idea requirement. |
+| Long answers | Soften | "Keep the support **even across the answer**, so a later section that needs a figure gets one" replaces the final-third floor. |
+| Table cells | Allow sentences | "One idea, about six words where a phrase will do and a short sentence where the comparison needs one." Step 3 asks whether a cell stays scannable. |
+| Section separator | Soften | The horizontal rule goes where an answer of three or more sections **turns to a new topic**. |
+| Accuracy | Strengthen in place | `core.md` principle 6 and the skill's accuracy rules name the settings a guarantee depends on, state an assumed workload or scale the person has not given, and carry no database's or broker's behaviour over to another unchecked. |
+| Everything else | Keep | The comparison-table cue, the Mermaid grammar, paragraph density, heading rules, the Step 3 scannability and decoration checks, and the form-from-content line are unchanged. Mandatory quizzes, takeaways, previews, unrequested artifacts and templates stay absent. |
+
 ## What this does not establish
 
 These are static policy documents. Passing the repository's structural and

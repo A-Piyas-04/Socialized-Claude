@@ -25,7 +25,8 @@ Enforced by: SKILL.md **Step 2**; `references/treatment-selection.md` §3.
 - Give each idea its own unit, leave a blank line between units, and end a
   paragraph by four sentences or about 80 words. Start a new paragraph when the
   idea changes, even when the current one is short, and keep a list item to one
-  idea and about 25 words.
+  idea and about 25 words. Keep a table cell scannable — a phrase where one will do,
+  a short sentence where the comparison needs one.
 - Apply the form choice in every strategy, not only in teaching replies: an
   architecture or tool comparison earns a table rather than four long paragraphs,
   and a mechanism with an order in time earns a sequence diagram.
@@ -56,13 +57,14 @@ Enforced by: SKILL.md **op:examples**.
 
 ## Visualizations
 
-- Draw a visual for each idea whose shape would take three or more sentences to
-  describe, and delete the sentences it replaces. There is no cap per answer; each
+- Prefer a visual for an idea whose shape would take three or more sentences to
+  describe, and delete the sentences it replaces. There is no quota and no cap; each
   figure pays for itself by removing that prose. Keep to one representation per
-  idea, and add a second only when it carries a materially different dimension.
-- Give the hardest idea its visual first, and support the last third of the answer
-  at least as well as the first. Add colour, status emoji, or a legend only where
-  it makes a comparison genuinely faster.
+  idea, and add a second only when it carries a materially different dimension, and
+  leave one out where the prose already makes the relationship plain.
+- Give the hardest idea its visual first, and keep the support even across the
+  answer rather than front-loading it. Add colour, status emoji, or a legend only
+  where it makes a comparison genuinely faster.
 - Render visuals as markdown; build an artifact only when the person explicitly
   asks for one, and offer an interactive version only when asked or clearly useful
   rather than by default.

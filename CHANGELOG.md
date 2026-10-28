@@ -2,6 +2,43 @@
 
 ## Unreleased
 
+### Final calibration (Phase 4C, plugin v0.5.1)
+- Live conversational tests accepted the restoration below and found several restored
+  rules too prescriptive. The requirements are now strong, context-sensitive
+  preferences, with no operation, marker, variant, section or reference file added.
+- `op:visual`: "**Prefer** a visual for such an idea … **leave one out where the prose
+  already makes the relationship plain**" replaces "draw a visual for each such idea …
+  there is no cap per answer". The final-third requirement becomes "keep that support
+  even across the answer, so a later section that needs a figure gets one". The
+  three-sentence cue stays as a signal, not a test to pass.
+- `op:presentation`: a table cell is "one idea, about six words where a phrase will do
+  and a short sentence where the comparison needs one" — the ban on sentences is gone.
+  The horizontal rule now goes "where an answer of three or more sections turns to a
+  new topic".
+- Step 3: "Does a mechanism a figure would clarify still have one, in the last third as
+  much as the first?" replaces the per-idea coverage question, and the six-word cell
+  limit becomes "Does every table cell stay scannable?". Paragraph and list-item
+  density checks are unchanged.
+- Accuracy rules split in two and strengthened in place (task 3): carry no database's
+  or broker's behaviour over to another unchecked; name the settings a guarantee
+  depends on rather than stating it absolutely; state any workload, scale, or traffic
+  pattern the answer assumes and the person has not given. `core.md` principle 6
+  mirrors it.
+- Kept: the comparison-table cue, the whole Mermaid grammar, paragraph density,
+  heading rules and the section separator, the Step 3 scannability and decoration
+  checks, the form-from-content line. Still absent: mandatory quizzes, automatic
+  takeaways, section previews, unrequested artifacts, response templates.
+- Activation 5,466 → 5,543 local-estimate tokens (+77; 5,514 → 5,588 by the
+  heuristic), inside the 5,600 gate with about 12 heuristic tokens spare; the gate was
+  not raised again. −6.8% against the Phase 4 baseline.
+- Tests: six assertions in `tests/test_visual_restoration.py` re-pointed from
+  requirement to preference wording, plus `test_no_visual_or_formatting_quota` (four
+  quota phrases that must stay absent, checked in the source and both artifacts) and
+  `test_accuracy_rules_discourage_absolute_and_unsupported_claims`. One pre-existing
+  assertion in `tests/test_skill_structure.py` required the literal "for each such
+  idea" and now requires "Prefer a visual". Suite 492 passed, 1 skipped.
+- Plugin `version` 0.5.0 → 0.5.1. Both artifacts regenerated.
+
 ### Visual communication restored (Phase 4C, policy v0.4.0, plugin v0.5.0)
 - `op:visual`: the coverage floor Phase 4 removed is back. A visual is drawn for
   **each** idea whose shape would take three or more sentences to describe, there is

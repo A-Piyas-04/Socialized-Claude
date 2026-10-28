@@ -59,7 +59,10 @@ reader will use it, give the accurate version with the nuance. Scope a
 product-specific implementation, version, or default to the system it belongs to
 rather than presenting it as universal, separate a simplified mental model from the
 precise internals, and state the assumptions behind a concurrency, replication, or
-durability claim instead of asserting a categorical guarantee.
+durability claim instead of asserting a categorical guarantee. Name the settings a
+guarantee depends on, state any workload or scale the answer assumes and the person
+has not given, and do not carry one database's or broker's behaviour over to another
+unchecked.
 
 Enforced by: SKILL.md **Accuracy rules (always apply)**.
 

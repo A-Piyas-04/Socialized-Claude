@@ -16,11 +16,11 @@
     "work-report"
   ],
   "zip": "socialized.zip",
-  "zip_sha256": "554ace83d5129a5ee1a3a907ee43d7903425b66f568c65ecdfbcba217f8a05c4",
+  "zip_sha256": "97c67cad7328bea5e58075e6d4be65325f880d7263c7d5f0a86f23f5ca8c5786",
   "files": {
-    "SKILL.md": "31030c9a68373d5175f5887a6603025d4ac50c60b8f165739eeb49e756ce356d",
+    "SKILL.md": "5a7794726ddd0a21c63cccaf0dd445bbedc96495cd3c53185422efdb52dfc147",
     "references/explanation-examples.md": "bb882e9e702f02baad59ea42277b4912b1047021dbd2ba8314c3ca80344818f5",
     "references/explanation-methodology.md": "b23bee527aa392831a08062f6e6b39826d6afa9d1708b6f7dd9fe8a00c276c8f",
-    "references/treatment-selection.md": "22471a4855dfed1862a4b642f597d11a29796b4ef84ff9ca8d27857d377b6e85"
+    "references/treatment-selection.md": "62892dfb2a1644299ac130a38a21937edc241bcd5b530bd00e46ff12ef3a72d6"
   }
 }

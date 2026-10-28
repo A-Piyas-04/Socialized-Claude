@@ -5,9 +5,16 @@ redundant visuals, interactive-demo offers). Three of those were right. The four
 went too far: it replaced the visual-coverage floor with a negative rule ("do not
 require a visual for every shaped idea, every section, or the final third") and
 turned the Step 3 visual check from a coverage question into a pruning-only one.
-Phase 4C restores the coverage floor, the paragraph-density rule and the section
-separator, and adds form selection to the non-teaching strategies, while keeping
-everything Phase 4 was right to remove.
+Phase 4C restored the coverage expectation, the paragraph-density rule and the
+section separator, and added form selection to the non-teaching strategies, while
+keeping everything Phase 4 was right to remove.
+
+The final calibration (same phase, after live tests) turned those restored rules from
+unconditional requirements into strong, context-sensitive preferences: no visual
+quota, no mandatory final-third figure, no prohibition on sentences in table cells.
+The preference has to stay strong, so these tests assert that the pull toward a
+figure, a table and a paragraph break is still in the text, and that no quota
+wording is.
 
 These are static assertions over the loaded SKILL.md, the reusable policy modules
 and both installed artifacts. They show which instructions ship. They cannot show
@@ -74,8 +81,15 @@ def bullets(block: str) -> list[str]:
 SUPPRESSING = [
     "do not require a visual for every shaped idea, every section, or the final third",
     "Draw a visual for each such idea when it clarifies the relationship",
-    "Prefer one strong representation per idea",
     "a visual would show that relationship better than three or more sentences",
+]
+
+# Quota wording the final calibration removed. None of it may return either.
+QUOTA = [
+    "Draw a visual for each such idea",
+    "there is no cap per answer",
+    "give the last third of the answer at least the visual support of the first",
+    "never a sentence",
 ]
 
 
@@ -85,18 +99,33 @@ def test_coverage_suppressing_wording_is_gone():
         assert norm(phrase) not in text, f"coverage-suppressing wording is back: {phrase!r}"
 
 
-def test_visual_covers_every_shaped_idea():
+def test_no_visual_or_formatting_quota():
+    """Calibration: strong preferences, never a count the answer has to hit."""
+    text = norm(skill_source())
+    for phrase in QUOTA:
+        assert norm(phrase) not in text, f"quota wording is back: {phrase!r}"
+
+
+def test_visual_is_the_preferred_treatment_for_a_shaped_idea():
+    """The pull toward a figure survives; the requirement does not."""
     block = norm(op_block(skill_source(), "visual"))
-    assert "Draw a visual for each such idea" in block
-    assert "there is no cap per answer" in block
-    assert "give the last third of the answer at least the visual support of the first" in block
+    assert "Prefer a visual for such an idea" in block
+    assert "delete the sentences it replaces" in block
+    # And it is a preference: the escape clause is explicit.
+    assert "Leave one out where the prose already makes the relationship plain" in block
+
+
+def test_visual_support_stays_even_across_a_long_answer():
+    block = norm(op_block(skill_source(), "visual"))
     assert "Give the hardest section its visual first" in block
+    assert "keep that support even across the answer" in block
+    assert "a later section that needs a figure gets one" in block
 
 
-def test_visual_trigger_is_the_three_sentence_test_not_a_second_judgement_gate():
-    """The trigger is the length of the prose description, not a taste check."""
+def test_visual_cue_is_the_three_sentence_test_not_a_second_judgement_gate():
+    """One cue, the length of the prose description, not Phase 4 stacked gates."""
     block = norm(op_block(skill_source(), "visual"))
-    assert "describing that relationship in prose would take three or more sentences" in block
+    assert "prose would take three or more sentences to describe that relationship" in block
 
 
 def test_visual_redundancy_rules_from_phase_4_are_kept():
@@ -115,12 +144,13 @@ def test_short_answers_still_get_sentences():
 # P4C-02: the pre-send check can add a missing visual again
 # ---------------------------------------------------------------------------
 
-def test_step_3_asks_for_coverage_not_only_pruning():
+def test_step_3_asks_about_missing_visuals_not_only_redundant_ones():
     check = norm(step_3(skill_source()))
-    assert "Does each idea with a shape have its visual" in check
-    assert "including the hardest section and the last third" in check
+    # A missing figure can still be noticed, in the last third as much as the first.
+    assert "Does a mechanism a figure would clarify still have one" in check
+    assert "in the last third as much as the first" in check
     # The pruning half stays.
-    assert "clarify a real relationship" in check
+    assert "carry a real relationship" in check
     assert "its replaced prose gone" in check
 
 
@@ -143,19 +173,23 @@ def test_paragraph_breaks_follow_the_idea_not_the_word_count():
 
 def test_major_topics_are_separated():
     block = norm(op_block(skill_source(), "presentation"))
-    assert "a horizontal rule (`---`) between major topics" in block
+    assert ("a horizontal rule (`---`) where an answer of three or more sections "
+            "turns to a new topic") in block
 
 
-def test_step_3_checks_every_density_limit():
+def test_step_3_checks_paragraph_and_list_density_and_table_scannability():
     check = norm(step_3(skill_source()))
-    for limit in ("four sentences or about 80 words", "any list item about 25 words",
-                  "any table cell six words"):
+    for limit in ("four sentences or about 80 words", "any list item about 25 words"):
         assert limit in check, limit
+    assert "Does every table cell stay scannable" in check
 
 
-def test_table_cells_are_not_sentences():
+def test_table_cells_scan_without_banning_sentences():
+    """Calibration: a cell prefers a phrase but may be a sentence."""
     block = norm(op_block(skill_source(), "presentation"))
-    assert "one idea of six words or fewer, never a sentence" in block
+    assert "about six words where a phrase will do" in block
+    assert "a short sentence where the comparison needs one" in block
+    assert "never a sentence" not in block
 
 
 # ---------------------------------------------------------------------------
@@ -225,6 +259,18 @@ def test_no_word_cap_was_added_to_the_explanation_itself():
     assert "Add length only when this reader needs it to understand" in text
 
 
+def test_accuracy_rules_discourage_absolute_and_unsupported_claims():
+    """Calibration task 3: refined in place, with no new operation."""
+    accuracy = norm(section(skill_source(), "## Accuracy rules (always apply)"))
+    assert "Name the settings a guarantee depends on rather than stating it absolutely" in accuracy
+    assert "State any workload, scale, or traffic pattern the answer assumes" in accuracy
+    assert "carry no database" in accuracy and "behaviour over to another unchecked" in accuracy
+    # Phase 4 scoping is kept, not replaced.
+    assert "Scope a product-specific implementation" in accuracy
+    assert "not a categorical guarantee" in accuracy
+    assert len(lib.OPERATIONS) == 12
+
+
 def test_technical_depth_is_preserved_by_splitting_not_cutting():
     text = norm(skill_source())
     assert "keep the causal steps a requested mechanism needs" in text
@@ -278,12 +324,13 @@ def test_every_restored_rule_names_an_action():
 
 
 RESTORED_MARKERS = (
-    "Draw a visual for each such idea",
-    "at least the visual support of the first",
-    "Does each idea with a shape have its visual",
+    "Prefer a visual for such an idea",
+    "keep that support even across the answer",
+    "Does a mechanism a figure would clarify still have one",
     "even when the current one is short",
-    "horizontal rule (`---`) between major topics",
+    "horizontal rule (`---`) where an answer of three or more sections",
     "In every strategy, pick the form from the content",
+    "Name the settings a guarantee depends on",
 )
 
 
@@ -296,7 +343,7 @@ def test_restored_policy_ships_in_the_claude_ai_zip(tmp_path):
     normalized = norm(skill_md)
     for marker in RESTORED_MARKERS:
         assert marker in normalized, marker
-    for phrase in SUPPRESSING + STILL_FORBIDDEN:
+    for phrase in SUPPRESSING + QUOTA + STILL_FORBIDDEN:
         assert norm(phrase) not in normalized, phrase
 
 
@@ -306,7 +353,7 @@ def test_restored_policy_ships_in_the_plugin():
     normalized = norm(skill_md)
     for marker in RESTORED_MARKERS:
         assert marker in normalized, marker
-    for phrase in SUPPRESSING + STILL_FORBIDDEN:
+    for phrase in SUPPRESSING + QUOTA + STILL_FORBIDDEN:
         assert norm(phrase) not in normalized, phrase
 
 
@@ -314,14 +361,15 @@ def test_restored_policy_ships_in_the_plugin():
 # P4C-08: the reference files agree with the skill
 # ---------------------------------------------------------------------------
 
-def test_treatment_selection_agrees_with_the_restored_visual_rule():
+def test_treatment_selection_agrees_with_the_calibrated_visual_rule():
     text = norm(read(lib.SKILL_DIR / "references" / "treatment-selection.md"))
-    assert "A visual** fits each idea whose content has a shape" in text
-    assert "There is no cap per answer" in text
-    assert "support the last third of the answer at least as well as the first" in text
-    assert "Each idea with a shape gets its own" in text
+    assert "A visual** fits an idea whose content has a shape" in text
+    assert "There is no quota and no cap" in text
+    assert "draw as many as the ideas earn" in text
+    assert "keep the support even across the answer rather than front-loading it" in text
     # The anti-redundancy half is stated there too.
     assert "add a second only when it carries a materially different dimension" in text
+    assert "leave one out where the prose already makes the relationship plain" in text
 
 
 def test_policy_modules_agree_with_the_restored_rules(repo_root):
@@ -329,10 +377,13 @@ def test_policy_modules_agree_with_the_restored_rules(repo_root):
     for name in ("core.md", "strategies.md", "controls.md"):
         assert "Version 0.4.0" in read(comms / name), name
     controls = norm(read(comms / "controls.md"))
-    assert "Draw a visual for each idea whose shape" in controls
-    assert "support the last third of the answer" in controls
+    assert "Prefer a visual for an idea whose shape" in controls
+    assert "keep the support even across the answer" in controls
+    assert "There is no quota and no cap" in controls
     assert "Start a new paragraph when the idea changes" in controls
+    assert "Keep a table cell scannable" in controls
     assert "an architecture or tool comparison earns a table" in controls
+    assert "Name the settings a guarantee depends on" in norm(read(comms / "core.md"))
     core = norm(read(comms / "core.md"))
     assert "## 11. Readable presentation" in core
     assert "never" not in core.split("## 11. Readable presentation")[1].split("Enforced by")[0].lower() \

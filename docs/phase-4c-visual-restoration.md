@@ -9,9 +9,17 @@ and the pre-send check stopped asking whether a visual was *missing*. Answers dr
 into long prose — the owner's microservices / Redis / RabbitMQ / Kubernetes
 discussion came back as four substantial prose sections instead of a comparison.
 
-Phase 4C restores the coverage floor, paragraph density and section separation, adds
-form selection to the non-teaching strategies, and reinstates nothing Phase 4 was
+Phase 4C restores the coverage expectation, paragraph density and section separation,
+adds form selection to the non-teaching strategies, and reinstates nothing Phase 4 was
 right to remove.
+
+**Final calibration (§6).** Live conversational tests accepted the restoration and
+found the restored rules too prescriptive. The calibration turned them from
+unconditional requirements into strong, context-sensitive preferences: no visual
+quota, no mandatory final-third figure, no ban on sentences in table cells. It also
+strengthened the accuracy rules in place. Sections 1–5 describe the restoration as
+shipped before that calibration; §6 records what changed and why, and the numbers in
+§4 and §5 are the calibrated ones.
 
 ---
 
@@ -81,9 +89,12 @@ Not measured. Ranked by how much of the regression each would explain.
 
 ## 2. Instructions changed in Phase 4C
 
+Listed as shipped by the restoration. C1–C3, C5, C6 and C9 were then calibrated; see
+§6 for their final wording.
+
 | ID | Where | Change |
 |---|---|---|
-| C1 | `op:visual` | Trigger is the mechanical test again: "describing that relationship in prose would take three or more sentences". Both judgement gates removed. |
+| C1 | `op:visual` | Trigger is one cue again — the length of the prose description. Phase 4's second judgement gate removed. |
 | C2 | `op:visual` | "Draw a visual for each such idea … ; there is no cap per answer." |
 | C3 | `op:visual` | "Give the hardest section its visual first, **and give the last third of the answer at least the visual support of the first**." The negative rule is deleted. |
 | C4 | `op:visual` | Kept from Phase 4: "Keep to one representation per idea, and add a second only when it carries a materially different dimension"; colour/emoji/legend only where they speed a comparison; conditional interactive offer; opt-in artifacts. |
@@ -122,7 +133,7 @@ Mapped to the brief's Task 2 list.
 | 2. Clear separation between concepts | blank line before every unit; horizontal rule between major topics | `op:presentation`, Step 3 |
 | 3. Meaningful headings | a heading per distinct part, stating what the section establishes; `##` then `###`; no heading over a one-sentence section | `op:presentation`, `controls.md` |
 | 4. Comparison tables | three or more items across two or more dimensions → a table, ≤4 columns; a table for options against their tradeoffs in every strategy | `op:presentation`, strategy section |
-| 5. Mermaid diagrams | `flowchart` for a branch/loop/return; `sequenceDiagram` for order in time; one per shaped idea, hardest first, last third supported | `op:visual` |
+| 5. Mermaid diagrams | `flowchart` for a branch/loop/return; `sequenceDiagram` for order in time; preferred per shaped idea, hardest first, support kept even across the answer | `op:visual` |
 | 6. Lists | labelled list for parallel options; numbered steps for a process | `op:presentation` |
 | 7. Selective bold | bold the one sentence the reader must not miss, at most two per answer; bolded verb per step; bolded label per option | `op:presentation` |
 | 8. Whitespace | blank line before every paragraph, list, table, code block, heading; rule between topics | `op:presentation`, Step 3 |
@@ -135,7 +146,7 @@ Mapped to the brief's Task 2 list.
 Commands and results, run on this tree.
 
 ```
-python -m pytest -q                              489 passed, 1 skipped
+python -m pytest -q                              492 passed, 1 skipped
 python scripts/validate_skill.py                 PASSED (0 errors, 0 warnings)
 python scripts/package_skill.py                  PASSED dist/socialized.zip
 python scripts/build_plugin.py --check           Plugin is in sync with the canonical skill.
@@ -145,15 +156,15 @@ python scripts/token_budget.py --tokenizer heuristic --check
 python research/recompute_archive_stats.py       reproduces
 ```
 
-New suite: `tests/test_visual_restoration.py`, 26 tests, grouped P4C-01…P4C-08.
+New suite: `tests/test_visual_restoration.py`, 29 tests, grouped P4C-01…P4C-08.
 
 | Group | Checks |
 |---|---|
-| P4C-01 | Coverage floor present in `op:visual`; all four coverage-suppressing phrases absent; mechanical trigger; Phase 4's redundancy rules kept; short answers still prose. |
-| P4C-02 | Step 3 asks for coverage *and* prunes; decoration check covers diagrams. |
-| P4C-03 | Paragraph/list/table limits; idea-change paragraph break; horizontal rule; table cell never a sentence. |
+| P4C-01 | Visual is the preferred treatment for a shaped idea, with its escape clause; support stays even across a long answer; the three coverage-suppressing phrases **and** the four quota phrases absent; one trigger cue; Phase 4's redundancy rules kept; short answers still prose. |
+| P4C-02 | Step 3 can still notice a *missing* figure, in the last third as much as the first, and still prunes; decoration check covers diagrams. |
+| P4C-03 | Paragraph and list limits; table-cell scannability without banning sentences; idea-change paragraph break; horizontal rule at a topic turn. |
 | P4C-04 | Form-from-content line present with all five cues; five strategies intact; no mandatory-diagram wording. |
-| P4C-05 | Quizzes, previews and demo offers still conditional; no word cap added; depth preserved by splitting. |
+| P4C-05 | Quizzes, previews and demo offers still conditional; no word cap added; depth preserved by splitting; accuracy rules cover configuration-dependent guarantees, unstated workloads and cross-implementation carry-over, with no new operation. |
 | P4C-06 | Phase 3 multi-turn: `op:repair`, `op:persistence`, `op:work-report` rule counts, key phrases, and the scope routing for correction and work-report turns. |
 | P4C-07 | 12 operations / 15 variants, markers balanced, both line budgets, every restored rule names an action, restored text present in the claude.ai ZIP **and** the plugin. |
 | P4C-08 | `treatment-selection.md`, the three policy modules and the policy README agree with the skill. |
@@ -176,15 +187,16 @@ was run.
 Local estimates (Anthropic's legacy public tokenizer; the heuristic in brackets).
 Baseline column is the pre-4B Phase 4 tree, as recorded in `scripts/token_baseline.json`.
 
-| Surface | Phase 4 | Phase 4B | Phase 4C | 4B → 4C |
-|---|---:|---:|---:|---:|
-| `activation` (loaded `SKILL.md`) | 5,946 [5,966] | 5,379 [5,418] | **5,466 [5,514]** | +87 (+1.6%) [+96, +1.8%] |
-| `metadata` | 37 | 37 | 37 | 0 |
-| references, on demand | 8,202 | 8,221 | 8,262 | +41 |
-| distributable skill | 14,148 | 13,600 | 13,728 | +128 |
+| Surface | Phase 4 | Phase 4B | 4C restoration | 4C calibrated | 4B → final |
+|---|---:|---:|---:|---:|---:|
+| `activation` (loaded `SKILL.md`) | 5,946 [5,966] | 5,379 [5,418] | 5,466 [5,514] | **5,543 [5,588]** | +164 (+3.0%) [+170, +3.1%] |
+| `metadata` | 37 | 37 | 37 | 37 | 0 |
+| references, on demand | 8,202 | 8,221 | 8,262 | 8,281 | +60 |
+| distributable skill | 14,148 | 13,600 | 13,728 | 13,824 | +224 |
 
-Against the Phase 4 baseline, activation is still **−8.1%**. Phase 4B's saving is
-kept; Phase 4C spends about a sixth of it.
+Against the Phase 4 baseline, activation is still **−6.8%**. Phase 4B's saving is
+kept; the restoration spent about a sixth of it and the calibration about another
+sixth, most of the latter on the accuracy strengthening (§6, K7).
 
 **What the 87 tokens bought:** C1–C3 (coverage floor), C5–C7 (three Step 3 checks),
 C8–C10 (density and separation) and C11 (form in every strategy).
@@ -205,7 +217,8 @@ C8–C10 (density and separation) and C11 (form in every strategy).
 **Budget change.** `activation.max` raised 5,500 → 5,600 in `scripts/token_budgets.json`,
 with the reason recorded there. That gate is a *regression ceiling about 2% above the
 current size*, not an owner-frozen threshold; the raise keeps it doing its job at the
-new size. `target` stays 5,000.
+new size. `target` stays 5,000. The calibration fits inside the raised gate with about
+12 tokens of heuristic headroom and did not raise it again.
 
 **The tradeoff, stated plainly.** Activation remains above the 5,000-token advisory
 target, and it is now 466 tokens above rather than 379. The report names what falls
@@ -226,7 +239,53 @@ owner-set visual rules at risk of never being read
 
 ---
 
-## 6. Remaining limitations
+## 6. Final calibration
+
+Live conversational tests accepted the restoration and reported that several restored
+rules were too prescriptive, risking the rigidity Phase 4 had removed. This was a
+wording calibration: no operation, marker, variant, section or reference file was
+added or removed, and `op:close`, `op:plain`, `op:repair`, `op:persistence` and
+`op:work-report` were not touched.
+
+| ID | Rule | Before (restoration) | After (calibrated) |
+|---|---|---|---|
+| K1 | `op:visual`, coverage | "**Draw** a visual for each such idea … ; **there is no cap per answer**." | "**Prefer** a visual for such an idea … **Leave one out where the prose already makes the relationship plain.**" |
+| K2 | `op:visual`, long answers | "give the last third of the answer **at least the visual support of the first**" | "**keep that support even across the answer, so a later section that needs a figure gets one**" |
+| K3 | `op:visual`, trigger | "**describing that relationship in prose would take** three or more sentences" | "**prose would take** three or more sentences **to describe that relationship**" — same cue, read as a signal rather than a test to pass |
+| K4 | `op:presentation`, tables | "one idea of six words or fewer, **never a sentence**" | "one idea, **about six words where a phrase will do and a short sentence where the comparison needs one**" |
+| K5 | `op:presentation`, separation | "a horizontal rule (`---`) **between major topics in** an answer of three or more sections" | "a horizontal rule (`---`) **where** an answer of three or more sections **turns to a new topic**" |
+| K6 | Step 3 | "Does **each idea with a shape have its visual**, including the hardest section and the last third?" / "any **table cell six words**" | "Does **a mechanism a figure would clarify still have one**, in the last third as much as the first?" / "Does every table cell **stay scannable**?" |
+| K7 | Accuracy rules | one bullet scoping implementation and concurrency claims | split in two: the first adds "**carry no database's or broker's behaviour over to another unchecked**"; the second adds "**Name the settings a guarantee depends on rather than stating it absolutely**" and "**State any workload, scale, or traffic pattern the answer assumes and the person has not given**" |
+
+Mirrored in `treatment-selection.md` §1 and its failure modes, `controls.md`
+(Visualizations, Formatting) and `core.md` principle 6. The policy modules stay at
+v0.4.0: the calibration adjusts the same rules, it does not add policy.
+
+**Kept, unchanged by the calibration:** the comparison-table cue (three or more items
+across two or more dimensions), the whole Mermaid grammar (`flowchart`,
+`sequenceDiagram`, `classDef`, load-bearing node shape, colour code), paragraph
+density (four sentences / ~80 words, new unit on an idea change, ~25-word list
+items), heading rules and the section separator, the Step 3 scannability and
+decoration checks, and the form-from-content line in the strategy section.
+
+**Still not reintroduced:** mandatory check questions, automatic takeaways, section
+previews, interactive offers, unrequested artifacts, response templates.
+
+**Tests updated**, per the calibration's own instruction to update tests that enforce
+unconditional visualization rules:
+
+- `tests/test_visual_restoration.py`: six tests re-pointed from requirement wording to
+  preference wording, plus two new ones — `test_no_visual_or_formatting_quota` (a
+  `QUOTA` list of four phrases that must stay absent, checked in the source and in
+  both artifacts) and `test_accuracy_rules_discourage_absolute_and_unsupported_claims`.
+- `tests/test_skill_structure.py`: one pre-existing assertion required the literal
+  "for each such idea" in `op:visual`; it now requires "Prefer a visual". Nothing else
+  in that suite was touched.
+
+No other test was weakened. The Phase 4 suite, the Phase 3 multi-turn suite, the
+packaging suites and the token-budget suite are unchanged and pass.
+
+## 7. Remaining limitations
 
 - **No behavioural evidence.** Everything above is static. The regression itself was
   observed by the owner in real chats; the fix has not been observed in real chats.
@@ -246,5 +305,11 @@ owner-set visual rules at risk of never being read
   them as heuristics and flags that never gate, so nothing in CI measures an actual
   answer's visual density.
 - **Phase 4's own fixes are equally unverified** and nothing here changes that.
-- **`SKILL.md` is near its guards again**: 463/500 raw lines, 415/460 rendered. The
-  next behavioural rule needs a consolidation first.
+- **`SKILL.md` is near its guards again**: 470/500 raw lines, 422/460 rendered, and
+  `activation` is about 12 heuristic tokens under its gate. The next behavioural rule
+  needs a consolidation first.
+- **"Strong preference" is not measurable from the text.** The calibration's whole
+  claim is that the pull toward a figure is still strong enough after the
+  requirement was removed. The tests can only check that the preference wording and
+  its escape clause are both present; whether the balance is right is unknown, and it
+  is the same kind of judgement Phase 4 got wrong in the other direction.

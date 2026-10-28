@@ -171,3 +171,15 @@ needs to decide. No progress narrative.
  a flow or an interaction, …") added to the strategy section so it applies to
  non-teaching replies. The reported regression was a Strategy D architecture discussion,
  which previously had no form guidance at all.
+- Phase 4C calibration (user, 2026-10-28, live tests): the restoration is accepted and
+ its restored rules are softened from requirements to strong, context-sensitive
+ preferences. `op:visual` prefers a visual per shaped idea with an explicit escape
+ clause, no quota and no cap; the final-third floor becomes "keep that support even
+ across the answer"; a table cell may be a short sentence. This supersedes the
+ "Visual budget" decision's "each idea with a shape gets one visual" as a requirement,
+ keeping it as the default preference. Recorded as a deviation from that decision.
+- Phase 4C calibration: accuracy rules split in two and strengthened in place —
+ configuration-dependent guarantees, unstated workload or scale assumptions, and
+ cross-implementation carry-over. No new operation (still 12 and 15 variants).
+- Phase 4C calibration: `activation` 5,543 legacy / 5,588 heuristic, inside the 5,600
+ gate with about 12 heuristic tokens spare; the gate was not raised again.

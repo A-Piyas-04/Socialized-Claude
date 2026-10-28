@@ -349,7 +349,8 @@ def test_visual_rules_name_actions_and_keep_artifacts_opt_in():
     assert "explicitly asks" in block
     joined = " ".join(rules)
     assert "artifact" in joined.lower()
-    for required in ("for each such idea", "hardest section", "sequenceDiagram", "classDef",
+    # Phase 4C calibration: a strong preference, not "for each such idea".
+    for required in ("Prefer a visual", "hardest section", "sequenceDiagram", "classDef",
                      "one colour code", "interactive"):
         assert required in block, required
     assert "at most two in an answer" not in block, "the per-answer cap was replaced by a per-idea budget"
