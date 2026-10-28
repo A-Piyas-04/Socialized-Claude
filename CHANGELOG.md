@@ -2,6 +2,21 @@
 
 ## Unreleased
 
+### Communication policy modules (Phase 1, v0.1.0)
+- New `communication/` modules at the repo root: `core.md` (universal
+  principles and precedence), `strategies.md` (five intent strategies plus
+  mixed-intent and scope boundaries), `controls.md` (depth, formatting, visual,
+  density), and a `README.md` with the change table and integration rationale.
+- The modules distil and index `skill/socialized/SKILL.md`; each rule names the
+  operation or step that enforces it. They live outside the skill package (which
+  is tested to contain exactly SKILL.md and its three references) and the skill
+  does not load them at runtime, per the brief's "independent of Claude-specific
+  packaging" and Risk D requirements.
+- `SKILL.md` is unchanged: its operations already met the brief's relaxation
+  goals (conditional headings, check questions, and visuals), so Phase 1 adds the
+  reusable modules and documentation without editing the working skill. Baseline
+  preserved as the git tag `baseline-pre-v1.0.1-communication`.
+
 ### Skill (Socialized-Claude, visual depth)
 - Visual budget: one visual per idea with a shape, no per-answer cap (the
   earlier two-per-answer cap is superseded). The hardest section gets its visual
