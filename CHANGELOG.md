@@ -2,6 +2,45 @@
 
 ## Unreleased
 
+### Visual communication restored (Phase 4C, policy v0.4.0, plugin v0.5.0)
+- `op:visual`: the coverage floor Phase 4 removed is back. A visual is drawn for
+  **each** idea whose shape would take three or more sentences to describe, there is
+  no cap per answer, the hardest section gets its visual first, and the last third of
+  the answer gets at least the visual support of the first. Phase 4's negative rule
+  ("do not require a visual for every shaped idea, every section, or the final
+  third") and its second judgement gate ("when it clarifies the relationship") are
+  gone; its anti-redundancy half stands — one representation per idea, a second only
+  for a materially different dimension, and colour, status emoji or a legend only
+  where they speed a comparison.
+- Step 3: the visual check asks again whether each idea with a shape has its visual,
+  including the hardest section and the last third, so a *missing* figure can be
+  added and not only a redundant one pruned. It also checks list-item length
+  alongside paragraph and table-cell length, and asks whether every heading, list,
+  table, **diagram** and bold sentence marks a real division or only decorates.
+- `op:presentation`: a new paragraph starts when the idea changes even when the
+  current one is short; a table cell is never a sentence; a horizontal rule (`---`)
+  separates major topics in an answer of three or more sections.
+- Strategy section: in every strategy, teaching or not, the form comes from the
+  content — a table for options against their tradeoffs, a diagram for a flow or an
+  interaction, steps for a procedure, a fenced block for code, prose for a single
+  chain or a casual reply. Architecture and tool comparisons were the regression the
+  owner reported; Strategy D previously gave no form guidance at all.
+- Nothing Phase 4 removed on purpose returns: no mandatory check question, no
+  automatic section map, no appended interactive offer, artifacts still opt-in. No
+  word cap was added, and technical depth is kept by splitting a dense paragraph
+  into connected units rather than by dropping a mechanism (`core.md` principle 11).
+- Activation grows from 5,379 to 5,466 local-estimate tokens (+87, +1.6%, legacy
+  tokenizer; 5,418 to 5,514 by the heuristic). The `activation` `max` is raised 5,500 → 5,600
+  as a regression ceiling about 2% above the new size; `target` stays 5,000. Step 3
+  now sits wholly outside Claude Code's 5,000-token compaction re-attach window,
+  while `op:visual` and `op:presentation` stay inside it. Offsetting consolidations
+  are listed in `docs/phase-4c-visual-restoration.md` §5.
+- New `tests/test_visual_restoration.py` (26 tests; suite 489 passed, 1 skipped).
+  Two Phase 4 assertions were inverted on purpose and are documented in
+  `tests/test_refinement_policy.py`.
+- Policy modules move to 0.4.0 with a Phase 4C change table. Plugin `version`
+  0.4.0 → 0.5.0. Both artifacts regenerated.
+
 ### Token efficiency (Phase 4B, plugin v0.4.0)
 - The shipped `SKILL.md` that loads on activation drops from 5,946 to 5,379
   local-estimate tokens (−9.5%, Anthropic's legacy public tokenizer). Claude Code's

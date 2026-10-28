@@ -10,8 +10,13 @@ the old *unconditional* directives are gone and the new *conditional* ones are
 present, that every changed rule still names an action, and that the 12-operation /
 15-variant contract and the SKILL.md line budgets are intact.
 
+Phase 4C reversed one half of the visual change: the coverage floor is back, while
+the anti-redundancy rules asserted here stand. The restored rules have their own
+suite in tests/test_visual_restoration.py.
+
 Offline string and structure assertions cannot show that Claude behaves this way in
-real conversations. See docs/phase-4-implementation.md.
+real conversations. See docs/phase-4-implementation.md and
+docs/phase-4c-visual-restoration.md.
 """
 
 from __future__ import annotations
@@ -90,8 +95,6 @@ FORBIDDEN = [
     "a follow-up about confusion with one check question the reader can verify",
     # P4-02: mandatory retained section map / preview.
     "Keep the one-line section map that the presentation operation places",
-    # P4-03: visual required for the final third of every answer.
-    "Give the last third of the answer at least the visual support of the first",
     # P4-04: interactive offer appended by default.
     "End the answer with one line offering an interactive version",
 ]
@@ -143,10 +146,15 @@ def test_section_preview_is_optional():
 # ---------------------------------------------------------------------------
 
 def test_visuals_are_value_based():
+    """Phase 4's anti-redundancy half, which Phase 4C keeps.
+
+    Phase 4 also removed the coverage floor (one visual per shaped idea, and the
+    last third supported as well as the first). Phase 4C restored it — see
+    tests/test_visual_restoration.py. Only the redundancy rules are asserted here.
+    """
     block = norm(op_block(skill_source(), "visual"))
-    assert "Prefer one strong representation per idea" in block
+    assert "Keep to one representation per idea" in block
     assert "add a second only when it carries a materially different dimension" in block
-    assert "do not require a visual for every shaped idea, every section, or the final third" in block
     # Colour / status markers only when they help a comparison.
     assert "makes a comparison genuinely faster" in block
 
@@ -197,10 +205,10 @@ def test_quick_answer_is_natural_not_a_rigid_cap():
 # ---------------------------------------------------------------------------
 
 REFINED_MARKERS = (
-    "asks to practise or be tested",                 # conditional quiz
-    "do not require a visual for every shaped idea",  # selective visuals
-    "never append the offer by default",              # no automatic demo
-    "Scope a product-specific implementation",        # epistemic scoping
+    "asks to practise or be tested",                      # conditional quiz
+    "add a second only when it carries a materially",     # no redundant visuals
+    "never append the offer by default",                  # no automatic demo
+    "Scope a product-specific implementation",            # epistemic scoping
 )
 
 
@@ -230,7 +238,8 @@ def test_refined_policy_ships_in_the_plugin():
 def test_reusable_policy_modules_track_phase_4(repo_root):
     comms = repo_root / "communication"
     for name in ("core.md", "strategies.md", "controls.md"):
-        assert "Version 0.3.0" in read(comms / name), name
+        assert "Version 0.4.0" in read(comms / name), name
     controls = norm(read(comms / "controls.md"))
+    assert "add a second only when it carries a materially different dimension" in controls
     assert "asks to practise or be tested" in controls
     assert "offered when" not in controls or "only when asked or clearly useful" in controls

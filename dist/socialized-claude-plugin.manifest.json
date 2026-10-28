@@ -2,12 +2,12 @@
   "plugin": "socialized",
   "zip": "socialized-claude-plugin.zip",
   "zip_root": "socialized/",
-  "zip_sha256": "9fd8059d93eef2e182bc451176b906d1da5cd8359313a81de04f775596ffa99e",
+  "zip_sha256": "58dd6c510bc0a25528b893dc1ede3f0ef695fa5bd4ded9a92e08ffecbc8c0fc4",
   "files": {
-    ".claude-plugin/plugin.json": "7f6c3dadc99958cdba2763e763cc3ee574954508bb8d7aa80deabe1fbf097387",
-    "skills/socialized/SKILL.md": "9862dea790c316cd7b43382dc94fb526843cee15889ced4fcd2e53701b1a5857",
+    ".claude-plugin/plugin.json": "a86f6203bba0d4ecd5c809bcb5b2441cde073b4b10ca0232e477c48cce1a7427",
+    "skills/socialized/SKILL.md": "31030c9a68373d5175f5887a6603025d4ac50c60b8f165739eeb49e756ce356d",
     "skills/socialized/references/explanation-examples.md": "bb882e9e702f02baad59ea42277b4912b1047021dbd2ba8314c3ca80344818f5",
     "skills/socialized/references/explanation-methodology.md": "b23bee527aa392831a08062f6e6b39826d6afa9d1708b6f7dd9fe8a00c276c8f",
-    "skills/socialized/references/treatment-selection.md": "f544e74f4f6a3378ad50099a764019de2b6aba310ede45b4d1635a191017635c"
+    "skills/socialized/references/treatment-selection.md": "22471a4855dfed1862a4b642f597d11a29796b4ef84ff9ca8d27857d377b6e85"
   }
 }

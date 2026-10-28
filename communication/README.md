@@ -1,4 +1,4 @@
-# Communication policy modules (v0.3.0)
+# Communication policy modules (v0.4.0)
 
 Reusable communication policy for Socialized-Claude. Three modules:
 
@@ -16,9 +16,11 @@ and index** that policy into the three reusable surfaces the Phase 1 brief asked
 for. Each rule here names the SKILL.md operation or step that enforces it, so the
 modules stay a map of the skill rather than a second, divergent copy of it.
 
-Policy version `0.3.0` tracks these modules (`0.1.0` was Phase 1; `0.2.0` added the
-Phase 3 across-turns guidance; `0.3.0` adds the Phase 4 communication refinements —
-selective quizzes, previews, and visuals, and tighter epistemic scoping). The
+Policy version `0.4.0` tracks these modules (`0.1.0` was Phase 1; `0.2.0` added the
+Phase 3 across-turns guidance; `0.3.0` added the Phase 4 communication refinements —
+selective quizzes, previews, and visuals, and tighter epistemic scoping; `0.4.0`
+restores the visual-coverage and paragraph-density rules Phase 4 removed, keeping
+the selective quiz, preview, and demo-offer behaviour). The
 skill's own version history stays in
 `CHANGELOG.md`; the baseline before this work is the git tag
 `baseline-pre-v1.0.1-communication`.
@@ -74,7 +76,7 @@ operations, planned silently over the turns the host supplies.
 |---|---|---|
 | Closing quizzes | Conditionalize | `op:close` and `controls.md` add a check question only when the person asks for practice, the exchange is a tutorial, or a focused check resolves a real uncertainty — never on code, fixes, decisions, or quick answers by category. "I don't understand X" gets a clearer explanation, not a quiz. |
 | Intro previews / section maps | Make optional | `op:plain` no longer keeps a mandatory section map; `op:presentation` adds a heading map only when a long answer needs orienting. |
-| Redundant visuals | Value-based selection | `op:visual` draws a figure only when it clarifies, prefers one strong representation per idea, and drops the every-section / final-third requirement. Colour, status emoji, and legends only when they speed a comparison. |
+| Redundant visuals | Value-based selection | `op:visual` draws a figure only when it clarifies, prefers one strong representation per idea, and drops the every-section / final-third requirement. Colour, status emoji, and legends only when they speed a comparison. *(The coverage floor was restored in Phase 4C; one-representation-per-idea and the colour gate stand.)* |
 | Automatic demo offers | Remove default | The interactive-version offer is made only when asked or clearly useful, never appended by default. |
 | Overgeneralized claims | Scope assumptions | Accuracy rules and `core.md` scope product-specific implementations, separate mental models from internals, and state concurrency/replication assumptions instead of categorical guarantees. |
 | 12 operations, 5 strategies, packaging | Preserve | No new `op:` marker, operation, or variant; `SKILL.md` stays within its line budgets; both install paths regenerated. |
@@ -82,6 +84,25 @@ operations, planned silently over the turns the host supplies.
 Phase 4 removes formatting that served the policy rather than the reader; it keeps
 the strengths of Phases 1–3 (causal mechanism, running examples, visual literacy,
 adaptive register, multi-turn repair).
+
+## Change summary (Phase 4C — visual communication restored)
+
+Phase 4 over-corrected: it replaced the visual-coverage floor with a negative rule
+and turned the pre-send check from "does each shaped idea have its visual?" into a
+pruning-only check. Answers drifted toward long prose. Phase 4C reverses that drift
+without reinstating anything Phase 4 was right to remove.
+
+| Area | Action | Result |
+|---|---|---|
+| Visual coverage | Restore | `op:visual` draws a visual for **each** shaped idea, with no cap per answer, and supports the last third at least as well as the first. The negative "do not require a visual for every shaped idea, every section, or the final third" is gone. |
+| Pre-send check | Restore | Step 3 asks again whether each idea with a shape has its visual, including the hardest section and the last third, so a missing figure can be added and not only a redundant one pruned. |
+| Visual redundancy | Keep Phase 4 | One representation per idea; a second only for a materially different dimension; colour, status emoji, and legends only where they speed a comparison. |
+| Paragraph density | Restore | `op:presentation` starts a new paragraph when the idea changes even when the current one is short; Step 3 checks list-item length as well as paragraph and table-cell length. |
+| Section separation | Restore | A horizontal rule (`---`) between major topics in an answer of three or more sections. |
+| Form in non-teaching replies | Add | The strategy section picks the form from the content in **every** strategy — a table for three or more options against their tradeoffs, a diagram for a flow or an interaction, steps for a procedure, a fenced block for code, prose for a single chain or a casual reply. |
+| Decorative structure | Restore | Step 3 asks whether every heading, list, table, **diagram**, and bold sentence marks a real division or only decorates. |
+| Quizzes, previews, demo offers, artifacts | Preserve | Unchanged from Phase 4: no mandatory check question, no automatic section map, no appended interactive offer, artifacts opt-in. |
+| Technical depth | Preserve | `core.md` principle 11 splits a dense paragraph into connected units rather than dropping a mechanism. No word caps were added. |
 
 ## What this does not establish
 

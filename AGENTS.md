@@ -154,3 +154,20 @@ needs to decide. No progress narrative.
  compaction re-attach. Option B (visual drawing grammar moved to an on-demand
  reference) is documented, not implemented: about 400 tokens saved against a real
  risk of losing owner-set visual rules when the reference is not read.
+- Phase 4C: Phase 4's visual change is split. Its anti-redundancy half stands; its
+ removal of the coverage floor is reversed, because that floor is an owner decision
+ (see "Visual budget") that Phase 4 overrode without recording a deviation. `op:visual`
+ draws one visual per shaped idea with no cap, hardest section first, last third
+ supported at least as well as the first, and Step 3 asks for coverage again, not only
+ pruning. Quizzes, previews, demo offers and opt-in artifacts stay as Phase 4 left them.
+- Phase 4C: `activation.max` raised 5,500 → 5,600 (now 5,466 legacy / 5,513 heuristic).
+ The gate is a regression ceiling about 2% above current size, not a frozen threshold;
+ `target` stays 5,000. Consequence recorded: Step 3 is now wholly outside Claude Code's
+ 5,000-token compaction re-attach window, while the rules it checks stay inside.
+- Phase 4C: two Phase 4 assertions inverted on purpose in
+ `tests/test_refinement_policy.py`, with the reason in the file. The restored rules have
+ their own suite, `tests/test_visual_restoration.py`.
+- Phase 4C: form selection ("a table for options against their tradeoffs, a diagram for
+ a flow or an interaction, …") added to the strategy section so it applies to
+ non-teaching replies. The reported regression was a Strategy D architecture discussion,
+ which previously had no form guidance at all.

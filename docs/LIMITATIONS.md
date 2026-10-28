@@ -108,7 +108,7 @@ Read this before drawing any conclusion from using or testing the skill.
   shows the policy ships in the loaded `SKILL.md` and in both artifacts. It cannot
   show that Claude adapts across turns. The scenarios in
   `docs/phase-3-implementation.md` are regression spot-checks, not measurements.
-- **`SKILL.md` is near its size guards** (443/460 rendered, 492/500 raw). Further
+- **`SKILL.md` is near its size guards** (415/460 rendered, 463/500 raw). Further
   additions require consolidating duplicate prose, not raising the guards.
 
 **Phase 4 backlog — now addressed (policy v0.3.0, plugin v0.3.0).**
@@ -136,8 +136,13 @@ the explanation operations (`docs/phase-4-implementation.md`):
   no controlled comparison was run.
 - **Epistemic scoping has no verifier.** The new accuracy rules are instructions;
   nothing checks a claim against a source. Accuracy still rests on the model.
-- **`SKILL.md` is at 498/500 raw lines.** The next behavioural rule needs a
-  consolidation first; no guard was raised to fit this phase.
+- **`SKILL.md` was at 498/500 raw lines** when Phase 4 shipped; Phase 4B's
+  consolidation brought it back down.
+- **One Phase 4 change was wrong and was reversed.** Making visuals "value-based"
+  also removed the coverage floor and turned the pre-send visual check into a
+  pruning-only check, and answers drifted into long prose. Phase 4C restored the
+  floor and the check; the anti-redundancy half of the Phase 4 change stands. See
+  `docs/phase-4c-visual-restoration.md` §1.
 
 ## Phase 4B (token efficiency) limitations
 
@@ -152,6 +157,26 @@ the explanation operations (`docs/phase-4-implementation.md`):
   was proposed and not implemented (`docs/phase-4b-token-efficiency.md`, §4).
 - **Order and wording changes are unmeasured.** The text moved and was tightened
   without a behavioural comparison.
+
+## Phase 4C (visual communication restored) limitations
+
+- **No behavioural evidence either way.** The regression was observed by the owner in
+  real chats; the fix has not been. The 26 tests in `tests/test_visual_restoration.py`
+  show which instructions ship, in the loaded `SKILL.md` and in both artifacts. They
+  cannot show that Claude now produces the comparison table.
+- **The cause is a ranked hypothesis.** The ten instruction changes in
+  `docs/phase-4c-visual-restoration.md` §1.1 are confirmed by diff. Which of them
+  produced the prose drift, and in what proportion, is not measured.
+- **The three-sentence trigger is still estimated by the model.** Nothing counts the
+  sentences a prose description would take.
+- **Step 3 now sits wholly outside Claude Code's 5,000-token compaction re-attach
+  window** (activation 5,466 local-estimate tokens; `op:close` is partly outside too).
+  The rules the checks enforce stay inside it. Untested in a long session.
+- **Nothing gates visual density.** `scripts/lint_response.py` carries
+  `visual_count`, `dense_paragraph`, `wide_table` and `flat_visual`, but AGENTS.md
+  fixes them as heuristics and flags that never gate.
+- **`activation.max` was raised 5,500 → 5,600** to pay for the restored rules. The
+  5,000-token advisory target is still exceeded, now by 466 tokens.
 
 ## Not in scope for V0
 

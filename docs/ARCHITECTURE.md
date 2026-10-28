@@ -38,12 +38,13 @@ socialized/
 | Level | What | When it is in Claude's context |
 |---|---|---|
 | 1 | `name` + `description` (164 characters, about 37 tokens) | Always, in every chat where the skill is enabled |
-| 2 | `SKILL.md` (about 415 lines, about 5,400 tokens) | Only after Claude decides the request matches the description; in Claude Code it then stays in the conversation |
+| 2 | `SKILL.md` (about 415 lines, about 5,500 tokens) | Only after Claude decides the request matches the description; in Claude Code it then stays in the conversation |
 | 3 | Reference files (about 8,200 tokens together) | Only if Claude chooses to read one for the current request |
 
 `SKILL.md` alone is a complete working skill. The references cover harder cases,
 so a short factual exchange never pays their context cost. Token figures are local
-estimates from `scripts/token_budget.py`; see `docs/phase-4b-token-efficiency.md`.
+estimates from `scripts/token_budget.py`; see `docs/phase-4b-token-efficiency.md`
+and `docs/phase-4c-visual-restoration.md` §5.
 
 The always-on core comes first and the operations after it. Claude Code keeps only
 the first 5,000 tokens of a skill when it re-attaches it after auto-compaction, so

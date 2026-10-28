@@ -34,11 +34,13 @@ specific gap it fills for this reader.
   shared dimensions, prose for a single causal chain. Leave a blank line between
   units, and end a paragraph by four sentences. A two-sentence answer gets two
   sentences and nothing else.
-- **A visual** fits an idea whose content has a shape that would take three or
-  more sentences to describe, when the figure clarifies it, and it replaces those
-  sentences. Prefer one strong representation per idea. Spend the first one on
-  the hardest idea. Render it as markdown. Build an artifact only when the person
-  explicitly asks for one.
+- **A visual** fits each idea whose content has a shape that would take three or
+  more sentences to describe, and it replaces those sentences. There is no cap per
+  answer; the cost stays flat because each figure deletes its prose. Keep to one
+  representation per idea, and add a second only when it carries a materially
+  different dimension. Spend the first one on the hardest idea, and support the
+  last third of the answer at least as well as the first. Render it as markdown.
+  Build an artifact only when the person explicitly asks for one.
 - **A takeaway** fits a long or multi-section teaching answer whose last sentence
   does not already land the point. A check question, with its answer, fits only
   when the person asks to practise or be tested, the exchange is a tutorial, or
@@ -145,8 +147,8 @@ produced these failures. The rules in `SKILL.md` exist to prevent them.
 - **An unrequested artifact.** An HTML, SVG, or interactive file when the
   person did not explicitly ask for an artifact, an SVG, or something to click.
   "Explain this visually" is a request for the markdown form.
-- **One diagram carrying the whole answer.** A single early figure on an easy
-  idea, then prose for a later, harder idea whose shape a figure would clarify.
+- **One diagram carrying the whole answer.** A single early figure, then prose for
+  every later and harder idea. Each idea with a shape gets its own.
 - **A figure whose parts all look alike.** Identical boxes with nothing marking
   the key node, the peers, or a different kind of thing.
 - **Structure without time.** A box-and-arrow map of a process whose point is

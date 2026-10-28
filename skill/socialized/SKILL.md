@@ -61,6 +61,10 @@ They set priorities, not templates; combine them when a request mixes intents.
   naturally. Add context only when its absence would mislead; "one sentence and
   stop" is the usual shape, not a rigid cap.
 
+In every strategy, pick the form from the content: a table for options against
+their tradeoffs, a diagram for a flow or an interaction, steps for a procedure, a
+fenced block for code, prose for a single chain or a casual reply.
+
 Return a requested deliverable (code, a translation, an email, JSON) in its own
 form, without wrapping it in explanation.
 
@@ -129,13 +133,11 @@ Add length only when this reader needs it to understand the answer.
 Read a file only when the current request needs it:
 
 - `references/explanation-methodology.md`: behaviour per request type. Read it
-  when the request type is unclear or unusual.
-- `references/explanation-examples.md`: weak and better pairs, the markdown
-  visual forms, and cases where the skill adds nothing. Read it when unsure how
-  much to add or which visual form fits.
-- `references/treatment-selection.md`: conflicts between operations, the length
-  budget, and the failure modes. Read it when operations pull in different
-  directions.
+  when the request type is unclear.
+- `references/explanation-examples.md`: weak and better pairs, and the markdown
+  visual forms. Read it when unsure how much to add or which form fits.
+- `references/treatment-selection.md`: operation conflicts, the length budget, and
+  the failure modes. Read it when operations pull in different directions.
 
 <!-- op:sequencing -->
 ## Operation: Order ideas by dependency
@@ -235,8 +237,8 @@ Use this for every answer with more than one idea. Choose the form from the
 content's shape; prose is one of the forms, not the fallback.
 
 - Give each idea its own unit: a short paragraph, list item, table row, or step.
-  Start a new unit when the idea changes, and keep sentences that make one
-  continuous argument together.
+  Start a new unit when the idea changes, even when the current one is short, and
+  keep sentences that make one continuous argument together.
 - End a paragraph at four sentences or about 80 words, and leave a blank line
   before the next paragraph, list, table, code block, or heading.
 - Give a list item one idea and about 25 words; put a second idea in a sub-bullet
@@ -250,12 +252,13 @@ content's shape; prose is one of the forms, not the fallback.
   - **A flow that branches or loops:** hand it to the visual operation.
   - **A single causal chain:** connected prose, so every link stays stated.
   - **One or two sentences:** just those sentences.
-- Fill a table cell with one idea of six words or fewer, name the dimension in
-  each header, and move anything longer to a list under the table.
+- Fill a table cell with one idea of six words or fewer, never a sentence; name the
+  dimension in each header and move anything longer to a list under the table.
 - Give each distinct part of a multi-part answer a heading that states what the
   section establishes ("Write-back can lose data"). Use `##` for a section and
-  `###` for a subsection without skipping a level, and a heading wherever a bold
-  line would announce a section.
+  `###` for a subsection without skipping a level, a heading wherever a bold line
+  would announce a section, and a horizontal rule (`---`) between major topics in
+  an answer of three or more sections.
 - Number the headings of an answer with three or more sections, and add a one-line
   map of them only when the answer is long enough that a reader needs it to
   navigate.
@@ -270,27 +273,25 @@ content's shape; prose is one of the forms, not the fallback.
 - Wrap every identifier, path, flag, command, and product-specific token in
   backticks and gloss it the first time. In a beginner answer, move those tokens
   into the **For implementers:** block.
-- Give the last section the same paragraph sizes, visuals, and spacing as the
-  first.
+- Give the last section the same paragraph sizes and spacing as the first.
 - Bold the one sentence the reader must not miss, at most two per answer.
 - When a list or table separates two causally linked facts, write the link inside
-  the item ("…, so…", "…because…"). Structure shows an explanation's shape; it
-  does not create one.
+  the item ("…, so…", "…because…").
 <!-- /op:presentation -->
 
 <!-- op:visual -->
 ## Operation: Show the shape instead of describing it
 
 Use this when an idea has parts, containment, a flow, a branch, an order in time,
-two states, or a proportion, and a visual would show that relationship better
-than three or more sentences.
+two states, or a proportion, and describing that relationship in prose would take
+three or more sentences.
 
-- Draw a visual for each such idea when it clarifies the relationship, in the
-  section that teaches it, and delete the sentences it replaces. Prefer one strong
-  representation per idea; add a second only when it carries a materially
-  different dimension. Give a short answer or a practitioner lookup as sentences.
-- Give the hardest section its visual first; do not require a visual for every
-  shaped idea, every section, or the final third. Render every visual as markdown.
+- Draw a visual for each such idea, in the section that teaches it, and delete the
+  sentences it replaces; there is no cap per answer. Keep to one representation per
+  idea, and add a second only when it carries a materially different dimension.
+  Give a short answer or a practitioner lookup as sentences.
+- Give the hardest section its visual first, and give the last third of the answer
+  at least the visual support of the first. Render every visual as markdown.
 - Show a linear flow of four steps or fewer as an arrow chain (`A → B → C`), and
   a branch, loop, or return as a Mermaid `flowchart` of ten nodes or fewer with
   labels of four words or fewer.
@@ -434,17 +435,18 @@ Use this at the end of a teaching answer, when a closing unit still earns its pl
 - Does any sentence carry two claims or more than two clauses? Split it.
 <!-- /op:plain -->
 <!-- op:presentation -->
-- Does any paragraph pass four sentences or about 80 words, any table cell six
-  words, or any bold line stand in for a heading? Is every unit set off by a
-  blank line?
-- Does every heading, list, table, and bold sentence mark a real division? Does
-  the narrative survive skipping every **Deeper:** block, and does the last
-  section look like the first?
+- Does any paragraph pass four sentences or about 80 words, any list item about
+  25 words, any table cell six words, or any bold line stand in for a heading? Is
+  every unit set off by a blank line?
+- Does every heading, list, table, diagram, and bold sentence mark a real
+  division, or does one only decorate? Does the narrative survive skipping every
+  **Deeper:** block, and does the last section look like the first?
 <!-- /op:presentation -->
 <!-- op:visual -->
-- Does each visual clarify a real relationship, with a caption, its replaced
-  prose gone, and one colour code? Is the reply markdown unless this message
-  explicitly asks for an artifact?
+- Does each idea with a shape have its visual, including the hardest section and
+  the last third? Does each one clarify a real relationship, with a caption, its
+  replaced prose gone, and one colour code? Is the reply markdown unless this
+  message explicitly asks for an artifact?
 <!-- /op:visual -->
 <!-- op:close -->
 - Is any takeaway earned, and any check asked for, part of a tutorial, or

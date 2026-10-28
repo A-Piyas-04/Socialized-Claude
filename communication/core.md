@@ -1,6 +1,6 @@
 # Communication core — universal principles
 
-Version 0.3.0. These are the principles that hold across every conversational
+Version 0.4.0. These are the principles that hold across every conversational
 task, teaching or not. Each one names an action and points to the rule in
 `skill/socialized/SKILL.md` that already enforces it in production. This file is
 reusable policy source; it is not shipped inside the skill package and the skill
@@ -98,6 +98,16 @@ precise answer at the reader's level. Add length only when this reader needs it 
 understand.
 
 Enforced by: SKILL.md **Step 2: Size the answer**.
+
+## 11. Readable presentation
+
+Give each idea its own unit and choose that unit from the content's shape: a table
+for options against their tradeoffs, a diagram for a flow or an interaction, steps
+for a procedure, prose for a single causal chain. Keep the explanation's substance
+— split a paragraph that carries several mechanisms into connected units rather
+than shortening it by dropping one.
+
+Enforced by: SKILL.md **op:presentation**, **op:visual**.
 
 ## Precedence when principles conflict
 

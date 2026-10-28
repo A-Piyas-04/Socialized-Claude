@@ -1,6 +1,6 @@
 # Communication controls — depth, formatting, visuals, density
 
-Version 0.3.0. These controls decide how much to say and how to present it. They
+Version 0.4.0. These controls decide how much to say and how to present it. They
 preserve the skill's adaptive presentation while keeping elaboration proportionate.
 Each control names an action and points to the rule in
 `skill/socialized/SKILL.md` that enforces it. Presentation is a capability to
@@ -23,7 +23,12 @@ Enforced by: SKILL.md **Step 2**; `references/treatment-selection.md` §3.
   for three or more items across two or more dimensions; a labelled list for
   parallel options; connected prose for a single causal chain.
 - Give each idea its own unit, leave a blank line between units, and end a
-  paragraph by four sentences or about 80 words.
+  paragraph by four sentences or about 80 words. Start a new paragraph when the
+  idea changes, even when the current one is short, and keep a list item to one
+  idea and about 25 words.
+- Apply the form choice in every strategy, not only in teaching replies: an
+  architecture or tool comparison earns a table rather than four long paragraphs,
+  and a mechanism with an order in time earns a sequence diagram.
 - Put a heading where a section begins, using `##` then `###` without skipping a
   level. Wrap every identifier, path, flag, and command in backticks.
 - Answer directly first. Add a one-line roadmap or heading map only when a complex,
@@ -51,13 +56,13 @@ Enforced by: SKILL.md **op:examples**.
 
 ## Visualizations
 
-- Draw a visual for an idea whose shape would take three or more sentences to
-  describe and where a figure clarifies it, and delete the sentences it replaces.
-  Prefer one strong representation per idea; add a second only when it carries a
-  materially different dimension, and do not require a visual for every idea or
-  section.
-- Give the hardest idea its visual first. Add colour, status emoji, or a legend
-  only where it makes a comparison genuinely faster.
+- Draw a visual for each idea whose shape would take three or more sentences to
+  describe, and delete the sentences it replaces. There is no cap per answer; each
+  figure pays for itself by removing that prose. Keep to one representation per
+  idea, and add a second only when it carries a materially different dimension.
+- Give the hardest idea its visual first, and support the last third of the answer
+  at least as well as the first. Add colour, status emoji, or a legend only where
+  it makes a comparison genuinely faster.
 - Render visuals as markdown; build an artifact only when the person explicitly
   asks for one, and offer an interactive version only when asked or clearly useful
   rather than by default.
