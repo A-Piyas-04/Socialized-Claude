@@ -16,12 +16,12 @@
     "work-report"
   ],
   "zip": "socialized.zip",
-  "zip_sha256": "9714eb5b7a403ca8c9d2003753809fe2c1be2a6f81b1267a8148d1dc8210d7a7",
+  "zip_sha256": "4565271b9b6a200e052c88815b5c910aabf89cfdad240db94af74936b27d2206",
   "files": {
     "LICENSE": "2729060b9de84d86a30abf9d216dbfecbfd9b952e1c4a2f314f0c9335c7307ab",
-    "SKILL.md": "ca97f6c70e1cef7b4083cd37da56b7852866cb4e7da9ae63b9072d3351abc19e",
-    "references/explanation-examples.md": "53bb8f455011bf98f6090f89235d2cd07890799b3bcff8e569dcb4cbb0744ddb",
+    "SKILL.md": "0cafc2c2cccd72b87cfe34a8c48f69e13983948226b8af512f1623af9aecbaa3",
+    "references/explanation-examples.md": "eec257d29fbf027d0ee58872600e5b4faf2fe2f5d3f417231eb1f66ee23e4102",
     "references/explanation-methodology.md": "b23bee527aa392831a08062f6e6b39826d6afa9d1708b6f7dd9fe8a00c276c8f",
-    "references/treatment-selection.md": "3b60838b7c7d5f07657589d6ddfe87da7a1ad7295d4d2e767e2e18750d3349c2"
+    "references/treatment-selection.md": "fe04a53a5c341865927103518fb26cb4d87bda8b38619f564351b5ce327793f6"
   }
 }

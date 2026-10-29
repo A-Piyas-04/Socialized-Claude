@@ -7,10 +7,11 @@
 Items 1–6, 9–11 and 20 below reflect that change; the rest are unchanged from the original run.
 
 **Release paused, 2026-10-29.** The owner rejected v0.5.2's communication quality. The
-recovery is plugin 0.6.0 on branch `recovery/communication-quality`
-([communication-recovery.md](communication-recovery.md)). This checklist was run against
-0.5.2 and has not been re-run for 0.6.0. Release waits on the owner's behavioural
-acceptance ([COMMUNICATION_BASELINE.md](COMMUNICATION_BASELINE.md)).
+recovery is plugin 0.6.0; the communication-experience upgrade on top of it is plugin
+0.7.0, still on branch `recovery/communication-quality`
+([communication-experience-upgrade.md](communication-experience-upgrade.md)). This
+checklist was run against 0.5.2 and has not been re-run. Release waits on the owner's
+behavioural acceptance ([COMMUNICATION_BASELINE.md](COMMUNICATION_BASELINE.md)).
 
 **Verdict: not releasable yet. The licence blocker is resolved (MIT). One owner action is open
 (private vulnerability reporting), and two items are unverified because they need a claude.ai

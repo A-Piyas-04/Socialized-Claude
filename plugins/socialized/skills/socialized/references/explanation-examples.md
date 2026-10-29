@@ -16,8 +16,8 @@ add nothing.
 - Follow-up confusion: repairing one link
 - Visual forms: flow, contrast, proportion, change over time, order in time,
   differentiated parts, two states, specimens, scannable tables, a decision table
-  with its reasoning underneath, a figure and the text beside it, a checkable
-  question
+  with its reasoning underneath, a figure and the text beside it, semantic icons
+  as navigation, a checkable question
 - Restraint: no visual, and no artifact unless asked
 - Opt-in: one artifact when the person asks
 - Restraint: requests where the skill should add nothing
@@ -410,6 +410,22 @@ sequenceDiagram
 The client fills the entry, not the cache. So two clients that miss at the same
 moment both read the database, which is why some caches put a lock around the
 fill.
+
+### Semantic icons as navigation
+
+**Weak:** an emoji on every bullet, or a heading decorated for atmosphere.
+
+**Better:** one meaning-matched icon on the heading or label that the reader
+uses to find the idea, and none inside the code.
+
+## 🗄️ Write path
+
+The client writes to the cache, then the cache writes through to storage.
+
+```python
+cache.set(key, value)
+store.put(key, value)
+```
 
 ### A question the reader can check
 

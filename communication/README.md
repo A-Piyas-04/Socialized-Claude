@@ -1,4 +1,4 @@
-# Communication policy modules (v0.5.0)
+# Communication policy modules (v0.6.0)
 
 Reusable communication policy for Socialized-Claude. Three modules:
 
@@ -22,7 +22,9 @@ selective quizzes, previews, and visuals, and tighter epistemic scoping; `0.4.0`
 restored the visual-coverage and paragraph-density rules Phase 4 removed, keeping
 the selective quiz, preview, and demo-offer behaviour; `0.5.0` is the pre-release
 communication-quality recovery — where information belongs between a table, a
-figure and the prose beside it). The
+figure and the prose beside it; `0.6.0` is the communication-experience upgrade —
+semantic icon-style emojis as navigation aids, plus an architecture-diagram cue for
+visual variety). The
 skill's own version history stays in
 `CHANGELOG.md`; the baseline before this work is the git tag
 `baseline-pre-v1.0.1-communication`.
@@ -138,6 +140,30 @@ variant or module was added.
 | Assumptions | Refine | State the scale or setting an answer assumes once, where it first matters, and what would change the answer. |
 | Depth layer and examples | Clarify | Specialist depth is named (variants, tuning, one system's edge cases); the running example is traced to the moment the behaviour shows. |
 | Everything else | Keep | All Phase 2–4C behaviour, including selective quizzes, previews and demo offers, opt-in artifacts, and the visual preference with its escape clause. |
+
+## Change summary (v0.6.0 — communication-experience upgrade)
+
+The owner asked for a better presentation experience from the installed skill: less
+dense prose, less congested tables, less diagram/prose repetition, clearer separation
+of essential from optional detail, more visual variety, and — the one explicit new
+requirement — semantic icon-style emojis as navigation aids. The implementation refined
+the existing operations rather than adding a new one; the brief is
+`docs/communication-experience-upgrade.md`. No operation, marker, variant or module was
+added.
+
+| Area | Action | Result |
+|---|---|---|
+| Paragraphs | Refine | `op:presentation` keeps one primary idea per paragraph, treats four sentences / 80 words as a ceiling not a target, and splits two independently important claims. Lists stay for genuinely distinct points. |
+| Tables | Refine | The verdict stays in the cell so the primary decision is visible at a glance; reasoning stays under the table. No word cap. |
+| Hierarchy | Refine | `op:sequencing` and `op:presentation` prioritise internally as core understanding, then the supporting mechanism, then optional advanced detail, in separate units, not as a three-section template. |
+| Visual variety | Refine | Form cues name architecture diagrams (components and connections) alongside sequence diagrams, flowcharts, state tables, compact arrow chains, comparison tables and fenced code. No quota. |
+| Figure vs prose | Refine | A comparison table summarises distinctions and does not retell the diagram. The v0.5.0 figure-versus-text jobs stay. |
+| Examples | Refine | A running example shows initial state, action, mechanism, resulting state, and why the result matters, with invented numbers consistent with each other. |
+| Semantic icons | Add | `op:visual` uses a meaning-matched icon (🗄️ storage, ⚙️ processing, 🔐 security, 💡 insight, …) as a navigation aid in a heading, diagram node, callout or compact label, selectively and intent-sensitively, and never inside code, identifiers, JSON or logs. The old "no other symbols" status-only restriction is gone; the ✅ ❌ ⚠️ 🟢 🟡 🔴 status legend stays. `controls.md` carries the full icon vocabulary. Use is never a template and never required. |
+| Everything else | Keep | All Phase 2–4C and v0.5.0 recovery behaviour, the 12 operations and 15 variants, selective quizzes and previews, opt-in artifacts, and the visual preference with its escape clause. |
+
+The emoji change is intent-sensitive and optional by design: a quick coding answer or a
+formal document gets no decoration, and no response is required to carry an icon.
 
 ## What this does not establish
 

@@ -10,7 +10,8 @@ repository cannot make it.
 
 Per-phase detail lives in `docs/phase-3-implementation.md`,
 `docs/phase-4-implementation.md`, `docs/phase-4b-token-efficiency.md` and
-`docs/phase-4c-visual-restoration.md` and `docs/communication-recovery.md`. This page is the roll-up, and the place to add
+`docs/phase-4c-visual-restoration.md`, `docs/communication-recovery.md` and
+`docs/communication-experience-upgrade.md`. This page is the roll-up, and the place to add
 a row when a new regression is found.
 
 Run everything here with `python scripts/verify.py` (see `docs/VALIDATION.md`).
@@ -90,6 +91,21 @@ Found by the owner in three real v0.5.2 answers; see `docs/COMMUNICATION_BASELIN
 | CR-04 | A decision answer that buries the recommendation inside the tradeoffs | Strategy D | `test_communication_recovery.py::test_decisions_lead_with_the_recommendation` | Structurally tested |
 | CR-05 | An assumption restated on every sentence until paragraphs go dense | accuracy rules | `test_communication_recovery.py::test_assumed_scale_is_stated_once_with_what_would_change_the_answer` | Structurally tested |
 | CR-06 | Whether the three prompts now produce the desired answers | — | none possible offline; the owner reruns the prompts in `docs/COMMUNICATION_BASELINE.md` | Observable only in conversation |
+
+## Communication-experience upgrade (policy v0.6.0, plugin v0.7.0)
+
+Owner request after the recovery, from six presentation weaknesses; see `docs/communication-experience-upgrade.md`.
+
+| # | Regression | Policy source | Protection | Status |
+|---|---|---|---|---|
+| CX-01 | Several independently important claims in one paragraph | `op:presentation` one-idea rule, Step 3 | `test_communication_experience.py::test_one_primary_idea_per_paragraph_and_a_ceiling_not_a_target`, `::test_step_3_checks_mixed_claims_and_decorative_icons` | Structurally tested |
+| CX-02 | A comparison table whose cells hide the decision | `op:presentation` glanceable-verdict rule | `test_communication_experience.py::test_table_cells_make_the_primary_decision_visible` | Structurally tested |
+| CX-03 | Core, supporting and optional detail mixed in one unit | `op:sequencing` internal priority, `op:presentation` essential-before-edge-cases | `test_communication_experience.py::test_hierarchy_is_internal_priority_not_a_template` | Structurally tested |
+| CX-04 | Every shaped idea described in prose, with no form variety | `op:visual` architecture cue, form-from-content | `test_communication_experience.py::test_visual_forms_include_architecture_and_existing_grammar` | Structurally tested |
+| CX-05 | A diagram, then a table, then prose that all retell the same arrows | `op:visual` figure-versus-text plus comparison-table clause | `test_communication_experience.py::test_a_comparison_table_does_not_retell_the_diagram` | Structurally tested |
+| CX-06 | An example that restates the definition | `op:examples` state–action–mechanism–result | `test_communication_experience.py::test_examples_trace_state_action_mechanism_result` | Structurally tested |
+| CX-07 | No semantic icons, or an icon on every line, or an icon inside code | `op:visual` semantic-icon rule | `test_communication_experience.py::test_semantic_icons_are_navigation_not_decoration`, `test_structural_metrics.py` heading-nav exemption | Structurally tested |
+| CX-08 | Whether ordinary conversations now read better | — | none possible offline; behavioural acceptance is the owner's | Observable only in conversation |
 
 ## Phase 5 — the packages and metadata that carry all of the above
 

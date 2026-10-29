@@ -256,3 +256,13 @@ needs to decide. No progress narrative.
  heuristic). Policy 0.5.0, plugin 0.6.0. Work is on `recovery/communication-quality`, unmerged.
  `docs/COMMUNICATION_BASELINE.md` is the behavioural reference; behavioural acceptance is
  the owner's.
+- Communication-experience upgrade (user, 2026-10-29): after the recovery, the owner asked
+ for a better presentation experience (dense paragraphs, congested tables, diagram/prose
+ repetition, weak hierarchy, limited visual variety, semantic icons). Refined in place, no
+ new operation: one idea per paragraph with four sentences as a ceiling not a target;
+ glanceable table verdicts; internal core → mechanism → optional priority; architecture
+ diagrams named beside the existing Mermaid grammar; figure vs table vs prose keep different
+ jobs; examples trace state → action → result; meaning-matched icons as navigation, never
+ required, never inside code. The addendum's emoji ban is narrowed a second time: a heading
+ may open with a navigation icon. Policy 0.6.0, plugin 0.7.0. Still on
+ `recovery/communication-quality`, unmerged. Behavioural acceptance is the owner's.

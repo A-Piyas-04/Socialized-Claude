@@ -235,6 +235,7 @@ def test_policy_modules_agree_with_the_recovery_rules(repo_root):
     assert "Teach the general mechanism first" in core
     readme = norm(read(comms / "README.md"))
     assert "Change summary (v0.5.0" in readme
+    assert "Change summary (v0.6.0" in readme
 
 
 def test_behavioural_reference_separates_evidence_from_intent(repo_root):

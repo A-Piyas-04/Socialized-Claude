@@ -238,7 +238,7 @@ def test_refined_policy_ships_in_the_plugin():
 def test_reusable_policy_modules_track_phase_4(repo_root):
     comms = repo_root / "communication"
     for name in ("core.md", "strategies.md", "controls.md"):
-        assert "Version 0.5.0" in read(comms / name), name
+        assert "Version 0.6.0" in read(comms / name), name
     controls = norm(read(comms / "controls.md"))
     assert "add a second only when it carries a materially different dimension" in controls
     assert "asks to practise or be tested" in controls

@@ -74,10 +74,21 @@ def test_repository_passes_its_configured_budgets(report):
     assert report["over_budget"] == []
 
 
-def test_activation_shrank_from_the_recorded_baseline(report):
+def test_activation_exceeds_the_phase_4_baseline_by_a_recorded_decision(report):
+    """Inverted on purpose, 2026-10-29. Phase 4B required activation < Phase 4
+    (5966 heuristic). The communication-experience upgrade's owner-requested
+    presentation rules cannot live in an on-demand reference without the risk
+    Phase 4B Option B documented (owner-set visual and paragraph rules dropped
+    on compaction if the reference is unread). See
+    docs/communication-experience-upgrade.md §2. Restore the '<' assertion only
+    by compressing those rules, not by deleting this test.
+    """
     activation = rows(report)["activation"]
     assert activation["baseline"] is not None
-    assert activation["tokens"] < activation["baseline"]
+    assert activation["tokens"] > activation["baseline"]
+    ceiling = tb.load_budgets()["activation"]["max"]
+    assert ceiling is not None
+    assert activation["tokens"] <= ceiling
 
 
 def test_budgets_are_configurable_and_targets_never_gate(tmp_path, capsys):
@@ -157,4 +168,7 @@ def test_always_on_core_survives_compaction_reattach(report):
     past = " ".join(report["past_compaction_keep"])
     for heading in ALWAYS_ON:
         assert heading[3:] not in past, heading
-    assert not re.search(r"Operation: (Order|Explain|Ground|Introduce|Write|Give|Show|Pitch|Repair|Keep)", past)
+    # Repair and persistence now sit past the 5,000-token re-attach window
+    # (recorded in docs/communication-experience-upgrade.md §2). work-report,
+    # close and Step 3 already did, from the communication-quality recovery.
+    assert not re.search(r"Operation: (Order|Explain|Ground|Introduce|Write|Give|Show|Pitch)", past)

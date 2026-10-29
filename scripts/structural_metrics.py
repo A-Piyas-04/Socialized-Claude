@@ -37,7 +37,9 @@ decorative_structure_flags (each a short code):
                         contains a connective (because, so, therefore, which means, if)
   emoji_structure       an emoji opening a heading or list item. A list item is exempt when its
                         marker is from the status legend (✅ ❌ ⚠️ 🟢 🟡 🔴) and the same list
-                        uses at least two distinct legend markers. A heading is never exempt.
+                        uses at least two distinct legend markers. A heading is exempt when it
+                        opens with a meaning-matched navigation icon (🗄️ ⚙️ 🔐 💡 …) followed
+                        by words; a decorative or status-only heading mark is still a flag.
   whitespace_padding    4+ prose paragraphs of which at least 75% are a single sentence
   uncaptioned_visual    a table, or a fenced diagram or bar block, with no prose sentence
                         directly before it
@@ -74,6 +76,10 @@ SENTENCE_SPLIT_RE = re.compile(r"(?<=[.!?])[\"')\]]*\s+")
 CONNECTIVE_RE = re.compile(r"(?i)\b(because|so|therefore|which means|if)\b")
 EMOJI_RE = re.compile("[\U0001F300-\U0001FAFF\u2600-\u27BF\u2B50\u2B55\u2705\u274C\u2714\u2716]")
 LEGEND = frozenset(mark.replace("\ufe0f", "") for mark in ("✅", "❌", "⚠️", "🟢", "🟡", "🔴"))
+NAV_ICONS = frozenset(mark.replace("\ufe0f", "") for mark in (
+    "🗄️", "💾", "🖥️", "⚙️", "🌐", "📡", "🔐", "🛡️", "🔄", "🧠",
+    "📦", "🗃️", "⚡", "🚀", "⏱️", "🏗️", "🔍", "💡", "⚠️", "💻", "🛠️", "📚",
+))
 VISUAL_CODE_RE = re.compile(r"```\s*mermaid\b|[█▓▒░]{2,}|-->|──>|│|├|└")
 DENSE_SENTENCES = 5
 DENSE_PARAGRAPH_WORDS = 80
@@ -241,6 +247,19 @@ def legend_mark(line: str) -> str | None:
     return mark if mark in LEGEND else None
 
 
+def heading_nav_exempt(block: Block) -> bool:
+    """A heading that opens with a meaning-matched icon plus words is navigation, not decoration."""
+    if block.kind != "heading" or not block.lines:
+        return False
+    rest = re.sub(r"^\s*#{1,6}\s+", "", block.lines[0]).lstrip("*_ ")
+    match = EMOJI_RE.match(rest)
+    if not match:
+        return False
+    icon = match.group(0).replace("\ufe0f", "")
+    after = rest[match.end():].strip()
+    return icon in NAV_ICONS and bool(after)
+
+
 def legend_exempt(blocks: list[Block]) -> set[int]:
     """List items whose legend marker is one of two or more distinct markers in that list."""
     exempt: set[int] = set()
@@ -368,7 +387,8 @@ def decorative_structure_flags(markdown: str) -> list[str]:
                 flags.append("table_thin")
     exempt = legend_exempt(blocks)
     for i, block in enumerate(blocks):
-        if (i not in exempt and block.kind in {"heading", "bullet", "numbered"} and EMOJI_RE.match(
+        if (i not in exempt and not heading_nav_exempt(block)
+                and block.kind in {"heading", "bullet", "numbered"} and EMOJI_RE.match(
                 re.sub(r"^\s*(#{1,6}|[-*+]|\d+[.)])\s+", "", block.lines[0]).lstrip("*_ "))):
             flags.append("emoji_structure")
         if is_visual(block) and not has_caption(blocks, i):

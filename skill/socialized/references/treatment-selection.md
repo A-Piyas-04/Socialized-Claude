@@ -29,7 +29,8 @@ specific gap it fills for this reader.
 <!-- op:examples -->
 - **One running example** fits when the idea is abstract and the reader is not an
   expert, when they ask for one, or when a concrete case would expose a likely
-  misconception. Reuse that same case in later sections.
+  misconception. Reuse that same case in later sections, tracing initial state,
+  action, mechanism, resulting state, and why the result matters.
 <!-- /op:examples -->
 <!-- op:terms -->
 - **Defining a term** fits when the term is load-bearing and this reader
@@ -42,9 +43,10 @@ specific gap it fills for this reader.
 <!-- op:presentation -->
 - **Presentation** fits every answer with more than one idea. Pick the form from
   the content's shape: steps for a process, a table for three or more items on
-  shared dimensions, prose for a single causal chain. Leave a blank line between
-  units, and end a paragraph by four sentences. A two-sentence answer gets two
-  sentences and nothing else.
+  shared dimensions, a diagram for a flow, an interaction, or how components
+  connect, prose for a single causal chain. Leave a blank line between units,
+  and end a paragraph by four sentences as a ceiling, not a target. A two-sentence
+  answer gets two sentences and nothing else.
 <!-- /op:presentation -->
 <!-- op:visual -->
 - **A visual** fits an idea whose content has a shape that would take three or
@@ -55,8 +57,12 @@ specific gap it fills for this reader.
   a materially different dimension. Spend the first one on the hardest idea, and
   keep the support even across the answer rather than front-loading it. Give the
   figure and its text different jobs: the figure shows what happens and in what
-  order, and the text says why. Render it as markdown. Build an artifact only when
-  the person explicitly asks for one.
+  order, and the text says why. Pick sequence diagrams for order in time, flowcharts
+  for branches, architecture diagrams for components and connections, state tables
+  for change over time, and a compact arrow chain for a short linear flow. A
+  meaning-matched icon may label a heading, node or component; it is never required.
+  Render it as markdown. Build an artifact only when the person explicitly asks for
+  one.
 <!-- /op:visual -->
 <!-- op:close -->
 - **A takeaway** fits a long or multi-section teaching answer whose last sentence
@@ -160,8 +166,11 @@ produced these failures. The rules in `SKILL.md` exist to prevent them.
 - **Decorative structure.** Headings over one-sentence sections, bullets that
   chop one continuous argument into fragments, a table with one meaningful
   column, or bolding so frequent that nothing stands out.
-- **Emoji as structure.** Emoji used as bullet markers or section icons, or a
-  status marker that is not from the legend or stands alone in its list.
+- **Decorative icons.** An icon on every bullet or sentence, an emoji inside
+  executable code, an identifier, JSON, a log or a formal document, or a status
+  marker standing alone in its list. A meaning-matched icon used as a navigation
+  aid in a heading, node or label (🗄️ storage, ⚙️ processing, 🔐 security, 💡
+  insight) is not a fault.
 - **Whitespace padding.** Every sentence its own paragraph when the sentences
   form one continuous argument. A unit break marks an idea break, not a line
   break.
@@ -180,8 +189,10 @@ produced these failures. The rules in `SKILL.md` exist to prevent them.
   section. Use `##` or `###`.
 - **A specimen left inline.** Sample data, a snippet, or an output folded into a
   sentence. Lift it into a titled fenced block.
-- **Depth with no layer.** Specialist detail interleaved with the core thread.
-  Put it in a **Deeper:** block the reader can skip.
+- **Depth with no layer.** Specialist detail interleaved with the core thread,
+  or core, supporting and optional claims sharing one paragraph. Establish the
+  essential concept and its mechanism first; put variants, tuning and one system's
+  edge cases in a **Deeper:** block the reader can skip.
 - **Identifiers at body weight.** A path, flag, or product name in plain text
   mid-sentence. Put it in backticks.
 <!-- /op:presentation -->

@@ -2,6 +2,40 @@
 
 ## Unreleased
 
+### Communication-experience upgrade (policy v0.6.0, plugin v0.7.0)
+- Owner request after the v0.5.0 recovery: six presentation weaknesses (dense
+  paragraphs, congested tables, diagram/prose repetition, weak hierarchy, limited
+  visual variety, missing semantic icons). Brief `temp/re-enhance--communication.md`;
+  write-up `docs/communication-experience-upgrade.md`. Refined in place; still 12
+  operations and 15 variants. No quiz, takeaway, preview, visual quota, emoji
+  template or response template was added.
+- `op:presentation`: one primary idea per paragraph; four sentences / 80 words is a
+  ceiling, not a target; two independently important claims never share a paragraph;
+  lists only for genuinely distinct points; a table cell makes the primary decision
+  visible at a glance.
+- `op:sequencing`: internal priority is core understanding, then the supporting
+  mechanism, then optional advanced detail, in separate units, not as a template.
+- `op:visual`: architecture diagrams (components and connections) sit beside the
+  existing Mermaid grammar. A comparison table summarises distinctions rather than
+  retelling the diagram. A meaning-matched icon may label a heading, node, callout
+  or compact label, intent-sensitively, and never inside code, identifiers, JSON or
+  logs. The status legend stays. The old "no other symbols" / "headings stay words"
+  restriction is gone.
+- `op:examples`: a running example shows initial state, action, mechanism, resulting
+  state, and why the result matters, with invented numbers consistent with each other.
+- `communication/` modules move to 0.6.0. `emoji_structure` no longer flags a
+  heading that opens with a navigation icon plus words.
+- Activation is 5,760 → 6,085 tokens (legacy) / 5,813 → 6,124 (heuristic).
+  `activation.max` is raised 5,900 → 6,200 as a regression ceiling; the target
+  stays 5,000. This is the first time activation exceeds the Phase 4 baseline
+  (5,946 / 5,966); recorded as a deviation. `op:repair` (partly) and
+  `op:persistence` now sit past Claude Code's 5,000-token compaction re-attach,
+  with `op:work-report`, `op:close` and Step 3. The new rules themselves stay
+  inside the window.
+- Plugin `version` 0.6.0 → 0.7.0. Both archives, both manifests, the plugin tree
+  and `scripts/version_lock.json` were regenerated. New suite
+  `tests/test_communication_experience.py`. Behavioural acceptance is the owner's.
+
 ### Communication-quality recovery (policy v0.5.0, plugin v0.6.0)
 - Public release is paused: the owner rejected v0.5.2's communication quality on three
   real prompts (database replication, an architecture decision, CPU cache coherence).

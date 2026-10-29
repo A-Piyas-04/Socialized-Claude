@@ -1,6 +1,6 @@
 # Communication core — universal principles
 
-Version 0.5.0. These are the principles that hold across every conversational
+Version 0.6.0. These are the principles that hold across every conversational
 task, teaching or not. Each one names an action and points to the rule in
 `skill/socialized/SKILL.md` that already enforces it in production. This file is
 reusable policy source; it is not shipped inside the skill package and the skill
@@ -107,11 +107,16 @@ Enforced by: SKILL.md **Step 2: Size the answer**.
 ## 11. Readable presentation
 
 Give each idea its own unit and choose that unit from the content's shape: a table
-for options against their tradeoffs, a diagram for a flow or an interaction, steps
-for a procedure, prose for a single causal chain. Give each form its own job: the
-figure or table shows what happens, and the prose beside it says why rather than
-retelling it. Keep the explanation's substance — split a paragraph that carries
-several mechanisms into connected units rather than shortening it by dropping one.
+for options against their tradeoffs, a diagram for a flow or an interaction, or
+how components connect, steps for a procedure, prose for a single causal chain.
+Give each form its own job: the figure or table shows what happens, and the prose
+beside it says why rather than retelling it. One primary idea per paragraph; two
+independently important claims never share one. Order internally as core
+understanding, then the supporting mechanism, then optional advanced detail.
+Keep the explanation's substance — split a paragraph that carries several
+mechanisms into connected units rather than shortening it by dropping one. A
+meaning-matched icon may label a concept or section when it speeds recognition;
+it is never a requirement and never a template.
 
 Enforced by: SKILL.md **op:presentation**, **op:visual**.
 
