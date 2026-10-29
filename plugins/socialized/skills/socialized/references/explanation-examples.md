@@ -15,8 +15,9 @@ add nothing.
 - Code: explaining a debounce function
 - Follow-up confusion: repairing one link
 - Visual forms: flow, contrast, proportion, change over time, order in time,
-  differentiated parts, two states, specimens, scannable tables, a checkable
-  question
+  differentiated parts, two states, specimens, scannable tables, a decision table
+  with its reasoning underneath, a figure and the text beside it, semantic icons
+  as navigation, a checkable question
 - Restraint: no visual, and no artifact unless asked
 - Opt-in: one artifact when the person asks
 - Restraint: requests where the skill should add nothing
@@ -369,6 +370,76 @@ dimension.
 |---|---|---|
 | Write-through | slow | none |
 | Write-back | fast | lost writes |
+
+### A decision table with its reasoning underneath
+
+**Weak:** a "Why" column whose cells each hold a paragraph: the workload, the
+alternative, the operational cost and the exception, all in one cell.
+
+**Better:** each cell holds the verdict and the one reason that decides it
+(✅ use, ⚠️ later, ❌ skip). The conditions sit in a list under the table, one
+item per row that needs one.
+
+| Option | Use here? | Deciding reason |
+|---|---|---|
+| In-process cache | ✅ yes | no network hop |
+| Redis | ⚠️ later | a second service to run |
+| No cache | ❌ no | the slow query repeats |
+
+- **Redis:** worth adding once a second app instance needs a shared cache, or
+  entries must survive a restart.
+- **No cache:** acceptable if the slow query turns out to be rare; measure it
+  before deciding.
+
+### A figure and the text beside it
+
+**Weak:** a document's review lifecycle drawn as a state diagram, again as a
+sequence diagram of the same transitions, then as numbered steps that walk both.
+Three tellings of one cycle, and the reject arrow drawn from the wrong state.
+
+**Better:** two forms, each with its own job, named in its caption. The table
+tracks state: each row is one transition and the action that causes it.
+
+| From | Trigger (who acts) | To |
+|---|---|---|
+| Draft | author submits | In review |
+| In review | reviewer approves | Published |
+| In review | reviewer rejects | Draft |
+
+The diagram adds only what the table cannot show: the author waits while the
+reviewer decides.
+
+```mermaid
+sequenceDiagram
+  Author->>Reviewer: submit draft
+  Note over Author: waits
+  Reviewer-->>Author: approve or reject
+```
+
+A rejection returns the document to Draft rather than closing it, so the author
+revises the same document instead of starting over.
+
+### Semantic icons, where they help a reader scan back
+
+Icons are optional. An answer with two or three sections rarely needs them; a
+long one a reader will scan back through can use one on the heading that matters
+most, so the key point is findable. The same icon always means the same kind of
+part, and the code stays plain.
+
+**Weak:** an emoji on every bullet, an icon on every heading, the same mark on
+different kinds of part, or an icon inside the code.
+
+**Better:** plain headings, with one icon where it earns its place.
+
+## A write-back cache delays the storage write
+
+## The write reaches storage on eviction
+
+```python
+cache.set(key, value)
+```
+
+## 💡 A crash before eviction loses the write
 
 ### A question the reader can check
 

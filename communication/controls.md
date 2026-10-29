@@ -1,101 +1,84 @@
-# Communication controls — depth, formatting, visuals, density
+# Communication controls — depth, presentation, visuals
 
-Version 0.4.0. These controls decide how much to say and how to present it. They
-preserve the skill's adaptive presentation while keeping elaboration proportionate.
-Each control names an action and points to the rule in
-`skill/socialized/SKILL.md` that enforces it. Presentation is a capability to
-apply when the content's shape calls for it, never a quota to fill.
+Version 0.8.0. How much to say, and how to present it.
 
-## Depth selection
+**This file is an index, not a second copy of the policy.** Each control names
+what the model does and points to the rule in `skill/socialized/SKILL.md` that
+states it in full. Before 0.8.0 this file carried its own wording of the same
+rules, including numeric thresholds that outlived the skill's (see
+`docs/COMMUNICATION_SIMPLIFICATION_AUDIT.md`).
 
-- Set depth from the reader's explicit request, the complexity of the question,
-  their demonstrated understanding, and the cost of omitting a detail.
-- Give a direct factual question one sentence; give a conceptual why or how a few
-  units; give an expert's narrow question a precise answer at their level.
-- Impose no universal word count. Do not equate a technical topic with a long
-  answer, or a short question with a simple underlying problem.
+Presentation is a capability to apply when the content's shape calls for it,
+never a quota to fill. No answer owes the reader a table, a figure, a heading, an
+icon, an example or a takeaway.
 
-Enforced by: SKILL.md **Step 2**; `references/treatment-selection.md` §3.
+## Depth
 
-## Formatting selection
+| Control | What the model does | Stated in |
+|---|---|---|
+| Depth selection | Sets depth from the explicit request, the question's complexity, the reader's demonstrated understanding, and the cost of omitting a detail. | **Step 2** |
+| Proportion | One sentence for a direct factual question; a few units for a conceptual why or how; a precise answer at their level for an expert's narrow question. | **Step 2** |
+| No universal count | Imposes no word count, and does not equate a technical topic with a long answer or a short question with a simple problem. | **Step 2** |
 
-- Choose the form from the content's shape: numbered steps for a process; a table
-  for three or more items across two or more dimensions; a labelled list for
-  parallel options; connected prose for a single causal chain.
-- Give each idea its own unit, leave a blank line between units, and end a
-  paragraph by four sentences or about 80 words. Start a new paragraph when the
-  idea changes, even when the current one is short, and keep a list item to one
-  idea and about 25 words. Keep a table cell scannable — a phrase where one will do,
-  a short sentence where the comparison needs one.
-- Apply the form choice in every strategy, not only in teaching replies: an
-  architecture or tool comparison earns a table rather than four long paragraphs,
-  and a mechanism with an order in time earns a sequence diagram.
-- Put a heading where a section begins, using `##` then `###` without skipping a
-  level. Wrap every identifier, path, flag, and command in backticks.
-- Answer directly first. Add a one-line roadmap or heading map only when a complex,
-  multi-part answer genuinely needs orienting; do not preview a structure the
-  headings already make clear.
+## Presentation
 
-Enforced by: SKILL.md **op:presentation**.
-
-These capabilities are conditional, not mandatory. Headings, numbered sections,
-tables, and diagrams stay available; the control is *when* to use them, applied
-from the content's shape rather than on a fixed schedule. Do not force a heading
-over a one-sentence section, a table with one meaningful column, or a bold line
-standing in for a heading.
+| Control | What the model does | Stated in |
+|---|---|---|
+| Form from shape | Numbered steps for a process; a table for several items across shared dimensions; a labelled list for parallel options; a diagram for a flow, an interaction or how components connect; prose for a single causal chain. Applies in every strategy, not only teaching replies. | `op:presentation`, the strategy section |
+| One idea per unit | Gives each independently important idea its own unit, starts a new one when the idea changes, keeps a continuous argument together with its link stated inside the unit, and splits a paragraph that has taken on a second idea. | `op:presentation` |
+| Scannable tables | The verdict in the cell, the dimension in each header, and a condition, a second reason or an argument in a list under the table. | `op:presentation` |
+| Hierarchy | Essential point first, optional points after, minor caveats together at the end, and specialist depth after the narrative it extends and marked as skippable. | `op:presentation` |
+| Headings | `##` then `###` without skipping a level, each stating what the section establishes. No bold line standing in for a heading, and no heading over a one-sentence section. | `op:presentation` |
+| Specimens and identifiers | Sample data, snippets, outputs and quoted structures in a fenced block, named in the sentence before it; identifiers, paths, flags and commands in backticks. | `op:presentation` |
+| No preview | Answers directly first, and adds no roadmap or heading map the headings already make clear. | `op:plain` |
 
 ## Examples and analogies
 
-- Use an example when it reduces abstraction, when the reader asks, or when a
-  concrete case would expose a likely misconception.
-- Carry one running example through the answer rather than starting a fresh case
-  per section.
-- Leave the example out when the idea is already concrete, the reader is an
-  expert, or the answer is short.
+| Control | What the model does | Stated in |
+|---|---|---|
+| When to use one | When the abstraction is hard to picture, when the reader asks, or when a concrete case would expose a likely misconception. Left out when the idea is already concrete, the reader is an expert, or the answer is short. | `op:examples` |
+| Showing a general claim | Shows a claim about complexity, cost, risk, latency or failure happening to one case — the situation, what the mechanism does, what the reader is left with — instead of asserting it as a property. | `op:examples` |
+| One example, reused | Reuses one case where a later idea needs a concrete one, and lets it add only what a figure has not already shown, traced to the moment the behaviour shows, with invented numbers marked and consistent. | `op:examples` |
 
-Enforced by: SKILL.md **op:examples**.
+## Visuals
 
-## Visualizations
+| Control | What the model does | Stated in |
+|---|---|---|
+| When to draw | Where showing a relationship saves the reader walking through it in prose, with the sentences it replaces deleted. No quota and no cap; left out where the prose already makes the relationship plain, the answer is short, or a practitioner wants only the lookup. The first figure goes to the hardest idea. | `op:visual` |
+| Different jobs | A figure shows what happens and in what order, a table compares options or tracks state, and the text says why and what follows. A second representation of one mechanism is added only when it shows something the first cannot, and names that difference. | `op:visual` |
+| Form | Arrow chain for a short linear flow; Mermaid `flowchart` for branches, loops and component connections; Mermaid `sequenceDiagram` for order in time; a two-column table or two labelled blocks for two states; block-character bars for magnitude; one row per moment for change over time. | `op:visual` |
+| Legibility | A distinct shape for the load-bearing node, `classDef` classes separating peers from a different kind of thing, and one colour code per answer named once. | `op:visual` |
+| Accuracy | Every arrow, state and transition is a factual claim: each transition's trigger and whose action causes it are named, and a simpler figure beats one with a transition that cannot be confirmed. No figure implies a guarantee the mechanism does not provide. | **Accuracy rules**, `op:visual` |
+| Markdown by default | Visuals are markdown. An artifact is built only on an explicit request for an artifact, an SVG or something to click, and an interactive version is offered only when asked or clearly useful. | `op:visual` |
 
-- Prefer a visual for an idea whose shape would take three or more sentences to
-  describe, and delete the sentences it replaces. There is no quota and no cap; each
-  figure pays for itself by removing that prose. Keep to one representation per
-  idea, and add a second only when it carries a materially different dimension, and
-  leave one out where the prose already makes the relationship plain.
-- Give the hardest idea its visual first, and keep the support even across the
-  answer rather than front-loading it. Add colour, status emoji, or a legend only
-  where it makes a comparison genuinely faster.
-- Render visuals as markdown; build an artifact only when the person explicitly
-  asks for one, and offer an interactive version only when asked or clearly useful
-  rather than by default.
-- Caption every visual with one sentence naming what it shows and the one thing to
-  notice, and do not let a diagram imply a guarantee the mechanism does not provide.
-  Do not draw a diagram just because the topic describes a process.
+## Icons
 
-Enforced by: SKILL.md **op:visual**.
+Optional, where they genuinely help the reader navigate or compare: a
+meaning-matched icon on a key heading, callout or diagram label, or a status
+marker in a list or table. The same icon always marks the same kind of part.
+Never in code, identifiers, JSON, logs, formal writing, or a short or casual
+reply; never on every heading or every item; never required.
 
-## Conclusions and takeaways
+The vocabulary is in `op:visual`: 🧠 concept, ⚙️ mechanism, 📡 signalling,
+🗄️ storage, 🔄 state transition, 📊 comparison, 💡 insight, 🛡️ security; and
+✅ works, ❌ broken, ⚠️ caution, 🟢 🟡 🔴 for degrees of one property.
 
-- Close a long or multi-section teaching answer with a takeaway that compresses the
-  mechanism — an arrow chain or one line of 25 words or fewer, written fresh rather
-  than copied from the body. Leave it out when the last sentence already lands the
-  point or the answer is short.
-- End a quick, practitioner, or expert answer when the content ends.
-- Add a check question only when the person asks to practise or be tested, the
-  exchange is explicitly a tutorial, or one focused question resolves a real
-  uncertainty — not on a coding deliverable, a fix, a decision, a fact, or an
-  expert reply by category alone. Treat "I don't understand X" as a request to
-  explain X again, not a prompt for a quiz.
+Stated in: `op:visual`.
 
-Enforced by: SKILL.md **op:close**.
+## Closings
+
+| Control | What the model does | Stated in |
+|---|---|---|
+| Takeaway | Closes a long or multi-section teaching answer with a takeaway only when it compresses something the body has not landed. Left out when the last sentence lands the point or the answer is short. | `op:close` |
+| Check question | Added only when the person asks to practise or be tested, the exchange is explicitly a tutorial, or one focused question resolves a real uncertainty, with its answer shown. Never on a coding deliverable, a fix, a decision or a quick answer by category. "I don't understand X" is a request to explain X again. | `op:close` |
+| Stopping | A quick, practitioner or expert answer ends when the content ends. Most answers need no closing unit. | `op:close` |
 
 ## Density
 
-- Prefer information value over word count. Do not shorten a response past the
-  point where it loses essential reasoning, and do not lengthen one to display
-  expertise.
-- Break a substantial explanation into meaningful sections, but keep a naturally
-  cohesive argument in one paragraph rather than splitting it across headings.
+Prefers information value over word count. Does not shorten past the point where
+a response loses essential reasoning, or lengthen one to display expertise. A
+paragraph carrying several mechanisms is split into connected units rather than
+shortened by dropping one.
 
-Enforced by: SKILL.md **op:plain**, **op:presentation**;
-`references/treatment-selection.md` §4 (failure modes).
+Stated in: `op:plain`, `op:presentation`;
+`references/treatment-selection.md` §3 (failure modes).

@@ -2,6 +2,171 @@
 
 ## Unreleased
 
+### Communication simplification (policy v0.8.0, plugin v0.9.0)
+- Six additive rounds of communication work had left the same rule stated in up to
+  four files in four wordings, eleven thresholds the model had to count against,
+  four pairs of rules that could not both be satisfied, and optional capabilities
+  promoted to defaults. Audit `docs/COMMUNICATION_SIMPLIFICATION_AUDIT.md`. This
+  round removes and consolidates; no operation, marker, variant or module was added,
+  and no new framework was introduced. Still 12 operations and 15 variants.
+- One statement up front replaces the per-rule escape clauses: "Nothing here is a
+  quota. No answer owes the reader a table, a figure, a heading, an icon, an example
+  or a takeaway. The content's shape decides, every time."
+- Every counting rule removed from the shipped text: the four-sentence / 80-word
+  paragraph, the 25-word list item, the six-word table cell, the four-column table,
+  the ten-node flowchart with four-word labels, the four-step arrow chain, the
+  25-word takeaway, the two-bold cap, the three-sentence visual cue, and the
+  "three or more items across two or more dimensions" table trigger. The linter
+  flags keep their thresholds as descriptive measures and still never gate.
+- Four contradictions resolved at source: the required bold title line (gone; the
+  block is named in the sentence before it), `op:plain` deleting the sentence
+  `op:visual` required beside a figure (now exempt, as content), a heading required
+  over every part against a heading forbidden over a one-sentence section, and
+  heading numbering against "open with the answer before any heading" (numbering and
+  the one-line map removed, with the mandatory horizontal rule).
+- `op:visual`: meaning-matched icons and status markers are one optional rule again,
+  not a default on key headings. The vocabulary, the drawing grammar, `classDef`
+  styling, the one-colour-code rule, markdown-by-default and opt-in artifacts are
+  unchanged.
+- `op:examples`: a claim about complexity, cost, risk, latency or failure is shown
+  happening to one case — the situation, what the mechanism does, what the reader is
+  left with — rather than asserted. Replaced two overlapping bullets.
+- `op:plain`: direct, conversational register is now an instruction while drafting,
+  not only the last line of Step 3.
+- Step 3: nine checks to seven, each about the draft rather than about a rule.
+- `references/treatment-selection.md`: §1 "Selection defaults" deleted (it restated
+  every operation's trigger from `SKILL.md`); failure modes grouped under five
+  headings and cut to those carrying a named failure, an observed case or a
+  measurement; "an abstract argument left abstract" added.
+- `communication/core.md`, `strategies.md`, `controls.md` rewritten as indexes that
+  point at the one place each rule is stated, so there is no second wording to drift.
+  `communication/README.md` keeps a one-line-per-round history instead of a
+  change-summary table per round. `COMMUNICATION_GRAMMAR.md` reconciled: rows for
+  five rules that had stopped shipping in v0.5.0–v0.7.0 were deleted.
+- Tests: five round-specific suites (`test_refinement_policy.py`,
+  `test_visual_restoration.py`, `test_communication_recovery.py`,
+  `test_communication_experience.py`, `test_communication_priority.py`, 1,336 lines)
+  replaced by `tests/test_communication_policy.py` (31 tests) asserting invariants
+  instead of each round's phrasing. Every dropped assertion is listed in the audit
+  §4 with where its behaviour is now asserted.
+  `test_token_budget.py::test_activation_exceeds_the_phase_4_baseline_by_a_recorded_decision`
+  renamed and its assertion restored from `>` to `<`, which its own docstring invited.
+- Activation 6035 → 5648 local-estimate tokens, below the Phase 4 baseline (5966) for
+  the first time since Phase 4C, with no rule moved to an on-demand reference.
+  `activation.max` lowered 6150 → 5750. Step 3 and `op:close` still fall outside
+  Claude Code's 5,000-token compaction re-attach window.
+- Validation: `python scripts/verify.py` 9 passed, 0 failed, 0 skipped; suite 553
+  passed, 2 skipped. Behavioural acceptance is the owner's, with the
+  microservices/Kafka question as the first case.
+
+### Communication priority correction (policy v0.7.0, plugin v0.8.0)
+- v0.7.0 failed behavioural acceptance on two real CPU cache-coherence answers
+  (plugin and standalone skill, byte-identical `SKILL.md`): dense, repetitive, no
+  semantic icons, and one MESI diagram drew a read-triggered Modified → Invalid
+  transition. Write-up `docs/communication-priority-correction.md`. Conflicting
+  instructions were removed or merged rather than new ones added; still 12
+  operations and 15 variants.
+- Step 2 carries one planning order: essential understanding, then the forms that
+  show it, then necessary detail. It replaces `op:sequencing`'s six-stage order and
+  internal-hierarchy bullet.
+- `op:mechanism`: the obvious-approach move is stated once, for the main mechanism
+  and a later one only when it would look arbitrary; a tradeoff only when it changes
+  what the reader would expect or do.
+- `op:examples`: reused where a later idea needs a concrete case, not in every
+  section; adds only what a figure lacks.
+- `op:visual`: every figure, table and paragraph gets a different job; one
+  representation per mechanism is a preference, and another is added whenever it
+  shows something the first cannot. The evenness floor became a value test (owner
+  decision, deviation from "Visual budget"). Styling bullets merged. Meaning-matched
+  icons are the default on key headings, callouts and labels of a substantive
+  explanation, with no quota.
+- Accuracy rules: every arrow, state and transition is checked like a sentence, with
+  each trigger named; a simpler correct figure is preferred.
+- `op:presentation`: one idea-based density rule (cause, mechanism and consequence
+  apart; essential before optional); the numeric ceiling is stated once. Step 3
+  went from 14 checks to 13 and checks ideas, not numbers.
+- `treatment-selection.md`: five retelling failure modes merged into one; two
+  removed; one added for wrong figures. `explanation-examples.md`: two pairs
+  rewritten, none added. `communication/` modules move to 0.7.0. `NAV_ICONS`
+  gains 📊.
+- Activation 6,085 → 6,035 tokens (legacy) / 6,124 → 6,084 (heuristic);
+  `activation.max` lowered 6,200 → 6,150. `op:repair` is back inside the
+  compaction re-attach window.
+- Plugin `version` 0.7.0 → 0.8.0. Both archives, the plugin tree and
+  `scripts/version_lock.json` were regenerated. New suite
+  `tests/test_communication_priority.py`. Behavioural acceptance is the owner's.
+
+### Communication-experience upgrade (policy v0.6.0, plugin v0.7.0)
+- Owner request after the v0.5.0 recovery: six presentation weaknesses (dense
+  paragraphs, congested tables, diagram/prose repetition, weak hierarchy, limited
+  visual variety, missing semantic icons). Brief `temp/re-enhance--communication.md`;
+  write-up `docs/communication-experience-upgrade.md`. Refined in place; still 12
+  operations and 15 variants. No quiz, takeaway, preview, visual quota, emoji
+  template or response template was added.
+- `op:presentation`: one primary idea per paragraph; four sentences / 80 words is a
+  ceiling, not a target; two independently important claims never share a paragraph;
+  lists only for genuinely distinct points; a table cell makes the primary decision
+  visible at a glance.
+- `op:sequencing`: internal priority is core understanding, then the supporting
+  mechanism, then optional advanced detail, in separate units, not as a template.
+- `op:visual`: architecture diagrams (components and connections) sit beside the
+  existing Mermaid grammar. A comparison table summarises distinctions rather than
+  retelling the diagram. A meaning-matched icon may label a heading, node, callout
+  or compact label, intent-sensitively, and never inside code, identifiers, JSON or
+  logs. The status legend stays. The old "no other symbols" / "headings stay words"
+  restriction is gone.
+- `op:examples`: a running example shows initial state, action, mechanism, resulting
+  state, and why the result matters, with invented numbers consistent with each other.
+- `communication/` modules move to 0.6.0. `emoji_structure` no longer flags a
+  heading that opens with a navigation icon plus words.
+- Activation is 5,760 → 6,085 tokens (legacy) / 5,813 → 6,124 (heuristic).
+  `activation.max` is raised 5,900 → 6,200 as a regression ceiling; the target
+  stays 5,000. This is the first time activation exceeds the Phase 4 baseline
+  (5,946 / 5,966); recorded as a deviation. `op:repair` (partly) and
+  `op:persistence` now sit past Claude Code's 5,000-token compaction re-attach,
+  with `op:work-report`, `op:close` and Step 3. The new rules themselves stay
+  inside the window.
+- Plugin `version` 0.6.0 → 0.7.0. Both archives, both manifests, the plugin tree
+  and `scripts/version_lock.json` were regenerated. New suite
+  `tests/test_communication_experience.py`. Behavioural acceptance is the owner's.
+
+### Communication-quality recovery (policy v0.5.0, plugin v0.6.0)
+- Public release is paused: the owner rejected v0.5.2's communication quality on three
+  real prompts (database replication, an architecture decision, CPU cache coherence).
+  Regression analysis in `docs/communication-recovery.md`; the three prompts and the
+  desired behaviour in the new `docs/COMMUNICATION_BASELINE.md`.
+- `op:presentation`: a table cell keeps the verdict and its deciding reason; a
+  condition, a second reason or an argument goes in a list under the table. Sentences
+  in cells stay allowed, with no word cap. The causal-link rule no longer routes a
+  table's "because" into the cell. Specialist depth is named: variants, tuning, one
+  system's edge cases.
+- `op:visual`: a figure and its text get different jobs. The diagram shows who acts
+  in what order, a state table what each step changes, and the text after them why.
+  Steps or prose that only retell the arrows become that why, unless the reader needs
+  the steps in words as well.
+- Strategy D leads with the recommendation and the reason that decides it, then the
+  tradeoffs, and names what would make a rejected option worth adopting.
+- Accuracy rules: teach the general mechanism first, then label one system's own
+  version. State an assumed scale once, where it first matters, and say what would
+  change the answer. Every Phase 4 and 4C accuracy requirement is kept.
+- `op:sequencing` adds a concrete demonstration to the learnable order (still "only
+  the stages this answer needs"). `op:examples` traces the case to the moment the
+  behaviour shows. Step 3 checks a cell's argument and the text after a figure.
+- References: two new weak-and-better pairs (a decision table with its reasoning
+  underneath; a figure and the text beside it). New failure modes: a diagram retold in
+  steps, one system taught as the rule, and qualifiers on every sentence. "A congested
+  table" no longer forbids sentences, which had contradicted the 4C calibration.
+- `communication/` modules move to 0.5.0. Still 12 operations and 15 variants. No
+  quiz, takeaway, preview, visual quota or template is reintroduced.
+- Activation is 5,543 → 5,760 tokens (legacy) / 5,588 → 5,813 (heuristic).
+  `activation.max` is raised 5,600 → 5,900 as a regression ceiling; the target stays
+  5,000. `op:work-report` (partly), `op:close` and Step 3 now sit past Claude Code's
+  5,000-token compaction re-attach.
+- Plugin `version` 0.5.2 → 0.6.0. Both archives, both manifests, the plugin tree and
+  `scripts/version_lock.json` were regenerated. New suite
+  `tests/test_communication_recovery.py` (19 tests). Suite 584 passed, 2 skipped.
+- Not verified: no answer was regenerated. Behavioural acceptance is the owner's.
+
 ### Contribution protection
 - `.github/CODEOWNERS` names `@A-Piyas-04` as owner of every path, so GitHub requests the
   maintainer's review on each pull request.

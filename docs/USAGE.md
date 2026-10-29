@@ -12,7 +12,8 @@ is in [COMPATIBILITY.md](COMPATIBILITY.md).
 | Starts with the answer | Starts with background and arrives at the answer |
 | Introduces an idea before the idea that needs it | Uses a term, then defines it two paragraphs later |
 | Names the cause, step by step, for *how* and *why* | Describes what happens without saying what makes it happen |
-| Takes the shape of its content — steps for a process, a table for options against tradeoffs, a small diagram for a flow | Puts everything in undifferentiated paragraphs, or adds headings to things that aren't sections |
+| Takes the shape of its content — steps for a process, a table for options against tradeoffs, a small diagram for a flow or for how components connect | Puts everything in undifferentiated paragraphs, or adds headings to things that aren't sections |
+| May mark a heading or label with a meaning-matched icon when that helps you find the idea | Decorates every line, or puts emoji inside code |
 | Draws the visual where the mechanism is hardest, and keeps that support to the end | Front-loads one diagram and lets the last third go bare |
 | Writes plain sentences: one point each, active voice | Stacks clauses and hedges |
 | Pitches at a practitioner unless you show otherwise | Explains the basics of your own field back to you |

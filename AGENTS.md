@@ -246,3 +246,65 @@ needs to decide. No progress narrative.
  deletion. CODEOWNERS review is not required for the same reason; `.github/CODEOWNERS` still
  requests it. The bypass list is empty; the owner keeps admin and can edit the ruleset.
  No package bytes changed, so the version stays 0.5.2.
+- Communication recovery (user, 2026-10-29): public release paused until three owner-run
+ prompts (replication, an architecture decision, cache coherence) read well. Fixed in place,
+ no new operation: a table cell keeps the verdict and the reasoning goes under the table (no
+ word cap, sentences still allowed); a figure shows what happens and its text says why;
+ Strategy D leads with the recommendation; one system's internals are labelled after the
+ general mechanism; an assumption is stated once. Headings and numbering were left alone
+ because no observation named them. `activation.max` 5,600 → 5,900 (5,760 legacy / 5,813
+ heuristic). Policy 0.5.0, plugin 0.6.0. Work is on `recovery/communication-quality`, unmerged.
+ `docs/COMMUNICATION_BASELINE.md` is the behavioural reference; behavioural acceptance is
+ the owner's.
+- Communication-experience upgrade (user, 2026-10-29): after the recovery, the owner asked
+ for a better presentation experience (dense paragraphs, congested tables, diagram/prose
+ repetition, weak hierarchy, limited visual variety, semantic icons). Refined in place, no
+ new operation: one idea per paragraph with four sentences as a ceiling not a target;
+ glanceable table verdicts; internal core → mechanism → optional priority; architecture
+ diagrams named beside the existing Mermaid grammar; figure vs table vs prose keep different
+ jobs; examples trace state → action → result; meaning-matched icons as navigation, never
+ required, never inside code. The addendum's emoji ban is narrowed a second time: a heading
+ may open with a navigation icon. Policy 0.6.0, plugin 0.7.0. Still on
+ `recovery/communication-quality`, unmerged. Behavioural acceptance is the owner's.
+- Communication priority correction (user, 2026-10-29): v0.7.0 failed acceptance on two
+ cache-coherence answers (dense, repetitive, no icons, a read-triggered M → I transition).
+ Conflicting instructions were removed or merged, not added to: one planning order in Step 2
+ (essential understanding → effective representation → necessary detail); the obvious-approach
+ move stated once; the example reused only where needed; every figure, table and paragraph a
+ different job. One representation per mechanism is a **preference, never a cap** (user):
+ another is added whenever it shows something the first cannot. The coverage floor ("even
+ across the answer", "last third as much as the first") is replaced by a value test, by owner
+ choice; recorded as a deviation from "Visual budget". Meaning-matched icons are now the
+ **default** on key headings, callouts and labels of a substantive explanation (no quota,
+ never in code, JSON, formal or casual replies). The first accuracy rule covers every arrow,
+ state and transition, with triggers named. The failed responses are described, not stored
+ (user). `activation.max` 6,200 → 6,150 (6,035 legacy / 6,084 heuristic). Policy 0.7.0,
+ plugin 0.8.0. Still on `recovery/communication-quality`, unmerged.
+- Communication simplification (user, 2026-10-29): after v0.7.0 the owner asked for the
+ instruction system to be *simplified*, not extended again. Audit
+ `docs/COMMUNICATION_SIMPLIFICATION_AUDIT.md`. Four verified causes: the same rule
+ stated in up to four files in four wordings; eleven counting thresholds; four pairs of
+ rules that cannot both be satisfied; and optional capabilities promoted to defaults.
+ A fifth cause is the test suite itself — five round-specific suites froze each round's
+ phrasing, so the cheapest change was always to add text beside it.
+ Removed, not added to: every counting rule; heading numbering, the one-line map, the
+ mandatory horizontal rule and the required bold title line; the icon default (icons and
+ status markers are one optional rule again). Added once, up front: "Nothing here is a
+ quota." Added as rules replacing overlapping bullets: show a general claim about cost,
+ risk or complexity happening to one case (owner brief §4); direct conversational
+ register in `op:plain`. `references/treatment-selection.md` §1 deleted as pure
+ restatement; `communication/*.md` rewritten as indexes that point at the one place each
+ rule is stated. `COMMUNICATION_GRAMMAR.md` reconciled — it still documented five rules
+ that stopped shipping in v0.5.0–v0.7.0.
+ **The 12 operations and 15 variants were examined and kept**, because six map to the
+ archive study's treatments and each variant is a planned sweep arm; merging headings
+ removes no instruction. Recorded as a deliberate decision, not a default.
+ Five policy test files (1,336 lines) replaced by one invariant-based
+ `tests/test_communication_policy.py`; every dropped assertion is listed in the audit §4.
+ `test_activation_exceeds_the_phase_4_baseline_by_a_recorded_decision` restored to `<`,
+ as its docstring invited. `activation.max` 6150 → 5750 (5648 heuristic), below the
+ Phase 4 baseline for the first time since Phase 4C; Step 3 and `op:close` still sit
+ outside the 5,000-token compaction re-attach window. Policy 0.8.0, plugin 0.9.0. Still
+ on `recovery/communication-quality`, unmerged. Behavioural acceptance is the owner's.
+ **Not done:** the brief's §1 comparison against `Microservices Architecture Advice.html`
+ and the paired Claude response. Neither file is in the repository or the working tree.

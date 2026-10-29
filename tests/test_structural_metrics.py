@@ -122,6 +122,12 @@ def test_dense_list_item_and_legend_emoji_are_distinct():
     assert "emoji_structure" in heading and "heading_thin" not in heading
     bare = "- ✅ only one marker\n- still one marker\n"
     assert "emoji_structure" in sm.decorative_structure_flags(bare)
+    nav = sm.decorative_structure_flags(
+        "## 🗄️ Write path\n\nThe client writes to the cache, then the cache writes through.\n")
+    assert "emoji_structure" not in nav
+    party = sm.decorative_structure_flags(
+        "## 🎉 Write-ahead logging\n\nIt records each change before applying it, so a crash can be replayed.\n")
+    assert "emoji_structure" in party
 
 
 def test_bold_title_above_a_block_is_a_label_not_a_heading():

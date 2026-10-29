@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import json
+import re
 import zipfile
 from pathlib import Path
 
@@ -355,37 +356,44 @@ def test_visual_rules_name_actions_and_keep_artifacts_opt_in():
     text = read(lib.SKILL_DIR / "SKILL.md")
     block = text.split("<!-- op:visual -->", 1)[1].split("<!-- /op:visual -->", 1)[0]
     rules = [line.strip()[2:] for line in block.splitlines() if line.strip().startswith("- ")]
-    assert len(rules) >= 8
+    assert len(rules) >= 6
     for rule in rules:
         assert not rule.lower().startswith(("do not", "don't", "never", "avoid")), rule
     assert "markdown" in block.lower()
     assert "explicitly asks" in block
     joined = " ".join(rules)
     assert "artifact" in joined.lower()
-    # Phase 4C calibration: a strong preference, not "for each such idea".
-    for required in ("Prefer a visual", "hardest section", "sequenceDiagram", "classDef",
+    # The drawing grammar survives the 2026-10-29 simplification; the quotas do not.
+    for required in ("hardest idea", "sequenceDiagram", "flowchart", "classDef",
                      "one colour code", "interactive"):
         assert required in block, required
-    assert "at most two in an answer" not in block, "the per-answer cap was replaced by a per-idea budget"
+    for quota in ("at most two in an answer", "for each such idea", "last third"):
+        assert quota not in block, quota
 
 
 def test_close_rules_name_actions():
     text = read(lib.SKILL_DIR / "SKILL.md")
     block = text.split("<!-- op:close -->", 1)[1].split("<!-- /op:close -->", 1)[0]
     rules = [line.strip()[2:] for line in block.splitlines() if line.strip().startswith("- ")]
-    assert len(rules) >= 5
+    assert len(rules) >= 4
     for rule in rules:
         assert not rule.lower().startswith(("do not", "don't", "never", "avoid")), rule
-    for required in ("three lettered", "**Answer:**", "25 words"):
+    # The check-question format survives; the takeaway word count does not (2026-10-29).
+    for required in ("three lettered", "**Answer:**", "one fresh line"):
         assert required in block, required
 
 
 def test_presentation_names_scanning_rules():
     text = read(lib.SKILL_DIR / "SKILL.md")
     block = text.split("<!-- op:presentation -->", 1)[1].split("<!-- /op:presentation -->", 1)[0]
-    for required in ("backticks", "`##`", "`###`", "bold title line", "six words", "four columns",
-                     "**Deeper:**", "last section"):
-        assert required in block, required
+    # The 2026-10-29 simplification kept the scanning rules that name a place for
+    # information and dropped the ones that made the model count (audit §2).
+    flat = re.sub(r"\s+", " ", block)
+    for required in ("backticks", "`##`", "`###`", "the verdict in the cell",
+                     "the dimension named in each header", "**Deeper:**"):
+        assert required in flat, required
+    for counted in ("bold title line", "six words", "four columns"):
+        assert counted not in flat, counted
 
 
 def test_plain_language_rules_name_actions():

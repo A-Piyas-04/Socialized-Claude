@@ -6,6 +6,15 @@
 **Updated 2026-10-29** after the MIT licence was applied (plugin 0.5.2), on top of `42fa013`.
 Items 1–6, 9–11 and 20 below reflect that change; the rest are unchanged from the original run.
 
+**Release paused, 2026-10-29.** The owner rejected v0.5.2's communication quality. The
+recovery is plugin 0.6.0; the communication-experience upgrade on top of it is plugin
+0.7.0 ([communication-experience-upgrade.md](communication-experience-upgrade.md)), which
+failed behavioural acceptance; the communication priority correction is plugin 0.8.0
+([communication-priority-correction.md](communication-priority-correction.md)), still on
+branch `recovery/communication-quality`. This
+checklist was run against 0.5.2 and has not been re-run. Release waits on the owner's
+behavioural acceptance ([COMMUNICATION_BASELINE.md](COMMUNICATION_BASELINE.md)).
+
 **Verdict: not releasable yet. The licence blocker is resolved (MIT). One owner action is open
 (private vulnerability reporting), and two items are unverified because they need a claude.ai
 account action.** Everything mechanical passes.
