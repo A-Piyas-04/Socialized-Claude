@@ -5,6 +5,11 @@ presentation, visual, register, repair, persistence, work-report, plain-language
 operations, and the accuracy additions, each with its evidence label.
 This file documents the skill; it does not argue for it.
 
+This file was reconciled with the shipped skill on 2026-10-29, when the
+communication simplification removed the counting rules and the mandatory formatting
+(`docs/COMMUNICATION_SIMPLIFICATION_AUDIT.md`). Rows for rules that no longer ship were
+deleted rather than marked superseded; the history is in `docs/`.
+
 **No rule here is a validated finding.** No comprehension evidence exists for any of them
 (`research/EVIDENCE_AUDIT.md` §11). Most presentation rules are **Hypothesis (L4)**.
 
@@ -53,27 +58,26 @@ on a detector artifact. It does not show that structure helps.
 
 | Rule | Label | Basis |
 |---|---|---|
+| Nothing is a quota: no answer owes the reader a table, figure, heading, icon, example or takeaway. The content's shape decides. | Engineering choice | Stated once at the top of `SKILL.md` by the 2026-10-29 simplification, in place of the per-rule escape clauses each round had added. |
 | Put the direct answer in the first one or two sentences, before any structure. | Hypothesis (L4) | The `directness` rubric dimension (`evaluation/RUBRIC.md`) rewards it; untested as a cause of understanding. |
 | Give each idea its own unit; start a new unit when a new idea starts. | Hypothesis (L4) | T5's intended mechanism (short paragraphs), `research/EVIDENCE_AUDIT.md` §6 T5. |
 | A process gets numbered steps, each stating what triggers the next. | Hypothesis (L4) | T5 template (ordered steps for procedures), same section. |
-| Three or more items across two or more dimensions get a table. | Hypothesis (L4) | T5 template (tables for genuine comparisons); the thresholds are an engineering choice. |
+| Several items compared across shared dimensions get a table, one row per item and one column per dimension. | Hypothesis (L4) | T5 template (tables for genuine comparisons). The item and column counts were dropped in the 2026-10-29 simplification: they made the model count instead of judge. |
 | Parallel terms or options get a list led by bolded labels. | Engineering choice | Matches the linter's labelled-list exemption. |
 | A branching or looping flow gets an ASCII diagram in a fenced block, then one sentence per branch. | Hypothesis (L4) | T5 template (diagram specification for flows); user reports favouring visual flows. |
 | A single causal chain stays connected prose. | Hypothesis (L4) | V0's one surviving formatting rule; `COMMUNICATION_EXEMPLARS.md` §6. |
 | Headings state what the section establishes, never a generic label. | Hypothesis (L4) | T5 template (headings that say what each section establishes). |
-| Bold the one sentence the reader must not miss; at most two per answer. | Engineering choice | Bounds emphasis so it still marks something. |
+| Bold sparingly: the one sentence this reader must not miss, where there is one. | Engineering choice | Bounds emphasis so it still marks something. The per-answer cap was dropped in the 2026-10-29 simplification. |
 | When a list or table separates causally linked facts, write the link inside the item. | Hypothesis (L4), with Literature (L2) motivation | The lab's H3 predicts presentation raises perceived clarity more than comprehension (illusion of fluency, L2), `research/EVIDENCE_AUDIT.md` §6 T5. |
 | Presentation is cut last when shortening. | Engineering choice | It costs few words. |
-| End a paragraph at four sentences or about 80 words, and leave a blank line between units. | Hypothesis (L4) | User report (2026-10-27), point 13: dense paragraphs are hard to read. The `dense_paragraph` flag encodes the threshold; `whitespace_padding` still flags the opposite. |
-| Number the headings of an answer with three or more sections, and put a one-line map after the answer sentence. | Hypothesis (L4) | User report (2026-10-27), point 7. A scoped exception to the plain-language ban on preview sentences. |
+| One idea per paragraph; a paragraph that has taken on a second one splits. | Hypothesis (L4) | User report (2026-10-27), point 13: dense paragraphs are hard to read. The sentence and word ceiling was dropped in the 2026-10-29 simplification; `dense_paragraph` keeps its threshold as a descriptive linter flag, and `whitespace_padding` still flags the opposite. |
 | Move specialist code and identifiers into a fenced block or a **For implementers:** blockquote after the narrative. | Hypothesis (L4) | User report (2026-10-27), point 15. |
-| Put the main point first in a section and gather minor caveats at the end; separate major topics with a horizontal rule. | Hypothesis (L4) | User report (2026-10-27), point 16. |
+| Put the main point first in a section and gather minor caveats at the end. | Hypothesis (L4) | User report (2026-10-27), point 16. The horizontal-rule requirement was dropped in the 2026-10-29 simplification. |
 | Wrap every identifier, path, flag, command, and product-specific token in backticks, and gloss it the first time. | Hypothesis (L4) | Second user report (2026-10-27), item 12. |
 | Use `##` for a major section and `###` for a subsection, with no skipped level and no bold line standing in for a heading. | Hypothesis (L4) | Second user report, item 14. The `bold_as_heading` flag checks the second half. |
 | Put specialist depth in a **Deeper:** or **For implementers:** block, and keep the narrative complete without it. | Hypothesis (L4) | Second user report, item 16. |
-| Lift every example, sample, snippet, and quoted structure into its own fenced block under a bold title line. | Hypothesis (L4) | Second user report, item 18. The `uncaptioned_specimen` flag checks a label is present. |
-| Tables: at most four columns; each cell one idea, about six words where a phrase will do and a short sentence where the comparison needs one; the header names the dimension. | Engineering choice, from Hypothesis (L4) | Second user report, item 19. The thresholds are a choice; `dense_table_cell` and `wide_table` encode them, and the Phase 4C calibration made the cell length a preference rather than a cap. |
-| Give the last section the same paragraph sizes, visuals, and spacing as the first. | Hypothesis (L4) | Second user report, item 7. `visuals_first_half` and `visuals_second_half` describe it and never gate. |
+| Put sample data, snippets, outputs and quoted structures in a fenced block, and name what the block shows in the sentence before it. | Hypothesis (L4) | Second user report, item 18. The required bold title line was dropped in the 2026-10-29 simplification: it contradicted the rule against a bold line standing in for a heading. `uncaptioned_specimen` stays a descriptive flag. |
+| Tables: the verdict in the cell, the dimension named in each header, and a condition, a second reason or an argument in a list under the table. | Hypothesis (L4) | Second user report, item 19. The word and column counts were dropped in the 2026-10-29 simplification; `dense_table_cell` and `wide_table` keep their thresholds as descriptive flags. |
 | Failure modes: decorative structure, emoji as decoration, whitespace padding, empty transitional units, a wall of text. | Engineering choice | Encoded as linter flags in `scripts/structural_metrics.py`. The emoji rule is narrowed below. |
 
 The risk these rules carry is fluency without understanding. The judge reports fact capture
@@ -134,11 +138,12 @@ fidelity risk, not comprehension evidence.
 | Rule | Label | Basis |
 |---|---|---|
 | Make one claim per sentence. | Hypothesis (L4), with Literature (L2) motivation | T1 template; cognitive load theory, scoped "reduce load ≠ reduce content". |
-| Split any sentence carrying more than two clauses. | Engineering choice | Makes "one claim per sentence" checkable; the threshold is a choice. |
+| Split a sentence that stacks clauses until the claim is hard to find. | Engineering choice | The two-clause threshold was dropped in the 2026-10-29 simplification; `max_sentence_words` stays a descriptive flag. |
 | Write in the active voice; passive only when the actor is unknown or irrelevant. | Hypothesis (L4) | Says who does what, which a causal explanation needs. |
 | Give every pronoun one clear referent; repeat the noun when two could match. | Hypothesis (L4) | T1 template ("resolve ambiguous references"). |
 | Choose the common word when it is exact; keep the technical term when it is not. | Hypothesis (L4), with an Observation of the failure | T1 replaced "pathogen" throughout (`transform-immunology-chatgpt-T1.json`), the case this rule's second half guards against. |
-| Delete any sentence whose only job is to introduce the next one, except the one-line section map. | Hypothesis (L4) | T1 template ("remove padding"); the map is the point-7 exception above. |
+| Write as a knowledgeable person talking to this reader: direct and conversational, without manufactured enthusiasm, flattery, exaggerated criticism, or academic throat-clearing. | Hypothesis (L4) | Owner simplification brief (2026-10-29) §3D. Previously only the Step 3 closing check carried it, where it had no operation to apply it. |
+| Delete a sentence whose only job is to introduce, preview or announce another; a sentence saying what to notice in a figure or table carries content and stays. | Hypothesis (L4) | T1 template ("remove padding"). The exemption resolves a conflict found in the 2026-10-29 audit: the same sentence was required by `op:visual` and deleted by `op:plain`. |
 
 ## 8. Accuracy additions (always apply)
 
@@ -155,17 +160,17 @@ user's instruction on 2026-10-27: markdown everywhere, artifacts on an explicit 
 
 | Rule | Label | Basis |
 |---|---|---|
-| Draw one visual for each idea whose content has a shape that would take three or more sentences, and delete those sentences. | Hypothesis (L4) | User report (2026-10-27), points 1, 3 and 5; second report, items 1 and 8. |
-| Use the smallest form: an arrow chain, a two-column or diff contrast, a Mermaid block of at most ten nodes, or block-character bars. | Engineering choice | Keeps the token cost to the visual that replaces prose. |
-| No per-answer cap. Give the hardest section its visual before any section gets a second, and give the last third at least the support of the first. None in a one- or two-sentence answer or an expert lookup. | Engineering choice | Replaces the earlier "one per section, two per answer" cap (superseded, user decision 2026-10-27). Each visual deletes its prose, so the cost stays flat. |
+| Draw a visual where showing a relationship saves the reader walking through it in prose, and delete the sentences it replaces. | Hypothesis (L4) | User report (2026-10-27), points 1, 3 and 5; second report, items 1 and 8. The three-sentence test was dropped in the 2026-10-29 simplification. |
+| Use the smallest form that shows the relationship: an arrow chain, a two-column or diff contrast, a Mermaid flowchart or sequence diagram small enough to read at a glance, a state table, or block-character bars. | Engineering choice | Keeps the token cost to the visual that replaces prose. The node count was dropped in the 2026-10-29 simplification. |
+| No quota and no cap. Spend the first figure on the hardest idea. None in a short answer or an expert lookup. | Engineering choice | Replaces the "one per section, two per answer" cap (superseded, user decision 2026-10-27) and the final-third floor (dropped, owner decision 2026-10-29). Each visual deletes its prose, so the cost stays flat. |
 | Order in time goes in a `sequenceDiagram` with each arrow labelled by its trigger; parallel work is shown as branches with a note. | Hypothesis (L4) | Second user report, item 3. |
 | Mark the load-bearing node with a distinct shape; give peers one shared `classDef` class and a different kind of thing its own. | Hypothesis (L4) | Second user report, item 2. The `flat_visual` flag catches a flowchart of four or more nodes with neither. |
 | Two states at one moment go side by side: a two-column table or two labelled fenced blocks. | Hypothesis (L4) | Second user report, item 5. |
 | One colour code per answer, named once in a legend line and reused in every visual. | Hypothesis (L4) | Second user report, item 6. |
 | Every range, ratio, or magnitude comparison becomes bars. | Hypothesis (L4) | Second user report, item 13. |
 | Caption every visual with what it shows and the one thing to notice. | Hypothesis (L4) | User report, point 14. The `uncaptioned_visual` flag checks the sentence is present. |
-| Mark status with ✅ ❌ ⚠️ 🟢 🟡 🔴, at least two distinct markers in the same list or table, and name them in the caption. A meaning-matched icon may label a heading, node or compact label when it speeds recognition; it is never required. | Hypothesis (L4) | User report, point 2, then owner request 2026-10-29 (`temp/re-enhance--communication.md` Task 5). Narrows the addendum's emoji ban a second time: legend markers in a list stay exempt; a heading that opens with a navigation icon plus words is now exempt too. Decorative or status-only heading marks still flag. Recorded as a deviation. |
-| Show change over time as one table row per moment, then end with one line offering an interactive version. | Hypothesis (L4) | User report, point 4; second report, item 4. Markdown cannot be clicked; the offer lets the person opt in to an artifact with one word (user decision 2026-10-27). |
+| Optional: a meaning-matched icon on a key heading, callout or diagram label, or a status marker (✅ ❌ ⚠️ 🟢 🟡 🔴) in a list or table. The same icon always marks the same kind of part. Never in code, identifiers, JSON, logs, formal writing, or a short or casual reply, never on every heading or item, and never required. | Hypothesis (L4) | User report, point 2; owner request 2026-10-29 (`temp/re-enhance--communication.md` Task 5) made icons available; the 2026-10-29 simplification returned them from a default to an option, because a default on key headings is the formatting quota the owner's simplification brief §5 rules out. Narrows the addendum's emoji ban: legend markers in a list and a navigation icon on a heading are exempt. Recorded as a deviation. |
+| Show change over time as one table row per moment. Offer an interactive version only when the person asks or it is clearly useful. | Hypothesis (L4) | User report, point 4; second report, item 4. The appended offer was removed in Phase 4 and stays removed. |
 | On an explicit artifact request, build one captioned artifact and keep a short markdown answer. The next reply returns to markdown unless the request was standing. | Engineering choice | User instruction, 2026-10-27. |
 
 `visual_count`, `visuals_first_half`, `visuals_second_half`, `max_table_cell_words` and
@@ -176,7 +181,7 @@ user's instruction on 2026-10-27: markdown everywhere, artifacts on an explicit 
 
 | Rule | Label | Basis |
 |---|---|---|
-| End a long or teaching answer with a takeaway compressed to an arrow chain or one line of 25 words or fewer, written fresh. | Hypothesis (L4) | User report, point 11; second report, item 11. |
-| End teaching, beginner, and confusion follow-ups with one verifiable question (three lettered options or one short factual answer), then its answer led by **Answer:**. Quick, practitioner, and expert answers end when the content ends. | Hypothesis (L4) | User report, point 10; second report, items 9 and 10. |
-| Carry one example through every section that teaches. For a beginner concept question, sentence one is a concrete situation and sentence two is the answer. | Hypothesis (L4) | User report, points 8 and 12; second report, item 15. |
-| For every mechanism, not only the first, name the approach a reader would try first and how it fails. | Hypothesis (L4) | User report, point 17; second report, item 17. |
+| End a long or multi-section teaching answer with a takeaway only when it compresses something the body has not landed: an arrow chain or one fresh line. | Hypothesis (L4) | User report, point 11; second report, item 11. The word count was dropped in the 2026-10-29 simplification. |
+| Add a check question only when the person asks to practise or be tested, the exchange is explicitly a tutorial, or one focused question resolves a real uncertainty, then give its answer led by **Answer:**. Most answers get no closing unit. | Hypothesis (L4) | User report, point 10; second report, items 9 and 10. Phase 4 made the question conditional; the category-based requirement is gone. |
+| Reuse one example where a later idea needs a concrete case. Show a general claim about cost, risk or complexity happening to one case instead of asserting it. For a beginner concept question, sentence one is a concrete situation and sentence two is the answer. | Hypothesis (L4) | User report, points 8 and 12; second report, item 15. "Every section that teaches" was removed in v0.7.0; the general-claim rule was added in the 2026-10-29 simplification (owner brief §4). |
+| When the main design is not what a reader would try first, name that approach and how it fails before it. | Hypothesis (L4) | User report, point 17; second report, item 17. v0.7.0 narrowed this from every mechanism to the main one. |

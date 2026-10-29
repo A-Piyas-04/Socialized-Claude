@@ -280,3 +280,31 @@ needs to decide. No progress narrative.
  state and transition, with triggers named. The failed responses are described, not stored
  (user). `activation.max` 6,200 → 6,150 (6,035 legacy / 6,084 heuristic). Policy 0.7.0,
  plugin 0.8.0. Still on `recovery/communication-quality`, unmerged.
+- Communication simplification (user, 2026-10-29): after v0.7.0 the owner asked for the
+ instruction system to be *simplified*, not extended again. Audit
+ `docs/COMMUNICATION_SIMPLIFICATION_AUDIT.md`. Four verified causes: the same rule
+ stated in up to four files in four wordings; eleven counting thresholds; four pairs of
+ rules that cannot both be satisfied; and optional capabilities promoted to defaults.
+ A fifth cause is the test suite itself — five round-specific suites froze each round's
+ phrasing, so the cheapest change was always to add text beside it.
+ Removed, not added to: every counting rule; heading numbering, the one-line map, the
+ mandatory horizontal rule and the required bold title line; the icon default (icons and
+ status markers are one optional rule again). Added once, up front: "Nothing here is a
+ quota." Added as rules replacing overlapping bullets: show a general claim about cost,
+ risk or complexity happening to one case (owner brief §4); direct conversational
+ register in `op:plain`. `references/treatment-selection.md` §1 deleted as pure
+ restatement; `communication/*.md` rewritten as indexes that point at the one place each
+ rule is stated. `COMMUNICATION_GRAMMAR.md` reconciled — it still documented five rules
+ that stopped shipping in v0.5.0–v0.7.0.
+ **The 12 operations and 15 variants were examined and kept**, because six map to the
+ archive study's treatments and each variant is a planned sweep arm; merging headings
+ removes no instruction. Recorded as a deliberate decision, not a default.
+ Five policy test files (1,336 lines) replaced by one invariant-based
+ `tests/test_communication_policy.py`; every dropped assertion is listed in the audit §4.
+ `test_activation_exceeds_the_phase_4_baseline_by_a_recorded_decision` restored to `<`,
+ as its docstring invited. `activation.max` 6150 → 5750 (5648 heuristic), below the
+ Phase 4 baseline for the first time since Phase 4C; Step 3 and `op:close` still sit
+ outside the 5,000-token compaction re-attach window. Policy 0.8.0, plugin 0.9.0. Still
+ on `recovery/communication-quality`, unmerged. Behavioural acceptance is the owner's.
+ **Not done:** the brief's §1 comparison against `Microservices Architecture Advice.html`
+ and the paired Claude response. Neither file is in the repository or the working tree.

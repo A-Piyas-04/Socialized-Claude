@@ -2,6 +2,63 @@
 
 ## Unreleased
 
+### Communication simplification (policy v0.8.0, plugin v0.9.0)
+- Six additive rounds of communication work had left the same rule stated in up to
+  four files in four wordings, eleven thresholds the model had to count against,
+  four pairs of rules that could not both be satisfied, and optional capabilities
+  promoted to defaults. Audit `docs/COMMUNICATION_SIMPLIFICATION_AUDIT.md`. This
+  round removes and consolidates; no operation, marker, variant or module was added,
+  and no new framework was introduced. Still 12 operations and 15 variants.
+- One statement up front replaces the per-rule escape clauses: "Nothing here is a
+  quota. No answer owes the reader a table, a figure, a heading, an icon, an example
+  or a takeaway. The content's shape decides, every time."
+- Every counting rule removed from the shipped text: the four-sentence / 80-word
+  paragraph, the 25-word list item, the six-word table cell, the four-column table,
+  the ten-node flowchart with four-word labels, the four-step arrow chain, the
+  25-word takeaway, the two-bold cap, the three-sentence visual cue, and the
+  "three or more items across two or more dimensions" table trigger. The linter
+  flags keep their thresholds as descriptive measures and still never gate.
+- Four contradictions resolved at source: the required bold title line (gone; the
+  block is named in the sentence before it), `op:plain` deleting the sentence
+  `op:visual` required beside a figure (now exempt, as content), a heading required
+  over every part against a heading forbidden over a one-sentence section, and
+  heading numbering against "open with the answer before any heading" (numbering and
+  the one-line map removed, with the mandatory horizontal rule).
+- `op:visual`: meaning-matched icons and status markers are one optional rule again,
+  not a default on key headings. The vocabulary, the drawing grammar, `classDef`
+  styling, the one-colour-code rule, markdown-by-default and opt-in artifacts are
+  unchanged.
+- `op:examples`: a claim about complexity, cost, risk, latency or failure is shown
+  happening to one case — the situation, what the mechanism does, what the reader is
+  left with — rather than asserted. Replaced two overlapping bullets.
+- `op:plain`: direct, conversational register is now an instruction while drafting,
+  not only the last line of Step 3.
+- Step 3: nine checks to seven, each about the draft rather than about a rule.
+- `references/treatment-selection.md`: §1 "Selection defaults" deleted (it restated
+  every operation's trigger from `SKILL.md`); failure modes grouped under five
+  headings and cut to those carrying a named failure, an observed case or a
+  measurement; "an abstract argument left abstract" added.
+- `communication/core.md`, `strategies.md`, `controls.md` rewritten as indexes that
+  point at the one place each rule is stated, so there is no second wording to drift.
+  `communication/README.md` keeps a one-line-per-round history instead of a
+  change-summary table per round. `COMMUNICATION_GRAMMAR.md` reconciled: rows for
+  five rules that had stopped shipping in v0.5.0–v0.7.0 were deleted.
+- Tests: five round-specific suites (`test_refinement_policy.py`,
+  `test_visual_restoration.py`, `test_communication_recovery.py`,
+  `test_communication_experience.py`, `test_communication_priority.py`, 1,336 lines)
+  replaced by `tests/test_communication_policy.py` (31 tests) asserting invariants
+  instead of each round's phrasing. Every dropped assertion is listed in the audit
+  §4 with where its behaviour is now asserted.
+  `test_token_budget.py::test_activation_exceeds_the_phase_4_baseline_by_a_recorded_decision`
+  renamed and its assertion restored from `>` to `<`, which its own docstring invited.
+- Activation 6035 → 5648 local-estimate tokens, below the Phase 4 baseline (5966) for
+  the first time since Phase 4C, with no rule moved to an on-demand reference.
+  `activation.max` lowered 6150 → 5750. Step 3 and `op:close` still fall outside
+  Claude Code's 5,000-token compaction re-attach window.
+- Validation: `python scripts/verify.py` 9 passed, 0 failed, 0 skipped; suite 553
+  passed, 2 skipped. Behavioural acceptance is the owner's, with the
+  microservices/Kafka question as the first case.
+
 ### Communication priority correction (policy v0.7.0, plugin v0.8.0)
 - v0.7.0 failed behavioural acceptance on two real CPU cache-coherence answers
   (plugin and standalone skill, byte-identical `SKILL.md`): dense, repetitive, no

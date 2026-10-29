@@ -74,18 +74,18 @@ def test_repository_passes_its_configured_budgets(report):
     assert report["over_budget"] == []
 
 
-def test_activation_exceeds_the_phase_4_baseline_by_a_recorded_decision(report):
-    """Inverted on purpose, 2026-10-29. Phase 4B required activation < Phase 4
-    (5966 heuristic). The communication-experience upgrade's owner-requested
-    presentation rules cannot live in an on-demand reference without the risk
-    Phase 4B Option B documented (owner-set visual and paragraph rules dropped
-    on compaction if the reference is unread). See
-    docs/communication-experience-upgrade.md §2. Restore the '<' assertion only
-    by compressing those rules, not by deleting this test.
+def test_activation_stays_under_the_phase_4_baseline(report):
+    """Restored to "<" on 2026-10-29. Phase 4B set this assertion; the
+    communication-experience upgrade inverted it because its owner-requested
+    presentation rules could not move to an on-demand reference without the risk
+    Phase 4B Option B documented. The communication simplification removed the
+    counting rules, the formatting mandates and the duplicated wording instead,
+    which brought activation back below the Phase 4 baseline with those rules
+    still in SKILL.md. See docs/COMMUNICATION_SIMPLIFICATION_AUDIT.md.
     """
     activation = rows(report)["activation"]
     assert activation["baseline"] is not None
-    assert activation["tokens"] > activation["baseline"]
+    assert activation["tokens"] < activation["baseline"]
     ceiling = tb.load_budgets()["activation"]["max"]
     assert ceiling is not None
     assert activation["tokens"] <= ceiling

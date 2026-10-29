@@ -161,20 +161,26 @@ read takes a Modified line to Shared, and only a remote write invalidates it.
 - Key headings carry a few meaning-matched icons.
 
 **Rules that target this (v0.8.0):** Step 2's planning order; `op:visual`'s
-one-job-per-form and one-representation preference; the first accuracy rule's figure
-clause; the icon default. See `docs/communication-priority-correction.md`.
+one-job-per-form rule; the first accuracy rule's figure clause. Icons are optional
+rather than expected, so "key headings carry a few meaning-matched icons" is a
+possible good outcome here, not a requirement — see
+`docs/COMMUNICATION_SIMPLIFICATION_AUDIT.md` §1.4 and
+`docs/communication-priority-correction.md`.
 
 ## Structural tests
 
-`tests/test_communication_recovery.py` checks the following offline:
+`tests/test_communication_policy.py` checks the following offline (it replaced
+`tests/test_communication_recovery.py` and four other round-specific suites on
+2026-10-29; see `docs/COMMUNICATION_SIMPLIFICATION_AUDIT.md` §4):
 
 - each rule named above ships in `SKILL.md`, in the claude.ai ZIP and in the plugin;
-- the references and the policy modules agree with those rules;
-- table cells still have no absolute word limit;
+- the policy modules index those rules rather than restating them, and carry no
+  threshold the skill has dropped;
+- no counting rule ships at all, so no cell, paragraph or table has a word limit;
 - a walkthrough in words is still allowed when the reader needs one;
-- the 12 operations, the 15 variants and every Phase 4–4C fix are intact;
-- this document keeps the three prompts and the four categories, and claims no
-  stored v0.5.2 output.
+- the 12 operations and the 15 variants are intact;
+- the accuracy requirements all survive, and diagram accuracy holds even in the
+  zero-operation build.
 
 These tests check text, not answers. **A passing suite does not show that any answer
 improved.**

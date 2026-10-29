@@ -160,14 +160,17 @@ the explanation operations (`docs/phase-4-implementation.md`):
 ## Phase 4C (visual communication restored) limitations
 
 - **No behavioural evidence either way.** The regression was observed by the owner in
-  real chats; the fix has not been. The 26 tests in `tests/test_visual_restoration.py`
-  show which instructions ship, in the loaded `SKILL.md` and in both artifacts. They
-  cannot show that Claude now produces the comparison table.
+  real chats; the fix has not been. `tests/test_communication_policy.py` (which replaced
+  `tests/test_visual_restoration.py` on 2026-10-29) shows which instructions ship, in
+  the loaded `SKILL.md` and in both artifacts. It cannot show that Claude now produces
+  the comparison table.
 - **The cause is a ranked hypothesis.** The ten instruction changes in
   `docs/phase-4c-visual-restoration.md` §1.1 are confirmed by diff. Which of them
   produced the prose drift, and in what proportion, is not measured.
-- **The three-sentence cue is still estimated by the model.** Nothing counts the
-  sentences a prose description would take.
+- **The three-sentence cue is gone.** The communication simplification replaced it
+  with "showing that relationship would save the reader walking through it in prose"
+  (`docs/COMMUNICATION_SIMPLIFICATION_AUDIT.md` §2.1). That is a judgement with no
+  threshold at all, which removes the counting and removes the specificity with it.
 - **The restoration was then calibrated, and the balance is a judgement.** Live tests
   accepted the restoration and found the restored rules too prescriptive, so the
   requirements became strong, context-sensitive preferences (no visual quota, no
@@ -215,9 +218,33 @@ the explanation operations (`docs/phase-4-implementation.md`):
   sort entries and normalise line endings, and `--check` compares bytes, so a
   platform-dependent difference would surface as drift rather than as a silent pass.
   Cross-platform byte-identity is asserted by the first green hosted run, not before.
-- **Token checks stay local estimates.** `--check` gates the 5,600 regression ceiling
+- **Token checks stay local estimates.** `--check` gates the configured regression ceiling
   only; the 5,000 advisory target never gates, and `visual_count`,
   `answer_first_offset` and `passive_sentence_count` never gate at all.
+
+## Communication simplification (policy v0.8.0) limitations
+
+- **The simplification is a hypothesis about cause.** The duplication, the eleven
+  thresholds and the four contradictions are verified by reading the shipped text
+  (`docs/COMMUNICATION_SIMPLIFICATION_AUDIT.md` §1). That they are *why* answers read
+  as mechanical is not measured, and removing them is not shown to help.
+- **Removing a threshold removes its specificity too.** "One idea per paragraph"
+  asks for judgement where "80 words" asked for arithmetic. The linter flags
+  (`dense_paragraph`, `dense_table_cell`, `wide_table`, `max_sentence_words`) keep
+  their numbers as descriptive measures, so drift is observable on a sampled answer,
+  but nothing gates on it.
+- **Icons may now not appear at all.** They were returned from a default to an
+  option deliberately. If the owner wants them more often, that is a wording change
+  to one rule, not a new rule.
+- **Keeping the twelve operations rests on an unrun sweep.** Six of them map to the
+  archive study's treatments and each of the fifteen variants is a planned arm of an
+  evaluation that waits on judge acceptance. Until it runs, "these twelve are the
+  right twelve" is an argument, not a finding.
+- **The owner's reference material was not available.** The ChatGPT export
+  `Microservices Architecture Advice.html` and the paired Claude response named in
+  the brief are not in this repository and were not in the working tree, so the
+  comparison the brief asks for in §1 was not performed. The techniques the brief
+  itself names were implemented from its description.
 
 ## Not in scope for V0
 

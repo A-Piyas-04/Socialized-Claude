@@ -442,18 +442,21 @@ sequenceDiagram
 A rejection returns the document to Draft rather than closing it, so the author
 revises the same document instead of starting over.
 
-### Semantic icons as navigation
+### Semantic icons, where they help a reader scan back
 
-**Weak:** an emoji on every bullet, the same mark on every heading, or an icon
-inside the code.
+Icons are optional. An answer with two or three sections rarely needs them; a
+long one a reader will scan back through can use one on the heading that matters
+most, so the key point is findable. The same icon always means the same kind of
+part, and the code stays plain.
 
-**Better:** a few headings open with an icon that says what kind of part
-follows, so a reader scanning back finds the mechanism or the key point at once.
-The code stays plain.
+**Weak:** an emoji on every bullet, an icon on every heading, the same mark on
+different kinds of part, or an icon inside the code.
 
-## 🧠 A write-back cache delays the storage write
+**Better:** plain headings, with one icon where it earns its place.
 
-## ⚙️ The write reaches storage on eviction
+## A write-back cache delays the storage write
+
+## The write reaches storage on eviction
 
 ```python
 cache.set(key, value)

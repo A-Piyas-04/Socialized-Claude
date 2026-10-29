@@ -131,7 +131,9 @@ def test_repair_operation_covers_the_multiturn_cases():
     block = operation_block(skill_source(), "repair",
                             "## Operation: Repair after a clarification or correction")
     rules = bullets(block)
-    assert len(rules) >= 7, rules
+    # Five after the 2026-10-29 simplification merged the misread-request pair into
+    # one rule; the cases below are what must stay covered, not a rule count.
+    assert len(rules) >= 5, rules
     # Every rule names an action (project skill-text rule).
     for rule in rules:
         assert not rule.lower().startswith(("do not", "don't", "never", "avoid")), rule
@@ -231,7 +233,7 @@ def test_both_installation_paths_stay_in_sync():
 def test_policy_modules_are_versioned_and_document_across_turns(repo_root):
     comms = repo_root / "communication"
     for name in ("core.md", "strategies.md", "controls.md"):
-        assert "Version 0.7.0" in read(comms / name), name
+        assert "Version 0.8.0" in read(comms / name), name
     strategies = read(comms / "strategies.md")
     across = norm(section(strategies, "## Across turns")).lower()
     # The brief's required cases are documented in the reusable module.

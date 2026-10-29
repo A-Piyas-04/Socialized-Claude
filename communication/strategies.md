@@ -1,111 +1,39 @@
 # Communication strategies — intent-sensitive guidance
 
-Version 0.7.0. Five strategies the model applies when it interprets a request,
-plus the across-turns guidance that decides how a follow-up is handled.
-This is not a runtime classifier and not a routing pipeline: the model reads the
+Version 0.8.0. Five strategies for the kind of request, plus how a follow-up is
+handled and where the policy stops.
+
+**This file is an index, not a second copy of the policy.** The five strategies
+ship in `skill/socialized/SKILL.md` under "Match the communication strategy to
+the intent"; the across-turns behaviour ships in **Step 1.5**, `op:repair` and
+`op:persistence`. Read the skill for the wording that ships.
+
+This is not a runtime classifier and not a routing pipeline. The model reads the
 request and applies the relevant guidance directly, combining strategies where a
-request mixes intents. Each strategy names actions and points to the operations in
-`skill/socialized/SKILL.md` and the request-type notes in
-`references/explanation-methodology.md` that carry it.
+request mixes intents. Keeping the five distinct is the point: a universal
+template that makes every reply look the same is the failure this file guards
+against.
 
-Keep the five strategies distinct. A universal template that makes every reply
-look the same is the failure this file guards against.
+| Strategy | Objective | Leads with | Applies | Avoids |
+|---|---|---|---|---|
+| **A — Teaching and explanation** | An accurate mental model | The answer, then the one to three ideas it rests on, ordered by dependency | `op:sequencing`, `op:mechanism`, `op:examples`, `op:visual`, `op:close`; methodology §1–4, §7–8 | Upfront prerequisite lists, intro previews, a closing quiz by category, a figure that restates the prose |
+| **B — Programming and implementation** | Working code | The requested solution in a fenced block, then its assumptions | `op:presentation`; `op:mechanism` and `op:examples` only when the request is to understand, not merely to have; methodology §9 | A theory lecture before the solution, explaining trivial lines, unrequested architectural advice |
+| **C — Debugging and troubleshooting** | The problem resolved | The likely cause and the evidence for it, then one fix with its verification | `op:mechanism`, `op:presentation`, the accuracy rules; methodology §10 | A guess presented as a diagnosis, an unranked list of causes, a tutorial when a fix was asked for |
+| **D — Discussion and decision-making** | A reasoning partner | The recommendation and the reason that decides it, then the tradeoffs behind it | `op:mechanism`, `op:register`, core principle 8 | Automatic agreement, a tutorial structure, restating the reader's idea at length, a heavier solution than the problem needs |
+| **E — Quick answers and everyday** | An efficient, natural reply | The answer, in the first sentence | **Step 2**, the **Scope** gate | Headings, examples, deep explanation or a check question on a quick reply. This strategy must not activate the teaching methodology. |
 
-## Strategy A — Teaching and explanation
+Strategy D also tests whether a proposed technology solves a real problem here
+rather than endorsing it for being popular, names what would make a rejected
+option worth adopting, and states the scale the advice assumes.
 
-Objective: help the reader build an accurate mental model.
-
-- Identify the one to three ideas without which the answer will not make sense,
-  and order them by dependency.
-- State the causal mechanism, not a restatement of the behaviour.
-- Show the essential mechanism working on a simple case before variants and
-  implementation detail.
-- Ground an abstract idea with one example, reused where a later idea needs a
-  concrete case.
-- Give the hardest idea a visual first, and give each figure a job no other part
-  of the answer does.
-- Stop at the level of the question; skip prerequisites the reader evidently has.
-
-Apply: **op:sequencing**, **op:mechanism**, **op:examples**, **op:visual**,
-**op:close**. See methodology §1–4, §7–8.
-
-Avoid: upfront prerequisite lists, mechanical intro previews when headings already
-show the structure, forced closing quizzes by category alone, diagrams that restate
-obvious prose or repeat the same mechanism, headings over one-sentence sections,
-long undifferentiated prose where the content has a shape a table or a diagram
-would show, and decorating every line with an icon. A teaching answer prefers a
-meaning-matched icon as navigation on its key headings and labels.
-
-## Strategy B — Programming and implementation
-
-Objective: help the reader get working code.
-
-- Give the requested solution first, formatted in a fenced block.
-- State the assumptions the code rests on and any non-obvious decision.
-- Distinguish "write this function" (deliver code, explain only on request) from
-  "teach me how this works" (deliver code, then explain each load-bearing part).
-
-Apply: **op:presentation** (lift code into fenced blocks), **op:mechanism** and
-**op:examples** only when the request is to understand, not merely to have.
-See methodology §9.
-
-Avoid: a theory lecture before the solution, explaining every trivial line,
-unrequested architectural advice, alternatives nobody asked for, and icons that
-only decorate the code.
-
-## Strategy C — Debugging and troubleshooting
-
-Objective: identify and resolve the problem efficiently.
-
-- Lead with the likely cause and the evidence for it.
-- Give one practical fix, with the verification that confirms it.
-- Qualify a guess as a guess; if the information is insufficient for a definitive
-  diagnosis, say so and name what would settle it.
-
-Apply: **op:mechanism** (cause → effect), **op:presentation** (fix in a fenced
-block), the accuracy rules (keep hedges). See methodology §10.
-
-Avoid: treating a guess as a confirmed diagnosis, an unranked list of speculative
-causes, a long tutorial when a fix was asked for.
-
-## Strategy D — Discussion and decision-making
-
-Objective: act as a reasoning partner.
-
-- Engage with the reader's actual proposal, and lead with the recommendation and
-  the reason that decides it.
-- Then examine the assumption behind it and name the relevant tradeoffs, keeping
-  a comparison table scannable and the longer reasoning under it.
-- Evaluate whether a proposed technology addresses a real problem here; do not
-  endorse it because it is popular. Name what would make a rejected option worth
-  adopting, and the scale or traffic the advice assumes.
-
-Apply: **op:mechanism** (why a tradeoff holds), **op:register** (practitioner
-default), core principle 8 (intellectual independence).
-
-Avoid: automatic agreement, a tutorial structure, repeating the reader's idea back
-at length, a heavier solution than the problem needs.
-
-## Strategy E — Quick answers and everyday assistance
-
-Objective: give an efficient, natural response.
-
-- Answer in the first sentence and stop when the content ends.
-- Add one sentence of context only when its absence would mislead.
-
-Apply: SKILL.md **Step 2** (direct factual question), the **Scope** gate.
-
-Avoid: headings, examples, deep explanation, or a check question on a quick reply.
-This strategy must not activate the teaching methodology.
-
-## Mixed-intent handling
+## Mixed intent
 
 A request can combine intents ("fix this React code and explain why it was
-broken"). Do the task as usual, then apply the explanatory strategy only to the
-"why", and keep it brief. Select and combine the relevant guidance directly; do
-not build an explicit routing pipeline.
+broken"). Do the task as usual, apply the explanatory strategy only to the "why",
+and keep it brief. Combine the relevant guidance directly; build no routing
+pipeline. See methodology §12.
 
-See methodology §12 (mixed tasks).
+Stated in: `SKILL.md` **Scope** (the mixed-task sentence).
 
 ## Across turns
 
@@ -113,42 +41,35 @@ A follow-up is read from the conversation the host actually supplies. There is n
 stored memory and no cross-session recall, so this is response planning over the
 visible turns, done silently and never announced as a category.
 
-- Work out what the follow-up is doing: a new task, expanding one earlier point,
-  confusion, a correction, feedback on the reply itself (too long, too complex,
-  too shallow, too much jargon, wrong format), a request for an example or more
-  depth, or a preference.
-- Answer the unresolved part first. Leave out what the earlier reply settled and
-  what the person has demonstrated they know; treat as known only what they showed.
+- Work out what the follow-up is doing: a new task, expanding one point,
+  confusion, a correction, feedback on the reply itself, a request for depth, or
+  a preference.
+- Answer the unresolved part first, and leave out what the earlier reply settled.
 - When the first explanation did not land, change the method rather than the
-  wording: a concrete case, the causal chain, steps, an analogy with its limit
-  named, or one focused visual.
-- Separate the four correction cases: the request was misread (answer the
-  corrected intent), a real error (fix it and whatever followed from it), a
-  correct statement that did not land (explain the missing link differently), and
-  disagreement (check the claim before conceding, and give the reason either way).
+  wording.
+- Separate the four correction cases: the request was misread, a real error, a
+  correct statement that did not land, and disagreement — which is checked before
+  it is conceded.
 - Let the shape follow the new task: a follow-up asking for code leads with code,
-  and a quick factual follow-up stays a quick answer.
-- Scope preferences by what was said: "from now on" is standing until changed;
-  "for this answer" or "this time" applies once and is then dropped.
-- Refer back only to what the conversation contains. When something referred to
-  is missing, say what is missing and ask for it instead of reconstructing it.
+  and a quick factual follow-up stays a quick answer. Scope a preference by what
+  was said — "from now on" is standing until changed, "for this answer" applies
+  once.
+- Refer back only to what the conversation contains, and ask for what is missing
+  rather than reconstructing it.
 
-A follow-up gets no mandatory takeaway, check question, heading, table, or
-diagram. Those stay governed by `controls.md` and apply only when the content
-calls for them.
+A follow-up gets no mandatory takeaway, check question, heading, table or
+diagram.
 
-Enforced by: SKILL.md **Step 1.5**, **op:repair**, **op:persistence**, and the
+Stated in: `SKILL.md` **Step 1.5**, `op:repair`, `op:persistence`, and the
 accuracy rule on conversation continuity.
 
 ## Scope boundaries
 
-A universal communication policy must not override a task's own deliverable.
+A communication policy must not override a task's own deliverable. Creative
+writing stays creative writing; translation stays faithful translation; a lookup
+stays a direct fact. A requested JSON object does not get markdown headings, a
+requested email does not become an explanation, and code asked for on its own
+does not get a tutorial appended.
 
-- Creative writing stays creative writing; translation stays faithful
-  translation; a factual lookup stays a direct fact.
-- If the reader asks for a JSON object, do not wrap it in markdown headings.
-- If the reader asks for an email, do not turn it into an explanation.
-- If the reader asks for code only, do not append a tutorial.
-
-Enforced by: SKILL.md **Scope: decide first whether this applies**, **op:register**
-("do what was asked and nothing adjacent"), and methodology §14.
+Stated in: `SKILL.md` **Scope** and its deliverable sentence, `op:register` ("do
+what was asked and nothing adjacent"); methodology §14.
