@@ -239,3 +239,10 @@ needs to decide. No progress narrative.
  skill text or token-budgeted. `license: MIT` also on the marketplace entry. Plugin
  0.5.1 → 0.5.2 (patch: package bytes changed, skill text did not). `plugin.json` author stays
  `A-Piyas-04`. The research-archive note lives in `docs/LICENSING.md`, not in the archive.
+- Repository protection (user, 2026-10-29): `main` is guarded by a repository ruleset, not
+ classic branch protection. It requires a pull request with 0 approvals (GitHub never lets an
+ author approve their own pull request, and the owner is the sole maintainer), both
+ `offline validation` jobs from GitHub Actions, an up-to-date branch, no force pushes and no
+ deletion. CODEOWNERS review is not required for the same reason; `.github/CODEOWNERS` still
+ requests it. The bypass list is empty; the owner keeps admin and can edit the ruleset.
+ No package bytes changed, so the version stays 0.5.2.
