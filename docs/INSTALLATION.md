@@ -1,155 +1,188 @@
-# Installing and using Socialized-Claude
+# Installing Socialized-Claude
 
-No API key, paid inference, separate account, or local model is needed. The
-skill runs inside your existing Claude account and uses your normal usage limits.
+No API key, paid inference, separate account or local model. The skill runs inside your
+existing Claude account and uses your normal usage limits.
 
-> **Interface note.** Claude's menus change over time. The paths below come from
-> Anthropic's documentation as checked on 2026-10-26: the platform "Agent Skills"
-> overview and the Help Center article "How to create custom skills". If your
-> screen differs, search the Help Center for "custom skills".
+> **Checked 2026-10-29** against Claude Code 2.1.311 and Anthropic's documentation at
+> [code.claude.com/docs/en/plugins](https://code.claude.com/docs/en/plugins) and
+> [claude.com/docs/plugins/overview](https://claude.com/docs/plugins/overview). Claude's menus
+> change; if your screen differs, the current pages are
+> [claude.ai/customize/skills](https://claude.ai/customize/skills) and
+> [claude.ai/customize/plugins](https://claude.ai/customize/plugins).
 
-## 1. Requirements
+Which paths have actually been exercised, and which are documented-only, is the table in
+[COMPATIBILITY.md](COMPATIBILITY.md#install-paths). Pick a path:
 
-- **A Claude plan with Skills.** Anthropic's platform documentation lists
-  custom Skills in claude.ai for **Pro, Max, Team, and Enterprise**. The Help
-  Center's skill-creation article also lists **Free**. Check your own Settings.
-- **Code execution enabled.** Custom skills depend on Claude's code-execution
-  ("create and edit files") capability. On Team and Enterprise plans, an
-  administrator may need to allow it.
-- **Per-user installation.** Custom skills uploaded to claude.ai are private to
-  your account. They do not sync to the Claude API or to Claude Code.
+| You use | Go to |
+|---|---|
+| claude.ai or the desktop app | [Skill upload](#1-claudeai--upload-the-skill) or [plugin upload](#2-claudeai--upload-the-plugin) |
+| Claude Code, just trying it | [One session](#3-claude-code--one-session) |
+| Claude Code, keeping it | [Install from the marketplace](#4-claude-code--install-it) |
 
-## 2. Locate the installable file
+## Requirements
 
+- **A Claude plan with Skills.** Documented for Free, Pro, Max, Team and Enterprise.
+- **Code execution enabled** ("create and edit files") for custom skills on claude.ai. On Team
+  and Enterprise, an Owner may need to allow it.
+- **Claude Code 2.1.311** is what the commands below were verified on. The `.zip` form of
+  `--plugin-dir` and one-step `--marketplace` installs need recent versions.
+- Custom skills you upload to claude.ai are **private to your account**.
+
+## 1. claude.ai — upload the skill
+
+The file is `dist/socialized.zip`. Upload it as it is; do not unzip and re-zip it. The archive
+must contain the `socialized/` folder at its root, which is what claude.ai looks for:
+
+```bash
+python -m zipfile -l dist/socialized.zip
+# socialized/
+# socialized/SKILL.md
+# socialized/references/...
 ```
-dist/socialized.zip
-```
 
-It contains one folder, `socialized/`, with `SKILL.md` and a `references/`
-folder inside. That is the structure claude.ai expects. Do not unzip and re-zip
-it. If you change the skill source, rebuild it:
+1. Open **[Customize → Skills](https://claude.ai/customize/skills)** in claude.ai or the
+   desktop app.
+2. Upload `dist/socialized.zip`.
+3. Make sure the **socialized** toggle is on.
+4. Start a **new chat** — chats opened before you enabled it do not pick it up.
 
-```
-pip install -r requirements-dev.txt
+Rebuild it yourself after a source edit:
+
+```bash
 python scripts/validate_skill.py
 python scripts/package_skill.py
 ```
 
-## 3. Upload and enable
+## 2. claude.ai — upload the plugin
 
-1. Open claude.ai (web or desktop app).
-2. Go to **Customize → Skills**. Some interface versions show Skills under
-   **Settings → Features** instead.
-3. Choose to add or upload a skill, and select `dist/socialized.zip`.
-4. Make sure the `socialized` toggle is **on**.
-5. Optional: to test this skill on its own, turn other custom skills off.
+Uploading the plugin instead of the skill has one real advantage: a plugin on your account also
+reaches **Cowork** and **Claude Code** as a synced plugin, so you install once.
 
-## 4. Use it
+1. Open **[Customize → Plugins](https://claude.ai/customize/plugins)**.
+2. **Add → Upload plugin**, and choose `dist/socialized-claude-plugin.zip`.
+3. Turn it on.
 
-Ask for explanations as usual, for example:
+Anthropic documents the upload as accepting a `.zip` "as long as the archive holds one
+`.claude-plugin/plugin.json`". Ours holds exactly one, at
+`socialized/.claude-plugin/plugin.json`, within the documented limits (5,000 files / 200 MB;
+this plugin is 6 files and 25 KB).
 
-- "How does a heat exchanger work?"
-- "I don't understand why recursion doesn't loop forever."
-- "Explain this function and why each part is needed."
+> **Unverified.** Nobody on this project has run this upload. The archive matches the
+> documented requirement, which is not the same as having seen it accepted. If it is rejected,
+> use path 1, which has the same skill content.
 
-Claude decides whether to load the skill, based on the skill's description.
-Loading is **not guaranteed**. Requests that are not about understanding
-something (translation, formatting, greetings, code changes) should not trigger
-it, and the skill itself tells Claude to answer those normally.
+## 3. Claude Code — one session
 
-### Explicit invocation
+No install, nothing written to your settings:
 
-To ask for it directly, start your message with:
-
-```
-Use the socialized skill for this.
+```bash
+claude --plugin-dir ./dist/socialized-claude-plugin.zip   # the archive, directly
+claude --plugin-dir ./plugins/socialized                  # or the folder
 ```
 
-## 5. Check that it was used
+Both verified. `claude --plugin-dir ./dist/socialized-claude-plugin.zip plugin list` reports
+`socialized@inline` with `Status: ✔ loaded`. Then ask a "how" or "why" question, or run
+`/socialized`.
 
-When Claude uses a skill, it reads the skill's files. Where the interface shows
-Claude's tool activity or thinking, expand it and look for
-`socialized/SKILL.md` being read. The Help Center suggests reviewing
-Claude's thinking to confirm a skill is loading.
+## 4. Claude Code — install it
 
-- Seeing the file read is **evidence of activation**.
-- Seeing nothing does **not** prove the skill was skipped. Some surfaces show
-  less detail.
-- **Asking Claude "did you use the skill?" is not reliable evidence.** It is
-  self-report, and it changes the conversation.
-
-The answer should not mention the skill, its steps, or labels such as
-"operations". If it does, that is a defect worth reporting.
-
-## 6. Disable or uninstall
-
-- **Disable:** turn off the `socialized` toggle in Skills settings. New
-  chats will no longer have it.
-- **Uninstall:** delete it from the Skills list.
-- **Switching to an ablation variant** (evaluation only): delete the installed
-  `socialized` first. All variants share the same name.
-
-## 7. Troubleshooting
-
-| Symptom | Likely cause | What to do |
-|---|---|---|
-| Upload rejected | ZIP structure, name, or description invalid | Run `python scripts/validate_skill.py dist/socialized.zip`. Upload the ZIP from `dist/`, not a re-zipped folder. The ZIP must contain the `socialized/` folder at its root. |
-| Upload rejected, mentioning description length | claude.ai's 200-character description limit | The shipped description is 164 characters. If you edited it, shorten it. The validator enforces 200. |
-| No Skills section in settings | Plan or region lacks Skills, or code execution is off | Enable code execution. Check plan eligibility. Ask your admin on Team or Enterprise plans. |
-| Skill never seems to load | Toggle off, chat started before enabling, or the description didn't match | Start a new chat after enabling. Try the explicit invocation line. Check the activity panel. |
-| Skill loads for unrelated requests | Description matching is decided by Claude | Report the prompt. The skill tells Claude to answer non-teaching requests normally, so the response itself should be unaffected. |
-| Answers became longer | Possible over-application | Report the prompt and response. Avoiding verbosity is an explicit design target (`evaluation/EVALUATION_PLAN.md`, S5). |
-| Works in claude.ai but not elsewhere | Skills don't sync across surfaces | For Claude Code, copy `skill/socialized/` to `~/.claude/skills/socialized/`. Other surfaces need their own upload. |
-
-## 8. Other Claude surfaces (optional)
-
-- **Claude Code.** Place the folder (rendered, or the source folder; the
-  `<!-- op:… -->` markers in the source are HTML comments and harmless) at
-  `~/.claude/skills/socialized/` or `.claude/skills/socialized/` in a
-  project. Or install the plugin (next section), which is the maintained path.
-- **Claude API.** Possible through the Skills API, but that requires an API key,
-  so it is outside V0's no-key scope.
-
-## 9. Claude Code plugin (Phase 2)
-
-Socialized-Claude is also packaged as a Claude Code plugin. The plugin's skill is
-generated from the same source as `dist/socialized.zip`, so behaviour is identical.
-
-**Try it in one session (no install):**
-
-```
-claude --plugin-dir ./plugins/socialized
+```bash
+claude plugin marketplace add ./
+claude plugin install socialized@socialized-claude
 ```
 
-Then run `/socialized:socialized`, or just ask a "how"/"why" question.
+Start the path with `./`: Claude Code reads a bare `name/name` as GitHub `owner/repo`
+shorthand. Once the repository is public you can install from GitHub in one step instead:
 
-**Install it from the bundled local marketplace:**
-
-```
-claude plugin marketplace add .
-/plugin install socialized@socialized-claude
+```bash
+claude plugin install socialized --marketplace A-Piyas-04/Socialized-Claude
 ```
 
-**Validate the plugin yourself:**
+Confirm it:
 
-```
-claude plugin validate ./plugins/socialized
-```
-
-**Distributable archive:** `dist/socialized-claude-plugin.zip`. Its root folder is
-`socialized/`. Rebuild both artifacts after any skill change:
-
-```
-python scripts/package_skill.py        # dist/socialized.zip (claude.ai skill)
-python scripts/build_plugin.py         # plugins/socialized/** + dist/socialized-claude-plugin.zip
-python scripts/build_plugin.py --check # fail if the generated plugin is stale
+```bash
+claude plugin list       # socialized@socialized-claude, Status: ✔ enabled
+claude plugin details socialized@socialized-claude
 ```
 
-**What runs where, and persistent-guidance options** (Projects, an opt-in
-`CLAUDE.md` block): see [`docs/phase-2-implementation.md`](phase-2-implementation.md).
-Installing the plugin makes the skill *available*; it is selected per request, not
-forced on every answer. There is no always-on guarantee in claude.ai normal chat.
+`details` also prints Claude Code's own token estimate for the plugin. It differs from this
+repository's estimate; both are estimates, neither is a bill. See
+[COMPATIBILITY.md](COMPATIBILITY.md#token-cost).
 
-**Uninstall:** `/plugin uninstall socialized@socialized-claude`, or
-`claude plugin marketplace remove socialized-claude`. For a `--plugin-dir`
+Inside a session, the equivalents are `/plugin marketplace add ./`, `/plugin install`, and
+`/plugin` for the panel. A plugin installed from the command line loads at the next session
+start, or after `/reload-plugins`.
+
+### Updating
+
+```bash
+claude plugin update socialized@socialized-claude
+```
+
+For a marketplace added from a local path, the plugin is read from its folder, so this reports
+"nothing to update" and your edits take effect at the next session start. That is expected.
+
+### Uninstalling
+
+```bash
+claude plugin uninstall socialized@socialized-claude
+claude plugin marketplace remove socialized-claude      # optional
+```
+
+Removing the marketplace also uninstalls every plugin installed from it. For a `--plugin-dir`
 session, just start Claude Code without the flag.
+
+The full round trip — add, install, list, details, update, uninstall, remove — was run on
+2.1.311 and returned the machine to its exact prior state.
+
+## 5. Other ways
+
+- **Manual skill folder.** Copy `skill/socialized/` to `~/.claude/skills/socialized/`, or to
+  `.claude/skills/socialized/` in a project. The `<!-- op:… -->` markers in the source are HTML
+  comments and harmless. The plugin is the maintained path.
+- **Project-scoped install.** `claude plugin install socialized@socialized-claude --scope
+  project` enables it for everyone working in that repository; each collaborator still runs the
+  install once on their own machine. Reversible by uninstalling at the same scope.
+- **An opt-in `CLAUDE.md` block** for standing guidance, with its scope and how to undo it:
+  [`phase-2-implementation.md`](phase-2-implementation.md).
+- **Claude API.** Possible through the Skills API, but that needs an API key, which is outside
+  this project's no-key scope.
+
+## Verifying what you installed
+
+Builds are deterministic and platform-independent, so you can check a download against the
+source rather than trusting it:
+
+```bash
+python scripts/package_skill.py --check    # the claude.ai ZIP matches the source
+python scripts/build_plugin.py --check     # the plugin tree and ZIP match the source
+```
+
+Per-file SHA-256 digests are in `dist/socialized.manifest.json` and
+`dist/socialized-claude-plugin.manifest.json`; the archive digests are also in
+`scripts/version_lock.json`.
+
+## Checking that it was used
+
+Expand Claude's activity or thinking panel and look for `socialized/SKILL.md` being read.
+
+- Seeing it read is evidence of activation.
+- Seeing nothing does **not** prove it was skipped — some surfaces show less detail.
+- Asking Claude "did you use the skill?" is self-report and proves nothing.
+
+The answer should never mention the skill, its steps, or words like "operations". If it does,
+that is a defect worth reporting.
+
+For why "installed", "available", "invoked" and "reliably applied" are four different things,
+see [COMPATIBILITY.md](COMPATIBILITY.md#activation-four-different-things).
+
+## When something goes wrong
+
+[TROUBLESHOOTING.md](TROUBLESHOOTING.md) covers upload rejections, marketplace errors,
+activation that never happens, and answers that come out longer than they should.
+
+One note that belongs here: if `claude plugin validate ./plugins/socialized --profile directory`
+fails for you, that is expected today — the repository has no licence yet, and Anthropic's
+plugin directory refuses a submission without one. Plain
+`claude plugin validate ./plugins/socialized` passes, including `--strict`. See
+[LICENSING.md](LICENSING.md).

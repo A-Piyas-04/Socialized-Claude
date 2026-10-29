@@ -8,3 +8,4 @@ venv/
 Thumbs.db
 dist/ablation/
 temp/
+dist/release-candidate/

@@ -2,6 +2,41 @@
 
 ## Unreleased
 
+### Public documentation and release candidate (Phase 6)
+- Public documentation set, written for first-time visitors rather than for the project's own
+  history: a rewritten `README.md`, plus `docs/USAGE.md`, `docs/COMPATIBILITY.md`,
+  `docs/TROUBLESHOOTING.md`, `docs/LICENSING.md`, `CONTRIBUTING.md` and `SECURITY.md`.
+  `docs/INSTALL_AND_USE.md` was an orphan nothing linked to; its content is now in
+  `docs/USAGE.md`.
+- `docs/INSTALLATION.md` rewritten against current Anthropic documentation and against the CLI
+  itself. Corrections: the menu paths are **Customize → Skills** and **Customize → Plugins**;
+  the Agent Skills description limit is 1,024 characters, not 200 (this repository enforces a
+  stricter 200 as a house rule, which the doc now says); a local marketplace path must start
+  with `./`; and `--plugin-dir` accepts the plugin ZIP directly.
+- Two install paths documented that were not before: `dist/socialized-claude-plugin.zip` loaded
+  straight from the archive with `--plugin-dir`, and plugin upload on claude.ai, which also
+  reaches Cowork and Claude Code as a synced plugin.
+- Install, update and uninstall verified end to end on Claude Code 2.1.311 from a clean
+  baseline, restored afterwards. `claude plugin validate --strict` passes for both the plugin
+  and the marketplace. No model call and no billed usage.
+- `claude plugin validate --profile directory` **fails on a missing licence**. The repository
+  has no `LICENSE`, so it is not open source and cannot be submitted to Anthropic's directory.
+  `docs/LICENSING.md` compares MIT and Apache-2.0, audits third-party content, and records the
+  decision as the open blocker. No licence was chosen.
+- `scripts/stage_release.py`: stages a release candidate into git-ignored
+  `dist/release-candidate/` with SHA-256 digests and a human-readable summary of version,
+  commit, gate output, artifacts and open blockers. It refuses to stage unless
+  `python scripts/verify.py` passes, and it has no code path that can publish, tag or push.
+- `tests/test_public_release.py`: 10 tests over what the existing suites did not cover - the
+  public documentation set exists and is linked, no file claims a licence while none exists,
+  every install path is documented, `SECURITY.md` publishes no unmonitored contact address,
+  staging reports the licence blocker and reproduces the committed digests, and the staging
+  script cannot publish.
+- `docs/RELEASE_READINESS.md` is now an executed checklist: 20 items with pass, fail or
+  unverified, the evidence for each, and the remaining work in order.
+- No communication policy, operation, variant or reference file changed. Still 12 operations
+  and 15 variants; both packages are byte-identical, so the version stays 0.5.1.
+
 ### Validation, CI and regression protection (Phase 5)
 - One offline entry point: `python scripts/verify.py` runs the test suite,
   `validate_skill.py` on the source and on the committed ZIP, both `--check` drift

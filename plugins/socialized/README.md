@@ -2,6 +2,16 @@
 
 A Claude Code plugin that provides the Socialized-Claude communication skill.
 
+## Install
+
+```
+/plugin install socialized --marketplace A-Piyas-04/Socialized-Claude
+```
+
+From a local clone, `claude plugin marketplace add ./` then
+`claude plugin install socialized@socialized-claude`. Full instructions:
+[`docs/INSTALLATION.md`](../../docs/INSTALLATION.md).
+
 ## Source of truth vs. generated
 
 - **Source of truth (edit these):** `.claude-plugin/plugin.json` (the manifest);

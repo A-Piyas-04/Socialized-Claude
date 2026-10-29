@@ -211,3 +211,25 @@ needs to decide. No progress narrative.
  `--check` drift gates and 5 tests. `package_skill.zip_bytes` now pins
  `ZIP_CREATE_SYSTEM = 0`, the value the committed archives already carry, so no package
  changed, no version decision was needed, and the version lock still holds.
+- Phase 6: no licence was chosen. `claude plugin validate --profile directory` refuses a
+ submission for `LICENSE_MISSING`, so the blocker is Anthropic's, not a style preference.
+ `docs/LICENSING.md` compares MIT and Apache-2.0 and recommends MIT if the owner has no
+ preference; nothing was applied. Adding `license` to plugin.json changes the plugin ZIP's
+ bytes, so it needs a version bump too.
+- Phase 6: documentation corrections found against current Anthropic docs — the skill
+ description limit is 1,024 (spec), not the 200 the docs claimed; the repository's stricter 200
+ is kept as a house rule and now labelled as one. Menu paths are Customize → Skills and
+ Customize → Plugins. A local marketplace path must start with `./`.
+- Phase 6: install/update/uninstall verified on Claude Code 2.1.311 from a clean baseline and
+ restored exactly. `--plugin-dir` loads `dist/socialized-claude-plugin.zip` directly; recorded
+ as a supported path. claude.ai skill and plugin upload stay unverified: they need an account
+ action and cannot be exercised from the repository.
+- Phase 6: a release workflow in GitHub Actions was deliberately not added. Staging is
+ `python scripts/stage_release.py`, local and publish-incapable by construction (guarded by a
+ test), because the owner holds Git and publishing control. Output goes to git-ignored
+ `dist/release-candidate/`.
+- Phase 6: `docs/INSTALL_AND_USE.md` deleted. Nothing linked to it; its content is in
+ `docs/USAGE.md`.
+- Phase 6: version stays 0.5.1. Documentation, a new script and new tests changed no package
+ bytes. 1.0.0 is not a Phase 6 entitlement; it waits on the licence, the claude.ai smoke tests
+ and the manual spot-check.

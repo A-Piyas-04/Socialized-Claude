@@ -1,151 +1,198 @@
-# Socialized-Claude: a Claude Skill for better explanations
+# Socialized-Claude
 
-An experimental, installable Claude Skill that helps Claude explain concepts so
-readers can actually build a working mental model. It does this mainly by
-**introducing prerequisites before the ideas that depend on them** and by
-**making the causal mechanism explicit** for why and how questions. It applies
-examples, term definitions, and formatting only when they fill a real gap, and
-it leaves non-teaching requests alone.
+**A Claude Skill that changes how Claude explains things: answer first, ideas in dependency
+order, the causal mechanism made explicit, and a visual where the mechanism is hard.**
 
-It needs **no API key**, no paid inference, and no separate service. It runs
-inside your normal Claude account.
+No API key. No paid inference. No separate service or backend. It is a folder of Markdown that
+installs into the Claude account you already have.
 
-> **Status: V0, untested in Claude.** The skill installs as a valid package and
-> passes all offline checks. **No controlled evaluation has been run.** There is
-> no evidence yet that it improves explanations or comprehension. The included
-> evaluation framework is how to find out.
+> **Status: release candidate, pre-1.0, unpublished.** Every offline check is green and both
+> install paths are structurally validated. **No controlled evaluation has been run**, so there
+> is no evidence that explanations are measurably clearer. See
+> [What is and is not established](#what-is-and-is-not-established).
+>
+> **No licence has been chosen yet**, so this repository is not open source and cannot be
+> redistributed. [`docs/LICENSING.md`](docs/LICENSING.md).
+
+## The problem
+
+Ask Claude how something works and the answer is usually correct. It is not always *usable*:
+the point arrives in paragraph four, a term is used before it is defined, the mechanism is
+described but never explained, and the last third of a long answer loses the structure the
+first third had.
+
+Socialized-Claude is a set of rules for those specific failures. Each rule names an action —
+not "be clear", but "introduce the prerequisite before the idea that needs it".
+
+## What it is, and what it is not
+
+| It is | It is not |
+|---|---|
+| A Claude Skill: Markdown instructions Claude loads when a request matches | A new model, a fine-tune, or a model wrapper |
+| 12 operations selected per request, plus always-on accuracy rules | An always-on modifier of every answer |
+| Installable on claude.ai, Cowork and Claude Code from one source | A hosted service or an API product |
+| Free to run inside your existing plan | Something needing an API key or paid inference |
+| Text only — no code runs on your machine | A plugin with hooks, agents or MCP servers |
+
+## What it changes
+
+| The answer | Instead of |
+|---|---|
+| Starts with the answer | Arrives at the answer in paragraph four |
+| Introduces an idea before the idea that needs it | Defines the term after using it |
+| Names the cause, step by step | Describes what happens, not what makes it happen |
+| Takes the shape of its content — steps, a table, a small diagram | Undifferentiated paragraphs, or headings on things that aren't sections |
+| Keeps its support to the last third | Front-loads one diagram, then goes bare |
+| Holds a standing instruction for the whole chat | Obeys once, then drifts |
+| After a correction, answers what you meant | Repeats itself louder |
+
+It deliberately leaves translation, editing, quick facts, greetings, creative writing and
+ordinary code changes alone. Full account: [`docs/USAGE.md`](docs/USAGE.md).
 
 ## Install
 
-1. Get `dist/socialized.zip`.
-2. In claude.ai, open **Customize → Skills** (or **Settings → Features**),
-   upload the ZIP, and enable it. Code execution must be on.
-3. Ask a "how" or "why" question, or start a message with
+Pick one. Both come from the same source and behave identically.
+
+### claude.ai — upload the skill
+
+1. Download `dist/socialized.zip`.
+2. Open **[Customize → Skills](https://claude.ai/customize/skills)** in claude.ai or the
+   desktop app, upload the ZIP, and turn it on. Code execution must be enabled.
+3. Start a new chat and ask a "how" or "why" question, or start your message with
    `Use the socialized skill for this.`
 
-Full instructions, eligibility, activation checks, and troubleshooting:
+### Claude Code — try it for one session
+
+```bash
+claude --plugin-dir ./dist/socialized-claude-plugin.zip
+```
+
+Verified: the archive loads directly, no install, no extraction.
+
+### Claude Code — install it
+
+```bash
+claude plugin marketplace add ./
+claude plugin install socialized@socialized-claude
+```
+
+Uninstall with `claude plugin uninstall socialized@socialized-claude`. The full round trip —
+add, install, update, uninstall, remove — is verified on Claude Code 2.1.311.
+
+**Which paths are tested, and on what:** [`docs/COMPATIBILITY.md`](docs/COMPATIBILITY.md).
+**Step-by-step, with the plugin-upload path and uninstall:**
 [`docs/INSTALLATION.md`](docs/INSTALLATION.md).
 
-### As a Claude Code plugin
+## Did it actually apply?
 
-Socialized-Claude is also packaged as a Claude Code plugin (same skill, same
-behaviour):
+Four different things get called "it's working". They are not the same:
 
-```
-claude --plugin-dir ./plugins/socialized          # try it for one session
-claude plugin marketplace add .                    # or install from the local marketplace
-/plugin install socialized@socialized-claude
-```
+| State | How you confirm it |
+|---|---|
+| **Installed** | `claude plugin list`, or the Skills list in claude.ai |
+| **Available** | The skill appears in the `/` menu |
+| **Invoked** | The activity panel shows `socialized/SKILL.md` being read |
+| **Reliably applied** | **Not established.** Nothing here measures it. |
 
-Installing makes the skill *available*; it is selected per request, not forced on
-every answer. What runs on each surface, and the opt-in standing-guidance options,
-are in [`docs/phase-2-implementation.md`](docs/phase-2-implementation.md).
+Claude decides per message whether to load a skill. Natural activation is **never guaranteed**
+— that is how Skills work. Explicit invocation is the reliable path. Asking Claude "did you use
+the skill?" proves nothing: it is self-report, and the question changes the conversation.
 
-## Repository layout
+## What is and is not established
 
-```
-skill/socialized/        The installable skill (source of truth)
-  SKILL.md                    Core workflow and operations
-  references/                 Loaded on demand: methodology, examples, selection rules
-communication/           Reusable policy modules (core, strategies, controls) — Phase 1
-plugins/socialized/      Claude Code plugin (manifest + generated skill) — Phase 2
-.claude-plugin/          Local marketplace listing the plugin
-dist/socialized.zip      claude.ai skill package (plus .manifest.json with hashes)
-dist/socialized-claude-plugin.zip   Claude Code plugin archive (root folder: socialized/)
-research/
-  EVIDENCE_AUDIT.md           What the prior experiments do and do not show; treatment decisions
-  recompute_archive_stats.py  Regenerates every number in the audit from the raw archive
-evaluation/                   Manual, no-API evaluation framework (see evaluation/README.md)
-  EVALUATION_PLAN.md, RUBRIC.md, BASELINE_INSTRUCTIONS.md, RUNBOOK.md
-  TEST_CASES.json             33 held-out cases
-  comprehension/              Human pre/post/transfer protocol and item bank
-scripts/                      validate_skill, package_skill, make_run_sheet, run_assistant,
-                              prepare_blind_packet, summarize_results, assign_comprehension
-tests/                        Offline tests (pytest)
-docs/                         INSTALLATION, ARCHITECTURE, LIMITATIONS, DEVELOPMENT_REPORT
-research-results-2026-10-26/  The ExplanationLab experiment archive (input, unchanged)
-```
+**Established**, by [`python scripts/verify.py`](docs/VALIDATION.md) and the CLI:
 
-## Research basis, briefly
+- The skill is well-formed and both archives match the source byte for byte.
+- Builds are deterministic and platform-independent — you can rebuild and compare.
+- `claude plugin validate` passes, including `--strict`.
+- Install, update and uninstall work in Claude Code.
+- The policy contracts in [`docs/REGRESSION_INVENTORY.md`](docs/REGRESSION_INVENTORY.md) are
+  still present in the text.
 
-The ExplanationLab archive contains three experiments:
+**Not established**, and not claimed anywhere:
 
-- Experiment 3: 60 single-treatment Gemini rewrites.
-- Experiment 4: 10 new rewrites by a second Gemini model.
-- Experiment 5: an AI-proxy answerability study that hit a ceiling. The proxy
-  answered all 15 items without any explanation.
+- That Claude's explanations are measurably better. No controlled comparison has been run.
+- That anyone understands the answers more. No comprehension study exists.
+- That activation is reliable or universal.
+- Any token saving in billed usage. The counts here are local estimates.
 
-The audit ([`research/EVIDENCE_AUDIT.md`](research/EVIDENCE_AUDIT.md)) finds:
+There are no benchmark numbers, win rates or improvement percentages in this repository,
+because none have been earned. [`docs/LIMITATIONS.md`](docs/LIMITATIONS.md) is the long version.
 
-- **Prerequisite sequencing (T2) had the best automated fidelity screen.** But 4
-  of its 9 "clean" runs were unchanged copies of the source.
-- **No treatment has any comprehension evidence.**
-- **Several observed failure modes were caused by the treatment instructions
-  themselves:** signposting, a false "mutually dependent" claim, and
-  meta-commentary.
+## Check it yourself
 
-V0 therefore uses sequencing and mechanism as **hypotheses**, guarded against
-those failure modes, with the other techniques conditional. See
-[`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md) for what is evidence-driven and
-what is provisional.
-
-## Run the offline checks
-
-One command, no network, no API key, no Claude authentication:
-
-```
+```bash
 pip install -r requirements-dev.txt
 python scripts/verify.py
 ```
 
-It runs the test suite, validates the skill source and the committed ZIP, checks
-both distributables against the source without rebuilding them, checks the local
-token budgets and the package version lock, and confirms it changed nothing. Add
-`--with-cli` for the optional `claude plugin validate` tier, which reports **skipped**
-rather than passed when the CLI is unavailable. `--list` shows the checks.
+One command, no network, no Claude authentication, no API key. It runs the tests, validates the
+skill source and the committed ZIP, checks both distributables against the source, checks the
+token budgets and the version lock, recomputes the research archive statistics, and confirms it
+changed nothing. `--with-cli` adds the optional `claude plugin validate` tier, which reports
+**skipped** rather than passed when the CLI is missing.
 
-The same command runs in CI on pushes to `main` and on pull requests
-([`.github/workflows/validate.yml`](.github/workflows/validate.yml)).
+The same gate runs in CI on `main` and on pull requests
+([`.github/workflows/validate.yml`](.github/workflows/validate.yml)), with no secrets and no
+publishing, so it runs unchanged on a fork.
 
-Offline validation shows the project is internally consistent: the skill is
-well-formed, the packages match the source, and the policy contracts are still in
-the text. It does **not** show that Claude loads the skill, follows it, or explains
-anything better. Full detail, including how to rebuild the distributables after a
-source edit: [`docs/VALIDATION.md`](docs/VALIDATION.md). What past failure is
-protected by what check: [`docs/REGRESSION_INVENTORY.md`](docs/REGRESSION_INVENTORY.md).
+This shows the project is internally consistent. It does **not** show that Claude loads the
+skill, follows it, or explains anything better.
 
-## Evaluate it
+## Layout
 
-The framework compares three conditions:
+```
+skill/socialized/        The installable skill — source of truth
+  SKILL.md                 12 operations, scope rules, accuracy rules
+  references/              Loaded on demand: methodology, examples, selection
+communication/           Reusable policy modules
+plugins/socialized/      Claude Code plugin (manifest + generated skill)
+.claude-plugin/          Local marketplace listing the plugin
+dist/                    Both archives, each with a per-file hash manifest
+scripts/                 Build, validation and evaluation tooling
+tests/                   Offline test suite
+docs/                    Installation, usage, compatibility, troubleshooting, limitations
+research/                EVIDENCE_AUDIT.md and the script that reproduces its numbers
+evaluation/              No-API evaluation framework (not yet run)
+research-results-2026-10-26/   Read-only experiment archive
+```
 
-- **A.** Normal Claude.
-- **B.** Claude with a carefully written generic explanation prompt.
-- **C.** Claude with the skill, both natural and explicitly invoked.
+## Where the design came from
 
-Everything is done by hand in ordinary chats. The measures are kept separate:
+The ExplanationLab archive holds three experiments: 60 single-treatment rewrites, 10 rewrites by
+a second model, and an answerability study that hit a ceiling — the proxy answered all 15 items
+with no explanation at all.
 
-- activation
-- adherence
-- 9 explanation-quality dimensions
-- factual accuracy
-- length
-- human comprehension
+[`research/EVIDENCE_AUDIT.md`](research/EVIDENCE_AUDIT.md) is blunt about what that supports:
+prerequisite sequencing had the best automated fidelity screen, but 4 of its 9 "clean" runs were
+unchanged copies of the source; **no treatment has any comprehension evidence**; and several
+observed failure modes were caused by the treatment instructions themselves — signposting, a
+false "mutually dependent" claim, meta-commentary.
 
-Start with [`evaluation/README.md`](evaluation/README.md) and
-[`evaluation/RUNBOOK.md`](evaluation/RUNBOOK.md).
+So sequencing and mechanism are used as **hypotheses guarded against those failure modes**, not
+as proven techniques. [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md) separates what is
+evidence-driven from what is provisional.
 
-## Next steps
+## Documentation
 
-1. **Install it.** Upload the ZIP to your Claude account and confirm it installs
-   (criterion S1). Try a few prompts with the activity panel open to see whether
-   activation is visible on your surface.
-2. **Run the reduced pilot.** Use `make_run_sheet.py --subset pilot16` (64
-   responses), have two raters score it, and run `summarize_results.py`.
-3. **Fix any problems first.** If S4 (errors) or S5 (verbosity) fails, fix that
-   before anything else. If natural activation is low but explicit invocation
-   does well, iterate on the description.
-4. **Screen the comprehension items, then run the human pilot** (12–18
-   participants).
-5. **Run the ablation round** only if the pilot shows a signal.
+| Document | For |
+|---|---|
+| [`docs/INSTALLATION.md`](docs/INSTALLATION.md) | Every install path, update and uninstall |
+| [`docs/USAGE.md`](docs/USAGE.md) | What changes, how to steer it, five worked requests |
+| [`docs/COMPATIBILITY.md`](docs/COMPATIBILITY.md) | Tested vs unverified, per surface |
+| [`docs/TROUBLESHOOTING.md`](docs/TROUBLESHOOTING.md) | Symptoms and what to do |
+| [`docs/LIMITATIONS.md`](docs/LIMITATIONS.md) | What this project does not know |
+| [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md) | How the pieces fit |
+| [`docs/VALIDATION.md`](docs/VALIDATION.md) | What each check proves |
+| [`docs/RELEASE_READINESS.md`](docs/RELEASE_READINESS.md) | Release checklist, with current status |
+| [`docs/LICENSING.md`](docs/LICENSING.md) | The open licence decision |
+| [`CONTRIBUTING.md`](CONTRIBUTING.md) | Setup, the one command, what gets rejected |
+| [`SECURITY.md`](SECURITY.md) | Private reporting, and why the attack surface is text |
+| [`CHANGELOG.md`](CHANGELOG.md) | What changed, by version |
 
-See [`docs/LIMITATIONS.md`](docs/LIMITATIONS.md) before interpreting anything.
+## Licence
+
+**None yet.** See [`docs/LICENSING.md`](docs/LICENSING.md) for the open decision between MIT and
+Apache-2.0, the third-party content audit, and what applying a choice takes. Until a `LICENSE`
+file exists, default copyright applies: you may read this repository, but no right to use,
+modify or redistribute it has been granted.
