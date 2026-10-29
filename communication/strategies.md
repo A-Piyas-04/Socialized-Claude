@@ -1,6 +1,6 @@
 # Communication strategies — intent-sensitive guidance
 
-Version 0.6.0. Five strategies the model applies when it interprets a request,
+Version 0.7.0. Five strategies the model applies when it interprets a request,
 plus the across-turns guidance that decides how a follow-up is handled.
 This is not a runtime classifier and not a routing pipeline: the model reads the
 request and applies the relevant guidance directly, combining strategies where a
@@ -18,8 +18,12 @@ Objective: help the reader build an accurate mental model.
 - Identify the one to three ideas without which the answer will not make sense,
   and order them by dependency.
 - State the causal mechanism, not a restatement of the behaviour.
-- Ground an abstract idea with one running example carried through the answer.
-- Give the hardest idea a visual before giving any idea a second one.
+- Show the essential mechanism working on a simple case before variants and
+  implementation detail.
+- Ground an abstract idea with one example, reused where a later idea needs a
+  concrete case.
+- Give the hardest idea a visual first, and give each figure a job no other part
+  of the answer does.
 - Stop at the level of the question; skip prerequisites the reader evidently has.
 
 Apply: **op:sequencing**, **op:mechanism**, **op:examples**, **op:visual**,
@@ -29,8 +33,8 @@ Avoid: upfront prerequisite lists, mechanical intro previews when headings alrea
 show the structure, forced closing quizzes by category alone, diagrams that restate
 obvious prose or repeat the same mechanism, headings over one-sentence sections,
 long undifferentiated prose where the content has a shape a table or a diagram
-would show, and decorating every line with an icon. A teaching answer may use a
-meaning-matched icon as navigation where it helps the reader find a concept.
+would show, and decorating every line with an icon. A teaching answer prefers a
+meaning-matched icon as navigation on its key headings and labels.
 
 ## Strategy B — Programming and implementation
 

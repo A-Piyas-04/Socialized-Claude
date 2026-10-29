@@ -1,6 +1,6 @@
 # Communication controls — depth, formatting, visuals, density
 
-Version 0.6.0. These controls decide how much to say and how to present it. They
+Version 0.7.0. These controls decide how much to say and how to present it. They
 preserve the skill's adaptive presentation while keeping elaboration proportionate.
 Each control names an action and points to the rule in
 `skill/socialized/SKILL.md` that enforces it. Presentation is a capability to
@@ -23,11 +23,12 @@ Enforced by: SKILL.md **Step 2**; `references/treatment-selection.md` §3.
   for three or more items across two or more dimensions; a labelled list for
   parallel options; a diagram for a flow, an interaction, or how components
   connect; connected prose for a single causal chain.
-- Give each idea its own unit, leave a blank line between units, and end a
+- Give each independently important idea its own unit, with cause, mechanism, and
+  consequence in separate sentences, and leave a blank line between units. End a
   paragraph by four sentences or about 80 words as a ceiling, not a target. Start
   a new paragraph when the idea changes, even when the current one is short, and
-  keep a list item to one idea and about 25 words. One primary idea per paragraph;
-  two independently important claims never share one. Keep a table cell scannable
+  keep a list item to one idea and about 25 words. Put the essential point first
+  and optional detail after it. Keep a table cell scannable
   — a phrase where one will do, a short sentence where the comparison needs one —
   so the primary decision is visible at a glance. When a row needs a condition, a
   second reason, or an argument, keep the verdict in the cell and put the reasoning
@@ -53,9 +54,10 @@ standing in for a heading.
 
 - Use an example when it reduces abstraction, when the reader asks, or when a
   concrete case would expose a likely misconception.
-- Carry one running example through the answer rather than starting a fresh case
-  per section. Trace initial state, action, internal mechanism, resulting state,
-  and why the result matters, with invented numbers consistent with each other.
+- Reuse one example where a later idea needs a concrete case rather than starting
+  a fresh one, and let it add only what a figure has not already shown. Trace
+  initial state, action, and resulting state, with invented numbers consistent
+  with each other.
 - Leave the example out when the idea is already concrete, the reader is an
   expert, or the answer is short.
 
@@ -65,20 +67,22 @@ Enforced by: SKILL.md **op:examples**.
 
 - Prefer a visual for an idea whose shape would take three or more sentences to
   describe, and delete the sentences it replaces. There is no quota and no cap; each
-  figure pays for itself by removing that prose. Keep to one representation per
-  idea, and add a second only when it carries a materially different dimension, and
-  leave one out where the prose already makes the relationship plain.
-- Give a figure and its text different jobs: a diagram shows who acts in what
-  order, a state table shows what each step changes, and the sentences after them
-  say why. Replace steps or prose that only retell a diagram's arrows with that
-  why, and keep a walkthrough in words only when this reader needs both. A
-  comparison table summarises distinctions; it does not retell the diagram.
-  Sequence diagrams show order in time, flowcharts show branches, architecture
-  diagrams show components and connections, state tables show change over time,
-  and a compact arrow chain shows a short linear flow.
-- Give the hardest idea its visual first, and keep the support even across the
-  answer rather than front-loading it. Add colour, status emoji, or a legend only
-  where it makes a comparison genuinely faster.
+  figure pays for itself by removing that prose. Prefer one representation per
+  mechanism, add another whenever it shows something the first cannot, and leave
+  one out where the prose already makes the relationship plain.
+- Give every figure, table, and paragraph a different job: a figure shows what
+  happens and in what order, a table compares or tracks state, and the text says
+  why and what follows. Write after a figure only what it cannot show, and keep a
+  walkthrough in words only when this reader needs it. Sequence diagrams show
+  order in time, flowcharts show branches, architecture diagrams show components
+  and connections, state tables show change over time, and a compact arrow chain
+  shows a short linear flow.
+- Give the hardest idea its visual first, and give a later idea its own when it
+  is just as hard and would otherwise be dense prose. Add colour, status emoji, or
+  a legend only where it makes a comparison genuinely faster.
+- Check every arrow, state, and transition as a factual claim: name each
+  transition's trigger and whose action causes it, and draw a simpler figure
+  rather than include one you cannot confirm.
 - Render visuals as markdown; build an artifact only when the person explicitly
   asks for one, and offer an interactive version only when asked or clearly useful
   rather than by default.
@@ -90,19 +94,18 @@ Enforced by: SKILL.md **op:visual**.
 
 ## Semantic icons
 
-- Use a meaning-matched icon as a navigation aid where it helps a reader recognise a
-  concept, section, or component faster: in a heading, a diagram node, a callout, or
-  a compact label. Match the icon to the meaning — 🗄️ storage, 🖥️ server, 🌐 network,
-  🔐 security, ⚙️ processing, 🧠 memory, ⚡ performance, ⏱️ timing, 🏗️ architecture,
-  🔍 investigation, 💡 insight, ⚠️ warning, 💻 code, 📚 learning.
-- Prefer a telling icon to a repeated coloured circle, and keep the status legend
-  (✅ works, ❌ broken, ⚠️ caution, 🟢 🟡 🔴 for degrees) for status.
-- Use icons selectively: not on every bullet or sentence, never inside executable
-  code or identifiers, and not in JSON, logs, formal documents, or a quick coding or
-  casual reply where they would only decorate. Match use to intent: a teaching or
-  architecture answer may place them as navigation; a code-only or formal reply
-  stays undecorated unless an icon is natural. Icon use is never a template and
-  never mandatory for a response.
+- In a substantive explanation or technical discussion, use a meaning-matched icon
+  as a navigation aid by default on the key headings, callouts, diagram nodes, or
+  compact labels, so the reader recognises each kind of part at a glance. Match the
+  icon to the meaning — 🧠 concept or memory, ⚙️ mechanism or processing, 📡
+  communication or signalling, 🗄️ storage or database, 🔄 state transition, 📊
+  comparison, 💡 key insight, 🛡️ security; 🖥️ server, 🌐 network, ⚡ performance,
+  ⏱️ timing and 🏗️ architecture fit as well.
+- Let each icon mark a different kind of part, and keep the status legend (✅ works,
+  ❌ broken, ⚠️ caution, 🟢 🟡 🔴 for degrees) for status.
+- Match use to intent: not on every heading, bullet or sentence, never inside
+  executable code or identifiers, and not in JSON, logs, formal documents, or a
+  quick coding or casual reply. There is no icon quota.
 
 Enforced by: SKILL.md **op:visual** (the semantic-icon and status-marker rules).
 

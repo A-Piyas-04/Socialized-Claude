@@ -56,10 +56,13 @@ def step_3(text: str) -> str:
 # ---------------------------------------------------------------------------
 
 def test_one_primary_idea_per_paragraph_and_a_ceiling_not_a_target():
+    # v0.7.0 priority correction: "one primary idea" and "two claims never share a
+    # paragraph" merged into one idea-based rule that also separates cause, mechanism
+    # and consequence (docs/communication-priority-correction.md).
     block = norm(op_block(skill_source(), "presentation"))
-    assert "One primary idea per paragraph" in block
+    assert "Give each independently important idea its own unit" in block
     assert "End a paragraph at four sentences or about 80 words as a ceiling, not a target" in block
-    assert "Two independently important claims never share a paragraph" in block
+    assert "Give cause, mechanism, and consequence separate sentences" in block
     assert "Use a list only when the points are genuinely distinct" in block
 
 
@@ -78,9 +81,12 @@ def test_table_cells_make_the_primary_decision_visible():
 # ---------------------------------------------------------------------------
 
 def test_hierarchy_is_internal_priority_not_a_template():
-    sequencing = norm(op_block(skill_source(), "sequencing"))
-    assert "Prioritise internally as core understanding, then the supporting mechanism, then optional advanced detail" in sequencing
-    assert "keep those layers in separate units" in sequencing
+    # v0.7.0: the internal hierarchy moved out of op:sequencing into one planning
+    # order in always-on Step 2, so it is stated once.
+    step_2 = norm(section(skill_source(), "## Step 2: Size the answer"))
+    assert "Plan silently in this order" in step_2
+    assert "then only the detail this reader needs, after the core is complete" in step_2
+    assert "Prioritise internally" not in skill_source()
     text = skill_source()
     for template in ("## Core understanding", "## Necessary supporting", "every answer must have three sections"):
         assert template not in text
@@ -108,13 +114,13 @@ def test_visual_forms_include_architecture_and_existing_grammar():
 # ---------------------------------------------------------------------------
 
 def test_semantic_icons_are_navigation_not_decoration():
+    # v0.7.0: the gated icon rule became a default preference for substantive
+    # explanations; the exclusions stay.
     visual = norm(op_block(skill_source(), "visual"))
-    assert "Use a semantic icon as a navigation aid" in visual
-    assert "in a heading, a diagram node, a callout, or a compact label" in visual
+    assert "Prefer meaning-matched icons as navigation in a substantive explanation" in visual
+    assert "open the key headings, callouts, or diagram labels (not every one)" in visual
     assert "🗄️ storage" in visual
-    assert "Match use to intent" in visual
-    assert "never as a template or a requirement" in visual
-    assert "keep icons out of executable code, identifiers, JSON, and logs" in visual
+    assert "Keep icons out of code, identifiers, JSON, logs, formal writing, and short or casual replies" in visual
     assert "no other symbols" not in visual
     assert "Keep headings and step numbers as words" not in skill_source()
 
@@ -130,9 +136,10 @@ def test_status_legend_survives_beside_semantic_icons():
 # ---------------------------------------------------------------------------
 
 def test_a_comparison_table_does_not_retell_the_diagram():
+    # v0.7.0: the figure/table/text jobs are one rule covering all three forms.
     visual = norm(op_block(skill_source(), "visual"))
-    assert "Give a figure and its text different jobs" in visual
-    assert "A comparison table summarises distinctions; it does not retell the diagram" in visual
+    assert "Give every figure, table, and paragraph a different job" in visual
+    assert "a table compares options or tracks state" in visual
 
 
 # ---------------------------------------------------------------------------
@@ -140,12 +147,14 @@ def test_a_comparison_table_does_not_retell_the_diagram():
 # ---------------------------------------------------------------------------
 
 def test_examples_trace_state_action_mechanism_result():
+    # v0.7.0: the mechanism and "why it matters" beats belong to the figure and the
+    # text, so the example traces state, action and result without retelling them.
     block = norm(op_block(skill_source(), "examples"))
-    assert "Show the initial state, the action, the internal mechanism, the resulting state, and why that result matters" in block
+    assert "Show the initial state, the action, and the resulting state" in block
     assert "Trace it to the moment the behaviour in question shows" in block
     assert "invented numbers consistent with each other" in block
     check = norm(step_3(skill_source()))
-    assert "show the initial state, the action, the result, and why that result matters" in check
+    assert "show the initial state, the action, and the result" in check
 
 
 # ---------------------------------------------------------------------------
@@ -153,9 +162,12 @@ def test_examples_trace_state_action_mechanism_result():
 # ---------------------------------------------------------------------------
 
 def test_step_3_checks_mixed_claims_and_decorative_icons():
+    # v0.7.0: the icon check is additive (does a substantive answer use them?), and
+    # decoration is caught by the one-job-per-part check.
     check = norm(step_3(skill_source()))
-    assert "Does any paragraph mix two independently important claims?" in check
-    assert "Are icons navigation, not decoration?" in check
+    assert "Does any paragraph or list item mix two independently important ideas" in check
+    assert "mark its key parts with meaning-matched icons" in check
+    assert "icon do a job nothing else in the reply does" in check
 
 
 # ---------------------------------------------------------------------------
@@ -195,13 +207,13 @@ def test_new_rules_name_actions():
 
 
 EXPERIENCE_MARKERS = (
-    "One primary idea per paragraph",
+    "Give each independently important idea its own unit",
     "as a ceiling, not a target",
-    "Prioritise internally as core understanding",
-    "Use a semantic icon as a navigation aid",
+    "Plan silently in this order",
+    "Prefer meaning-matched icons as navigation",
     "the components of a system and how they connect",
-    "A comparison table summarises distinctions",
-    "Show the initial state, the action, the internal mechanism",
+    "Give every figure, table, and paragraph a different job",
+    "Show the initial state, the action, and the resulting state",
 )
 
 
@@ -227,8 +239,8 @@ def test_experience_rules_ship_in_the_plugin():
 def test_references_agree_with_the_experience_rules():
     selection = norm(read(lib.SKILL_DIR / "references" / "treatment-selection.md"))
     assert "architecture diagrams for components and connections" in selection
-    assert "A meaning-matched icon may label a heading, node or component" in selection
-    assert "tracing initial state, action, mechanism, resulting state" in selection
+    assert "a meaning-matched icon may label a heading, node or component" in selection
+    assert "tracing initial state, action, and resulting state" in selection
     assert "**Decorative icons.**" in selection
     examples = norm(read(lib.SKILL_DIR / "references" / "explanation-examples.md"))
     assert "### Semantic icons as navigation" in examples
@@ -237,13 +249,13 @@ def test_references_agree_with_the_experience_rules():
 def test_policy_modules_agree_with_the_experience_rules(repo_root):
     comms = repo_root / "communication"
     for name in ("core.md", "strategies.md", "controls.md"):
-        assert "Version 0.6.0" in read(comms / name), name
+        assert "Version 0.7.0" in read(comms / name), name
     controls = norm(read(comms / "controls.md"))
-    assert "Use a meaning-matched icon as a navigation aid" in controls
+    assert "use a meaning-matched icon as a navigation aid by default" in controls
     assert "Match use to intent" in controls
     assert "architecture diagrams show components and connections" in controls
     core = norm(read(comms / "core.md"))
-    assert "Order internally as core understanding" in core
+    assert "essential understanding first" in core
     strategies = norm(read(comms / "strategies.md"))
     assert "meaning-matched icon as navigation" in strategies
     readme = norm(read(comms / "README.md"))

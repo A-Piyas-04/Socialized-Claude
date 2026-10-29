@@ -1,4 +1,4 @@
-# Communication policy modules (v0.6.0)
+# Communication policy modules (v0.7.0)
 
 Reusable communication policy for Socialized-Claude. Three modules:
 
@@ -16,7 +16,7 @@ and index** that policy into the three reusable surfaces the Phase 1 brief asked
 for. Each rule here names the SKILL.md operation or step that enforces it, so the
 modules stay a map of the skill rather than a second, divergent copy of it.
 
-Policy version `0.5.0` tracks these modules (`0.1.0` was Phase 1; `0.2.0` added the
+Policy version `0.7.0` tracks these modules (`0.1.0` was Phase 1; `0.2.0` added the
 Phase 3 across-turns guidance; `0.3.0` added the Phase 4 communication refinements —
 selective quizzes, previews, and visuals, and tighter epistemic scoping; `0.4.0`
 restored the visual-coverage and paragraph-density rules Phase 4 removed, keeping
@@ -24,7 +24,9 @@ the selective quiz, preview, and demo-offer behaviour; `0.5.0` is the pre-releas
 communication-quality recovery — where information belongs between a table, a
 figure and the prose beside it; `0.6.0` is the communication-experience upgrade —
 semantic icon-style emojis as navigation aids, plus an architecture-diagram cue for
-visual variety). The
+visual variety; `0.7.0` is the communication priority correction — essential
+understanding, then effective representation, then necessary detail, with
+conflicting instructions removed or merged rather than new ones added). The
 skill's own version history stays in
 `CHANGELOG.md`; the baseline before this work is the git tag
 `baseline-pre-v1.0.1-communication`.
@@ -164,6 +166,27 @@ added.
 
 The emoji change is intent-sensitive and optional by design: a quick coding answer or a
 formal document gets no decoration, and no response is required to carry an icon.
+
+## Change summary (v0.7.0 — communication priority correction)
+
+v0.6.0 failed behavioural acceptance on two real CPU cache-coherence answers: still
+dense, repetitive, no semantic icons, and one MESI diagram drew a read-triggered
+Modified → Invalid transition. The cause was competing instructions, not missing
+ones, so this version removes and merges rather than adds. The full inventory is in
+`docs/communication-priority-correction.md`. No operation, marker, variant or
+module was added.
+
+| Area | Action | Result |
+|---|---|---|
+| Planning priority | Consolidate | One planning order in Step 2 — essential understanding, then the forms that show it, then necessary detail — replaces the six-stage learnable order and the internal-hierarchy bullet. |
+| Repeated motivation | Remove | The obvious-approach move applies to the main mechanism, and to a later one only when it would look arbitrary; the duplicate in `op:sequencing`, the Step 3 check and the "Motivation given once" failure mode are gone. |
+| Running example | Narrow | Reused where a later idea needs a concrete case, not "in every section that teaches"; it adds only what a figure lacks. |
+| Figure, table, prose | Refine | Every figure, table and paragraph gets a different job. One representation per mechanism is a preference; another is added whenever it shows something the first cannot. |
+| Coverage floor | Replace | Hardest idea first; a later idea gets its own figure when it is just as hard and would otherwise be dense prose. The last-third check is gone. |
+| Density | Refine | Cause, mechanism and consequence kept apart; essential before optional. The existing ceiling is stated once in the skill; no new numbers. |
+| Semantic icons | Default | A meaning-matched icon is the default on key headings, callouts and labels of a substantive explanation, each marking a different kind of part. No quota; never in code, JSON, formal or casual replies. |
+| Diagram accuracy | Strengthen in place | The first accuracy rule covers every arrow, state and transition, with each trigger named, and prefers a simpler correct figure. |
+| Step 3 | Shrink | Additive checks removed; one check asks whether every part does a job nothing else does. |
 
 ## What this does not establish
 

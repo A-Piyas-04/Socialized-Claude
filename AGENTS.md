@@ -266,3 +266,17 @@ needs to decide. No progress narrative.
  required, never inside code. The addendum's emoji ban is narrowed a second time: a heading
  may open with a navigation icon. Policy 0.6.0, plugin 0.7.0. Still on
  `recovery/communication-quality`, unmerged. Behavioural acceptance is the owner's.
+- Communication priority correction (user, 2026-10-29): v0.7.0 failed acceptance on two
+ cache-coherence answers (dense, repetitive, no icons, a read-triggered M → I transition).
+ Conflicting instructions were removed or merged, not added to: one planning order in Step 2
+ (essential understanding → effective representation → necessary detail); the obvious-approach
+ move stated once; the example reused only where needed; every figure, table and paragraph a
+ different job. One representation per mechanism is a **preference, never a cap** (user):
+ another is added whenever it shows something the first cannot. The coverage floor ("even
+ across the answer", "last third as much as the first") is replaced by a value test, by owner
+ choice; recorded as a deviation from "Visual budget". Meaning-matched icons are now the
+ **default** on key headings, callouts and labels of a substantive explanation (no quota,
+ never in code, JSON, formal or casual replies). The first accuracy rule covers every arrow,
+ state and transition, with triggers named. The failed responses are described, not stored
+ (user). `activation.max` 6,200 → 6,150 (6,035 legacy / 6,084 heuristic). Policy 0.7.0,
+ plugin 0.8.0. Still on `recovery/communication-quality`, unmerged.

@@ -2,6 +2,43 @@
 
 ## Unreleased
 
+### Communication priority correction (policy v0.7.0, plugin v0.8.0)
+- v0.7.0 failed behavioural acceptance on two real CPU cache-coherence answers
+  (plugin and standalone skill, byte-identical `SKILL.md`): dense, repetitive, no
+  semantic icons, and one MESI diagram drew a read-triggered Modified → Invalid
+  transition. Write-up `docs/communication-priority-correction.md`. Conflicting
+  instructions were removed or merged rather than new ones added; still 12
+  operations and 15 variants.
+- Step 2 carries one planning order: essential understanding, then the forms that
+  show it, then necessary detail. It replaces `op:sequencing`'s six-stage order and
+  internal-hierarchy bullet.
+- `op:mechanism`: the obvious-approach move is stated once, for the main mechanism
+  and a later one only when it would look arbitrary; a tradeoff only when it changes
+  what the reader would expect or do.
+- `op:examples`: reused where a later idea needs a concrete case, not in every
+  section; adds only what a figure lacks.
+- `op:visual`: every figure, table and paragraph gets a different job; one
+  representation per mechanism is a preference, and another is added whenever it
+  shows something the first cannot. The evenness floor became a value test (owner
+  decision, deviation from "Visual budget"). Styling bullets merged. Meaning-matched
+  icons are the default on key headings, callouts and labels of a substantive
+  explanation, with no quota.
+- Accuracy rules: every arrow, state and transition is checked like a sentence, with
+  each trigger named; a simpler correct figure is preferred.
+- `op:presentation`: one idea-based density rule (cause, mechanism and consequence
+  apart; essential before optional); the numeric ceiling is stated once. Step 3
+  went from 14 checks to 13 and checks ideas, not numbers.
+- `treatment-selection.md`: five retelling failure modes merged into one; two
+  removed; one added for wrong figures. `explanation-examples.md`: two pairs
+  rewritten, none added. `communication/` modules move to 0.7.0. `NAV_ICONS`
+  gains 📊.
+- Activation 6,085 → 6,035 tokens (legacy) / 6,124 → 6,084 (heuristic);
+  `activation.max` lowered 6,200 → 6,150. `op:repair` is back inside the
+  compaction re-attach window.
+- Plugin `version` 0.7.0 → 0.8.0. Both archives, the plugin tree and
+  `scripts/version_lock.json` were regenerated. New suite
+  `tests/test_communication_priority.py`. Behavioural acceptance is the owner's.
+
 ### Communication-experience upgrade (policy v0.6.0, plugin v0.7.0)
 - Owner request after the v0.5.0 recovery: six presentation weaknesses (dense
   paragraphs, congested tables, diagram/prose repetition, weak hierarchy, limited

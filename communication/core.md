@@ -1,6 +1,6 @@
 # Communication core — universal principles
 
-Version 0.6.0. These are the principles that hold across every conversational
+Version 0.7.0. These are the principles that hold across every conversational
 task, teaching or not. Each one names an action and points to the rule in
 `skill/socialized/SKILL.md` that already enforces it in production. This file is
 reusable policy source; it is not shipped inside the skill package and the skill
@@ -44,15 +44,21 @@ Enforced by: SKILL.md **op:mechanism**.
 
 ## 5. Logical sequencing
 
-Introduce a concept before the idea that depends on it. When a later idea exists
-because an obvious approach fails, state that approach and the specific way it
-fails before the idea. State a dependency only when it is real.
+Introduce a concept before the idea that depends on it, and plan in priority
+order: essential understanding first (for a mechanism, a simple run that shows it
+working), then the forms that represent it best, then only the supporting detail
+the reader needs. When the main design exists because an obvious approach fails,
+state that approach and the specific way it fails before it. State a dependency
+only when it is real.
 
-Enforced by: SKILL.md **op:sequencing**.
+Enforced by: SKILL.md **Step 2**, **op:sequencing**, **op:mechanism**.
 
 ## 6. Technical accuracy
 
-Use only mechanisms, numbers, and citations you know to be real. Keep the
+Use only mechanisms, numbers, and citations you know to be real, and hold every
+arrow, state, and transition in a figure to the same standard: name what triggers
+each transition and whose action causes it, and draw a simpler figure rather than
+include a transition you cannot confirm. Keep the
 confidence the facts support: leave "usually" and "can" as they are. Simplify the
 expression, not the substance — if a simple version would be false in the way the
 reader will use it, give the accurate version with the nuance. Scope a
@@ -109,14 +115,15 @@ Enforced by: SKILL.md **Step 2: Size the answer**.
 Give each idea its own unit and choose that unit from the content's shape: a table
 for options against their tradeoffs, a diagram for a flow or an interaction, or
 how components connect, steps for a procedure, prose for a single causal chain.
-Give each form its own job: the figure or table shows what happens, and the prose
-beside it says why rather than retelling it. One primary idea per paragraph; two
-independently important claims never share one. Order internally as core
-understanding, then the supporting mechanism, then optional advanced detail.
-Keep the explanation's substance — split a paragraph that carries several
-mechanisms into connected units rather than shortening it by dropping one. A
-meaning-matched icon may label a concept or section when it speeds recognition;
-it is never a requirement and never a template.
+Give every figure, table, and paragraph its own job: the figure shows what
+happens, a table compares or tracks state, and the prose says why rather than
+retelling either. Prefer one representation per mechanism and add another whenever
+it shows something the first cannot. Give each independently important idea its
+own unit, with cause, mechanism, and consequence kept apart. Keep the
+explanation's substance — split a paragraph that carries several mechanisms into
+connected units rather than shortening it by dropping one. In a substantive
+explanation, prefer meaning-matched icons on the key headings and labels, each
+marking a different kind of part.
 
 Enforced by: SKILL.md **op:presentation**, **op:visual**.
 

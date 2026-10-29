@@ -24,8 +24,9 @@ specific gap it fills for this reader.
   definition, or a procedure to follow.
 - **One running example** fits when the idea is abstract and the reader is not an
   expert, when they ask for one, or when a concrete case would expose a likely
-  misconception. Reuse that same case in later sections, tracing initial state,
-  action, mechanism, resulting state, and why the result matters.
+  misconception. Reuse that same case where a later idea needs a concrete case,
+  tracing initial state, action, and resulting state, and let it add only what a
+  figure has not already shown.
 - **Defining a term** fits when the term is load-bearing and this reader
   probably doesn't know it.
 - **Plain sentences** fit every explanation. They change how each sentence is
@@ -40,16 +41,20 @@ specific gap it fills for this reader.
   more sentences to describe, and it replaces those sentences. There is no quota and
   no cap; the cost stays flat because each figure deletes its prose, so draw as many
   as the ideas earn and leave one out where the prose already makes the relationship
-  plain. Keep to one representation per idea, and add a second only when it carries
-  a materially different dimension. Spend the first one on the hardest idea, and
-  keep the support even across the answer rather than front-loading it. Give the
-  figure and its text different jobs: the figure shows what happens and in what
-  order, and the text says why. Pick sequence diagrams for order in time, flowcharts
-  for branches, architecture diagrams for components and connections, state tables
-  for change over time, and a compact arrow chain for a short linear flow. A
-  meaning-matched icon may label a heading, node or component; it is never required.
-  Render it as markdown. Build an artifact only when the person explicitly asks for
-  one.
+  plain. Prefer one representation per mechanism, and add another whenever it shows
+  something the first cannot. Spend the first one on the hardest idea, and give a
+  later idea its own when it is just as hard. Give every figure, table and paragraph
+  a different job: the figure shows what happens and in what order, a table compares
+  or tracks state, and the text says why. Pick sequence diagrams for order in time,
+  flowcharts for branches, architecture diagrams for components and connections,
+  state tables for change over time, and a compact arrow chain for a short linear
+  flow. Render it as markdown. Build an artifact only when the person explicitly
+  asks for one.
+- **Semantic icons** fit a substantive explanation or technical discussion by
+  default: a meaning-matched icon may label a heading, node or component, each one
+  marking a different kind of part (🧠 concept, ⚙️ mechanism, 📡 signalling, 🗄️
+  storage, 🔄 state transition, 📊 comparison, 💡 insight, 🛡️ security). They
+  stay out of code, formal writing, and short or casual replies.
 - **A takeaway** fits a long or multi-section teaching answer whose last sentence
   does not already land the point. A check question, with its answer, fits only
   when the person asks to practise or be tested, the exchange is a tutorial, or
@@ -86,6 +91,8 @@ to lowest:
 - Visuals that replaced prose. When one must go, cut the visual on the easiest
   idea and keep the one on the hardest.
 - The takeaway sentence. Cut the check question before the takeaway.
+- A figure, example, walkthrough or recap that repeats what another part already
+  shows. Cut it first.
 
 Cut from the bottom. An answer that has to be scrolled should earn every
 paragraph.
@@ -125,21 +132,17 @@ produced these failures. The rules in `SKILL.md` exist to prevent them.
 - **Decorative structure.** Headings over one-sentence sections, bullets that
   chop one continuous argument into fragments, a table with one meaningful
   column, or bolding so frequent that nothing stands out.
-- **Decorative icons.** An icon on every bullet or sentence, an emoji inside
-  executable code, an identifier, JSON, a log or a formal document, or a status
-  marker standing alone in its list. A meaning-matched icon used as a navigation
-  aid in a heading, node or label (🗄️ storage, ⚙️ processing, 🔐 security, 💡
-  insight) is not a fault.
+- **Decorative icons.** An icon on every bullet or sentence, the same icon on
+  different kinds of part, an emoji inside code, JSON or a formal document, or a
+  status marker standing alone in its list.
 - **Whitespace padding.** Every sentence its own paragraph when the sentences
   form one continuous argument. A unit break marks an idea break, not a line
   break.
 - **Empty transitional units.** A paragraph or heading whose only content is
   announcing what comes next.
-- **A wall of text.** A paragraph past four sentences, or a list item that
-  carries a second idea. Split it and leave the blank line.
-- **Effort that decays.** The first screen gets spacing and figures, and the
-  back half reverts to dense paragraphs. Give the last section the treatment of
-  the first.
+- **A wall of text.** A paragraph that carries two independently important ideas
+  or blurs cause, mechanism and consequence, often in the back half after a
+  well-spaced first screen. Split it and leave the blank line.
 - **A congested table.** An argument in a cell (a condition, a second reason, an
   exception), more than four columns, or a header that names nothing. A short
   sentence in a cell is fine. Keep the verdict in the cell and move the reasoning
@@ -154,21 +157,20 @@ produced these failures. The rules in `SKILL.md` exist to prevent them.
   edge cases in a **Deeper:** block the reader can skip.
 - **Identifiers at body weight.** A path, flag, or product name in plain text
   mid-sentence. Put it in backticks.
-- **A decorative diagram.** A figure that restates a shape the prose already
-  made obvious, or a second figure in a section that already has one.
-- **A visual on top of the same prose.** The sentences that describe the shape
-  stay after the figure. Delete them once the figure carries them.
-- **A diagram retold in steps.** Numbered steps or a paragraph that walk the
-  arrows the figure just showed. Use that text for why each step happens and what
-  would break; keep a walkthrough only when this reader needs the steps in words
-  as well.
+- **The same mechanism told twice.** A figure that restates a shape the prose
+  already made obvious; the sentences the figure replaced left in place; numbered
+  steps that walk its arrows; a second figure, an example or a recap that shows
+  the same transitions again. Give each its own job: the figure what happens, the
+  text why and what would break. A second figure stays when it shows something the
+  first cannot, and a walkthrough when this reader needs the steps in words.
+- **An elaborate figure that is wrong.** A transition with the wrong trigger
+  (a read drawn where only a write causes it), or an arrow the mechanism does not
+  have. A smaller figure that is right teaches more.
 - **An uncaptioned figure.** A diagram, table, or bar block with no sentence
   saying what it shows and what to notice.
 - **An unrequested artifact.** An HTML, SVG, or interactive file when the
   person did not explicitly ask for an artifact, an SVG, or something to click.
   "Explain this visually" is a request for the markdown form.
-- **One diagram carrying the whole answer.** A single early figure, then prose for
-  every later and harder idea whose shape a figure would clarify.
 - **A figure whose parts all look alike.** Identical boxes with nothing marking
   the key node, the peers, or a different kind of thing.
 - **Structure without time.** A box-and-arrow map of a process whose point is
@@ -183,10 +185,6 @@ produced these failures. The rules in `SKILL.md` exist to prevent them.
   Give three options or a short factual answer, then the answer itself.
 - **A recap instead of a compression.** A closing paragraph that restates the
   body. The takeaway is an arrow chain or one line of 25 words or fewer.
-- **An abandoned example.** A case introduced early that vanishes in the middle
-  sections. Carry it into every section that teaches.
-- **Motivation given once.** The obvious approach and its failure shown for the
-  first mechanism only. Repeat the move for each one.
 - **One system taught as the rule.** One product's internals (a database's log
   format, a broker's acknowledgement mode) presented as how the whole category
   works. Teach the general mechanism, then label that system's version.

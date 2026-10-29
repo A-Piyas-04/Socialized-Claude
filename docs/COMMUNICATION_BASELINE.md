@@ -144,6 +144,26 @@ Weaknesses:
 order, a state table shows what each step changes, the text says why); the **Deeper:**
 block's named contents; the Step 3 check on the text after a figure.
 
+**Observed in v0.7.0 (owner report, not stored).** Two answers, one through the
+claude.ai plugin and one through the standalone skill, failed acceptance. Both were
+still dense and repetitive: the same transitions appeared in a state diagram, a
+sequence diagram, prose and a recap. Neither used meaning-matched icons. The plugin
+answer's state diagram drew a read-triggered Modified → Invalid transition; a remote
+read takes a Modified line to Shared, and only a remote write invalidates it.
+
+**Added desired behaviour (v0.8.0):**
+
+- Each figure, table and paragraph does a job nothing else in the answer does; a
+  second figure of the same transitions appears only when it shows something the
+  first cannot.
+- Every transition in a figure names its trigger, and read-triggered and
+  write-triggered transitions are not confused.
+- Key headings carry a few meaning-matched icons.
+
+**Rules that target this (v0.8.0):** Step 2's planning order; `op:visual`'s
+one-job-per-form and one-representation preference; the first accuracy rule's figure
+clause; the icon default. See `docs/communication-priority-correction.md`.
+
 ## Structural tests
 
 `tests/test_communication_recovery.py` checks the following offline:

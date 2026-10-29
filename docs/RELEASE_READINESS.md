@@ -8,8 +8,10 @@ Items 1–6, 9–11 and 20 below reflect that change; the rest are unchanged fro
 
 **Release paused, 2026-10-29.** The owner rejected v0.5.2's communication quality. The
 recovery is plugin 0.6.0; the communication-experience upgrade on top of it is plugin
-0.7.0, still on branch `recovery/communication-quality`
-([communication-experience-upgrade.md](communication-experience-upgrade.md)). This
+0.7.0 ([communication-experience-upgrade.md](communication-experience-upgrade.md)), which
+failed behavioural acceptance; the communication priority correction is plugin 0.8.0
+([communication-priority-correction.md](communication-priority-correction.md)), still on
+branch `recovery/communication-quality`. This
 checklist was run against 0.5.2 and has not been re-run. Release waits on the owner's
 behavioural acceptance ([COMMUNICATION_BASELINE.md](COMMUNICATION_BASELINE.md)).
 

@@ -153,8 +153,11 @@ def test_visuals_are_value_based():
     tests/test_visual_restoration.py. Only the redundancy rules are asserted here.
     """
     block = norm(op_block(skill_source(), "visual"))
-    assert "Keep to one representation per idea" in block
-    assert "add a second only when it carries a materially different dimension" in block
+    # v0.7.0: the redundancy rule stays a preference, with a concrete test for when a
+    # second representation earns its place instead of "a materially different
+    # dimension", which let two figures of the same transitions both pass.
+    assert "Prefer one representation per mechanism" in block
+    assert "add another whenever it shows something the first cannot" in block
     # Colour / status markers only when they help a comparison.
     assert "makes a comparison genuinely faster" in block
 
@@ -206,7 +209,7 @@ def test_quick_answer_is_natural_not_a_rigid_cap():
 
 REFINED_MARKERS = (
     "asks to practise or be tested",                      # conditional quiz
-    "add a second only when it carries a materially",     # no redundant visuals
+    "add another whenever it shows something the first cannot",  # no redundant visuals
     "never append the offer by default",                  # no automatic demo
     "Scope a product-specific implementation",            # epistemic scoping
 )
@@ -238,8 +241,8 @@ def test_refined_policy_ships_in_the_plugin():
 def test_reusable_policy_modules_track_phase_4(repo_root):
     comms = repo_root / "communication"
     for name in ("core.md", "strategies.md", "controls.md"):
-        assert "Version 0.6.0" in read(comms / name), name
+        assert "Version 0.7.0" in read(comms / name), name
     controls = norm(read(comms / "controls.md"))
-    assert "add a second only when it carries a materially different dimension" in controls
+    assert "add another whenever it shows something the first cannot" in controls
     assert "asks to practise or be tested" in controls
     assert "offered when" not in controls or "only when asked or clearly useful" in controls

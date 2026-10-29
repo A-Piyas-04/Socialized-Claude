@@ -10,8 +10,9 @@ repository cannot make it.
 
 Per-phase detail lives in `docs/phase-3-implementation.md`,
 `docs/phase-4-implementation.md`, `docs/phase-4b-token-efficiency.md` and
-`docs/phase-4c-visual-restoration.md`, `docs/communication-recovery.md` and
-`docs/communication-experience-upgrade.md`. This page is the roll-up, and the place to add
+`docs/phase-4c-visual-restoration.md`, `docs/communication-recovery.md`,
+`docs/communication-experience-upgrade.md` and `docs/communication-priority-correction.md`.
+This page is the roll-up, and the place to add
 a row when a new regression is found.
 
 Run everything here with `python scripts/verify.py` (see `docs/VALIDATION.md`).
@@ -106,6 +107,19 @@ Owner request after the recovery, from six presentation weaknesses; see `docs/co
 | CX-06 | An example that restates the definition | `op:examples` state–action–mechanism–result | `test_communication_experience.py::test_examples_trace_state_action_mechanism_result` | Structurally tested |
 | CX-07 | No semantic icons, or an icon on every line, or an icon inside code | `op:visual` semantic-icon rule | `test_communication_experience.py::test_semantic_icons_are_navigation_not_decoration`, `test_structural_metrics.py` heading-nav exemption | Structurally tested |
 | CX-08 | Whether ordinary conversations now read better | — | none possible offline; behavioural acceptance is the owner's | Observable only in conversation |
+
+## Communication priority correction (policy v0.7.0, plugin v0.8.0)
+
+v0.7.0 failed acceptance on two cache-coherence answers; see `docs/communication-priority-correction.md`.
+
+| # | Regression | Policy source | Protection | Status |
+|---|---|---|---|---|
+| PC-01 | One mechanism told again in a second figure, an example, a walkthrough and a recap | Step 2 planning order, `op:visual` one-job-per-form, Step 3 one-job check | `test_communication_priority.py::test_repetition_drivers_are_gone`, `::test_planning_order_lives_once_in_step_2` | Structurally tested |
+| PC-02 | One-representation hardening into a cap that strips useful figures | `op:visual` preference with "add another whenever it shows something the first cannot" | `test_communication_priority.py::test_one_representation_stays_a_preference_not_a_cap`, `::test_visual_grammar_survives` | Structurally tested |
+| PC-03 | A figure with a wrong transition trigger (read drawn where only a write causes it) | First accuracy rule, figure clause | `test_communication_priority.py::test_diagram_accuracy_is_always_on` (text only) | Structurally tested; correctness observable only in conversation |
+| PC-04 | No semantic icons in a substantive explanation | `op:visual` icon default | `test_communication_priority.py::test_icons_are_a_default_preference_with_exclusions`, `::test_linter_accepts_every_default_icon_on_a_heading` | Structurally tested |
+| PC-05 | Conflicting rules growing back | Step 3 size, activation size | `test_communication_priority.py::test_step_3_got_shorter`, `::test_activation_shrank`, `activation.max` | Structurally tested |
+| PC-06 | Whether answers are now easier to understand | — | none possible offline; behavioural acceptance is the owner's | Observable only in conversation |
 
 ## Phase 5 — the packages and metadata that carry all of the above
 

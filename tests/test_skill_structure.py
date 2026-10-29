@@ -383,9 +383,12 @@ def test_close_rules_name_actions():
 def test_presentation_names_scanning_rules():
     text = read(lib.SKILL_DIR / "SKILL.md")
     block = text.split("<!-- op:presentation -->", 1)[1].split("<!-- /op:presentation -->", 1)[0]
+    # v0.7.0: "last section" left op:presentation; it duplicated the Step 3 check
+    # "does the last section look like the first?", which stays.
     for required in ("backticks", "`##`", "`###`", "bold title line", "six words", "four columns",
-                     "**Deeper:**", "last section"):
+                     "**Deeper:**"):
         assert required in block, required
+    assert "does the last section look like the first" in text
 
 
 def test_plain_language_rules_name_actions():

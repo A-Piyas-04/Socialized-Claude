@@ -104,13 +104,20 @@ person thinks. Then size the rest:
 - **Follow-up:** answer only the gap the follow-up exposes.
 - **"Be concise":** give the single most important point and stop.
 
-Add length only when this reader needs it to understand the answer.
+Add length only when this reader needs it to understand the answer. Plan silently
+in this order: the ideas this reader must leave with, and for a mechanism a simple
+concrete run that shows it working; then the forms that show those ideas best,
+each with its own job; then only the detail this reader needs, after the core is
+complete.
 
 ## Accuracy rules (always apply)
 
 - Use only mechanisms, numbers, studies, citations, dates, and historical claims
   you know to be real. When the answer needs one you lack, or you are unsure of a
-  fact it depends on, say so.
+  fact it depends on, say so. Hold every arrow, state, transition, and table cell
+  in a figure to the same standard: label each transition with its trigger and
+  whose action causes it (a read or a write, local or remote), and draw a simpler
+  figure rather than include a transition you cannot confirm.
 - Keep the confidence the facts support: keep "usually" and "can" rather than
   upgrading them to "always" or "will".
 - Simplify the expression, not the substance: if a simple version would mislead
@@ -152,14 +159,10 @@ Read a file only when the current request needs it:
 Use this for concept, why and how questions, and any explanation with more than
 one idea.
 
-- Before writing, find the main idea and what it rests on. A learnable order is
-  usually: the problem that makes the concept necessary, the minimum
-  prerequisites, the concept, how it works, a concrete case that shows it working,
-  then consequences or tradeoffs. Use only the stages this answer needs. Prioritise
-  internally as core understanding, then the supporting mechanism, then optional
-  advanced detail, and keep those layers in separate units.
-- When an idea exists because an obvious approach fails, state that approach and
-  how it fails, in a sentence or two, before the idea.
+- Before writing, find the main idea and what it rests on, and order the answer
+  so each idea rests on one already in place. For a technical mechanism, show the
+  essential mechanism working on a simple case before variants and implementation
+  detail.
 - Teach a missing prerequisite in a sentence or two where it is needed. Naming
   prerequisites ("to understand this you need A, B and C") teaches nothing.
 - Skip prerequisites the reader evidently has; give an expert's narrow question
@@ -178,12 +181,12 @@ only where a step looks arbitrary.
 
 - State the chain: what triggers what, through what, with what result. Make
   explicit every intermediate step the reader would otherwise have to guess.
-- Say what problem the mechanism solves. When the design is not what a reader
-  would try first, name that approach and how it fails before the real
-  mechanism, and repeat this for every later mechanism, so each reads as a
-  conclusion rather than a rule.
-- Name the tradeoff or limitation that follows from the mechanism itself.
-- Separate cause, precondition, effect, and exception where the topic blurs them.
+- Say what problem the mechanism solves. When the main design is not what a
+  reader would try first, name that approach and how it fails before the real
+  mechanism, so it reads as a conclusion rather than a rule; do the same for a
+  later mechanism only when it would otherwise look arbitrary.
+- Name the tradeoff or limitation that follows from the mechanism when it changes
+  what the reader would expect or do.
 - Add only the causal links the reader is missing. A "because" in every sentence
   is padding, not mechanism.
 - When part of the mechanism is unknown, debated, or simplified, say so in a
@@ -197,16 +200,15 @@ Use an example when the abstraction is hard to picture, when asked for one, or
 when a concrete case would expose a likely misconception. Leave it out when the
 idea is already concrete, the reader is an expert, or the answer is short.
 
-- Use one example and carry it through: introduce it once and apply each later
-  idea to it in every section that teaches. When a section cannot use it, say why
-  in a clause.
+- Use one example and reuse it wherever a later idea needs a concrete case,
+  rather than starting a new one. Where a figure already makes an idea concrete,
+  let the example add only what the figure lacks.
 - For a beginner's conceptual question, make sentence one a concrete situation (a
   person, a problem, something going wrong) and sentence two the answer.
 - Prefer a direct case from the domain, such as a specific input traced through
-  the process, over an analogy. Show the initial state, the action, the internal
-  mechanism, the resulting state, and why that result matters. Trace it to the
-  moment the behaviour in question shows (a conflict, a failure, a recovery),
-  not only the smooth path.
+  the process, over an analogy. Show the initial state, the action, and the
+  resulting state. Trace it to the moment the behaviour in question shows (a
+  conflict, a failure, a recovery), not only the smooth path.
 - Say which part of the example corresponds to which part of the idea.
 - Pick an analogy that keeps the causal structure that matters and suits an
   adult, and say where it stops holding.
@@ -248,13 +250,13 @@ Apply this to every sentence of an explanation.
 Use this for every answer with more than one idea. Choose the form from the
 content's shape; prose is one of the forms, not the fallback.
 
-- Give each idea its own unit: a short paragraph, list item, table row, or step.
-  One primary idea per paragraph. Start a new unit when the idea changes, even
-  when the current one is short, and keep sentences that make one continuous
-  argument together.
-- End a paragraph at four sentences or about 80 words as a ceiling, not a target,
-  and leave a blank line before the next paragraph, list, table, code block, or
-  heading. Two independently important claims never share a paragraph.
+- Give each independently important idea its own unit: a short paragraph, list
+  item, table row, or step. Give cause, mechanism, and consequence separate
+  sentences, and separate units when each matters on its own. Start a new unit
+  when the idea changes, even when the current one is short, and keep sentences
+  that make one continuous argument together. End a paragraph at four sentences
+  or about 80 words as a ceiling, not a target, and leave a blank line before the
+  next paragraph, list, table, code block, or heading.
 - Give a list item one idea and about 25 words; put a second idea in a sub-bullet
   or a new item. Use a list only when the points are genuinely distinct.
 - Match the form to the shape:
@@ -276,12 +278,11 @@ content's shape; prose is one of the forms, not the fallback.
   section establishes ("Write-back can lose data"). Use `##` for a section and
   `###` for a subsection without skipping a level, a heading wherever a bold line
   would announce a section, and a horizontal rule (`---`) where an answer of three
-  or more sections turns to a new topic.
-- Number the headings of an answer with three or more sections, and add a one-line
-  map of them only when the answer is long enough that a reader needs it to
-  navigate.
-- Put the main point first in its section, and gather minor caveats into one
-  short unit at its end.
+  or more sections turns to a new topic. Number the headings of an answer with
+  three or more sections, and add a one-line map of them only when the answer is
+  long enough that a reader needs it to navigate.
+- Put the essential point first in its section and optional points after it,
+  with minor caveats gathered into one short unit at its end.
 - Lift every example, sample input or output, snippet, and quoted structure into
   its own fenced block under a bold title line that names it ("**Example: the
   config that times out**"), with narrative sentences outside the block.
@@ -291,7 +292,6 @@ content's shape; prose is one of the forms, not the fallback.
 - Wrap every identifier, path, flag, command, and product-specific token in
   backticks and gloss it the first time. In a beginner answer, move those tokens
   into the **For implementers:** block.
-- Give the last section the same paragraph sizes and spacing as the first.
 - Bold the one sentence the reader must not miss, at most two per answer.
 - When a list separates two causally linked facts, write the link inside the item
   ("…, so…", "…because…").
@@ -306,16 +306,16 @@ describe that relationship.
 
 - Prefer a visual for such an idea, in the section that teaches it, and delete the
   sentences it replaces. Leave one out where the prose already makes the
-  relationship plain. Keep to one representation per idea, and add a second only
-  when it carries a materially different dimension. Give a short answer or a
-  practitioner lookup as sentences.
-- Give a figure and its text different jobs: the diagram shows who acts in what
-  order, a state table what each step changes, and the sentences after them why
-  each step happens. Turn numbered steps or prose that only retell the arrows into
-  that why, unless this reader needs the steps in words as well. A comparison
-  table summarises distinctions; it does not retell the diagram.
-- Give the hardest section its visual first, and keep that support even across the
-  answer, so a later section that needs a figure gets one. Render every visual as
+  relationship plain. Prefer one representation per mechanism, and add another
+  whenever it shows something the first cannot (its states versus its order in
+  time, its structure versus its flow), naming that difference in its caption.
+  Give a short answer or a practitioner lookup as sentences.
+- Give every figure, table, and paragraph a different job: a figure shows what
+  happens and in what order, a table compares options or tracks state, and the
+  text says why and what follows. Write after a figure only what it cannot show,
+  and walk through its steps in words only when this reader needs them.
+- Give the hardest section its visual first, and give a later idea its own when
+  it is just as hard and would otherwise be dense prose. Render every visual as
   markdown.
 - Show a linear flow of four steps or fewer as an arrow chain (`A → B → C`), and
   a branch, loop, return, or the components of a system and how they connect as a
@@ -324,31 +324,28 @@ describe that relationship.
   a Mermaid `sequenceDiagram` with each arrow labelled by its trigger. Show work
   that runs at once as parallel branches with a note naming what runs together.
 - Mark the load-bearing node with a distinct shape (`[[like this]]`), give peers
-  one shared `classDef` class, and give a different kind of thing its own class.
+  one shared `classDef` class and a different kind of thing its own, and keep
+  one colour code per answer, named once in a legend line before the first
+  coloured visual and reused in every later one.
 - Show two states at one moment side by side: a two-column table with one row per
   element, or two fenced blocks under bold state labels. Put the broken case in a
   `diff` fence when the states are text or code.
-- Use one colour code per answer, named once in a legend line before the first
-  coloured visual, and reuse its `classDef` classes and `diff` colours in every
-  later visual.
 - Show a range, ratio, or magnitude comparison as bars of block characters (`█`)
   in a fenced block, one labelled bar per quantity, scaled to the largest.
 - Show a process that changes over time as a table with one row per moment. Offer
   an interactive version only when the person asks for one or it is clearly
   useful and feasible; never append the offer by default. In a terminal, add one
   short command the reader can run when running it is safe.
-- Use a semantic icon as a navigation aid where it helps a reader recognise a
-  concept, section, or component faster — in a heading, a diagram node, a callout,
-  or a compact label — matched to its meaning (🗄️ storage, ⚙️ processing, 🔐
-  security, 💡 insight). Prefer a telling icon to a repeated coloured circle.
-  Match use to intent: teaching and architecture may use them as navigation; a
-  code-only, formal, or casual reply stays undecorated. Use one only where it
-  earns its keep, never as a template or a requirement, and keep icons out of
-  executable code, identifiers, JSON, and logs.
+- Prefer meaning-matched icons as navigation in a substantive explanation or
+  technical discussion: open the key headings, callouts, or diagram labels (not
+  every one) with an icon that marks what kind of part it is (🧠 concept or
+  memory, ⚙️ mechanism, 📡 signalling, 🗄️ storage, 🔄 state transition, 📊
+  comparison, 💡 key insight, 🛡️ security). Keep icons out of code, identifiers,
+  JSON, logs, formal writing, and short or casual replies.
 - Mark status with ✅ works, ❌ broken, ⚠️ caution, 🟢 🟡 🔴 for degrees of one
   property, or a meaning-matched icon, at least two distinct markers per list or
   table, each at the start of its item or cell and named in the caption. Add
-  colour, an icon, or a legend only where it makes a comparison genuinely faster.
+  colour or a legend only where it makes a comparison genuinely faster.
 - Write one sentence before each visual that names what it shows and the one
   thing to notice, and do not let a diagram imply a guarantee the mechanism does
   not actually provide.
@@ -433,9 +430,10 @@ rather than explaining a concept.
 
 Use this at the end of a teaching answer, when a closing unit still earns its place.
 
-- End a long or multi-section teaching answer with a takeaway that compresses the
-  mechanism: an arrow chain (`A → B → C`) or one fresh line of 25 words or fewer.
-  Leave it out when the last sentence lands the point or the answer is short.
+- End a long or multi-section teaching answer with a takeaway only when it
+  compresses something the body has not already landed: an arrow chain
+  (`A → B → C`) or one fresh line of 25 words or fewer. Leave it out when the last
+  sentence lands the point, a figure already has, or the answer is short.
 - Add a check question only when the person asks to practise or be tested, the
   exchange is explicitly a tutorial, or one focused question resolves a real
   uncertainty: three lettered options or a question with one short factual answer.
@@ -456,31 +454,27 @@ Use this at the end of a teaching answer, when a closing unit still earns its pl
 - Is every idea and term introduced, or clearly known, before it is used?
 <!-- /op:sequencing -->
 <!-- op:mechanism -->
-- Is every needed causal link stated, and does every non-obvious mechanism show
-  the obvious approach failing?
+- Is every needed causal link stated?
 <!-- /op:mechanism -->
 <!-- op:examples -->
-- Does the one example reach every teaching section, obey the mechanism, show
-  the initial state, the action, the result, and why that result matters, and
-  have its mapping stated?
+- Does the example obey the mechanism, show the initial state, the action, and
+  the result, and have its mapping stated?
 <!-- /op:examples -->
 <!-- op:plain -->
 - Does any sentence carry two claims or more than two clauses? Split it.
 <!-- /op:plain -->
 <!-- op:presentation -->
-- Does any paragraph pass four sentences or about 80 words, any list item about
-  25 words, or any bold line stand in for a heading? Does any paragraph mix two
-  independently important claims? Does every table cell stay scannable, with its
-  argument under the table, and is every unit set off by a blank line?
-- Does every heading, list, table, diagram, and bold sentence mark a real
-  division, or does one only decorate? Does the narrative survive skipping every
+- Does any paragraph or list item mix two independently important ideas, or blur
+  cause, mechanism, and consequence? Does any bold line stand in for a heading?
+  Does every table cell stay scannable, with its argument under the table, and is
+  every unit set off by a blank line? Does the narrative survive skipping every
   **Deeper:** block, and does the last section look like the first?
 <!-- /op:presentation -->
 <!-- op:visual -->
-- Does a mechanism a figure would clarify still have one, in the last third as
-  much as the first? Does each visual carry a real relationship, with a caption,
-  its replaced prose gone, text after it adding the why rather than a retelling,
-  and one colour code? Are icons navigation, not decoration? Is the reply
+- Does each figure show something the text and the other figures do not, with a
+  caption, its replaced prose gone, and every arrow and transition correct with
+  its trigger named? Does a substantive explanation mark its key parts with
+  meaning-matched icons, each signalling a different kind of part? Is the reply
   markdown unless this message explicitly asks for an artifact?
 <!-- /op:visual -->
 <!-- op:close -->
@@ -496,6 +490,7 @@ Use this at the end of a teaching answer, when a closing unit still earns its pl
   instruction to that reply only?
 <!-- /op:persistence -->
 - Are all hedges intact, with no new absolute claims?
-- Could any paragraph be deleted without the reader losing something? Delete it.
+- Does every heading, list, table, diagram, paragraph, and icon do a job nothing
+  else in the reply does? Delete or merge what only repeats.
 - Does the reply read as a knowledgeable person talking to this reader, with
   these steps, their labels, and this skill's name kept out of it?

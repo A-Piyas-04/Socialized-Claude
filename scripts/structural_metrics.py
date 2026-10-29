@@ -78,7 +78,7 @@ EMOJI_RE = re.compile("[\U0001F300-\U0001FAFF\u2600-\u27BF\u2B50\u2B55\u2705\u27
 LEGEND = frozenset(mark.replace("\ufe0f", "") for mark in ("✅", "❌", "⚠️", "🟢", "🟡", "🔴"))
 NAV_ICONS = frozenset(mark.replace("\ufe0f", "") for mark in (
     "🗄️", "💾", "🖥️", "⚙️", "🌐", "📡", "🔐", "🛡️", "🔄", "🧠",
-    "📦", "🗃️", "⚡", "🚀", "⏱️", "🏗️", "🔍", "💡", "⚠️", "💻", "🛠️", "📚",
+    "📦", "🗃️", "⚡", "🚀", "⏱️", "🏗️", "🔍", "💡", "⚠️", "💻", "🛠️", "📚", "📊",
 ))
 VISUAL_CODE_RE = re.compile(r"```\s*mermaid\b|[█▓▒░]{2,}|-->|──>|│|├|└")
 DENSE_SENTENCES = 5

@@ -116,10 +116,13 @@ def test_visual_is_the_preferred_treatment_for_a_shaped_idea():
 
 
 def test_visual_support_stays_even_across_a_long_answer():
+    # v0.7.0 (owner decision, recorded as a deviation from "Visual budget"): the
+    # evenness floor counted figures, so it became a value test. A later hard idea
+    # still gets its own figure; an idea already shown does not get a second.
     block = norm(op_block(skill_source(), "visual"))
     assert "Give the hardest section its visual first" in block
-    assert "keep that support even across the answer" in block
-    assert "a later section that needs a figure gets one" in block
+    assert "give a later idea its own when it is just as hard and would otherwise be dense prose" in block
+    assert "keep that support even across the answer" not in block
 
 
 def test_visual_cue_is_the_three_sentence_test_not_a_second_judgement_gate():
@@ -129,9 +132,12 @@ def test_visual_cue_is_the_three_sentence_test_not_a_second_judgement_gate():
 
 
 def test_visual_redundancy_rules_from_phase_4_are_kept():
+    # v0.7.0: "a materially different dimension" gave no test for what counts, so a
+    # state diagram and a sequence diagram of the same transitions both passed. It is
+    # now a preference with a concrete test, and never a cap.
     block = norm(op_block(skill_source(), "visual"))
-    assert "Keep to one representation per idea" in block
-    assert "add a second only when it carries a materially different dimension" in block
+    assert "Prefer one representation per mechanism" in block
+    assert "add another whenever it shows something the first cannot" in block
     assert "makes a comparison genuinely faster" in block
 
 
@@ -145,19 +151,22 @@ def test_short_answers_still_get_sentences():
 # ---------------------------------------------------------------------------
 
 def test_step_3_asks_about_missing_visuals_not_only_redundant_ones():
+    # v0.7.0: the last-third check is gone with the evenness floor. A missing figure
+    # for a hard idea is caught by op:visual's value test and by the density check
+    # (a paragraph that blurs cause, mechanism and consequence).
     check = norm(step_3(skill_source()))
-    # A missing figure can still be noticed, in the last third as much as the first.
-    assert "Does a mechanism a figure would clarify still have one" in check
-    assert "in the last third as much as the first" in check
+    assert "in the last third as much as the first" not in check
+    assert "blur cause, mechanism, and consequence" in check
     # The pruning half stays.
-    assert "carry a real relationship" in check
+    assert "Does each figure show something the text and the other figures do not" in check
     assert "its replaced prose gone" in check
 
 
 def test_step_3_prunes_decorative_structure_including_diagrams():
+    # v0.7.0: the decoration check and "could any paragraph be deleted" merged.
     check = norm(step_3(skill_source()))
-    assert "Does every heading, list, table, diagram, and bold sentence mark a real division" in check
-    assert "only decorate" in check
+    assert "Does every heading, list, table, diagram, paragraph, and icon do a job nothing else in the reply does" in check
+    assert "Delete or merge what only repeats" in check
 
 
 # ---------------------------------------------------------------------------
@@ -178,9 +187,11 @@ def test_major_topics_are_separated():
 
 
 def test_step_3_checks_paragraph_and_list_density_and_table_scannability():
+    # v0.7.0: the numeric limits are stated once, in op:presentation; Step 3 checks
+    # ideas rather than restating the numbers.
     check = norm(step_3(skill_source()))
-    for limit in ("four sentences or about 80 words", "any list item about 25 words"):
-        assert limit in check, limit
+    assert "Does any paragraph or list item mix two independently important ideas" in check
+    assert "four sentences or about 80 words" not in check
     assert "Does every table cell stay scannable" in check
 
 
@@ -325,8 +336,8 @@ def test_every_restored_rule_names_an_action():
 
 RESTORED_MARKERS = (
     "Prefer a visual for such an idea",
-    "keep that support even across the answer",
-    "Does a mechanism a figure would clarify still have one",
+    "Give the hardest section its visual first",
+    "Does each figure show something the text and the other figures do not",
     "even when the current one is short",
     "horizontal rule (`---`) where an answer of three or more sections",
     "In every strategy, pick the form from the content",
@@ -366,19 +377,19 @@ def test_treatment_selection_agrees_with_the_calibrated_visual_rule():
     assert "A visual** fits an idea whose content has a shape" in text
     assert "There is no quota and no cap" in text
     assert "draw as many as the ideas earn" in text
-    assert "keep the support even across the answer rather than front-loading it" in text
-    # The anti-redundancy half is stated there too.
-    assert "add a second only when it carries a materially different dimension" in text
+    assert "give a later idea its own when it is just as hard" in text
+    # The anti-redundancy half is stated there too, as a preference (v0.7.0).
+    assert "Prefer one representation per mechanism, and add another whenever it shows something the first cannot" in text
     assert "leave one out where the prose already makes the relationship plain" in text
 
 
 def test_policy_modules_agree_with_the_restored_rules(repo_root):
     comms = repo_root / "communication"
     for name in ("core.md", "strategies.md", "controls.md"):
-        assert "Version 0.6.0" in read(comms / name), name
+        assert "Version 0.7.0" in read(comms / name), name
     controls = norm(read(comms / "controls.md"))
     assert "Prefer a visual for an idea whose shape" in controls
-    assert "keep the support even across the answer" in controls
+    assert "give a later idea its own when it is just as hard" in controls
     assert "There is no quota and no cap" in controls
     assert "Start a new paragraph when the idea changes" in controls
     assert "Keep a table cell scannable" in controls

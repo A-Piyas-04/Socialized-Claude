@@ -416,39 +416,50 @@ item per row that needs one.
 
 ### A figure and the text beside it
 
-**Weak:** a sequence diagram of a cache miss, then four numbered steps that
-repeat its four arrows.
+**Weak:** a document's review lifecycle drawn as a state diagram, again as a
+sequence diagram of the same transitions, then as numbered steps that walk both.
+Three tellings of one cycle, and the reject arrow drawn from the wrong state.
 
-**Better:** the diagram carries the order, and the sentences after it carry what
-the arrows cannot show.
+**Better:** two forms, each with its own job, named in its caption. The table
+tracks state: each row is one transition and the action that causes it.
+
+| From | Trigger (who acts) | To |
+|---|---|---|
+| Draft | author submits | In review |
+| In review | reviewer approves | Published |
+| In review | reviewer rejects | Draft |
+
+The diagram adds only what the table cannot show: the author waits while the
+reviewer decides.
 
 ```mermaid
 sequenceDiagram
-  Client->>Cache: get user 42
-  Cache-->>Client: miss
-  Client->>Database: read user 42
-  Client->>Cache: store user 42
+  Author->>Reviewer: submit draft
+  Note over Author: waits
+  Reviewer-->>Author: approve or reject
 ```
 
-The client fills the entry, not the cache. So two clients that miss at the same
-moment both read the database, which is why some caches put a lock around the
-fill.
+A rejection returns the document to Draft rather than closing it, so the author
+revises the same document instead of starting over.
 
 ### Semantic icons as navigation
 
-**Weak:** an emoji on every bullet, or a heading decorated for atmosphere.
+**Weak:** an emoji on every bullet, the same mark on every heading, or an icon
+inside the code.
 
-**Better:** one meaning-matched icon on the heading or label that the reader
-uses to find the idea, and none inside the code.
+**Better:** a few headings open with an icon that says what kind of part
+follows, so a reader scanning back finds the mechanism or the key point at once.
+The code stays plain.
 
-## 🗄️ Write path
+## 🧠 A write-back cache delays the storage write
 
-The client writes to the cache, then the cache writes through to storage.
+## ⚙️ The write reaches storage on eviction
 
 ```python
 cache.set(key, value)
-store.put(key, value)
 ```
+
+## 💡 A crash before eviction loses the write
 
 ### A question the reader can check
 

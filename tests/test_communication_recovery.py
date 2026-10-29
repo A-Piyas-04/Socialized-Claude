@@ -96,23 +96,25 @@ def test_assumed_scale_is_stated_once_with_what_would_change_the_answer():
 # ---------------------------------------------------------------------------
 
 def test_figure_and_text_have_different_jobs():
+    # v0.7.0: the old wording listed diagram, state table and sentences together and
+    # was read as a recipe that produces all three; the jobs are now stated per form.
     block = norm(op_block(skill_source(), "visual"))
-    assert "Give a figure and its text different jobs" in block
-    assert "the diagram shows who acts in what order" in block
-    assert "a state table what each step changes" in block
-    assert "the sentences after them why each step happens" in block
+    assert "Give every figure, table, and paragraph a different job" in block
+    assert "a figure shows what happens and in what order" in block
+    assert "the text says why and what follows" in block
+    assert "a state table what each step changes" not in block
 
 
 def test_retelling_becomes_reasons_without_banning_a_walkthrough():
     """Reinforcement stays allowed; mechanical repetition does not."""
     block = norm(op_block(skill_source(), "visual"))
-    assert "Turn numbered steps or prose that only retell the arrows into that why" in block
-    assert "unless this reader needs the steps in words as well" in block
+    assert "Write after a figure only what it cannot show" in block
+    assert "walk through its steps in words only when this reader needs them" in block
 
 
 def test_step_3_checks_the_text_beside_a_figure_and_the_table_reasoning():
     check = norm(step_3(skill_source()))
-    assert "text after it adding the why rather than a retelling" in check
+    assert "Does each figure show something the text and the other figures do not" in check
     assert "Does every table cell stay scannable, with its argument under the table" in check
 
 
@@ -137,9 +139,11 @@ def test_depth_layer_names_what_counts_as_specialist_depth():
 # ---------------------------------------------------------------------------
 
 def test_learnable_order_includes_a_demonstration_but_stays_optional():
+    # v0.7.0: the six-stage order read as a template; it became one demonstration-first
+    # clause plus the planning order in Step 2.
     block = norm(op_block(skill_source(), "sequencing"))
-    assert "how it works, a concrete case that shows it working, then consequences or tradeoffs" in block
-    assert "Use only the stages this answer needs" in block
+    assert "show the essential mechanism working on a simple case before variants and implementation detail" in block
+    assert "then consequences or tradeoffs" not in block
 
 
 def test_running_example_reaches_the_behaviour_in_question():
@@ -185,7 +189,7 @@ def test_new_rules_name_actions():
 
 RECOVERY_MARKERS = (
     "keep the verdict in the cell and give the reasoning in a list under the table",
-    "Give a figure and its text different jobs",
+    "Give every figure, table, and paragraph a different job",
     "lead with the recommendation and the reason that decides it",
     "Teach the general mechanism first, then label one system's own version",
     "State each assumption once, where it first matters",
@@ -213,8 +217,10 @@ def test_recovery_rules_ship_in_the_plugin():
 
 def test_references_agree_with_the_recovery_rules():
     selection = norm(read(lib.SKILL_DIR / "references" / "treatment-selection.md"))
-    assert "Give the figure and its text different jobs" in selection
-    assert "**A diagram retold in steps.**" in selection
+    assert "Give every figure, table and paragraph a different job" in selection
+    # v0.7.0: the retelling failure modes merged into one.
+    assert "**The same mechanism told twice.**" in selection
+    assert "numbered steps that walk its arrows" in selection
     assert "**One system taught as the rule.**" in selection
     assert "**Qualifiers on every sentence.**" in selection
     assert "A short sentence in a cell is fine" in selection
@@ -228,7 +234,7 @@ def test_policy_modules_agree_with_the_recovery_rules(repo_root):
     comms = repo_root / "communication"
     controls = norm(read(comms / "controls.md"))
     assert "keep the verdict in the cell and put the reasoning in a list under the table" in controls
-    assert "Give a figure and its text different jobs" in controls
+    assert "Give every figure, table, and paragraph a different job" in controls
     strategies = norm(read(comms / "strategies.md"))
     assert "lead with the recommendation and the reason that decides it" in strategies
     core = norm(read(comms / "core.md"))
@@ -236,6 +242,7 @@ def test_policy_modules_agree_with_the_recovery_rules(repo_root):
     readme = norm(read(comms / "README.md"))
     assert "Change summary (v0.5.0" in readme
     assert "Change summary (v0.6.0" in readme
+    assert "Change summary (v0.7.0" in readme
 
 
 def test_behavioural_reference_separates_evidence_from_intent(repo_root):
