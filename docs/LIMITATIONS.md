@@ -91,9 +91,8 @@ Read this before drawing any conclusion from using or testing the skill.
 - **Plugin runtime behaviour is unverified.** `claude plugin validate` passes and
   the structure is sound, but structural checks cannot show the skill changes
   Claude's behaviour. Confirm with ordinary conversations.
-- **Directory submission not prepared.** Submitting to Anthropic's public plugin
-  directory needs a `LICENSE`/`license` and a listing icon; neither is added,
-  because the license is the owner's decision.
+- **Directory submission not prepared.** The MIT `LICENSE` and the `license` field
+  are in place, but there is no listing icon, and nothing has been submitted.
 
 ## Phase 3 (multi-turn) limitations
 
@@ -219,8 +218,6 @@ the explanation operations (`docs/phase-4-implementation.md`):
 - **Token checks stay local estimates.** `--check` gates the 5,600 regression ceiling
   only; the 5,000 advisory target never gates, and `visual_count`,
   `answer_first_offset` and `passive_sentence_count` never gate at all.
-- **No licence yet.** There is no `LICENSE` file, so "open source" is not yet a claim
-  this repository can make. It is item 6 of `docs/RELEASE_READINESS.md`.
 
 ## Not in scope for V0
 

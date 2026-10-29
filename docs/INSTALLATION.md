@@ -181,8 +181,7 @@ see [COMPATIBILITY.md](COMPATIBILITY.md#activation-four-different-things).
 [TROUBLESHOOTING.md](TROUBLESHOOTING.md) covers upload rejections, marketplace errors,
 activation that never happens, and answers that come out longer than they should.
 
-One note that belongs here: if `claude plugin validate ./plugins/socialized --profile directory`
-fails for you, that is expected today — the repository has no licence yet, and Anthropic's
-plugin directory refuses a submission without one. Plain
-`claude plugin validate ./plugins/socialized` passes, including `--strict`. See
-[LICENSING.md](LICENSING.md).
+One note that belongs here: `claude plugin validate ./plugins/socialized` passes, including
+`--strict` and `--profile directory`. The directory profile still warns that the plugin has no
+listing icon; that warning does not fail validation. The licence is MIT and ships inside both
+archives — see [LICENSING.md](LICENSING.md).

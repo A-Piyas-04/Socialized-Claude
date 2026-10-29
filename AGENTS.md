@@ -233,3 +233,9 @@ needs to decide. No progress narrative.
 - Phase 6: version stays 0.5.1. Documentation, a new script and new tests changed no package
  bytes. 1.0.0 is not a Phase 6 entitlement; it waits on the licence, the claude.ai smoke tests
  and the manual spot-check.
+- Licence (user, 2026-10-29): MIT, `Copyright (c) 2026 Ahnaf Shahriar Pias`. Root `LICENSE` is
+ the single source; `package_skill.py` and `build_plugin.py` ship it as `socialized/LICENSE` in
+ both archives and in `plugins/socialized/LICENSE`, outside `render_files()` so it is never
+ skill text or token-budgeted. `license: MIT` also on the marketplace entry. Plugin
+ 0.5.1 → 0.5.2 (patch: package bytes changed, skill text did not). `plugin.json` author stays
+ `A-Piyas-04`. The research-archive note lives in `docs/LICENSING.md`, not in the archive.

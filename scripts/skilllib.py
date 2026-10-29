@@ -17,6 +17,16 @@ except ImportError as exc:  # pragma: no cover - exercised only without PyYAML
 REPO_ROOT = Path(__file__).resolve().parents[1]
 SKILL_DIR = REPO_ROOT / "skill" / "socialized"
 DIST_DIR = REPO_ROOT / "dist"
+# MIT requires the notice in every copy, so both packages ship this file as LICENSE.
+LICENSE_FILE = REPO_ROOT / "LICENSE"
+
+
+def license_bytes() -> bytes:
+    """The repository LICENSE as shipped: UTF-8, LF line endings, trailing newline."""
+    text = LICENSE_FILE.read_bytes().decode("utf-8").replace("\r\n", "\n")
+    if not text.endswith("\n"):
+        text += "\n"
+    return text.encode("utf-8")
 
 OPERATIONS = (
     "sequencing", "mechanism", "examples", "terms",

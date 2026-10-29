@@ -9,8 +9,9 @@ identical to dist/socialized.zip) into the plugin's skill directory so the two
 never diverge. plugin.json and .claude-plugin/marketplace.json are hand-written
 source-of-truth files and are not generated here.
 
-Source of truth : skill/socialized/ , plugins/socialized/.claude-plugin/plugin.json
-Generated        : plugins/socialized/skills/socialized/**  , dist/socialized-claude-plugin.zip
+Source of truth : skill/socialized/ , plugins/socialized/.claude-plugin/plugin.json , LICENSE
+Generated        : plugins/socialized/skills/socialized/** , plugins/socialized/LICENSE ,
+                   dist/socialized-claude-plugin.zip
 
 Builds are deterministic: the same source produces a byte-identical ZIP.
 """
@@ -43,7 +44,8 @@ DISK_ONLY = {"README.md"}
 def plugin_files() -> dict[str, bytes]:
     """Return every file of the plugin, keyed by path relative to the plugin root."""
     manifest_bytes = PLUGIN_MANIFEST.read_bytes()
-    files: dict[str, bytes] = {".claude-plugin/plugin.json": manifest_bytes}
+    files: dict[str, bytes] = {".claude-plugin/plugin.json": manifest_bytes,
+                               "LICENSE": lib.license_bytes()}
     for rel, data in render_files(lib.SKILL_DIR, lib.VARIANTS["full"]).items():
         files[f"{PLUGIN_SKILL_SUBDIR}/{rel}"] = data
     return files

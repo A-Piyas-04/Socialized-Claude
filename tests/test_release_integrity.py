@@ -208,7 +208,7 @@ def test_check_still_examines_an_ablation_zip_that_is_present(built):
 
 def test_zip_bytes_match_the_written_file(built):
     skill_dir, _, zip_path = built
-    files = ps.render_files(skill_dir, lib.VARIANTS["full"])
+    files = ps.package_files(skill_dir, lib.VARIANTS["full"])
     assert ps.zip_bytes(files, skill_dir.name) == zip_path.read_bytes()
 
 

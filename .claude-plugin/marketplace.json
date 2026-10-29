@@ -9,7 +9,8 @@
     {
       "name": "socialized",
       "source": "./plugins/socialized",
-      "description": "Clear, adaptive explanations and intent-aware communication, packaged as a Claude Code plugin."
+      "description": "Clear, adaptive explanations and intent-aware communication, packaged as a Claude Code plugin.",
+      "license": "MIT"
     }
   ]
 }

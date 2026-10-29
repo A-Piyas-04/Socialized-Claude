@@ -11,8 +11,7 @@ installs into the Claude account you already have.
 > is no evidence that explanations are measurably clearer. See
 > [What is and is not established](#what-is-and-is-not-established).
 >
-> **No licence has been chosen yet**, so this repository is not open source and cannot be
-> redistributed. [`docs/LICENSING.md`](docs/LICENSING.md).
+> **Licence: MIT.** See [`LICENSE`](LICENSE) and [`docs/LICENSING.md`](docs/LICENSING.md).
 
 ## The problem
 
@@ -185,14 +184,15 @@ evidence-driven from what is provisional.
 | [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md) | How the pieces fit |
 | [`docs/VALIDATION.md`](docs/VALIDATION.md) | What each check proves |
 | [`docs/RELEASE_READINESS.md`](docs/RELEASE_READINESS.md) | Release checklist, with current status |
-| [`docs/LICENSING.md`](docs/LICENSING.md) | The open licence decision |
+| [`docs/LICENSING.md`](docs/LICENSING.md) | The MIT licence, where it ships, the third-party audit |
 | [`CONTRIBUTING.md`](CONTRIBUTING.md) | Setup, the one command, what gets rejected |
 | [`SECURITY.md`](SECURITY.md) | Private reporting, and why the attack surface is text |
 | [`CHANGELOG.md`](CHANGELOG.md) | What changed, by version |
 
 ## Licence
 
-**None yet.** See [`docs/LICENSING.md`](docs/LICENSING.md) for the open decision between MIT and
-Apache-2.0, the third-party content audit, and what applying a choice takes. Until a `LICENSE`
-file exists, default copyright applies: you may read this repository, but no right to use,
-modify or redistribute it has been granted.
+Released under the [MIT License](LICENSE). Copyright (c) 2026 Ahnaf Shahriar Pias.
+
+Both installable archives carry the same `LICENSE` file, so the notice travels with every copy.
+[`docs/LICENSING.md`](docs/LICENSING.md) lists where the licence is declared and has the
+third-party content audit.

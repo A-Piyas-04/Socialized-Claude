@@ -16,8 +16,9 @@
     "work-report"
   ],
   "zip": "socialized.zip",
-  "zip_sha256": "97c67cad7328bea5e58075e6d4be65325f880d7263c7d5f0a86f23f5ca8c5786",
+  "zip_sha256": "fb2c24c22892371f80a5c9c380087777f5fe30f015de7692e57651ff0faa72d2",
   "files": {
+    "LICENSE": "2729060b9de84d86a30abf9d216dbfecbfd9b952e1c4a2f314f0c9335c7307ab",
     "SKILL.md": "5a7794726ddd0a21c63cccaf0dd445bbedc96495cd3c53185422efdb52dfc147",
     "references/explanation-examples.md": "bb882e9e702f02baad59ea42277b4912b1047021dbd2ba8314c3ca80344818f5",
     "references/explanation-methodology.md": "b23bee527aa392831a08062f6e6b39826d6afa9d1708b6f7dd9fe8a00c276c8f",

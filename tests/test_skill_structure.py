@@ -263,6 +263,7 @@ def test_production_zip_structure(tmp_path):
     assert out == tmp_path / "socialized.zip"
     texts = zip_texts(out)
     assert set(texts) == {
+        "socialized/LICENSE",
         "socialized/SKILL.md",
         "socialized/references/explanation-methodology.md",
         "socialized/references/treatment-selection.md",

@@ -5,10 +5,9 @@ of what it ships is **instruction text that changes how a model writes**, so a o
 `SKILL.md` is a behavioural change, while a 300-line docs edit usually isn't. The checks below
 exist to keep that distinction visible.
 
-> **Licence:** this repository has no `LICENSE` file yet, so there is no granted right to use
-> or redistribute the code, and contributions cannot be accepted under a licence that does not
-> exist. See [`docs/LICENSING.md`](docs/LICENSING.md). Until the owner chooses one, treat pull
-> requests as discussion rather than something that can be merged and shipped.
+> **Licence:** the project is MIT-licensed ([`LICENSE`](LICENSE)). By submitting a pull
+> request you agree that your contribution is licensed under the same terms. See
+> [`docs/LICENSING.md`](docs/LICENSING.md).
 
 ## Setup
 

@@ -20,7 +20,7 @@ From a local clone, `claude plugin marketplace add ./` then
   `skills/socialized/references/` are rendered from `skill/socialized/` by
   `scripts/build_plugin.py`. They are byte-identical to the contents of
   `dist/socialized.zip`, so the plugin and the standalone claude.ai skill behave
-  the same.
+  the same. `LICENSE` is copied from the repository root (MIT).
 
 Regenerate after any change to the canonical skill:
 

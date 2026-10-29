@@ -22,7 +22,7 @@ see [CONTRIBUTING.md](../CONTRIBUTING.md).
 | `plugin install socialized` fails | The marketplace name is missing | Use `claude plugin install socialized@socialized-claude`, or `claude plugin install socialized --marketplace ./`. |
 | Installed, but no `/socialized` in the `/` menu | The session started before the install | Run `/reload-plugins`, or start Claude Code again. |
 | `plugin update` says "nothing to update" | The plugin is read from its folder, not a cloned copy | Expected for a local-path marketplace. Edits take effect at the next session start or `/reload-plugins`. |
-| `plugin validate` fails on `LICENSE` | You ran `--profile directory` | Expected today. The repository has no licence yet — [LICENSING.md](LICENSING.md). Plain `claude plugin validate ./plugins/socialized` passes. |
+| `plugin validate --profile directory` fails on `LICENSE_MISSING` | You are on a checkout from before the MIT licence was added, or `LICENSE` / the `license` field in `plugin.json` was removed | Update the checkout. Both are present from 0.5.2 — [LICENSING.md](LICENSING.md). The `ICON_MISSING` warning is expected and does not fail validation. |
 | The plugin vanished after removing a marketplace | Removing a marketplace uninstalls everything from it | That is documented behaviour. Re-add the marketplace and reinstall. |
 
 ## Behaviour in conversation

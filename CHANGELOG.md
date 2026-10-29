@@ -2,6 +2,32 @@
 
 ## Unreleased
 
+### MIT licence (plugin v0.5.2)
+- The project is released under the MIT License, `Copyright (c) 2026 Ahnaf Shahriar Pias`.
+  The full, unmodified text is in the new root `LICENSE`.
+- `plugins/socialized/.claude-plugin/plugin.json` and the marketplace entry in
+  `.claude-plugin/marketplace.json` declare `"license": "MIT"`. Both pass
+  `claude plugin validate --strict`.
+- Both archives now ship the licence as `socialized/LICENSE`: beside `SKILL.md` in
+  `dist/socialized.zip`, and at the plugin root in `dist/socialized-claude-plugin.zip`.
+  `build_plugin.py` also writes `plugins/socialized/LICENSE`, so a marketplace install carries
+  it. `package_skill.py` and `build_plugin.py` take it from the root `LICENSE`, and both
+  `--check` modes catch a stale copy. It is not skill text: token estimates are unchanged.
+- `claude plugin validate ./plugins/socialized --profile directory` now passes. It still warns
+  `ICON_MISSING`, which does not fail validation.
+- Plugin `version` 0.5.1 → 0.5.2: both packages changed bytes. The shipped skill files are
+  byte-identical to 0.5.1. Both archives, both manifests and `scripts/version_lock.json`
+  regenerated.
+- `README.md`, `CONTRIBUTING.md` and `docs/LICENSING.md`, `RELEASE_READINESS.md`,
+  `INSTALLATION.md`, `COMPATIBILITY.md`, `TROUBLESHOOTING.md` and `LIMITATIONS.md` updated
+  from "no licence" to MIT. `docs/LICENSING.md` keeps the third-party audit and records that the
+  research archive is included as research data.
+- Tests: the archive inventories include `socialized/LICENSE`; new tests in
+  `tests/test_public_release.py` check that the licence is MIT with the right copyright line,
+  that `plugin.json` and the marketplace agree, and that both packages and the plugin tree ship
+  the same bytes as `LICENSE`. Suite 565 passed, 2 skipped.
+- No communication policy, operation, variant or reference file changed.
+
 ### Public documentation and release candidate (Phase 6)
 - Public documentation set, written for first-time visitors rather than for the project's own
   history: a rewritten `README.md`, plus `docs/USAGE.md`, `docs/COMPATIBILITY.md`,

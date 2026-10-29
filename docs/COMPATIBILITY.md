@@ -94,5 +94,6 @@ either as an order of magnitude, and neither as what you will be billed.
 - **Chats started before you enable the skill** do not pick it up. Start a new one.
 - **Relative `source` paths in a marketplace** resolve only for Git-added and local-path
   marketplaces, which is why path 3 above uses `./`.
-- **Directory submission is currently refused** for a missing licence. See
-  [LICENSING.md](LICENSING.md).
+- **Directory submission has not been attempted.** `--profile directory` validation passes now
+  that the MIT licence is in place ([LICENSING.md](LICENSING.md)); the plugin still has no
+  listing icon, which the validator reports as a warning.

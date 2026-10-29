@@ -12,6 +12,7 @@ import json
 import re
 import subprocess
 import sys
+import zipfile
 from pathlib import Path
 
 import pytest
@@ -107,6 +108,38 @@ def test_plugin_manifest_declares_no_license_it_does_not_have(repo_root):
             f"repository root (looked for {', '.join(LICENSE_NAMES)})")
 
 
+MIT_PERMISSION = ("The above copyright notice and this permission notice shall be included in all\n"
+                  "copies or substantial portions of the Software.")
+
+
+def test_license_is_mit_and_names_the_copyright_holder(repo_root):
+    text = read(repo_root / "LICENSE")
+    assert text.startswith("MIT License\n\nCopyright (c) 2026 Ahnaf Shahriar Pias\n")
+    assert MIT_PERMISSION in text
+    assert 'THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND' in text
+
+
+def test_declared_license_agrees_everywhere(repo_root):
+    """plugin.json ships inside the plugin ZIP; the marketplace entry is what a catalog reads."""
+    plugin = json.loads(read(repo_root / "plugins/socialized/.claude-plugin/plugin.json"))
+    entry = json.loads(read(repo_root / ".claude-plugin/marketplace.json"))["plugins"][0]
+    assert plugin.get("license") == "MIT"
+    assert entry.get("license") == plugin["license"]
+
+
+@pytest.mark.parametrize("rel", ("dist/socialized.zip", "dist/socialized-claude-plugin.zip"))
+def test_every_package_ships_the_license(repo_root, rel):
+    """MIT's one condition: the notice travels with every copy."""
+    with zipfile.ZipFile(repo_root / rel) as archive:
+        shipped = archive.read("socialized/LICENSE")
+    assert shipped == lib.license_bytes(), f"{rel}: socialized/LICENSE differs from LICENSE"
+
+
+def test_installed_plugin_tree_carries_the_license(repo_root):
+    """A marketplace install copies plugins/socialized/, not the repository root."""
+    assert (repo_root / "plugins/socialized/LICENSE").read_bytes() == lib.license_bytes()
+
+
 def test_installation_doc_covers_every_install_path(repo_root):
     text = read(repo_root / "docs/INSTALLATION.md")
     missing = [path for path in INSTALL_PATHS if path not in text]
@@ -122,11 +155,14 @@ def test_security_policy_publishes_no_unmonitored_contact(repo_root):
         "SECURITY.md must name GitHub private vulnerability reporting as the channel"
 
 
-def test_license_blocker_is_reported_while_no_license_exists():
-    labels = [label for label, _ in blockers("0.5.1")]
+def test_license_blocker_tracks_whether_a_license_exists():
+    labels = [label for label, _ in blockers("0.5.2")]
     if find_license() is None:
         assert any("LICENSE" in label for label in labels), \
             "stage_release must report the missing licence as a blocker"
+    else:
+        assert not any("LICENSE" in label for label in labels), \
+            "stage_release still reports a licence blocker although LICENSE exists"
     assert any("evaluation" in label.lower() for label in labels), \
         "stage_release must keep reporting that no controlled evaluation exists"
 

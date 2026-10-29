@@ -1,70 +1,47 @@
-# Licensing: owner decision required
+# Licensing
 
-**Status: BLOCKER. The repository has no `LICENSE` file.**
+**Socialized-Claude is released under the [MIT License](../LICENSE).**
+Copyright (c) 2026 Ahnaf Shahriar Pias.
 
-Nothing in this repository may be described as open source until one exists. No licence has
-been chosen here, and none was chosen on the owner's behalf.
+The owner chose MIT on 2026-10-29. The full, unmodified licence text is in the repository's
+[`LICENSE`](../LICENSE) file; the SPDX identifier is `MIT`.
 
-## Why this blocks the release
+## What it permits
 
-It is not only a convention. Anthropic's own validator refuses a directory submission for it:
-
-```
-$ claude plugin validate ./plugins/socialized --profile directory
-✘ LICENSE: License missing (LICENSE_MISSING). This plugin has no LICENSE file and
-  plugin.json has no `license`. The directory requires one of them.
-✘ Validation passed → Validation failed (--profile directory)
-```
-
-Observed on Claude Code 2.1.311, 2026-10-29. Without `--profile directory` the same command
-prints `✔ Validation passed`, so the plugin is **loadable** today; it is **not submittable**.
-
-Three further consequences:
-
-| Without a licence | Effect |
+| | |
 |---|---|
-| Legal | Default copyright applies. Others may read the repository but have no granted right to use, modify or redistribute it. |
-| Directory | Submission to Anthropic's plugin directory is refused outright. |
-| Claim | README, CHANGELOG and release notes cannot call the project open source. |
+| Use, copy, modify, merge, publish, distribute, sublicense, sell | Yes, free of charge |
+| Condition | Keep the copyright notice and the permission notice in every copy or substantial portion |
+| Warranty | None. The software is provided "as is" |
+| Patents | MIT says nothing about patents; there is no express patent grant |
 
-## The two reasonable options
+## Where the licence is declared
 
-Both are permissive, OSI-approved, and compatible with how this project is built (no vendored
-third-party code, dev dependencies not redistributed). The real difference is patents and
-notices, not permissiveness.
+| Location | What it carries |
+|---|---|
+| [`LICENSE`](../LICENSE) | The full MIT text — the single source for every copy below |
+| `plugins/socialized/.claude-plugin/plugin.json` | `"license": "MIT"` |
+| `.claude-plugin/marketplace.json` | `"license": "MIT"` on the `socialized` entry |
+| `plugins/socialized/LICENSE` | Generated copy, so a marketplace install (which copies only the plugin folder) carries the notice |
+| `dist/socialized.zip` | `socialized/LICENSE`, beside `SKILL.md` |
+| `dist/socialized-claude-plugin.zip` | `socialized/LICENSE`, at the plugin root |
 
-| | MIT | Apache-2.0 |
-|---|---|---|
-| Length | ~170 words | ~10,000 words |
-| Permits commercial use, modification, redistribution | Yes | Yes |
-| Requires the licence and copyright notice be kept | Yes | Yes |
-| **Express patent grant from contributors** | No (silent) | **Yes** |
-| **Patent retaliation clause** | No | Yes — a contributor who sues over patents loses their grant |
-| Requires a `NOTICE` of significant changes | No | Yes, when a `NOTICE` file exists |
-| Trademark grant | Silent | Explicitly withheld |
-| Typical use | Small libraries, skills, templates | Projects expecting corporate contributors or adoption |
-| SPDX id for `plugin.json` | `MIT` | `Apache-2.0` |
+The two packages and the plugin folder get their copy from the build, not by hand:
+`scripts/package_skill.py` and `scripts/build_plugin.py` add the root `LICENSE` (LF line
+endings) to what they ship, and both `--check` modes fail if a copy drifts from the source.
+`tests/test_public_release.py` asserts that the licence is MIT with the right copyright line,
+that `plugin.json` and the marketplace entry agree, and that every package ships the same bytes.
 
-### What to weigh
+The `LICENSE` file is not skill text. It is not rendered into `SKILL.md`, it does not count
+toward the token budgets, and Claude never loads it when the skill activates.
 
-- **MIT** is the lower-friction choice for a single-author Skill. It is short enough to read,
-  and it is what most community Claude skills and plugins use. It says nothing about patents,
-  which for a repository of Markdown policy text and small Python scripts is a small exposure.
-- **Apache-2.0** is the safer choice if this project might take contributions from people
-  employed by companies, or be adopted inside one. Corporate legal review generally prefers the
-  explicit patent grant. The cost is a long file and the `NOTICE`/change-notice obligation.
-
-**If the owner expresses no preference, MIT is the lighter fit for what this repository
-actually is.** This is a recommendation, not a decision, and it has not been applied.
-
-Other options (GPL-3.0, MPL-2.0, CC-BY-4.0, proprietary/all-rights-reserved) are deliberately
-not listed. A copyleft licence would complicate reuse of the Skill text inside other people's
-plugins, which is the main thing someone would do with it. If the owner wants one of these,
-say so and it will be applied instead.
+`claude plugin validate ./plugins/socialized --profile directory` no longer reports
+`LICENSE_MISSING`. It still warns that the plugin has no listing icon; that warning does not
+fail validation.
 
 ## Third-party content audit
 
-Checked 2026-10-29. Nothing found that constrains the licence choice.
+Checked 2026-10-29. Nothing found that constrains the licence.
 
 | Source | What it is | Obligation |
 |---|---|---|
@@ -77,30 +54,13 @@ Checked 2026-10-29. Nothing found that constrains the licence choice.
 | `pyyaml`, `pytest` | Dev-only dependencies, both MIT | Not redistributed. Neither appears in `dist/socialized.zip` or `dist/socialized-claude-plugin.zip`. |
 
 No icons, fonts, images, vendored libraries or copied code from other projects are present. The
-two distribution archives contain only Markdown and one JSON manifest, all written here —
-confirmed by `python -m zipfile -l dist/socialized.zip`.
+two distribution archives contain only Markdown, one JSON manifest and the `LICENSE`, all
+written here — confirmed by `python -m zipfile -l dist/socialized.zip`.
 
-One point for the owner rather than a lawyer's question: the archive contains answers generated
-by Google Gemini and OpenAI models. They are used as *source material* for exemplars, never
-redistributed as a product. If a licence is applied to the repository as a whole, it is worth
-stating in the LICENSE header, or in `research-results-2026-10-26/README.md`, that the archive
-is included as research data rather than as licensed work product.
+## The research archive
 
-## What applying the decision takes
-
-Once the owner names a licence, all of this is mechanical:
-
-1. Add `LICENSE` at the repository root with the chosen text and the owner's copyright line.
-2. Add `"license": "<SPDX-id>"` to `plugins/socialized/.claude-plugin/plugin.json`.
-3. Rebuild both packages (`python scripts/package_skill.py`, `python scripts/build_plugin.py`),
-   bump the version, and run `python scripts/version_lock.py --update`. **The plugin manifest is
-   inside `dist/socialized-claude-plugin.zip`, so adding the field changes package bytes and
-   needs a version decision.**
-4. State the licence in `README.md` and in the marketplace entry.
-5. Re-run `python scripts/verify.py` and
-   `claude plugin validate ./plugins/socialized --profile directory`.
-6. Remove this file's BLOCKER status and tick item 6 in
-   [`RELEASE_READINESS.md`](RELEASE_READINESS.md).
-
-Until step 1 happens, [`RELEASE_READINESS.md`](RELEASE_READINESS.md) keeps `LICENSE: OWNER
-DECISION REQUIRED` as a failing item, and the release candidate stays unpublished.
+`research-results-2026-10-26/` contains answers generated by Google Gemini and OpenAI models.
+They are kept as **research data** — the record the evidence audit reproduces — and as source
+material for exemplars. They are not redistributed as part of either package, and the MIT grant
+covers the work written in this repository rather than asserting authorship of those model
+outputs. The archive itself is read-only, so this note lives here rather than inside it.

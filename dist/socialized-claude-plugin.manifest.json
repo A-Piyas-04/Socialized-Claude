@@ -2,9 +2,10 @@
   "plugin": "socialized",
   "zip": "socialized-claude-plugin.zip",
   "zip_root": "socialized/",
-  "zip_sha256": "621df120b2db461b5a5140010f17429ceb4b10e2cc25269ee30ebe512484a8a3",
+  "zip_sha256": "984f0abc7c936aa238d8f7ad5975d8b535b17f11b48fc0a3e604b46f66fc4201",
   "files": {
-    ".claude-plugin/plugin.json": "fb6eb61e80c80f3250fcfdc9c5d8352568a66c2225922f281e994431fb6d5754",
+    ".claude-plugin/plugin.json": "83470179c7f83efff6c8d0fd9ddd569ca41dbce1d57ffe1ae362cc3d13f9141f",
+    "LICENSE": "2729060b9de84d86a30abf9d216dbfecbfd9b952e1c4a2f314f0c9335c7307ab",
     "skills/socialized/SKILL.md": "5a7794726ddd0a21c63cccaf0dd445bbedc96495cd3c53185422efdb52dfc147",
     "skills/socialized/references/explanation-examples.md": "bb882e9e702f02baad59ea42277b4912b1047021dbd2ba8314c3ca80344818f5",
     "skills/socialized/references/explanation-methodology.md": "b23bee527aa392831a08062f6e6b39826d6afa9d1708b6f7dd9fe8a00c276c8f",

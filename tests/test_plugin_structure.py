@@ -98,6 +98,7 @@ def test_plugin_skill_preserves_operations_and_strips_markers():
 
 EXPECTED_ZIP_ENTRIES = {
     "socialized/.claude-plugin/plugin.json",
+    "socialized/LICENSE",
     "socialized/skills/socialized/SKILL.md",
     "socialized/skills/socialized/references/explanation-examples.md",
     "socialized/skills/socialized/references/explanation-methodology.md",
@@ -286,6 +287,7 @@ def test_original_skill_package_still_intact(repo_root):
     with zipfile.ZipFile(committed) as archive:
         names = {n for n in archive.namelist() if not n.endswith("/")}
     assert names == {
+        "socialized/LICENSE",
         "socialized/SKILL.md",
         "socialized/references/explanation-methodology.md",
         "socialized/references/treatment-selection.md",

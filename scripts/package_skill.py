@@ -6,7 +6,8 @@
     python scripts/package_skill.py --check            # is the committed ZIP current? writes nothing
 
 The ZIP contains one top-level folder, socialized/, with SKILL.md directly
-inside it, as claude.ai expects. Operation markers are removed. Ablation variants
+inside it, as claude.ai expects, plus the repository LICENSE beside it.
+Operation markers are removed. Ablation variants
 also drop the blocks of disabled operations. Every variant keeps the same name and
 description, so automatic activation sees identical metadata.
 
@@ -53,6 +54,15 @@ def render_files(skill_dir: Path, enabled: frozenset[str]) -> dict[str, bytes]:
             data = text.encode("utf-8")
         rendered[rel] = data
     return rendered
+
+
+def package_files(skill_dir: Path, enabled: frozenset[str]) -> dict[str, bytes]:
+    """Everything the skill ZIP carries: the rendered skill and the LICENSE.
+
+    The LICENSE is added here rather than in render_files() so it never counts as skill
+    text (token budgets) and is not duplicated inside the plugin's skill directory.
+    """
+    return {**render_files(skill_dir, enabled), "LICENSE": lib.license_bytes()}
 
 
 def zip_bytes(files: dict[str, bytes], root: str) -> bytes:
@@ -126,7 +136,7 @@ def build(variant: str, *, skill_dir: Path = lib.SKILL_DIR, out_dir: Path = lib.
         return Path(), report
 
     enabled = lib.VARIANTS[variant]
-    files = render_files(skill_dir, enabled)
+    files = package_files(skill_dir, enabled)
     root = skill_dir.name
     if variant == "full":
         out_path = out_dir / f"{root}.zip"
@@ -169,7 +179,7 @@ def check_variant(variant: str, *, skill_dir: Path = lib.SKILL_DIR,
         return [f"skill source does not validate: {m}" for m in source.errors]
 
     root = skill_dir.name
-    files = render_files(skill_dir, lib.VARIANTS[variant])
+    files = package_files(skill_dir, lib.VARIANTS[variant])
     expected = {f"{root}/{rel}": data for rel, data in files.items()}
     out_path = out_path_for(variant, root, out_dir)
     archive_bytes = zip_bytes(files, root)
