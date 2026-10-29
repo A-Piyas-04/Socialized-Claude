@@ -35,16 +35,19 @@ decorative_structure_flags (each a short code):
   table_thin            a table with fewer than 2 data columns besides the first (label) column
   bullets_unconnected   a run of 2+ unordered list items, not a labelled list, in which no item
                         contains a connective (because, so, therefore, which means, if)
-  emoji_structure       an emoji opening a heading or list item. A list item is exempt when its
-                        marker is from the status legend (✅ ❌ ⚠️ 🟢 🟡 🔴) and the same list
-                        uses at least two distinct legend markers. A heading is exempt when it
-                        opens with a meaning-matched navigation icon (🗄️ ⚙️ 🔐 💡 …) followed
-                        by words; a decorative or status-only heading mark is still a flag.
+  emoji_structure       an emoji opening a heading or list item that is decoration rather than a
+                        signal. A heading or list item is exempt when it opens with a
+                        meaning-matched navigation icon (🗄️ ⚙️ 🔐 💡 …) followed by words,
+                        because the house style asks for exactly that (docs/COMMUNICATION_SIMPLIFICATION_AUDIT.md §8).
+                        A list item is also exempt when its marker is from the status legend
+                        (✅ ❌ ⚠️ 🟢 🟡 🔴) and the same list uses at least two distinct legend
+                        markers. A decorative or status-only heading mark is still a flag.
   whitespace_padding    4+ prose paragraphs of which at least 75% are a single sentence
   uncaptioned_visual    a table, or a fenced diagram or bar block, with no prose sentence
                         directly before it
-  dense_paragraph       a prose paragraph of 5+ sentences or more than 80 words, or a list
-                        item of more than 40 words
+  dense_paragraph       a prose paragraph of 4+ sentences or more than 55 words, or a list
+                        item of more than 40 words. The paragraph thresholds track the
+                        house style's two-or-three-sentence rule (docs/COMMUNICATION_SIMPLIFICATION_AUDIT.md §8).
   dense_table_cell      a table whose cells include one of more than 6 words or more than one
                         sentence
   wide_table            a table with more than 4 columns
@@ -76,13 +79,21 @@ SENTENCE_SPLIT_RE = re.compile(r"(?<=[.!?])[\"')\]]*\s+")
 CONNECTIVE_RE = re.compile(r"(?i)\b(because|so|therefore|which means|if)\b")
 EMOJI_RE = re.compile("[\U0001F300-\U0001FAFF\u2600-\u27BF\u2B50\u2B55\u2705\u274C\u2714\u2716]")
 LEGEND = frozenset(mark.replace("\ufe0f", "") for mark in ("✅", "❌", "⚠️", "🟢", "🟡", "🔴"))
-NAV_ICONS = frozenset(mark.replace("\ufe0f", "") for mark in (
-    "🗄️", "💾", "🖥️", "⚙️", "🌐", "📡", "🔐", "🛡️", "🔄", "🧠",
-    "📦", "🗃️", "⚡", "🚀", "⏱️", "🏗️", "🔍", "💡", "⚠️", "💻", "🛠️", "📚", "📊",
+NAV_ICONS = frozenset(mark.replace("️", "") for mark in (
+    # The SKILL.md working set, plus the references/emoji-palette.md catalogue.
+    "🧠", "💡", "🎯", "🔑", "📖", "❓", "🤔", "⚖️", "🧭", "🗺️", "🪞", "🧩", "📐",
+    "⚙️", "🔄", "➡️", "🔀", "🔗", "🏭", "🧵", "🚦", "🪝", "🧮", "📤", "📥", "♻️", "🪄",
+    "🗄️", "💾", "🗃️", "📦", "🧊", "🔥", "📊", "📈", "📉", "🧾", "🪣", "🔖", "🗂️",
+    "🌐", "📡", "🖥️", "📱", "🔌", "📨", "📬", "🚚", "🧱", "🏗️", "🪢", "✂️", "👂",
+    "💻", "🛠️", "🧰", "🏷️", "🧹", "🪛", "🧪", "🚀", "📝", "🔧", "🪤",
+    "⏱️", "⏳", "⚡", "🐢", "📅", "🔂", "🧯", "🏔️", "🪶",
+    "⚠️", "💥", "🐛", "🕳️", "🌩️", "🛡️", "🔐", "🚨", "🧨", "🩹", "🔍", "🧷",
+    "👤", "👥", "🙋", "🗣️", "📋", "🤝", "🎓", "💰", "⏰",
+    "📏", "🔹", "🌬️", "💬", "🎨", "📚",
 ))
 VISUAL_CODE_RE = re.compile(r"```\s*mermaid\b|[█▓▒░]{2,}|-->|──>|│|├|└")
-DENSE_SENTENCES = 5
-DENSE_PARAGRAPH_WORDS = 80
+DENSE_SENTENCES = 4
+DENSE_PARAGRAPH_WORDS = 55
 DENSE_ITEM_WORDS = 40
 TABLE_CELL_WORDS = 6
 TABLE_MAX_COLUMNS = 4
@@ -248,10 +259,15 @@ def legend_mark(line: str) -> str | None:
 
 
 def heading_nav_exempt(block: Block) -> bool:
-    """A heading that opens with a meaning-matched icon plus words is navigation, not decoration."""
-    if block.kind != "heading" or not block.lines:
+    """A heading or bullet opening with a meaning-matched icon plus words is navigation.
+
+    The house style asks for an emoji point on each bullet and key heading
+    (docs/COMMUNICATION_SIMPLIFICATION_AUDIT.md §8), so a matched icon followed by words is the intended form and
+    must not flag. A bare or status-only mark on a heading still flags as decoration.
+    """
+    if block.kind not in {"heading", "bullet", "numbered"} or not block.lines:
         return False
-    rest = re.sub(r"^\s*#{1,6}\s+", "", block.lines[0]).lstrip("*_ ")
+    rest = re.sub(r"^\s*(#{1,6}|[-*+]|\d+[.)])\s+", "", block.lines[0]).lstrip("*_ ")
     match = EMOJI_RE.match(rest)
     if not match:
         return False

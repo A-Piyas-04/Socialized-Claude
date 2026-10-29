@@ -308,3 +308,32 @@ needs to decide. No progress narrative.
  on `recovery/communication-quality`, unmerged. Behavioural acceptance is the owner's.
  **Not done:** the brief's §1 comparison against `Microservices Architecture Advice.html`
  and the paired Claude response. Neither file is in the repository or the working tree.
+- Owner house style (user, 2026-10-29, same day as the simplification): the owner
+ specified the output format directly and said to change, remove or add whatever it took.
+ Recorded in `docs/COMMUNICATION_SIMPLIFICATION_AUDIT.md` §8. **It reverses three of the
+ simplification's decisions, deliberately:** one counting rule ships again (two or three
+ sentences per paragraph), the "nothing here is a quota" preamble is replaced by a
+ narrower one, and an emoji point is the default on every bullet and key heading rather
+ than optional. A direct owner instruction outranks the simplification brief's §5, and
+ the audit says so in place of quietly contradicting itself.
+ New always-on `SKILL.md` "House style" section before the first operation: short
+ paragraphs, bullets over prose for a multi-point passage, an emoji point per bullet, a
+ blank line between units, plain words and sentences. Escape hatch in one sentence — an
+ explicit request lifts one and then stands. `op:plain` names the swaps ("use" not
+ "utilise", "in order to" → "to") because a rule that only says "write simply" is
+ satisfiable by writing exactly as before. `op:visual` carries a 44-icon working set; the
+ full ~150-icon catalogue is a **new fourth reference**, `references/emoji-palette.md`.
+ Markdown has no text colour, so the skill names the three techniques that render
+ (`diff` fence, Mermaid `classDef`, status emoji) instead of promising colour.
+ `structural_metrics.py` retuned to measure the shipped rules: `DENSE_SENTENCES` 5 → 4,
+ `DENSE_PARAGRAPH_WORDS` 80 → 55, `heading_nav_exempt` extended to bullets so the
+ intended emoji form does not flag, `NAV_ICONS` 23 → ~100. Still never gates.
+ Two tests inverted on purpose with the reason in each docstring; the activation test
+ flips for the second time. `activation.max` 5750 → 6350 (6178). **`SKILL.md` is at 495 of the
+ validator's 500 body lines**, reached after a compression pass that merged wording
+ across every operation without dropping a rule — the next addition must displace
+ something. `op:register` now sits past the 5,000-token compaction re-attach window.
+ Policy 0.9.0, plugin 0.10.0. Still on `recovery/communication-quality`, unmerged.
+ Main risk recorded, not resolved: a two-sentence paragraph cap can fragment a connected
+ causal argument. The guard is `op:presentation`'s prose exception plus the
+ `whitespace_padding` flag; whether it holds is a conversational question.

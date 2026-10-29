@@ -12,7 +12,7 @@ Per-phase detail lives in `docs/phase-3-implementation.md`,
 `docs/phase-4-implementation.md`, `docs/phase-4b-token-efficiency.md` and
 `docs/phase-4c-visual-restoration.md`, `docs/communication-recovery.md`,
 `docs/communication-experience-upgrade.md`, `docs/communication-priority-correction.md`
-and `docs/COMMUNICATION_SIMPLIFICATION_AUDIT.md`.
+and `docs/COMMUNICATION_SIMPLIFICATION_AUDIT.md` (whose §8 is the owner's house style).
 This page is the roll-up, and the place to add
 a row when a new regression is found.
 
@@ -129,14 +129,32 @@ Six additive rounds had left duplicated, counted and contradictory instructions;
 
 | # | Regression | Policy source | Protection | Status |
 |---|---|---|---|---|
-| CS-01 | A rule that makes the model count words, sentences, columns or nodes | no threshold in the shipped text | `test_communication_policy.py::test_no_counting_rule_ships_in_the_skill_or_its_references`, `::test_modules_carry_no_rule_wording_the_skill_has_dropped` | Structurally tested |
-| CS-02 | A capability promoted to a default or a quota (icons, visuals, takeaways, checks) | the no-quota statement; `op:visual`; `op:close` | `::test_the_no_quota_statement_is_made_once_up_front`, `::test_no_form_is_mandatory`, `::test_icons_are_optional_not_a_default`, `::test_visuals_have_no_quota_and_no_cap`, `::test_closing_units_stay_conditional` | Structurally tested |
+| CS-01 | A rule that makes the model count columns, nodes, cell words or list-item words | those thresholds stay out of the shipped text | `test_communication_policy.py::test_the_removed_counting_rules_stay_removed`, `::test_modules_carry_no_rule_wording_the_skill_has_dropped` | Structurally tested. **Narrowed on 2026-10-29:** the paragraph cap is an intended threshold now (HS-01) |
+| CS-02 | A *content* form promoted to a quota (visuals, takeaways, checks) | `op:visual`; `op:close`; the house style's "never decides that a figure must exist" | `::test_content_forms_stay_conditional`, `::test_visuals_have_no_quota_and_no_cap`, `::test_closing_units_stay_conditional` | Structurally tested. **The icon clause was reversed on 2026-10-29** by owner instruction; see HS-03 |
 | CS-03 | Two rules that cannot both be satisfied | resolved at source | `::test_the_bold_line_contradiction_is_resolved`, `::test_the_caption_contradiction_is_resolved` | Structurally tested. These two were found and fixed; a new contradiction would not be caught by a test, only by reading. |
 | CS-04 | One rule restated in a second file, in a second wording | the modules index the skill | `::test_policy_modules_index_the_skill_rather_than_restating_it`, `::test_the_reference_does_not_repeat_when_each_operation_applies` | Structurally tested |
 | CS-05 | An abstract claim about cost, risk or complexity asserted and never shown | `op:examples` general-property rule; Step 3 mechanism check | `::test_general_claims_get_shown_rather_than_asserted` | Structurally tested |
 | CS-06 | Mechanical register: manufactured enthusiasm, flattery, academic throat-clearing | `op:plain` | `::test_conversational_register_is_an_instruction_not_only_a_check` | Structurally tested |
 | CS-07 | The test suite freezing a round's phrasing so the next round can only add | invariant-based assertions | none possible: this is a property of how tests are written, not of a file. The audit §1.5 records it, and `::test_step_3_stayed_short` plus `activation.max` are the two numeric brakes. | Observable only in review |
 | CS-08 | Whether the simplified policy reads better in ordinary conversation | — | none possible offline; behavioural acceptance is the owner's, with the microservices/Kafka question as the first case | Observable only in conversation |
+
+## Owner house style (policy v0.9.0, plugin v0.10.0)
+
+Owner instruction after the simplification, the same day; see
+`docs/COMMUNICATION_SIMPLIFICATION_AUDIT.md` §8. It reverses three CS rows above.
+
+| # | Regression | Policy source | Protection | Status |
+|---|---|---|---|---|
+| HS-01 | A paragraph longer than two or three sentences | **House style**, `op:presentation` | `test_communication_policy.py::test_the_paragraph_cap_is_the_one_intended_threshold`; `structural_metrics.py` flag `dense_paragraph`, retuned to 4 sentences / 55 words to measure this rule | Structurally tested (rule) / Heuristic only (flag) |
+| HS-02 | Prose where a multi-point passage should be a list | **House style**, `op:presentation` | `::test_bullets_are_the_default_form_for_multi_point_passages` | Structurally tested |
+| HS-03 | A bullet or key heading with no emoji point, or a mismatched one | **House style**, `op:visual` | `::test_emoji_points_are_the_default_on_bullets_and_key_headings` | Structurally tested. **Reverses CS-02's icon clause and PC-04's withdrawal.** |
+| HS-04 | The opposite failure: the same emoji on every bullet, so it carries no signal | `op:visual` consistency rule | `::test_emoji_points_are_the_default_on_bullets_and_key_headings` (asserts the consistency and drop-rather-than-mismatch rules) | Structurally tested; the linter no longer flags the intended form, so this is observable only in conversation |
+| HS-05 | Units running together with no blank line between them | **House style**, `op:presentation` | `::test_bullets_are_the_default_form_for_multi_point_passages` | Structurally tested |
+| HS-06 | Long sentences, formal phrasing, or a word with a plainer equivalent | **House style**, `op:plain`, Step 3 | `::test_plain_language_names_the_substitutions_to_make` | Structurally tested |
+| HS-07 | The skill promising text colour markdown cannot render | `op:visual`, `references/emoji-palette.md` §12 | `::test_colour_is_the_three_techniques_that_actually_render` | Structurally tested |
+| HS-08 | A connected causal argument chopped into two-sentence fragments by the paragraph cap | `op:presentation` prose exception; `treatment-selection.md` §3 ("whitespace padding", "bullets that chop one continuous argument into fragments") | `structural_metrics.py` flag `whitespace_padding` | Heuristic only. **The main risk the house style carries**; see audit §8.7 |
+| HS-09 | `SKILL.md` growing past the validator's 500-line limit | `validate_skill.py` `BODY_MAX_LINES`; `activation.max` | `scripts/validate_skill.py`, `test_token_budget.py` | Structurally tested. It is **at** 500 now, so the next addition must displace something |
+| HS-10 | Whether the format actually reads better | — | none possible offline; behavioural acceptance is the owner's | Observable only in conversation |
 
 ## Phase 5 — the packages and metadata that carry all of the above
 

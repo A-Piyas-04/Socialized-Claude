@@ -1,6 +1,6 @@
 # Communication controls — depth, presentation, visuals
 
-Version 0.8.0. How much to say, and how to present it.
+Version 0.9.0. How much to say, and how to present it.
 
 **This file is an index, not a second copy of the policy.** Each control names
 what the model does and points to the rule in `skill/socialized/SKILL.md` that
@@ -8,9 +8,16 @@ states it in full. Before 0.8.0 this file carried its own wording of the same
 rules, including numeric thresholds that outlived the skill's (see
 `docs/COMMUNICATION_SIMPLIFICATION_AUDIT.md`).
 
-Presentation is a capability to apply when the content's shape calls for it,
-never a quota to fill. No answer owes the reader a table, a figure, a heading, an
-icon, an example or a takeaway.
+Two kinds of rule live here, and they are not weighed against each other.
+
+**The house style always applies** (`SKILL.md` "House style: always on"): short
+paragraphs, bullets over prose for a multi-point passage, an emoji point on each
+bullet, a blank line between units, and plain words and sentences. Only an explicit
+request lifts one.
+
+**Everything else follows the content's shape.** No answer owes the reader a table,
+a figure, an example or a takeaway. The house style sets how the text is laid out;
+it never decides that a figure must exist.
 
 ## Depth
 
@@ -25,12 +32,15 @@ icon, an example or a takeaway.
 | Control | What the model does | Stated in |
 |---|---|---|
 | Form from shape | Numbered steps for a process; a table for several items across shared dimensions; a labelled list for parallel options; a diagram for a flow, an interaction or how components connect; prose for a single causal chain. Applies in every strategy, not only teaching replies. | `op:presentation`, the strategy section |
-| One idea per unit | Gives each independently important idea its own unit, starts a new one when the idea changes, keeps a continuous argument together with its link stated inside the unit, and splits a paragraph that has taken on a second idea. | `op:presentation` |
+| Short paragraphs | Holds every paragraph to two or three sentences. A fourth starts a new paragraph, or the passage becomes a list. Lifted only by an explicit request for long paragraphs. | **House style**, `op:presentation` |
+| Bullets first | Reaches for a list whenever a passage carries more than one point, and keeps prose for a single chain of reasoning where the links have to stay in the sentences. | **House style**, `op:presentation` |
+| One idea per unit | Gives each list item one idea and one emoji point, states the link inside the item where two facts are causally joined, and leaves a blank line between every unit. | **House style**, `op:presentation` |
 | Scannable tables | The verdict in the cell, the dimension in each header, and a condition, a second reason or an argument in a list under the table. | `op:presentation` |
 | Hierarchy | Essential point first, optional points after, minor caveats together at the end, and specialist depth after the narrative it extends and marked as skippable. | `op:presentation` |
 | Headings | `##` then `###` without skipping a level, each stating what the section establishes. No bold line standing in for a heading, and no heading over a one-sentence section. | `op:presentation` |
 | Specimens and identifiers | Sample data, snippets, outputs and quoted structures in a fenced block, named in the sentence before it; identifiers, paths, flags and commands in backticks. | `op:presentation` |
 | No preview | Answers directly first, and adds no roadmap or heading map the headings already make clear. | `op:plain` |
+| Plain words and sentences | One clause per sentence, or two when the second is short. The everyday word over the formal one, and a phrase cut to a word. | **House style**, `op:plain` |
 
 ## Examples and analogies
 
@@ -53,17 +63,29 @@ icon, an example or a takeaway.
 
 ## Icons
 
-Optional, where they genuinely help the reader navigate or compare: a
-meaning-matched icon on a key heading, callout or diagram label, or a status
-marker in a list or table. The same icon always marks the same kind of part.
-Never in code, identifiers, JSON, logs, formal writing, or a short or casual
-reply; never on every heading or every item; never required.
+**House style: an emoji point opens every bullet and key heading.** One
+meaning-matched icon, at the front, then the words. The same icon always marks the
+same kind of part, and a different kind gets a different icon. Drop the icon rather
+than pick one that does not match.
 
-The vocabulary is in `op:visual`: 🧠 concept, ⚙️ mechanism, 📡 signalling,
-🗄️ storage, 🔄 state transition, 📊 comparison, 💡 insight, 🛡️ security; and
-✅ works, ❌ broken, ⚠️ caution, 🟢 🟡 🔴 for degrees of one property.
+Never in code, identifiers, commands, JSON, logs, file paths, formal or legal
+writing, or a one-line reply.
 
-Stated in: `op:visual`.
+The working set is in `op:visual`; `references/emoji-palette.md` holds the full set
+by meaning, with the status marks (✅ works, ❌ broken, ⚠️ caveat, 🟢 🟡 🔴 degrees)
+kept for status only.
+
+Stated in: `SKILL.md` **House style**, `op:visual`.
+
+## Colour
+
+Markdown has no text colour. Three techniques render, and nothing else does:
+
+- A `diff` fence for a broken and fixed pair — red and green.
+- Mermaid `classDef` for a coloured diagram, one code per answer, named once.
+- 🟢 🟡 🔴 and ✅ ❌ ⚠️ for a coloured list item or table cell.
+
+Stated in: `op:visual`; worked examples in `references/emoji-palette.md` §12.
 
 ## Closings
 

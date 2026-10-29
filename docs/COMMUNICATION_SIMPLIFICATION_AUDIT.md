@@ -1,6 +1,10 @@
 # Communication simplification audit
 
-Policy 0.8.0, plugin 0.9.0. 2026-10-29.
+Policy 0.9.0, plugin 0.10.0. 2026-10-29.
+
+§1–§7 are the simplification. **§8 is an addendum recording the owner's house-style
+instruction later the same day, which deliberately reverses three of the decisions
+below.** Read §8 before treating §1–§7 as current.
 
 Six rounds of communication work (Phase 4, Phase 4C, its calibration, v0.5.0
 recovery, v0.6.0 experience upgrade, v0.7.0 priority correction) each diagnosed a
@@ -343,3 +347,133 @@ Stated as expectations, not results. None is established by the checks in §5.
   information hierarchy, content-driven form, natural register — were implemented
   from the brief's own description. **This is the one part of the brief that was
   not carried out as written.** Supplying the two files would allow it.
+
+---
+
+## 8. Addendum: the owner's house style (policy 0.9.0, plugin 0.10.0)
+
+Same day, after the simplification shipped. The owner asked for a specific output
+format and said to change, remove or add whatever it took to get it. This section
+records what that reversed, because three of the changes contradict §1–§7 above.
+
+### 8.1 What was asked for
+
+- 📏 Short paragraphs only — two or three lines — whatever the topic, unless the
+  person explicitly asks for long ones.
+- 🔹 Heavy use of bullet points.
+- 🏷️ Emoji points on the bullets, drawn from a large set.
+- 🌬️ A visually spacious structure.
+- 📊 Diagrams and colour-coded markdown where they are needed.
+- 💬 Simple sentences and simple grammar, kept at all cost.
+
+### 8.2 What it reverses
+
+| §1–§7 said | The house style says | Why the owner's version wins |
+|---|---|---|
+| No counting rule ships; "80 words" asked for arithmetic where judgement belongs | One counting rule ships: two or three sentences per paragraph | A direct instruction from the owner outranks a brief's §5. It is one threshold, not eleven, and it is stated once |
+| "Nothing here is a quota. No answer owes the reader a table, a figure, a heading, an icon…" | Five layout rules always apply | The quota statement read as making the layout optional too. It is replaced by a narrower one: the house style governs layout, content forms stay conditional |
+| Icons are optional, and "never belongs on every heading or every item" | An emoji point opens every bullet and key heading | Direct owner instruction. §1.4 had argued the v0.7.0 default was the problem; the owner's answer is that it is the intent |
+
+Two tests are inverted on purpose and say so in their docstrings:
+`test_emoji_points_are_the_default_on_bullets_and_key_headings` in
+`tests/test_communication_policy.py`, and
+`test_activation_exceeds_the_phase_4_baseline_by_a_recorded_decision` in
+`tests/test_token_budget.py`, which flips for the second time.
+
+What §1–§7 keeps: the other ten counting rules stay gone, the four contradictions
+stay resolved, one wording per rule, and the modules stay indexes.
+
+### 8.3 What was added
+
+**`SKILL.md` gains a "House style: always on" section**, before the first
+operation so it is read first and sits inside Claude Code's 5,000-token compaction
+re-attach window. Five rules, each with its escape hatch in one sentence: an
+explicit request lifts one, and then stands until changed.
+
+**`op:presentation`** holds the paragraph cap, the bullets-first rule, one idea and
+one emoji point per item, and the blank-line rule.
+
+**`op:plain`** names the swaps instead of only asking for simplicity: one clause
+per sentence or two when the second is short, the everyday word over the formal one
+("use" not "utilise", "so" not "consequently"), and the phrase cut to a word ("in
+order to" → "to", "has the ability to" → "can"). A rule that only says "write
+simply" is satisfiable by writing exactly as before.
+
+**`op:visual`** holds a 44-icon working set grouped by meaning, the consistency
+rule (same icon for the same kind of thing, drop it rather than mismatch), the
+exclusions (code, identifiers, commands, JSON, logs, file paths, formal or legal
+writing, one-line replies), and the colour techniques.
+
+**`references/emoji-palette.md`** is new: about 150 icons by meaning across twelve
+groups, the three colour techniques with worked examples, and a "what not to do"
+list. It is the fourth reference file. Both expected-file sets in
+`tests/test_skill_structure.py` and `tests/test_plugin_structure.py` were updated.
+
+### 8.4 Colour: what markdown can actually do
+
+Markdown has **no text colour**. The skill says so rather than promising it, and
+names the three things that do render:
+
+- 🎨 A `diff` fence — `-` lines red, `+` lines green. Best for a broken and fixed
+  pair.
+- 🎨 Mermaid `classDef` — real fill and stroke colour inside a diagram, one code
+  per answer, named once.
+- 🎨 Status emoji — 🟢 🟡 🔴 and ✅ ❌ ⚠️ are the only way to colour a table cell
+  or a bullet.
+
+### 8.5 The linter now measures the house style
+
+`scripts/structural_metrics.py` changed so its flags track the shipped rules
+instead of the removed ones:
+
+- `DENSE_SENTENCES` 5 → 4 and `DENSE_PARAGRAPH_WORDS` 80 → 55, so a paragraph that
+  breaks the two-or-three-sentence rule flags.
+- `heading_nav_exempt` now covers bullets and numbered items, not only headings. A
+  bullet opening with a meaning-matched icon plus words is the intended form, so it
+  must not raise `emoji_structure`. A bare or status-only mark on a heading still
+  flags.
+- `NAV_ICONS` grew from 23 to about 100, covering the working set and the palette.
+
+These stay descriptive. Nothing gates on them.
+
+### 8.6 Cost
+
+| Surface | Before | After |
+|---|---|---|
+| `activation` tokens | 5,648 | 6,178 |
+| `activation.max` ceiling | 5,750 | 6,350 |
+| `SKILL.md` body lines | 429 | 495 (validator limit: 500) |
+| `SKILL.md` rendered lines | 432 | 459 |
+| `ref:emoji-palette.md` | — | 2,699 tokens, on demand only |
+
+The house style costs about 530 activation tokens, more than the simplification's
+390-token saving, so activation is above the Phase 4 baseline (5,966) again. The
+full palette went to a reference, which costs nothing until read. `SKILL.md` is at 495 body
+lines against the validator's limit of 500 — **five lines of headroom, so the next
+addition to it has to displace something.** Keeping it under that limit took a compression pass across
+`op:sequencing`, `op:mechanism`, `op:examples`, `op:terms`, `op:presentation`,
+`op:visual`, `op:register`, `op:repair`, `op:persistence`, `op:work-report`,
+`op:close`, Step 1, Step 2, the accuracy rules and the scope list. No rule was
+dropped in that pass; wording was merged.
+
+One consequence: `op:register` now falls past the 5,000-token compaction re-attach
+window, joining `op:repair`, `op:persistence`, `op:work-report`, `op:close` and
+Step 3. The explanation operations that do the teaching, and the house style
+itself, stay inside. `tests/test_token_budget.py::test_always_on_core_survives_compaction_reattach`
+records the list.
+
+### 8.7 What is still unverified
+
+- Whether answers actually read this way. Static tests show the rules ship.
+- **Whether the paragraph cap damages explanations that need a connected argument.**
+  A two-sentence ceiling on a causal chain risks fragmenting it. `op:presentation`
+  keeps "prose for a single chain of reasoning, where the links have to stay in the
+  sentences" as the exception, and `treatment-selection.md` still names
+  "whitespace padding" and "bullets that chop one continuous argument into
+  fragments" as failures. Whether that is enough is a conversational question.
+- **Whether an emoji on every bullet stops reading as a signal.** The consistency
+  rule and the "drop it rather than mismatch" rule are the guards. The linter's
+  `emoji_structure` flag no longer fires on the intended form, so it will not catch
+  this; only reading will.
+- Whether `SKILL.md` at the 500-line limit is maintainable. It is not, for growth.
+  The next round has to remove before it adds.

@@ -2,6 +2,56 @@
 
 ## Unreleased
 
+### Owner house style (policy v0.9.0, plugin v0.10.0)
+- Owner instruction the same day as the simplification, and a deliberate partial
+  reversal of it: short paragraphs only, heavy bullet use, emoji points drawn from a
+  large set, a visually spacious structure, diagrams and colour where needed, and
+  simple sentences and grammar kept at all cost. Recorded in
+  `docs/COMMUNICATION_SIMPLIFICATION_AUDIT.md` §8, which states what it reverses.
+- New always-on `SKILL.md` section, "House style", before the first operation and
+  inside Claude Code's 5,000-token compaction re-attach window. Five rules: two or
+  three sentences per paragraph, bullets over prose for a multi-point passage, an
+  emoji point on each bullet, a blank line between units, plain words and sentences.
+  One sentence carries the escape hatch: an explicit request lifts one, and then
+  stands until the person changes it.
+- It replaces the simplification's "Nothing here is a quota" line with a narrower
+  claim: the house style governs layout, and whether the answer needs a table,
+  diagram, example or takeaway at all is still decided by the content.
+- `op:presentation`: the paragraph cap, bullets-first, one idea and one emoji point
+  per item, and the blank-line rule.
+- `op:plain`: names the swaps rather than only asking for simplicity — one clause per
+  sentence or two when the second is short, the everyday word over the formal one, and
+  a phrase cut to a word ("in order to" → "to", "has the ability to" → "can").
+- `op:visual`: a 44-icon working set grouped by meaning, the consistency rule, the
+  exclusions (code, identifiers, commands, JSON, logs, file paths, formal or legal
+  writing, one-line replies), and the colour techniques. Markdown has no text colour,
+  so colour comes from a `diff` fence, Mermaid `classDef`, or status emoji — the skill
+  says so rather than promising otherwise.
+- New fourth reference `references/emoji-palette.md`: about 150 icons by meaning across
+  twelve groups, the three colour techniques with worked examples, and a "what not to
+  do" list. On demand, so it costs nothing until read. Both expected-file sets in
+  `tests/test_skill_structure.py` and `tests/test_plugin_structure.py` updated.
+- `scripts/structural_metrics.py` now measures the shipped rules: `DENSE_SENTENCES`
+  5 → 4, `DENSE_PARAGRAPH_WORDS` 80 → 55, `heading_nav_exempt` extended to bullets and
+  numbered items so the intended emoji form does not raise `emoji_structure`, and
+  `NAV_ICONS` grown from 23 to about 100. All still descriptive; nothing gates.
+- Two tests inverted on purpose, each with the reason in its docstring:
+  `test_emoji_points_are_the_default_on_bullets_and_key_headings` (was
+  `test_icons_are_optional_not_a_default`) and
+  `test_activation_exceeds_the_phase_4_baseline_by_a_recorded_decision`, which flips for
+  the second time. `test_the_no_quota_statement_is_made_once_up_front` became
+  `test_the_house_style_is_stated_once_up_front_and_always_on`;
+  `test_no_counting_rule_ships...` became `test_the_removed_counting_rules_stay_removed`,
+  narrowed to the ten thresholds that stay out.
+- Activation 5648 → 6178 tokens; `activation.max` 5750 → 6350. `SKILL.md` is at 495 body
+  lines against the validator's limit of 500, after a compression pass across every operation and step
+  that merged wording without dropping a rule. **The next addition to `SKILL.md` has to
+  displace something.** `op:register` now falls past the 5,000-token re-attach window,
+  joining repair, persistence, work-report, close and Step 3; the teaching operations and
+  the house style stay inside.
+- Validation: `python scripts/verify.py` 9 passed, 0 failed, 0 skipped; suite 558 passed,
+  2 skipped. Behavioural acceptance is the owner's.
+
 ### Communication simplification (policy v0.8.0, plugin v0.9.0)
 - Six additive rounds of communication work had left the same rule stated in up to
   four files in four wordings, eleven thresholds the model had to count against,

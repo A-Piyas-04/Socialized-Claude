@@ -269,6 +269,7 @@ def test_production_zip_structure(tmp_path):
         "socialized/references/explanation-methodology.md",
         "socialized/references/treatment-selection.md",
         "socialized/references/explanation-examples.md",
+        "socialized/references/emoji-palette.md",
     }
     for name, text in texts.items():
         assert "op:" not in text, f"marker left in {name}"
@@ -400,7 +401,8 @@ def test_plain_language_rules_name_actions():
     text = read(lib.SKILL_DIR / "SKILL.md")
     block = text.split("<!-- op:plain -->", 1)[1].split("<!-- /op:plain -->", 1)[0]
     rules = [line.strip()[2:] for line in block.splitlines() if line.strip().startswith("- ")]
-    assert len(rules) == 6
+    # Seven since the owner's plain-language instruction added the word and phrase swaps.
+    assert len(rules) == 7
     for rule in rules:
         assert not rule.lower().startswith(("do not", "don't", "never", "avoid")), rule
 

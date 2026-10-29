@@ -7,9 +7,9 @@
       "why": "Agent Skills overview: Level 1 metadata costs about 100 tokens per skill and sits in context on every turn while the skill is enabled."
     },
     "activation": {
-      "max": 5750,
+      "max": 6350,
       "target": 5000,
-      "why": "max: regression ceiling just above the current size, so growth is a deliberate decision. History: 5500 (Phase 4B), 5600 (Phase 4C), 5900 (communication-quality recovery), 6200 (communication-experience upgrade), 6150 (communication priority correction). Lowered to 5750 in the communication simplification (docs/COMMUNICATION_SIMPLIFICATION_AUDIT.md), which removed the counting rules, the formatting mandates and the duplicated rule wording: activation fell from 6035 to 5648 heuristic tokens, back below the Phase 4 baseline (5966) for the first time since Phase 4C. target: the Agent Skills overview puts Level 2 instructions under 5k tokens, and Claude Code re-attaches only the first 5,000 tokens of an invoked skill after auto-compaction. Still above target: op:work-report (partly), op:close and Step 3 fall outside that window."
+      "why": "max: regression ceiling just above the current size, so growth is a deliberate decision. History: 5500 (Phase 4B), 5600 (Phase 4C), 5900 (communication-quality recovery), 6200 (communication-experience upgrade), 6150 (communication priority correction), 5750 (communication simplification). Raised to 6350 for the owner's house style (docs/COMMUNICATION_SIMPLIFICATION_AUDIT.md \u00a78): the always-on paragraph, bullet, emoji-point, spacing and plain-language rules plus the emoji working set cost about 530 tokens that the simplification's 390-token saving did not cover. The full palette is in references/emoji-palette.md and costs nothing until read. target: the Agent Skills overview puts Level 2 instructions under 5k tokens, and Claude Code re-attaches only the first 5,000 tokens of an invoked skill after auto-compaction. The house style sits in the first 5,000 tokens on purpose; op:close and Step 3 fall outside it."
     },
     "ref:explanation-examples.md": {
       "max": null,
@@ -35,6 +35,11 @@
       "max": 250,
       "target": 150,
       "why": "Opt-in standing guidance, loaded in full at every Claude Code session launch."
+    },
+    "ref:emoji-palette.md": {
+      "max": null,
+      "target": null,
+      "why": "On demand. The overview states bundled files cost nothing until read."
     }
   }
 }

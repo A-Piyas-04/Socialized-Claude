@@ -32,7 +32,8 @@ socialized/
 └── references/
     ├── explanation-methodology.md        Level 3: per-request-type behaviour
     ├── explanation-examples.md           Level 3: weak/better pairs + restraint cases
-    └── treatment-selection.md            Level 3: conflicts, length budget, failure modes
+    ├── treatment-selection.md            Level 3: conflicts, length budget, failure modes
+    └── emoji-palette.md                  Level 3: the full icon set, and colour in markdown
 ```
 
 | Level | What | When it is in Claude's context |

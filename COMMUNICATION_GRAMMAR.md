@@ -5,10 +5,13 @@ presentation, visual, register, repair, persistence, work-report, plain-language
 operations, and the accuracy additions, each with its evidence label.
 This file documents the skill; it does not argue for it.
 
-This file was reconciled with the shipped skill on 2026-10-29, when the
+This file was reconciled with the shipped skill twice on 2026-10-29: once when the
 communication simplification removed the counting rules and the mandatory formatting
 (`docs/COMMUNICATION_SIMPLIFICATION_AUDIT.md`). Rows for rules that no longer ship were
-deleted rather than marked superseded; the history is in `docs/`.
+deleted rather than marked superseded; the history is in `docs/`. The second pass
+recorded the owner's house style, which reverses three of those decisions (audit §8):
+rows labelled **Owner instruction (2026-10-29)** are direct requests, not conjectures,
+and outrank the briefs.
 
 **No rule here is a validated finding.** No comprehension evidence exists for any of them
 (`research/EVIDENCE_AUDIT.md` §11). Most presentation rules are **Hypothesis (L4)**.
@@ -58,7 +61,8 @@ on a detector artifact. It does not show that structure helps.
 
 | Rule | Label | Basis |
 |---|---|---|
-| Nothing is a quota: no answer owes the reader a table, figure, heading, icon, example or takeaway. The content's shape decides. | Engineering choice | Stated once at the top of `SKILL.md` by the 2026-10-29 simplification, in place of the per-rule escape clauses each round had added. |
+| The house style always applies: short paragraphs, bullets for a multi-point passage, an emoji point on each bullet, a blank line between units, plain words and sentences. | Owner instruction (2026-10-29) | Direct owner request, stated once at the top of `SKILL.md`. It supersedes the simplification's "nothing here is a quota" line, which read as making layout optional too. Audit §8. |
+| No *content* form is owed an appearance: whether the answer needs a table, figure, example or takeaway at all is decided by the content. | Engineering choice | The narrower half of the simplification's quota statement, kept. |
 | Put the direct answer in the first one or two sentences, before any structure. | Hypothesis (L4) | The `directness` rubric dimension (`evaluation/RUBRIC.md`) rewards it; untested as a cause of understanding. |
 | Give each idea its own unit; start a new unit when a new idea starts. | Hypothesis (L4) | T5's intended mechanism (short paragraphs), `research/EVIDENCE_AUDIT.md` §6 T5. |
 | A process gets numbered steps, each stating what triggers the next. | Hypothesis (L4) | T5 template (ordered steps for procedures), same section. |
@@ -70,7 +74,9 @@ on a detector artifact. It does not show that structure helps.
 | Bold sparingly: the one sentence this reader must not miss, where there is one. | Engineering choice | Bounds emphasis so it still marks something. The per-answer cap was dropped in the 2026-10-29 simplification. |
 | When a list or table separates causally linked facts, write the link inside the item. | Hypothesis (L4), with Literature (L2) motivation | The lab's H3 predicts presentation raises perceived clarity more than comprehension (illusion of fluency, L2), `research/EVIDENCE_AUDIT.md` §6 T5. |
 | Presentation is cut last when shortening. | Engineering choice | It costs few words. |
-| One idea per paragraph; a paragraph that has taken on a second one splits. | Hypothesis (L4) | User report (2026-10-27), point 13: dense paragraphs are hard to read. The sentence and word ceiling was dropped in the 2026-10-29 simplification; `dense_paragraph` keeps its threshold as a descriptive linter flag, and `whitespace_padding` still flags the opposite. |
+| Hold every paragraph to two or three sentences. A fourth starts a new paragraph, or the passage becomes a list. Lifted only by an explicit request for long paragraphs. | Owner instruction (2026-10-29) | User report (2026-10-27) point 13, then a direct owner instruction the same day as the simplification, which had just removed the ceiling. This is now the one counting rule that ships; `dense_paragraph` was retuned to 4 sentences / 55 words to measure it, and `whitespace_padding` still flags the opposite failure. Audit §8. |
+| Reach for a list whenever a passage carries more than one point; keep prose for a single chain of reasoning where the links have to stay in the sentences. | Owner instruction (2026-10-29) | Same instruction ("use excessive bullet points"). The prose exception is the guard against chopping a continuous argument into fragments. |
+| Leave a blank line between every paragraph, list, table, figure, fenced block and heading. | Owner instruction (2026-10-29) | Same instruction ("visually spacious structure"). |
 | Move specialist code and identifiers into a fenced block or a **For implementers:** blockquote after the narrative. | Hypothesis (L4) | User report (2026-10-27), point 15. |
 | Put the main point first in a section and gather minor caveats at the end. | Hypothesis (L4) | User report (2026-10-27), point 16. The horizontal-rule requirement was dropped in the 2026-10-29 simplification. |
 | Wrap every identifier, path, flag, command, and product-specific token in backticks, and gloss it the first time. | Hypothesis (L4) | Second user report (2026-10-27), item 12. |
@@ -138,10 +144,11 @@ fidelity risk, not comprehension evidence.
 | Rule | Label | Basis |
 |---|---|---|
 | Make one claim per sentence. | Hypothesis (L4), with Literature (L2) motivation | T1 template; cognitive load theory, scoped "reduce load ≠ reduce content". |
-| Split a sentence that stacks clauses until the claim is hard to find. | Engineering choice | The two-clause threshold was dropped in the 2026-10-29 simplification; `max_sentence_words` stays a descriptive flag. |
+| Keep the sentence to one clause, or two when the second is short. | Owner instruction (2026-10-29) | "Maintain humanised communication, simple sentence and simple grammar, no complex phrase or words - maintain this at all cost." `max_sentence_words` stays a descriptive flag. |
+| Cut a phrase where a word will do: "in order to" → "to", "due to the fact that" → "because", "has the ability to" → "can". | Owner instruction (2026-10-29) | Same instruction. A rule that only says "write simply" is satisfiable by writing exactly as before, so the rule names the swaps. |
 | Write in the active voice; passive only when the actor is unknown or irrelevant. | Hypothesis (L4) | Says who does what, which a causal explanation needs. |
 | Give every pronoun one clear referent; repeat the noun when two could match. | Hypothesis (L4) | T1 template ("resolve ambiguous references"). |
-| Choose the common word when it is exact; keep the technical term when it is not. | Hypothesis (L4), with an Observation of the failure | T1 replaced "pathogen" throughout (`transform-immunology-chatgpt-T1.json`), the case this rule's second half guards against. |
+| Choose the everyday word over the formal one ("use" not "utilise", "so" not "consequently"); keep the technical term when the plain word would be wrong. | Hypothesis (L4), with an Observation of the failure, strengthened by Owner instruction (2026-10-29) | T1 replaced "pathogen" throughout (`transform-immunology-chatgpt-T1.json`), the case this rule's second half guards against. The owner's instruction added the named swaps. |
 | Write as a knowledgeable person talking to this reader: direct and conversational, without manufactured enthusiasm, flattery, exaggerated criticism, or academic throat-clearing. | Hypothesis (L4) | Owner simplification brief (2026-10-29) §3D. Previously only the Step 3 closing check carried it, where it had no operation to apply it. |
 | Delete a sentence whose only job is to introduce, preview or announce another; a sentence saying what to notice in a figure or table carries content and stays. | Hypothesis (L4) | T1 template ("remove padding"). The exemption resolves a conflict found in the 2026-10-29 audit: the same sentence was required by `op:visual` and deleted by `op:plain`. |
 
@@ -169,7 +176,9 @@ user's instruction on 2026-10-27: markdown everywhere, artifacts on an explicit 
 | One colour code per answer, named once in a legend line and reused in every visual. | Hypothesis (L4) | Second user report, item 6. |
 | Every range, ratio, or magnitude comparison becomes bars. | Hypothesis (L4) | Second user report, item 13. |
 | Caption every visual with what it shows and the one thing to notice. | Hypothesis (L4) | User report, point 14. The `uncaptioned_visual` flag checks the sentence is present. |
-| Optional: a meaning-matched icon on a key heading, callout or diagram label, or a status marker (✅ ❌ ⚠️ 🟢 🟡 🔴) in a list or table. The same icon always marks the same kind of part. Never in code, identifiers, JSON, logs, formal writing, or a short or casual reply, never on every heading or item, and never required. | Hypothesis (L4) | User report, point 2; owner request 2026-10-29 (`temp/re-enhance--communication.md` Task 5) made icons available; the 2026-10-29 simplification returned them from a default to an option, because a default on key headings is the formatting quota the owner's simplification brief §5 rules out. Narrows the addendum's emoji ban: legend markers in a list and a navigation icon on a heading are exempt. Recorded as a deviation. |
+| An emoji point opens every bullet and key heading: one meaning-matched icon, then the words. The same icon always marks the same kind of part, and a mismatched icon is dropped rather than used. Status marks (✅ ❌ ⚠️ 🟢 🟡 🔴) stay for status. Never in code, identifiers, commands, JSON, logs, file paths, formal or legal writing, or a one-line reply. | Hypothesis (L4) | User report, point 2; owner request 2026-10-29 (`temp/re-enhance--communication.md` Task 5) made icons available; the 2026-10-29 simplification returned them from a default to an option; the owner then instructed the same day that an emoji point open each bullet, which outranks that brief's §5. Narrows the addendum's emoji ban a third time: a matched icon plus words on a bullet or heading is the intended form and no longer flags. Recorded as a deviation. Audit §8. |
+| A 44-icon working set ships in `op:visual`, grouped by meaning; `references/emoji-palette.md` holds about 150 by meaning across twelve groups. | Owner instruction (2026-10-29) | Direct request to "build a huge set of emojis to use from". The working set is in `SKILL.md` so it applies without a file read; the catalogue is a reference and costs nothing until read. |
+| Markdown has no text colour. Colour comes from a `diff` fence (red and green), Mermaid `classDef`, or 🟢 🟡 🔴 / ✅ ❌ ⚠️ in a list or table. | Observation | A markdown renderer has no colour span. The rule exists so the skill does not promise what the surface cannot do. |
 | Show change over time as one table row per moment. Offer an interactive version only when the person asks or it is clearly useful. | Hypothesis (L4) | User report, point 4; second report, item 4. The appended offer was removed in Phase 4 and stays removed. |
 | On an explicit artifact request, build one captioned artifact and keep a short markdown answer. The next reply returns to markdown unless the request was standing. | Engineering choice | User instruction, 2026-10-27. |
 
