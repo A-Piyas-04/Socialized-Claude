@@ -74,18 +74,23 @@ def test_repository_passes_its_configured_budgets(report):
     assert report["over_budget"] == []
 
 
-def test_activation_stays_under_the_phase_4_baseline(report):
-    """Restored to "<" on 2026-10-29. Phase 4B set this assertion; the
-    communication-experience upgrade inverted it because its owner-requested
-    presentation rules could not move to an on-demand reference without the risk
-    Phase 4B Option B documented. The communication simplification removed the
-    counting rules, the formatting mandates and the duplicated wording instead,
-    which brought activation back below the Phase 4 baseline with those rules
-    still in SKILL.md. See docs/COMMUNICATION_SIMPLIFICATION_AUDIT.md.
+def test_activation_exceeds_the_phase_4_baseline_by_a_recorded_decision(report):
+    """Inverted again on 2026-10-29, second time. Phase 4B set "<"; the
+    communication-experience upgrade inverted it to ">"; the communication
+    simplification restored "<" by removing the counting rules and the duplicated
+    wording. The owner then asked for an always-on house style (short paragraphs,
+    bullets, an emoji point per bullet, spacious layout, plain language) plus an emoji
+    working set, which must sit in SKILL.md to apply on every reply. That is about 580
+    tokens the simplification's saving did not cover, so activation is above the
+    baseline again. The full emoji catalogue is in references/emoji-palette.md and costs
+    nothing until read. See docs/COMMUNICATION_SIMPLIFICATION_AUDIT.md section 8.
+
+    Restore "<" only by compressing those rules, not by deleting this test and not by
+    moving owner-set rules into a reference that may go unread (Phase 4B Option B).
     """
     activation = rows(report)["activation"]
     assert activation["baseline"] is not None
-    assert activation["tokens"] < activation["baseline"]
+    assert activation["tokens"] > activation["baseline"]
     ceiling = tb.load_budgets()["activation"]["max"]
     assert ceiling is not None
     assert activation["tokens"] <= ceiling
@@ -168,7 +173,10 @@ def test_always_on_core_survives_compaction_reattach(report):
     past = " ".join(report["past_compaction_keep"])
     for heading in ALWAYS_ON:
         assert heading[3:] not in past, heading
-    # Repair and persistence now sit past the 5,000-token re-attach window
-    # (recorded in docs/communication-experience-upgrade.md §2). work-report,
-    # close and Step 3 already did, from the communication-quality recovery.
-    assert not re.search(r"Operation: (Order|Explain|Ground|Introduce|Write|Give|Show|Pitch)", past)
+    # What falls past the 5,000-token re-attach window has grown by round, each time
+    # recorded: repair and persistence in docs/communication-experience-upgrade.md §2,
+    # work-report, close and Step 3 in the communication-quality recovery, and register
+    # in the owner's house-style instruction (docs/COMMUNICATION_SIMPLIFICATION_AUDIT.md
+    # §8), whose always-on rules take the first ~900 tokens on purpose.
+    # The explanation operations that do the teaching must stay inside.
+    assert not re.search(r"Operation: (Order|Explain|Ground|Introduce|Write|Give|Show)", past)

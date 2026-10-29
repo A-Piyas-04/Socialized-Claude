@@ -1,4 +1,4 @@
-# Communication policy modules (v0.8.0)
+# Communication policy modules (v0.9.0)
 
 Reusable communication policy for Socialized-Claude. Three modules:
 
@@ -37,7 +37,7 @@ the skill is built to agree with — not as runtime dependencies.
 
 ## Version history
 
-Policy version `0.8.0` tracks these modules. The skill's own version history is
+Policy version `0.9.0` tracks these modules. The skill's own version history is
 in `CHANGELOG.md`; the baseline before this line of work is the git tag
 `baseline-pre-v1.0.1-communication`.
 
@@ -51,12 +51,13 @@ in `CHANGELOG.md`; the baseline before this line of work is the git tag
 | 0.6.0 | Communication-experience upgrade — semantic icons as navigation aids, architecture diagrams as a named form. |
 | 0.7.0 | Communication priority correction — one planning order, conflicting instructions removed rather than added to. |
 | 0.8.0 | Communication simplification — the accumulated counting rules and formatting mandates removed, the four documentation surfaces reduced to one source, icons returned from a default to an option. |
+| 0.9.0 | The owner's house style — short paragraphs, bullets first, an emoji point on each bullet, spacious layout and plain sentences, always on. Reverses three of 0.8.0's decisions; see the audit §8. |
 
 Each round's reasoning is in `docs/`: `phase-4-implementation.md`,
 `phase-4c-visual-restoration.md`, `communication-recovery.md`,
 `communication-experience-upgrade.md`, `communication-priority-correction.md`,
-and `COMMUNICATION_SIMPLIFICATION_AUDIT.md`. Those reports hold the per-round
-change tables that used to be duplicated here.
+and `COMMUNICATION_SIMPLIFICATION_AUDIT.md`, whose §8 records the house style.
+Those reports hold the per-round change tables that used to be duplicated here.
 
 The behavioural reference for acceptance is `docs/COMMUNICATION_BASELINE.md`.
 

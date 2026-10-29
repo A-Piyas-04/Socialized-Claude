@@ -61,7 +61,8 @@ def test_plugin_skill_is_identical_to_the_claude_ai_skill(repo_root, tmp_path):
     skill_texts = zip_texts(fresh_skill_zip)
     plugin_root = bp.PLUGIN_DIR
     for rel in ("SKILL.md", "references/explanation-methodology.md",
-                "references/treatment-selection.md", "references/explanation-examples.md"):
+                "references/treatment-selection.md", "references/explanation-examples.md",
+                "references/emoji-palette.md"):
         plugin_file = plugin_root / "skills" / "socialized" / rel
         assert plugin_file.is_file(), rel
         assert read(plugin_file) == skill_texts[f"socialized/{rel}"], rel
@@ -103,6 +104,7 @@ EXPECTED_ZIP_ENTRIES = {
     "socialized/skills/socialized/references/explanation-examples.md",
     "socialized/skills/socialized/references/explanation-methodology.md",
     "socialized/skills/socialized/references/treatment-selection.md",
+    "socialized/skills/socialized/references/emoji-palette.md",
 }
 
 
@@ -292,4 +294,5 @@ def test_original_skill_package_still_intact(repo_root):
         "socialized/references/explanation-methodology.md",
         "socialized/references/treatment-selection.md",
         "socialized/references/explanation-examples.md",
+        "socialized/references/emoji-palette.md",
     }

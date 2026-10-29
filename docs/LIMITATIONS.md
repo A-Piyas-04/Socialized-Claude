@@ -246,6 +246,26 @@ the explanation operations (`docs/phase-4-implementation.md`):
   comparison the brief asks for in §1 was not performed. The techniques the brief
   itself names were implemented from its description.
 
+## Owner house style (policy v0.9.0) limitations
+
+- **It reverses part of the simplification by instruction, not by evidence.** The
+  paragraph cap, the bullet default and the emoji default are owner decisions. The
+  arguments in `docs/COMMUNICATION_SIMPLIFICATION_AUDIT.md` §1.2 and §1.4 against
+  thresholds and promoted defaults still stand on their own terms; they were
+  outranked, not refuted.
+- **A two-sentence paragraph cap can fragment a connected argument.** This is the
+  main risk the house style carries. `op:presentation` keeps prose for a single chain
+  of reasoning as the exception, and `whitespace_padding` flags the opposite failure,
+  but nothing offline can tell a well-split explanation from a chopped one.
+- **An emoji on every bullet may stop reading as a signal.** The consistency rule and
+  "drop the icon rather than pick one that does not match" are the guards. The
+  `emoji_structure` flag deliberately no longer fires on the intended form, so it will
+  not catch this. Only reading will.
+- **`SKILL.md` is at the validator's 500-line limit.** There is no headroom. The next
+  change to it has to remove before it adds.
+- **The linter thresholds are a choice, not a finding.** `DENSE_SENTENCES = 4` and
+  `DENSE_PARAGRAPH_WORDS = 55` were set to measure the shipped rule. They never gate.
+
 ## Not in scope for V0
 
 There is no chatbot, API client, proxy, browser extension, or automated UI

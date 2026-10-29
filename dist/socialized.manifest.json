@@ -16,10 +16,11 @@
     "work-report"
   ],
   "zip": "socialized.zip",
-  "zip_sha256": "94060f13533751b8392992e692a947cf903c33f49f6cdffcf2f5663f39fd74f7",
+  "zip_sha256": "8a450e7e376a2b5e593190efc11a6835b3d30dee63f9c3847dbbab3872e213eb",
   "files": {
     "LICENSE": "2729060b9de84d86a30abf9d216dbfecbfd9b952e1c4a2f314f0c9335c7307ab",
-    "SKILL.md": "176dccd67d96e2a7deb13358b0faeddf6c8a4330380a826bb52d865750e1dedf",
+    "SKILL.md": "09cc8b4dbb0d11e160250a3ebe650e81ed24cd9d850cb362336be14c1fc6ed74",
+    "references/emoji-palette.md": "62db5a37a6328be9c99d3239ac14c72378d7bb1b806fae692fb443a39c561642",
     "references/explanation-examples.md": "171e5eaff869aa940ef0fd720ff1fdba037627c2fadf4d1ae2b9da04a9c3d6de",
     "references/explanation-methodology.md": "b23bee527aa392831a08062f6e6b39826d6afa9d1708b6f7dd9fe8a00c276c8f",
     "references/treatment-selection.md": "b6e383af884b7e3b39c3af90bf7e6a20f0c6f968a87ead025982d7314b36c076"

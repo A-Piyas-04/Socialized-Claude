@@ -1,6 +1,6 @@
 # Communication strategies — intent-sensitive guidance
 
-Version 0.8.0. Five strategies for the kind of request, plus how a follow-up is
+Version 0.9.0. Five strategies for the kind of request, plus how a follow-up is
 handled and where the policy stops.
 
 **This file is an index, not a second copy of the policy.** The five strategies

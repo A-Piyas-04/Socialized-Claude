@@ -1,4 +1,4 @@
-"""Communication policy invariants (policy 0.8.0, plugin 0.9.0).
+"""Communication policy invariants (policy 0.9.0, plugin 0.10.0).
 
 This file replaces five round-specific suites — test_refinement_policy.py (Phase 4),
 test_visual_restoration.py (Phase 4C), test_communication_recovery.py (v0.5.0),
@@ -9,9 +9,14 @@ the instruction count rising. See docs/COMMUNICATION_SIMPLIFICATION_AUDIT.md §4
 the inventory of what each dropped assertion covered and where its behaviour is now
 asserted.
 
+Section A was amended on 2026-10-29 by an owner instruction that reverses part of the
+simplification: short paragraphs, bullets, emoji points, spacious layout and plain
+language are now an always-on house style. Two assertions there are inverted on purpose
+and say so in their docstrings. The audit section 8 records the reversal.
+
 What is tested here is what should hold whatever the current wording is:
 
-  A. Nothing is a quota        - no counting rules, no mandatory form
+  A. The house style holds, and no other quota returns
   B. One source per rule       - the modules index the skill, they do not restate it
   C. Rules name actions        - the project's skill-text rule
   D. Behaviour that must survive - accuracy, scope, intent strategies, multi-turn
@@ -80,10 +85,10 @@ def policy_files(repo_root: Path) -> dict[str, str]:
 # A. Nothing is a quota
 # ---------------------------------------------------------------------------
 
-# Each of these shipped at some point between Phase 4C and v0.7.0 and made the
-# model count output elements instead of judging the content (owner brief §2, §5).
+# Thresholds that shipped between Phase 4C and v0.7.0 and made the model count output
+# elements instead of judging the content. The simplification removed them; they stay
+# removed. One cap survives by owner decision, asserted separately below.
 COUNTING_RULES = (
-    "four sentences",
     "80 words",
     "25 words",
     "six words",
@@ -97,7 +102,7 @@ COUNTING_RULES = (
 )
 
 
-def test_no_counting_rule_ships_in_the_skill_or_its_references():
+def test_the_removed_counting_rules_stay_removed():
     for name, text in {"SKILL.md": skill_source(),
                        **{f"references/{p.name}": read(p)
                           for p in (lib.SKILL_DIR / "references").glob("*.md")}}.items():
@@ -106,19 +111,47 @@ def test_no_counting_rule_ships_in_the_skill_or_its_references():
             assert rule not in low, f"{name} still counts: {rule!r}"
 
 
-def test_the_no_quota_statement_is_made_once_up_front():
+def test_the_house_style_is_stated_once_up_front_and_always_on():
+    """Owner instruction, 2026-10-29: short paragraphs, bullets, emoji points, spacing
+    and plain language hold in every substantive reply. This replaces the
+    simplification's "nothing here is a quota" preamble, which read as making these
+    optional too. See the audit section 8.
+    """
     text = skill_source()
-    preamble = text.split("## Scope", 1)[0]
-    assert "Nothing here is a quota" in preamble
-    joined = norm(preamble).lower()
-    for form in ("table", "figure", "heading", "icon", "example", "takeaway"):
-        assert form in joined, form
-    assert joined.count("nothing here is a quota") == 1
+    house = section(text, "## House style: always on")
+    joined = norm(house)
+    assert "standing instruction, not a preference to weigh" in joined
+    for rule in ("Short paragraphs", "Bullets over prose", "An emoji point on each bullet",
+                 "Spacious layout", "Simple words, simple sentences"):
+        assert rule in joined, rule
+    assert "Only an explicit request lifts one" in joined
+    assert "stands until the person changes it" in joined
+    assert text.index("## House style") < text.index("## Operation:")
+    assert "never decides that a figure must exist" in joined
 
 
-# Formatting that must stay conditional: a rule making any of these automatic is
-# the overengineering the owner brief §5 rules out.
-def test_no_form_is_mandatory():
+def test_the_paragraph_cap_is_the_one_intended_threshold():
+    import structural_metrics as sm
+    house = norm(section(skill_source(), "## House style: always on"))
+    assert "Two or three sentences, never more" in house
+    block = norm(op_block(skill_source(), "presentation"))
+    assert "Hold every paragraph to two or three sentences" in block
+    assert "unless the person explicitly asks for long paragraphs" in block
+    # The linter measures the same rule, so drift is observable on a sampled answer.
+    assert sm.DENSE_SENTENCES == 4 and sm.DENSE_PARAGRAPH_WORDS == 55
+
+
+def test_bullets_are_the_default_form_for_multi_point_passages():
+    block = norm(op_block(skill_source(), "presentation"))
+    assert "Reach for a list whenever a passage carries more than one point" in block
+    assert "Keep prose for a single chain of reasoning" in block
+    assert "one idea and one emoji point" in block
+    assert "blank line between every paragraph, list, table, figure" in block
+
+
+def test_content_forms_stay_conditional():
+    """The house style governs layout. Whether an answer needs a table, a diagram, an
+    example or a takeaway at all is still decided by the content (audit section 8)."""
     text = norm(skill_source()).lower()
     for mandate in ("number the headings", "every answer must", "every section must",
                     "every response must", "must contain a table", "must contain a diagram",
@@ -126,19 +159,52 @@ def test_no_form_is_mandatory():
         assert mandate not in text, mandate
 
 
-def test_icons_are_optional_not_a_default():
+def test_emoji_points_are_the_default_on_bullets_and_key_headings():
+    """Inverted on purpose, 2026-10-29. The simplification had just returned icons from a
+    default to an option, because a default on key headings is the formatting mandate the
+    simplification brief section 5 rules out. The owner then asked for an emoji point on
+    each bullet as the house style. A direct owner instruction outranks that brief, and
+    the audit section 8 records the reversal and what it costs. Restore the optional
+    wording only on a new owner decision, not to satisfy section 5.
+    """
     block = norm(op_block(skill_source(), "visual"))
-    assert "Optional, where it genuinely helps" in block
-    assert "Neither is ever required" in block
-    assert "neither belongs on every heading or every item" in block
-    # The v0.6.0/v0.7.0 wordings that made an icon the expected case are gone.
-    low = block.lower()
-    for driver in ("prefer meaning-matched icons", "are the default on key headings",
-                   "by default on the key headings"):
-        assert driver not in low, driver
-    # The vocabulary itself stays available.
-    for icon in ("🧠", "⚙️", "🗄️", "🔄", "📊", "💡", "🛡️", "✅", "❌", "⚠️"):
+    assert "Open every bullet and key heading with a meaning-matched icon" in block
+    # Still a signal, not a bullet character.
+    assert "Use the same icon for the same kind of thing all through one answer" in block
+    assert "Drop the icon rather than pick one that does not match" in block
+    # The exclusions keeping icons out of machine-readable and formal text survive.
+    for excluded in ("code", "identifiers", "commands", "JSON", "logs", "file paths",
+                     "formal or legal writing", "one-line reply"):
+        assert excluded in block, excluded
+    for icon in ("🧠", "⚙️", "🗄️", "🔄", "📊",
+                 "💡", "🛡️", "✅", "❌", "⚠️",
+                 "📡", "🔌"):
         assert icon in block, icon
+    assert "references/emoji-palette.md" in block
+
+
+def test_the_emoji_palette_reference_ships_and_is_reachable():
+    palette = lib.SKILL_DIR / "references" / "emoji-palette.md"
+    assert palette.is_file()
+    text = read(palette)
+    assert "references/emoji-palette.md" in skill_source()
+    assert lib.has_contents_section(text), "a reference over 100 lines needs a Contents section"
+    # The one rule that makes an icon a signal rather than decoration.
+    assert "the same icon means" in norm(text)
+    for group in ("Core concepts", "Mechanism, process and flow", "Data and storage",
+                  "Network, services and messaging", "Code, build and tooling",
+                  "Time, speed and scale", "Problems, risk and security", "Status marks"):
+        assert group in text, group
+
+
+def test_colour_is_the_three_techniques_that_actually_render():
+    """Markdown has no text colour. The skill must not promise what a renderer cannot do."""
+    block = norm(op_block(skill_source(), "visual"))
+    assert "Markdown carries no text colour" in block
+    for technique in ("`diff` fence", "`classDef`", "🟢"):
+        assert technique in block, technique
+    palette = norm(read(lib.SKILL_DIR / "references" / "emoji-palette.md"))
+    assert "Markdown has **no text colour**" in palette
 
 
 def test_visuals_have_no_quota_and_no_cap():
@@ -175,7 +241,7 @@ def test_policy_modules_index_the_skill_rather_than_restating_it(repo_root):
     comms = repo_root / "communication"
     for name in ("core.md", "strategies.md", "controls.md"):
         text = read(comms / name)
-        assert "Version 0.8.0" in text, name
+        assert "Version 0.9.0" in text, name
         assert "index, not a second copy" in text, name
         # Every module points back at the skill as the source.
         assert "SKILL.md" in text, name
@@ -241,7 +307,10 @@ def test_step_3_asks_questions_about_the_draft_not_about_the_rules():
 
 
 def test_step_3_stayed_short():
-    """It grew one line per round through v0.6.0; v0.7.0 shrank it and this round again."""
+    """It grew one line per round through v0.6.0; v0.7.0 and the simplification shrank
+    it to seven. The house style added two (paragraph length and icon matching) and
+    removed one, so the ceiling is nine. It is a brake on the per-round growth that made
+    Step 3 a checklist, not a target."""
     assert len(step_3_checks(skill_source())) <= 9
 
 
@@ -361,6 +430,20 @@ def test_conversational_register_is_an_instruction_not_only_a_check():
         assert banned in plain, banned
 
 
+def test_plain_language_names_the_substitutions_to_make():
+    """Owner instruction: simple sentences and simple grammar, kept at all cost. A rule
+    that only says "write simply" is satisfiable by writing exactly as before, so the
+    rule names the swaps."""
+    plain = norm(op_block(skill_source(), "plain"))
+    assert "Keep the sentence to one clause, or two when the second is short" in plain
+    for swap in ('"use" not "utilise"', '"in order to"', '"has the ability to"'):
+        assert swap in plain, swap
+    assert "Cut a phrase where a word will do" in plain
+    # Step 3 asks for the swap too, folded into the final register check rather than
+    # added as an eleventh line.
+    assert "no formal phrase" in norm(step_3(skill_source()))
+
+
 def test_multi_turn_operations_survive():
     text = skill_source()
     for op, marker in (("repair", "answer only that gap"),
@@ -400,12 +483,20 @@ def test_both_installs_carry_the_same_skill():
     assert bp.check() == [], "run: python scripts/build_plugin.py"
 
 
-def test_activation_fell_back_within_the_compaction_relevant_range():
-    """The simplification removed text; activation must not have grown doing it."""
+def test_activation_stays_inside_its_recorded_ceiling():
+    """The simplification took activation below the Phase 4 baseline (5966). The owner's
+    house style put it back above, because the always-on paragraph, bullet, emoji-point,
+    spacing and plain-language rules have to sit in SKILL.md to be always on. The full
+    emoji catalogue went to references/emoji-palette.md, which costs nothing until read.
+    The ceiling in scripts/token_budgets.json is the gate; the baseline comparison is
+    reported, not asserted. Audit section 8.
+    """
     report = tb.build_report(tb.HeuristicCounter(), tb.load_budgets(), tb.load_baseline())
     activation = next(r for r in report["components"] if r["id"] == "activation")
-    assert activation["baseline"] is not None
-    assert activation["tokens"] < activation["baseline"], (
-        "the simplification is expected to leave activation below the Phase 4 baseline")
     ceiling = tb.load_budgets()["activation"]["max"]
+    assert ceiling is not None
     assert activation["tokens"] <= ceiling
+    # The house style must be inside the 5,000-token compaction re-attach window.
+    skill = skill_source()
+    counter = tb.HeuristicCounter()
+    assert counter.count(skill.split("## House style", 1)[0]) < 1000
