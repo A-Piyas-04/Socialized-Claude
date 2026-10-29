@@ -133,6 +133,46 @@ These are confirmed by diff to touch no presentation rule:
 - Phase 4B's moving of the "each figure pays for itself" argument to
   `treatment-selection.md`. That text is an argument, not a rule.
 
+### 2.9 Information architecture (Task 2): already covered, no new rule
+
+The brief names Task 2 — distinguishing core, supporting and optional information,
+establishing core understanding before substantial optional detail, and not
+congesting one paragraph with several independently important explanations — as its
+highest-priority task. This recovery adds **no new rule for it**, because its
+substance is already distributed across rules that ship and are structurally tested.
+
+**Verified.** The brief's three asks each map to an existing instruction:
+
+- *Core before optional ordering.* `op:sequencing` orders ideas by dependency and
+  puts the main idea and its prerequisites before consequences; `op:presentation`
+  says "Put the main point first in its section, and gather minor caveats into one
+  short unit at its end."
+- *A skippable layer for optional detail.* `op:presentation`'s **Deeper:** /
+  **For implementers:** blockquote defers variants, tuning and one system's edge
+  cases, "keeping the narrative complete for a reader who skips it" (named by R7).
+- *One idea per unit, not several per paragraph.* `op:presentation`'s "Give each
+  idea its own unit… Start a new unit when the idea changes" is exactly the brief's
+  critical rule, and `op:plain`'s one-claim / two-clause limits enforce it at the
+  sentence level. Causal relationships are preserved by `op:mechanism` (state the
+  chain) and the list-item link rule.
+
+The brief itself frames these as distinctions that "guide information selection and
+ordering internally" and states "this does not mean every answer must have three
+sections", so a literal core/supporting/optional tier would risk the template shape
+Task 8 forbids.
+
+**What this recovery did for Task 2 indirectly.** The dense-paragraph fault (§2.4)
+is the observable symptom of congested information. R5 (state each assumption once,
+not as a clause on every sentence) removes the main driver of that density without a
+new architecture rule. R8 (a demonstration stage in the learnable order) and R9
+(trace the example to the behaviour) sharpen the core-before-detail sequence.
+
+**Not done.** No explicit three-tier rule, because adding one would cost scarce
+activation headroom (§4) for substance already present, and the owner's three
+observations named table cells, figure/prose redundancy and scoping — not a missing
+tiering rule. Recorded as a candidate if a later owner test reports core and optional
+detail interleaved despite the rules above.
+
 ---
 
 ## 3. Changes
@@ -172,6 +212,8 @@ bullet.
 - No visual quota, mandatory figure, quiz, takeaway, preview or template.
 - No change to headings or numbering (§2.7), and no change to the mechanism op's
   causal depth (§2.4).
+- No explicit core/supporting/optional tier for Task 2 (§2.9); its substance already
+  ships in `op:sequencing`, `op:presentation` and `op:plain`.
 - No rule moved into a reference file.
 
 ## 4. Token budget
