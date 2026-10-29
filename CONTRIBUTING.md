@@ -111,14 +111,63 @@ request.
 
 ## Pull requests
 
-1. Branch from `main`.
-2. Make the change, rebuild packages if you touched the skill.
-3. `python scripts/verify.py` — green.
-4. Say in the description whether behaviour changed, and which regression in the inventory the
+You do not need write access to this repository. Every change, the maintainer's included,
+reaches `main` through a pull request:
+
+```text
+Public GitHub Repository
+          │
+          ▼
+     Contributor forks
+          │
+          ▼
+  Creates a feature branch
+          │
+          ▼
+   Implements changes
+          │
+          ▼
+ Runs project validation
+          │
+          ▼
+    Opens Pull Request
+          │
+          ▼
+    GitHub Actions CI
+          │
+          ▼
+  Maintainer reviews PR
+          │
+     ┌────┴────┐
+     │         │
+  Approved   Rejected
+     │         │
+     ▼         ▼
+   Merge    No merge
+```
+
+1. Fork `A-Piyas-04/Socialized-Claude` on GitHub and clone your fork.
+2. Create a feature branch from `main`: `git switch -c my-change`.
+3. Make the change, and rebuild the packages if you touched the skill.
+4. Run the validation gate until it is green:
+
+   ```bash
+   python scripts/verify.py
+   ```
+
+5. Push the branch to your fork and open a pull request against `main`.
+6. Say in the description whether behaviour changed, and which regression in the inventory the
    change touches, if any.
 
-CI runs the same gate on pull requests, on Python 3.11 and 3.13, with `contents: read`, no
-secrets, and no publishing — so it runs unchanged on a fork.
+CI runs the same gate on every pull request, on Python 3.11 and 3.13, with `contents: read`, no
+secrets, and no publishing — so it runs unchanged on a fork. GitHub may ask the maintainer to
+approve the first workflow run from a new contributor before it starts.
+
+`main` is protected: it accepts changes only through a pull request whose two CI jobs,
+`offline validation (python 3.11)` and `offline validation (python 3.13)`, have passed, and it
+refuses force pushes and deletion. [`.github/CODEOWNERS`](.github/CODEOWNERS) requests a review
+from the maintainer on every pull request. The maintainer decides whether to merge; a pull
+request that is not approved is closed without merging.
 
 ## Things that are deliberately not accepted
 

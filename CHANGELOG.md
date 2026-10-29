@@ -2,6 +2,16 @@
 
 ## Unreleased
 
+### Contribution protection
+- `.github/CODEOWNERS` names `@A-Piyas-04` as owner of every path, so GitHub requests the
+  maintainer's review on each pull request.
+- `CONTRIBUTING.md` documents the fork, branch, validate, pull request, CI and review workflow;
+  contributors need no write access.
+- `main` is protected on GitHub by a repository ruleset: changes arrive by pull request, both
+  CI jobs must pass, and force pushes and deletion are blocked. No approval count is required,
+  so the sole maintainer can still merge their own pull requests.
+- No package, version, skill text or communication policy changed.
+
 ### MIT licence (plugin v0.5.2)
 - The project is released under the MIT License, `Copyright (c) 2026 Ahnaf Shahriar Pias`.
   The full, unmodified text is in the new root `LICENSE`.
