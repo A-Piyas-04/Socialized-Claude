@@ -1,4 +1,4 @@
-# Communication policy modules (v0.4.0)
+# Communication policy modules (v0.5.0)
 
 Reusable communication policy for Socialized-Claude. Three modules:
 
@@ -16,11 +16,13 @@ and index** that policy into the three reusable surfaces the Phase 1 brief asked
 for. Each rule here names the SKILL.md operation or step that enforces it, so the
 modules stay a map of the skill rather than a second, divergent copy of it.
 
-Policy version `0.4.0` tracks these modules (`0.1.0` was Phase 1; `0.2.0` added the
+Policy version `0.5.0` tracks these modules (`0.1.0` was Phase 1; `0.2.0` added the
 Phase 3 across-turns guidance; `0.3.0` added the Phase 4 communication refinements —
 selective quizzes, previews, and visuals, and tighter epistemic scoping; `0.4.0`
-restores the visual-coverage and paragraph-density rules Phase 4 removed, keeping
-the selective quiz, preview, and demo-offer behaviour). The
+restored the visual-coverage and paragraph-density rules Phase 4 removed, keeping
+the selective quiz, preview, and demo-offer behaviour; `0.5.0` is the pre-release
+communication-quality recovery — where information belongs between a table, a
+figure and the prose beside it). The
 skill's own version history stays in
 `CHANGELOG.md`; the baseline before this work is the git tag
 `baseline-pre-v1.0.1-communication`.
@@ -118,6 +120,24 @@ operation, marker, variant or module was added, so the modules stay at v0.4.0.
 | Section separator | Soften | The horizontal rule goes where an answer of three or more sections **turns to a new topic**. |
 | Accuracy | Strengthen in place | `core.md` principle 6 and the skill's accuracy rules name the settings a guarantee depends on, state an assumed workload or scale the person has not given, and carry no database's or broker's behaviour over to another unchecked. |
 | Everything else | Keep | The comparison-table cue, the Mermaid grammar, paragraph density, heading rules, the Step 3 scannability and decoration checks, and the form-from-content line are unchanged. Mandatory quizzes, takeaways, previews, unrequested artifacts and templates stay absent. |
+
+## Change summary (v0.5.0 — communication-quality recovery)
+
+The owner rejected v0.5.2's communication quality before public release, from three
+real answers: database replication, an architecture decision, and CPU cache
+coherence. The regression analysis is in `docs/communication-recovery.md`; the
+behavioural reference is `docs/COMMUNICATION_BASELINE.md`. No operation, marker,
+variant or module was added.
+
+| Area | Action | Result |
+|---|---|---|
+| Table cells | Refine | A cell keeps the verdict and its deciding reason; a condition, a second reason, or an argument goes in a list under the table. Sentences in cells stay allowed; no word cap. |
+| Figure versus text | Refine | A diagram shows who acts in what order, a state table what each step changes, and the text after them why. Steps or prose that only retell the arrows become that why. A walkthrough in words stays when the reader needs both. |
+| Decisions | Refine | Strategy D leads with the recommendation and the reason that decides it, then the tradeoffs, and names what would make a rejected option worth adopting. |
+| Product-specific internals | Refine | Teach the general mechanism first, then label one system's own version. |
+| Assumptions | Refine | State the scale or setting an answer assumes once, where it first matters, and what would change the answer. |
+| Depth layer and examples | Clarify | Specialist depth is named (variants, tuning, one system's edge cases); the running example is traced to the moment the behaviour shows. |
+| Everything else | Keep | All Phase 2–4C behaviour, including selective quizzes, previews and demo offers, opt-in artifacts, and the visual preference with its escape clause. |
 
 ## What this does not establish
 

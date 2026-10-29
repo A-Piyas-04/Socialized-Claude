@@ -24,7 +24,8 @@ add nothing.
 - Follow-up confusion: repairing one link
 <!-- op:visual -->
 - Visual forms: flow, contrast, proportion, change over time, order in time,
-  differentiated parts, two states, specimens, scannable tables, a checkable
+  differentiated parts, two states, specimens, scannable tables, a decision table
+  with its reasoning underneath, a figure and the text beside it, a checkable
   question
 - Restraint: no visual, and no artifact unless asked
 - Opt-in: one artifact when the person asks
@@ -392,6 +393,46 @@ dimension.
 |---|---|---|
 | Write-through | slow | none |
 | Write-back | fast | lost writes |
+
+### A decision table with its reasoning underneath
+
+**Weak:** a "Why" column whose cells each hold a paragraph: the workload, the
+alternative, the operational cost and the exception, all in one cell.
+
+**Better:** each cell holds the verdict and the one reason that decides it
+(✅ use, ⚠️ later, ❌ skip). The conditions sit in a list under the table, one
+item per row that needs one.
+
+| Option | Use here? | Deciding reason |
+|---|---|---|
+| In-process cache | ✅ yes | no network hop |
+| Redis | ⚠️ later | a second service to run |
+| No cache | ❌ no | the slow query repeats |
+
+- **Redis:** worth adding once a second app instance needs a shared cache, or
+  entries must survive a restart.
+- **No cache:** acceptable if the slow query turns out to be rare; measure it
+  before deciding.
+
+### A figure and the text beside it
+
+**Weak:** a sequence diagram of a cache miss, then four numbered steps that
+repeat its four arrows.
+
+**Better:** the diagram carries the order, and the sentences after it carry what
+the arrows cannot show.
+
+```mermaid
+sequenceDiagram
+  Client->>Cache: get user 42
+  Cache-->>Client: miss
+  Client->>Database: read user 42
+  Client->>Cache: store user 42
+```
+
+The client fills the entry, not the cache. So two clients that miss at the same
+moment both read the database, which is why some caches put a lock around the
+fill.
 
 ### A question the reader can check
 

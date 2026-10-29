@@ -8,9 +8,9 @@
     "After an intentional change: rebuild the packages, bump plugin_version, then run",
     "python scripts/version_lock.py --update."
   ],
-  "plugin_version": "0.5.2",
+  "plugin_version": "0.6.0",
   "packages": {
-    "dist/socialized.zip": "fb2c24c22892371f80a5c9c380087777f5fe30f015de7692e57651ff0faa72d2",
-    "dist/socialized-claude-plugin.zip": "984f0abc7c936aa238d8f7ad5975d8b535b17f11b48fc0a3e604b46f66fc4201"
+    "dist/socialized.zip": "9714eb5b7a403ca8c9d2003753809fe2c1be2a6f81b1267a8148d1dc8210d7a7",
+    "dist/socialized-claude-plugin.zip": "749c904feb1858fbf7ef283ac7bc1c5d897ea37effe9bec1294be8692941bad7"
   }
 }

@@ -375,7 +375,7 @@ def test_treatment_selection_agrees_with_the_calibrated_visual_rule():
 def test_policy_modules_agree_with_the_restored_rules(repo_root):
     comms = repo_root / "communication"
     for name in ("core.md", "strategies.md", "controls.md"):
-        assert "Version 0.4.0" in read(comms / name), name
+        assert "Version 0.5.0" in read(comms / name), name
     controls = norm(read(comms / "controls.md"))
     assert "Prefer a visual for an idea whose shape" in controls
     assert "keep the support even across the answer" in controls

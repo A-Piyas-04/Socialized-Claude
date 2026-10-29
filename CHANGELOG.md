@@ -2,6 +2,43 @@
 
 ## Unreleased
 
+### Communication-quality recovery (policy v0.5.0, plugin v0.6.0)
+- Public release is paused: the owner rejected v0.5.2's communication quality on three
+  real prompts (database replication, an architecture decision, CPU cache coherence).
+  Regression analysis in `docs/communication-recovery.md`; the three prompts and the
+  desired behaviour in the new `docs/COMMUNICATION_BASELINE.md`.
+- `op:presentation`: a table cell keeps the verdict and its deciding reason; a
+  condition, a second reason or an argument goes in a list under the table. Sentences
+  in cells stay allowed, with no word cap. The causal-link rule no longer routes a
+  table's "because" into the cell. Specialist depth is named: variants, tuning, one
+  system's edge cases.
+- `op:visual`: a figure and its text get different jobs. The diagram shows who acts
+  in what order, a state table what each step changes, and the text after them why.
+  Steps or prose that only retell the arrows become that why, unless the reader needs
+  the steps in words as well.
+- Strategy D leads with the recommendation and the reason that decides it, then the
+  tradeoffs, and names what would make a rejected option worth adopting.
+- Accuracy rules: teach the general mechanism first, then label one system's own
+  version. State an assumed scale once, where it first matters, and say what would
+  change the answer. Every Phase 4 and 4C accuracy requirement is kept.
+- `op:sequencing` adds a concrete demonstration to the learnable order (still "only
+  the stages this answer needs"). `op:examples` traces the case to the moment the
+  behaviour shows. Step 3 checks a cell's argument and the text after a figure.
+- References: two new weak-and-better pairs (a decision table with its reasoning
+  underneath; a figure and the text beside it). New failure modes: a diagram retold in
+  steps, one system taught as the rule, and qualifiers on every sentence. "A congested
+  table" no longer forbids sentences, which had contradicted the 4C calibration.
+- `communication/` modules move to 0.5.0. Still 12 operations and 15 variants. No
+  quiz, takeaway, preview, visual quota or template is reintroduced.
+- Activation is 5,543 → 5,760 tokens (legacy) / 5,588 → 5,813 (heuristic).
+  `activation.max` is raised 5,600 → 5,900 as a regression ceiling; the target stays
+  5,000. `op:work-report` (partly), `op:close` and Step 3 now sit past Claude Code's
+  5,000-token compaction re-attach.
+- Plugin `version` 0.5.2 → 0.6.0. Both archives, both manifests, the plugin tree and
+  `scripts/version_lock.json` were regenerated. New suite
+  `tests/test_communication_recovery.py` (19 tests). Suite 584 passed, 2 skipped.
+- Not verified: no answer was regenerated. Behavioural acceptance is the owner's.
+
 ### Contribution protection
 - `.github/CODEOWNERS` names `@A-Piyas-04` as owner of every path, so GitHub requests the
   maintainer's review on each pull request.

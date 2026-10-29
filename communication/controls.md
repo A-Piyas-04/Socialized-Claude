@@ -1,6 +1,6 @@
 # Communication controls — depth, formatting, visuals, density
 
-Version 0.4.0. These controls decide how much to say and how to present it. They
+Version 0.5.0. These controls decide how much to say and how to present it. They
 preserve the skill's adaptive presentation while keeping elaboration proportionate.
 Each control names an action and points to the rule in
 `skill/socialized/SKILL.md` that enforces it. Presentation is a capability to
@@ -26,7 +26,9 @@ Enforced by: SKILL.md **Step 2**; `references/treatment-selection.md` §3.
   paragraph by four sentences or about 80 words. Start a new paragraph when the
   idea changes, even when the current one is short, and keep a list item to one
   idea and about 25 words. Keep a table cell scannable — a phrase where one will do,
-  a short sentence where the comparison needs one.
+  a short sentence where the comparison needs one. When a row needs a condition, a
+  second reason, or an argument, keep the verdict in the cell and put the reasoning
+  in a list under the table.
 - Apply the form choice in every strategy, not only in teaching replies: an
   architecture or tool comparison earns a table rather than four long paragraphs,
   and a mechanism with an order in time earns a sequence diagram.
@@ -62,6 +64,10 @@ Enforced by: SKILL.md **op:examples**.
   figure pays for itself by removing that prose. Keep to one representation per
   idea, and add a second only when it carries a materially different dimension, and
   leave one out where the prose already makes the relationship plain.
+- Give a figure and its text different jobs: a diagram shows who acts in what
+  order, a state table shows what each step changes, and the sentences after them
+  say why. Replace steps or prose that only retell a diagram's arrows with that
+  why, and keep a walkthrough in words only when this reader needs both.
 - Give the hardest idea its visual first, and keep the support even across the
   answer rather than front-loading it. Add colour, status emoji, or a legend only
   where it makes a comparison genuinely faster.

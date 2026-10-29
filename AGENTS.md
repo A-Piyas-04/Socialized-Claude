@@ -246,3 +246,13 @@ needs to decide. No progress narrative.
  deletion. CODEOWNERS review is not required for the same reason; `.github/CODEOWNERS` still
  requests it. The bypass list is empty; the owner keeps admin and can edit the ruleset.
  No package bytes changed, so the version stays 0.5.2.
+- Communication recovery (user, 2026-10-29): public release paused until three owner-run
+ prompts (replication, an architecture decision, cache coherence) read well. Fixed in place,
+ no new operation: a table cell keeps the verdict and the reasoning goes under the table (no
+ word cap, sentences still allowed); a figure shows what happens and its text says why;
+ Strategy D leads with the recommendation; one system's internals are labelled after the
+ general mechanism; an assumption is stated once. Headings and numbering were left alone
+ because no observation named them. `activation.max` 5,600 → 5,900 (5,760 legacy / 5,813
+ heuristic). Policy 0.5.0, plugin 0.6.0. Work is on `recovery/communication-quality`, unmerged.
+ `docs/COMMUNICATION_BASELINE.md` is the behavioural reference; behavioural acceptance is
+ the owner's.

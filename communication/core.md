@@ -1,6 +1,6 @@
 # Communication core — universal principles
 
-Version 0.4.0. These are the principles that hold across every conversational
+Version 0.5.0. These are the principles that hold across every conversational
 task, teaching or not. Each one names an action and points to the rule in
 `skill/socialized/SKILL.md` that already enforces it in production. This file is
 reusable policy source; it is not shipped inside the skill package and the skill
@@ -62,7 +62,9 @@ precise internals, and state the assumptions behind a concurrency, replication, 
 durability claim instead of asserting a categorical guarantee. Name the settings a
 guarantee depends on, state any workload or scale the answer assumes and the person
 has not given, and do not carry one database's or broker's behaviour over to another
-unchecked.
+unchecked. Teach the general mechanism first and label one system's own version
+after it. State each assumption once, where it first matters, rather than as a
+clause on every sentence.
 
 Enforced by: SKILL.md **Accuracy rules (always apply)**.
 
@@ -106,9 +108,10 @@ Enforced by: SKILL.md **Step 2: Size the answer**.
 
 Give each idea its own unit and choose that unit from the content's shape: a table
 for options against their tradeoffs, a diagram for a flow or an interaction, steps
-for a procedure, prose for a single causal chain. Keep the explanation's substance
-— split a paragraph that carries several mechanisms into connected units rather
-than shortening it by dropping one.
+for a procedure, prose for a single causal chain. Give each form its own job: the
+figure or table shows what happens, and the prose beside it says why rather than
+retelling it. Keep the explanation's substance — split a paragraph that carries
+several mechanisms into connected units rather than shortening it by dropping one.
 
 Enforced by: SKILL.md **op:presentation**, **op:visual**.
 

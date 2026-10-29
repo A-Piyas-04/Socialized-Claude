@@ -10,7 +10,7 @@ repository cannot make it.
 
 Per-phase detail lives in `docs/phase-3-implementation.md`,
 `docs/phase-4-implementation.md`, `docs/phase-4b-token-efficiency.md` and
-`docs/phase-4c-visual-restoration.md`. This page is the roll-up, and the place to add
+`docs/phase-4c-visual-restoration.md` and `docs/communication-recovery.md`. This page is the roll-up, and the place to add
 a row when a new regression is found.
 
 Run everything here with `python scripts/verify.py` (see `docs/VALIDATION.md`).
@@ -77,6 +77,19 @@ Run everything here with `python scripts/verify.py` (see `docs/VALIDATION.md`).
 | P4C-05 | Depth cut instead of split when an answer gets long | `op:presentation`, Step 3 | `test_visual_restoration.py::test_technical_depth_is_preserved_by_splitting_not_cutting` | Structurally tested |
 | P4C-06 | `treatment-selection.md` or the `communication/` modules drifting from the skill | reference and module text | `test_visual_restoration.py::test_treatment_selection_agrees_with_the_calibrated_visual_rule`, `::test_policy_modules_agree_with_the_restored_rules`, `::test_policy_readme_records_the_regression_and_the_fix` | Structurally tested |
 | P4C-07 | Whether the calibrated preference produces the right number of visuals for a real reader | — | none possible offline; the calibration itself came from live tests | Observable only in conversation |
+
+## Communication-quality recovery (policy v0.5.0, plugin v0.6.0)
+
+Found by the owner in three real v0.5.2 answers; see `docs/COMMUNICATION_BASELINE.md`.
+
+| # | Regression | Policy source | Protection | Status |
+|---|---|---|---|---|
+| CR-01 | Table cells that each hold a paragraph of arguments | `op:presentation` table-cell rule, Step 3 | `test_communication_recovery.py::test_table_rows_keep_the_verdict_and_move_the_argument_under_the_table`, `::test_causal_links_are_no_longer_routed_into_table_cells`, `::test_table_cells_still_have_no_absolute_word_limit` | Structurally tested |
+| CR-02 | A diagram followed by numbered steps or prose that retell its arrows | `op:visual` figure-versus-text rule, Step 3 | `test_communication_recovery.py::test_figure_and_text_have_different_jobs`, `::test_retelling_becomes_reasons_without_banning_a_walkthrough` | Structurally tested |
+| CR-03 | One database's internals taught as how every database works | accuracy rules | `test_communication_recovery.py::test_general_mechanism_precedes_a_labelled_system_version` | Structurally tested |
+| CR-04 | A decision answer that buries the recommendation inside the tradeoffs | Strategy D | `test_communication_recovery.py::test_decisions_lead_with_the_recommendation` | Structurally tested |
+| CR-05 | An assumption restated on every sentence until paragraphs go dense | accuracy rules | `test_communication_recovery.py::test_assumed_scale_is_stated_once_with_what_would_change_the_answer` | Structurally tested |
+| CR-06 | Whether the three prompts now produce the desired answers | — | none possible offline; the owner reruns the prompts in `docs/COMMUNICATION_BASELINE.md` | Observable only in conversation |
 
 ## Phase 5 — the packages and metadata that carry all of the above
 

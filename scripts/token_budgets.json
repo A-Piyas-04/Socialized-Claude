@@ -7,9 +7,9 @@
       "why": "Agent Skills overview: Level 1 metadata costs about 100 tokens per skill and sits in context on every turn while the skill is enabled."
     },
     "activation": {
-      "max": 5600,
+      "max": 5900,
       "target": 5000,
-      "why": "max: regression ceiling about 2% above the Phase 4C size, so growth is a deliberate decision. Raised from 5500 in Phase 4C to pay for the restored visual-coverage, paragraph-density and form-selection rules (see docs/phase-4c-visual-restoration.md §5). target: the Agent Skills overview puts Level 2 instructions under 5k tokens, and Claude Code re-attaches only the first 5,000 tokens of an invoked skill after auto-compaction."
+      "why": "max: regression ceiling about 2% above the current size, so growth is a deliberate decision. Raised from 5500 in Phase 4C to pay for the restored visual-coverage, paragraph-density and form-selection rules (see docs/phase-4c-visual-restoration.md §5), and from 5600 in the communication-quality recovery to pay for the table-cell, figure-versus-text and product-scoping rules (see docs/communication-recovery.md §4). target: the Agent Skills overview puts Level 2 instructions under 5k tokens, and Claude Code re-attaches only the first 5,000 tokens of an invoked skill after auto-compaction."
     },
     "ref:explanation-examples.md": {
       "max": null,

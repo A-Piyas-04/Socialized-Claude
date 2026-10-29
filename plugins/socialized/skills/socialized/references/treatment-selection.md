@@ -40,8 +40,10 @@ specific gap it fills for this reader.
   as the ideas earn and leave one out where the prose already makes the relationship
   plain. Keep to one representation per idea, and add a second only when it carries
   a materially different dimension. Spend the first one on the hardest idea, and
-  keep the support even across the answer rather than front-loading it. Render it as
-  markdown. Build an artifact only when the person explicitly asks for one.
+  keep the support even across the answer rather than front-loading it. Give the
+  figure and its text different jobs: the figure shows what happens and in what
+  order, and the text says why. Render it as markdown. Build an artifact only when
+  the person explicitly asks for one.
 - **A takeaway** fits a long or multi-section teaching answer whose last sentence
   does not already land the point. A check question, with its answer, fits only
   when the person asks to practise or be tested, the exchange is a tutorial, or
@@ -129,8 +131,10 @@ produced these failures. The rules in `SKILL.md` exist to prevent them.
 - **Effort that decays.** The first screen gets spacing and figures, and the
   back half reverts to dense paragraphs. Give the last section the treatment of
   the first.
-- **A congested table.** Sentences in cells, more than four columns, or a header
-  that names nothing. Shorten the cells and move the rest to a list.
+- **A congested table.** An argument in a cell (a condition, a second reason, an
+  exception), more than four columns, or a header that names nothing. A short
+  sentence in a cell is fine. Keep the verdict in the cell and move the reasoning
+  to a list under the table.
 - **A bold line for a heading.** A bold phrase on its own line that announces a
   section. Use `##` or `###`.
 - **A specimen left inline.** Sample data, a snippet, or an output folded into a
@@ -143,6 +147,10 @@ produced these failures. The rules in `SKILL.md` exist to prevent them.
   made obvious, or a second figure in a section that already has one.
 - **A visual on top of the same prose.** The sentences that describe the shape
   stay after the figure. Delete them once the figure carries them.
+- **A diagram retold in steps.** Numbered steps or a paragraph that walk the
+  arrows the figure just showed. Use that text for why each step happens and what
+  would break; keep a walkthrough only when this reader needs the steps in words
+  as well.
 - **An uncaptioned figure.** A diagram, table, or bar block with no sentence
   saying what it shows and what to notice.
 - **An unrequested artifact.** An HTML, SVG, or interactive file when the
@@ -168,5 +176,11 @@ produced these failures. The rules in `SKILL.md` exist to prevent them.
   sections. Carry it into every section that teaches.
 - **Motivation given once.** The obvious approach and its failure shown for the
   first mechanism only. Repeat the move for each one.
+- **One system taught as the rule.** One product's internals (a database's log
+  format, a broker's acknowledgement mode) presented as how the whole category
+  works. Teach the general mechanism, then label that system's version.
+- **Qualifiers on every sentence.** The same assumption or setting restated as a
+  clause in each sentence, until the mechanism is hard to follow. State it once,
+  where it first matters.
 - **Over-expansion.** Every operation applied to every answer. The goal is an
   answer that is easier to understand, not one that is longer.
