@@ -684,6 +684,54 @@ All four follow-up fixes held. What remains:
 **Acceptance:** no worked example is a heading-less prose block, except the ones that
 show "a short answer stays short".
 
+#### Status (2026-11-02): ✅ done
+
+✅ The acceptance holds. The only "better" answer without a layout is the follow-up
+repair, which stays short on purpose. The Visual forms pairs show one form each.
+
+**Your two decisions:**
+
+- **Glosses:** a gloss of six words or fewer, in parentheses, does not count toward
+  the 50-word paragraph ceiling. The skill says so, and `structural_metrics` counts
+  that way.
+- **Ablation stays clean:** the gold answers ship only in the full build. The
+  rewritten "better" answers carry the layout but no 🙋, 🧠, 🎯 or 🧪 callouts.
+
+**What changed:**
+
+- **New `references/layout-exemplars.md`:** three complete gold answers (replicas,
+  monolith, cache coherence), with a pointer line in `SKILL.md`. One marker block
+  needs all six shape operations, so no partial build carries the answers.
+- **`explanation-examples.md`:** six "better" answers are rewritten as complete,
+  fenced answers with a title, `---`, a two-sentence opener, a map, `##` sections
+  and a visual where the content has a shape. They cover connection pools, hash
+  tables, the derivative, dividing by a fraction, the pressure cooker and debounce.
+- **Linter heuristics:**
+  - short glosses are not counted toward paragraph density;
+  - a callout is measured unit by unit, so a 🧪 check is no longer dense by design;
+  - a bold label that opens a callout line no longer counts as emphasis.
+  - On round 4, the replicas flags fell from six to three, and the monolith flags
+    from six to five. The flags that remain are real.
+- **Baseline:** in `research/baseline_structural_metrics.json`, the immunology/base
+  answer lost one `dense_paragraph` flag (four to three). The structural fixtures
+  are unchanged.
+- **Prompts:** `layout_cache` is added to `evaluation/layout_prompts.json`.
+
+**Tests:** `tests/test_examples_shape.py` checks four things.
+
+- All nine answers pass both linters with zero flags.
+- The gold answers fill every slot.
+- Each "better" answer has the layout and no callouts.
+- The gold answers ship only in the full build.
+
+The gloss allowance is tied to `GLOSS_MAX_WORDS`.
+
+**Budget:** the body is still 480 lines. The pointer line was paid for by
+shortening two Reference files entries.
+
+**Not verified:** whether claude.ai answers become more consistent, for example the
+missing title line in round 4's replicas answer.
+
 ---
 
 ### 🧩 Phase 9 — Close the real gaps

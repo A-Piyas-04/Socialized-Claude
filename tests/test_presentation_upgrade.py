@@ -67,6 +67,8 @@ RULES = [
     (7, "question slot", "conversational", ["**Question:** at least one"]),
     (7, "decision answers ask too", "conversational", ["Use this for teaching and decision answers"]),
     (7, "separator row stays plain", None, ["keep the `|---|` row plain"]),
+    (8, "exemplar pointer", None, ["references/layout-exemplars.md"]),
+    (8, "glosses outside the ceiling", "presentation", ["not counting a gloss of six words or fewer"]),
     (7, "analogy slot", "examples", ["**Analogy:** one"]),
     (7, "scenario after the answer", "examples", ["first section after the answer"]),
     (7, "gloss slot", "terms", ["**Terms:** a short gloss"]),
@@ -234,6 +236,12 @@ def test_paragraph_ceiling_matches_the_dense_paragraph_gate():
     assert match, "the paragraph ceiling must state sentences and words"
     assert sm.DENSE_SENTENCES == numbers[match.group(1)] + 1
     assert sm.DENSE_PARAGRAPH_WORDS == int(match.group(2))
+
+
+def test_gloss_allowance_matches_the_metric():
+    match = re.search(r"not counting a gloss of (\w+) words or fewer", norm(skill_text()))
+    assert match, "the paragraph ceiling must state the gloss allowance"
+    assert sm.GLOSS_MAX_WORDS == {"five": 5, "six": 6, "seven": 7}[match.group(1)]
 
 
 def test_table_width_rule_matches_both_linters():

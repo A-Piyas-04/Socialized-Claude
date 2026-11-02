@@ -29,6 +29,49 @@ def test_fixture_matches_shared_expected_output(name):
     assert m(name) == EXPECTED[name]["expected"]
 
 
+GLOSSED_OPENER = (
+    "Keep the monolith (one app, deployed as one unit), organize its insides into clear modules, and split "
+    "out a service only when you can name the specific pain it fixes. Full microservices (many small "
+    "services, each deployed on its own) would cost a team of six far more than forty thousand daily "
+    "users could justify."
+)
+
+
+def test_short_glosses_do_not_count_toward_paragraph_density():
+    assert len(sm.words(GLOSSED_OPENER)) > sm.DENSE_PARAGRAPH_WORDS
+    assert "dense_paragraph" not in sm.decorative_structure_flags(GLOSSED_OPENER)
+    unglossed = GLOSSED_OPENER.replace("(", "").replace(")", "")
+    assert "dense_paragraph" in sm.decorative_structure_flags(unglossed)
+
+
+def test_a_long_parenthesis_still_counts():
+    aside = "(" + " ".join(["word"] * (sm.GLOSS_MAX_WORDS + 1)) + ")"
+    assert len(sm.prose_words(f"one two {aside} three")) == 3 + sm.GLOSS_MAX_WORDS + 1
+
+
+CHECK_CALLOUT = """> 🧪 **Check yourself:** A leader needs acks from every replica before it commits. Going from three to ten replicas most directly changes which of these?
+> - a) The read capacity of the cluster, and nothing else about how it behaves
+> - b) The chance that any given write has to wait on a slow replica
+> - c) The size in bytes of each write that the leader sends out
+>
+> **Answer:** b. Each replica adds another chance of a stall, and the leader waits for the slowest one.
+"""
+
+
+def test_a_check_callout_is_measured_unit_by_unit():
+    assert len(sm.words(CHECK_CALLOUT)) > sm.DENSE_PARAGRAPH_WORDS
+    assert sm.decorative_structure_flags(CHECK_CALLOUT) == []
+
+
+def test_callout_labels_do_not_count_as_emphasis():
+    text = ("> 🙋 **Why not wait for one?**\n\nBecause it is unsafe.\n\n> 🧠 **Think of it like:** a chat.\n\n"
+            "> 🎯 **Takeaway:** wait less.\n\n> 🧪 **Check yourself:** which?\n>\n> **Answer:** b.\n\n"
+            "> **Deeper:** more detail.\n")
+    assert sm.bold_spans(text) == 0
+    assert "emphasis_overuse" not in sm.decorative_structure_flags(text)
+    assert sm.bold_spans("> Plain quote with **one** and **two** and **three** bold words.\n") == 3
+
+
 def test_every_fixture_has_an_expected_entry():
     assert {p.stem for p in FIXTURES.glob("*.md")} == set(EXPECTED)
 

@@ -75,7 +75,7 @@ def test_build_carries_a_version_stamp(tmp_path):
 def test_required_reference_files_exist_and_are_linked():
     body = read(lib.SKILL_DIR / "SKILL.md")
     for name in ("explanation-methodology.md", "treatment-selection.md", "explanation-examples.md",
-                 "conversation-grammar.md", "emoji-palette.md"):
+                 "conversation-grammar.md", "emoji-palette.md", "layout-exemplars.md"):
         assert (lib.SKILL_DIR / "references" / name).is_file()
         assert f"references/{name}" in body
 
@@ -281,6 +281,7 @@ def test_production_zip_structure(tmp_path):
         "socialized/references/explanation-examples.md",
         "socialized/references/conversation-grammar.md",
         "socialized/references/emoji-palette.md",
+        "socialized/references/layout-exemplars.md",
     }
     for name, text in texts.items():
         assert "op:" not in text, f"marker left in {name}"

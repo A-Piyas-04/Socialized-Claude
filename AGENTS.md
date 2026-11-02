@@ -336,4 +336,29 @@ needs to decide. No progress narrative.
   - The `#` title is about eight words.
   - A bold lead-in counts as one of the opener's two sentences.
   - Duplicate wording was trimmed to keep the body at 480.
+- Skill upgrade V2 Phase 8 (rewrite the examples), user 2026-11-02:
+  - Glosses (user's option A): a parenthetical gloss of six words or fewer does not
+    count toward the 50-word paragraph ceiling. `SKILL.md` states it, and
+    `structural_metrics.prose_words` counts that way (`GLOSS_MAX_WORDS = 6`, tied by
+    a test).
+  - Ablation: `references/layout-exemplars.md` holds three gold answers (replicas,
+    monolith, cache coherence) inside one block marked with all six shape operations,
+    so it ships only in the full build.
+  - The six "better" answers in `explanation-examples.md` were relaid as fenced,
+    complete answers inside their existing markers. This means their layout (title,
+    `##` sections, `---`, a visual) now appears in single-op builds such as `seq` and
+    `mech`. They carry no 🙋, 🧠, 🎯 or 🧪 callouts.
+- Phase 8 linter heuristics (flags, never gates):
+  - `dense_paragraph` measures a blockquote callout unit by unit, split at its blank
+    `>` lines and list items;
+  - `emphasis_overuse` excludes a bold label that opens a blockquote line after an
+    optional icon;
+  - in the regenerated `research/baseline_structural_metrics.json`, the
+    immunology/base answer goes from four to three `dense_paragraph` flags;
+  - `tests/fixtures/structural/expected.json` is unchanged.
+- Phase 8: `layout_cache` (beginner, mechanism) is added to
+  `evaluation/layout_prompts.json`. `tests/test_examples_shape.py` requires every
+  fenced answer in both example references to pass both linters with zero flags.
+  The body stays at 480 lines; the exemplar pointer was paid for by shortening two
+  Reference files entries.
 

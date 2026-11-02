@@ -56,7 +56,9 @@ decorative_structure_flags (each a short code):
   uncaptioned_visual    a table, or a fenced diagram or bar block, with no prose sentence
                         directly before it
   dense_paragraph       a prose paragraph of 4+ sentences or more than 50 words, or a list
-                        item of more than 40 words
+                        item of more than 40 words. A parenthetical gloss of 6 words or fewer
+                        is not counted, and a blockquote callout is checked unit by unit (split
+                        at its blank `>` lines and list items)
   dense_table_cell      a table whose cells include one of more than 6 words or more than one
                         sentence
   wide_table            a table with more than 4 columns
@@ -68,7 +70,8 @@ decorative_structure_flags (each a short code):
                         distinct node shape ([[ ]], (( )), {{ }}, [( )], [/ /], or { })
   empty_transition      a one-sentence paragraph that only announces what follows ("Let's look
                         at...", "Here's how it works."), followed by prose or a heading
-  emphasis_overuse      more than 2 bold spans (labels excluded)
+  emphasis_overuse      more than 2 bold spans (labels excluded: a bold span opening a list item,
+                        or opening a blockquote line after an optional icon)
 """
 
 from __future__ import annotations
@@ -96,6 +99,10 @@ VISUAL_CODE_RE = re.compile(r"```\s*mermaid\b|[█▓▒░]{2,}|-->|──>|│
 ITALIC_RE = re.compile(r"\*(?=\S)[^*\n]+?(?<=\S)\*|(?<![A-Za-z0-9_])_(?=\S)[^_\n]+?(?<=\S)_(?![A-Za-z0-9_])")
 INLINE_CODE_RE = re.compile(r"`[^`\n]+`")
 BLOCKQUOTE_RE = re.compile(r"^\s{0,3}>")
+QUOTE_PREFIX_RE = re.compile(r"^\s{0,3}>\s?")
+QUOTE_ITEM_RE = re.compile(r"^\s*(?:[-*+]|\d+[.)])\s+")
+GLOSS_RE = re.compile(r"\s*\(([^()]*)\)")
+GLOSS_MAX_WORDS = 6
 DENSE_SENTENCES = 4
 DENSE_PARAGRAPH_WORDS = 50
 DENSE_ITEM_WORDS = 40
@@ -195,6 +202,35 @@ def words(text: str) -> list[str]:
     return [w for w in re.findall(r"\S+", text) if re.search(r"[A-Za-z0-9]", w)]
 
 
+def prose_words(text: str) -> list[str]:
+    """Words for the density checks: a parenthetical gloss of GLOSS_MAX_WORDS or fewer is not counted."""
+    unglossed = GLOSS_RE.sub(lambda m: "" if len(words(m.group(1))) <= GLOSS_MAX_WORDS else m.group(0), text)
+    return words(unglossed)
+
+
+def density_units(block: Block) -> list[str]:
+    """A callout is split at its blank `>` lines and list items; any other block is one unit."""
+    if block.kind != "paragraph" or not BLOCKQUOTE_RE.match(block.lines[0]):
+        return [block.text]
+    units: list[list[str]] = [[]]
+    for line in block.lines:
+        body = QUOTE_PREFIX_RE.sub("", line, count=1)
+        if not body.strip() or QUOTE_ITEM_RE.match(body):
+            units.append([])
+        if body.strip():
+            units[-1].append(QUOTE_ITEM_RE.sub("", body, count=1).strip())
+    return [strip_inline(" ".join(u)) for u in units if u]
+
+
+def callout_body(line: str) -> str:
+    """A blockquote line without its `>`, its opening icon, and its opening bold label."""
+    body = QUOTE_PREFIX_RE.sub("", line, count=1)
+    if body[:1] and (EMOJI_RE.match(body) or body[:1] in NAV_ICONS):
+        body = body[1:].lstrip("\ufe0f").lstrip()
+    label = LABEL_RE.match(body)
+    return body[label.end():] if label else body
+
+
 def table_cells(row: str) -> list[str]:
     return [c.strip() for c in row.strip().strip("|").split("|")]
 
@@ -222,6 +258,8 @@ def bold_spans(markdown: str) -> int:
             body = BULLET_RE.sub(r"\1", NUMBERED_RE.sub(r"\1", block.lines[0]), count=1)
             label = LABEL_RE.match(body)
             raw = "\n".join([body[label.end():] if label else body, *block.lines[1:]])
+        elif block.kind == "paragraph" and BLOCKQUOTE_RE.match(block.lines[0]):
+            raw = "\n".join(callout_body(line) for line in block.lines)
         count += len(BOLD_RE.findall(raw))
     return count
 
@@ -423,10 +461,11 @@ def decorative_structure_flags(markdown: str) -> list[str]:
             flags.append("bold_as_heading")
         if is_flat_visual(block):
             flags.append("flat_visual")
-        if block.kind == "paragraph" and (len(sentences(block.text)) >= DENSE_SENTENCES
-                                           or len(words(block.text)) > DENSE_PARAGRAPH_WORDS):
+        if block.kind == "paragraph" and any(len(sentences(u)) >= DENSE_SENTENCES
+                                             or len(prose_words(u)) > DENSE_PARAGRAPH_WORDS
+                                             for u in density_units(block)):
             flags.append("dense_paragraph")
-        if block.kind in {"bullet", "numbered"} and len(words(block.text)) > DENSE_ITEM_WORDS:
+        if block.kind in {"bullet", "numbered"} and len(prose_words(block.text)) > DENSE_ITEM_WORDS:
             flags.append("dense_paragraph")
     run: list[Block] = []
     for block in [*blocks, Block("end", "", [])]:

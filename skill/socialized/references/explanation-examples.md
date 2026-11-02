@@ -1,9 +1,10 @@
 # Explanation examples
 
 Each pair shows a weak explanation, a better one, and what specifically changed.
-The "better" versions illustrate the operations. They are not templates: choose
-each answer's structure from its own content. The last section shows requests where the right move is to
-add nothing.
+Each longer "better" answer is complete and sits in a fenced block, laid out in the
+page shape from `SKILL.md`: the page shape is fixed; the wording never is. The
+follow-up and the last sections show answers that stay short, and requests where
+the right move is to add nothing.
 
 ## Contents
 
@@ -44,21 +45,40 @@ web app faster?
 > validation.
 
 **Better:**
-> Opening a database connection is expensive compared with running a typical
-> query. The client and server set up a network connection (often with TLS),
-> authenticate, and the database allocates resources for the new session; in
-> PostgreSQL, for example, each connection gets its own server process. If every
-> request opens a fresh connection and closes it afterwards, that setup is paid
-> on every request, and it can take longer than the query itself.
->
-> A pool opens a set of connections once and keeps them open. A request borrows
-> one, runs its queries, and hands it back, and the next request reuses it. The
-> setup cost is paid once per connection instead of once per request.
->
-> The same mechanism sets the main limit: the pool caps how many connections
-> exist. When all of them are busy, new requests wait for one to be returned. A
-> pool that is too small becomes a queue, and one that is too large can overload
-> the database with concurrent sessions.
+
+````markdown
+# Why a connection pool makes your app faster
+
+---
+
+Opening a database connection costs more than running a typical query, and without a pool your app pays that cost on every request. A pool opens connections once and lends them out, so the setup is paid once per connection instead of once per request.
+
+The answer covers three steps: 1 · what a new connection costs, 2 · how the pool reuses it, 3 · the limit the pool sets.
+
+---
+
+## 1. ⏱️ A new connection is expensive
+
+To open a connection, the client and server set up a network link, often with TLS (encryption for the link), and authenticate. The database then allocates resources for the session, and in PostgreSQL each connection gets its own server process.
+
+If every request opens and closes its own connection, that setup can take longer than the query itself.
+
+---
+
+## 2. 🔄 The pool reuses open connections
+
+A request now does four things in turn: borrow a connection → run its queries → hand it back → the next request reuses it.
+
+The setup cost is paid once per connection instead of once per request. That saving is the whole speed-up.
+
+---
+
+## 3. ⚖️ The pool also sets a limit
+
+The same mechanism caps how many connections exist. When all of them are busy, a new request waits for one to come back, so a pool that is too small becomes a queue.
+
+A pool that is too large has the opposite problem: it can overload the database with more concurrent sessions than it handles well.
+````
 
 **What changed:**
 - The problem (per-request setup cost) comes before the solution.
@@ -66,6 +86,8 @@ web app faster?
   once per connection.
 - The tradeoff follows from the mechanism instead of appearing as a list of
   configuration knobs nobody asked about.
+- The layout: a `#` title, a two-sentence answer, a map, and one `##` section per
+  step, with `---` between them.
 <!-- /op:sequencing,mechanism -->
 
 <!-- op:sequencing,mechanism -->
@@ -80,23 +102,45 @@ search?
 > The worst case is O(n).
 
 **Better:**
-> It rests on one property of arrays: if you know an element's index, you can
-> read it directly, because the address is computed from the index. Nothing is
-> searched.
->
-> A hash table turns a key into an index. A hash function does arithmetic on the
-> key, say the string "alice", to produce a number, and that number reduced
-> modulo the array size picks a slot. To find "alice" later, you repeat the same
-> computation, get the same slot, and go straight there. The work is computing
-> the hash and checking that slot, which does not grow with the number of
-> stored items.
->
-> "Average" matters because two keys can land in the same slot, which is called a
-> collision. That slot then holds several entries, which must be checked one by
-> one. If the table resizes before it gets too full and the hash spreads keys
-> evenly, each slot holds very few entries on average, so lookups stay constant
-> on average. If many keys collide, through a poor hash or adversarial input,
-> lookup degrades toward scanning a list. That is the O(n) worst case.
+
+````markdown
+# Why hash-table lookup is constant on average
+
+---
+
+A hash table never searches for a key: it computes where the key lives and reads that one slot. The computation takes the same time however many items the table holds, which is why lookup is O(1) (constant time) on average.
+
+The answer covers three steps: 1 · the array property it rests on, 2 · how a key becomes a slot, 3 · why the guarantee says average.
+
+---
+
+## 1. 🔑 Arrays give direct access
+
+It rests on one property of arrays: if you know an element's index, you can read it directly, because its address is computed from the index. Nothing is searched.
+
+---
+
+## 2. 🧮 A key becomes a slot number
+
+A hash function (arithmetic that turns keys into numbers) maps "alice" to a number, and that number, reduced modulo the array size, picks a slot. To find "alice" later, you repeat the same computation and go straight to the same slot.
+
+The path is the same every time: "alice" → hash → number → slot → read.
+
+---
+
+## 3. 💥 Collisions explain "average"
+
+Two keys can land in the same slot, which is called a collision. That slot then holds several entries, which must be checked one by one.
+
+If the table resizes before it fills and the hash spreads keys evenly, each slot holds very few entries, so lookups stay constant on average. The table shows what changes when they don't.
+
+| Case | Entries in the slot | Lookup cost |
+|---|---|---|
+| Typical | One or two | Constant |
+| Many collisions | Most of the keys | Grows with n |
+
+Many collisions come from a poor hash or adversarial input (keys chosen to collide). That is the O(n) worst case (time growing with item count).
+````
 
 **What changed:**
 - The prerequisite the question hinges on (arrays give direct access by index)
@@ -105,6 +149,8 @@ search?
   asserted.
 - Collisions are introduced where they explain the word "average", not as a
   detached list of strategies.
+- The layout: a `#` title, a two-sentence answer, a map, `##` sections, and a
+  small table for the two cases.
 <!-- /op:sequencing,mechanism -->
 
 <!-- op:sequencing -->
@@ -118,27 +164,51 @@ search?
 > slope of the tangent line.
 
 **Better:**
-> Start with something familiar: average speed. If a car covers 120 km in
-> 2 hours, its average speed is 120 ÷ 2 = 60 km/h, the change in distance divided
-> by the change in time.
->
-> That average can hide a lot. The car may have sped up and slowed down. To pin
-> down how fast it was going at one moment, take the average over a shorter and
-> shorter window around that moment: the last minute, the last second, the last
-> millisecond. As the window shrinks, these averages settle towards a single
-> value. That value is the speed at that instant.
->
-> A derivative is exactly this, for any quantity that changes: the value that
-> the average rate of change approaches as the interval shrinks towards zero,
-> when it does approach a single value. For smooth curves it does.
-> The formula, the limit of (f(x + h) − f(x)) / h as h → 0, writes that
-> procedure down: f(x + h) − f(x) is the change, h is the window, and "h → 0" is
-> the shrinking. On a graph, it is the slope of the curve at that point.
+
+````markdown
+# What a derivative measures
+
+---
+
+A derivative is how fast something is changing at one instant: the value an average rate of change settles towards as you measure it over shorter and shorter intervals. On a graph, it is the slope of the curve at that point.
+
+The answer builds it in three steps: 1 · average speed, 2 · shrinking the window, 3 · the formula.
+
+---
+
+## 1. 📈 Start with average speed
+
+If a car covers 120 km in 2 hours, its average speed is 120 ÷ 2 = 60 km/h: the change in distance divided by the change in time. That average can hide a lot, because the car may have sped up and slowed down.
+
+---
+
+## 2. ⏳ Shrink the window
+
+To pin down the speed at one moment, take the average over a shorter and shorter window around it: the last minute, the last second, the last millisecond. As the window shrinks, the averages settle towards a single value, and that value is the speed at that instant.
+
+The illustrative figures below are for a car passing one point on the road.
+
+| Window | Distance covered | Average speed |
+|---|---|---|
+| 1 minute | 1.05 km | 63 km/h |
+| 1 second | 18.3 m | 65.9 km/h |
+| 1 millisecond | 18.33 mm | 66.0 km/h |
+
+---
+
+## 3. 📝 The formula writes the procedure down
+
+The formula is the limit of `(f(x + h) − f(x)) / h` as `h → 0`, and it records exactly this procedure.
+
+The top, `f(x + h) − f(x)`, is the change, `h` is the window, and `h → 0` is the shrinking. The derivative exists when those averages approach a single value, as they do for smooth curves.
+````
 
 **What changed:**
 - The formal definition depends on two ideas, average rate and shrinking the
   interval. Each is now in place before the formula appears.
 - The formula is introduced last and each part is mapped to the idea it encodes.
+- The layout: a `#` title, the answer in two sentences, a map, one `##` section per
+  idea, and a table that shows the averages settling.
 <!-- /op:sequencing -->
 
 <!-- op:sequencing,examples -->
@@ -151,22 +221,45 @@ search?
 > a ÷ (b/c) = a × (c/b). Remember: keep, change, flip.
 
 **Better:**
-> Division asks "how many of these fit into that?". 6 ÷ 2 asks how many 2s fit
-> into 6. The same question works for fractions. 3 ÷ ¼ asks how many quarters fit
-> into 3. Each whole holds 4 quarters, so 3 wholes hold 3 × 4 = 12. Dividing by ¼
-> became multiplying by 4.
->
-> Now try 3 ÷ ¾, with pieces three times as big as a quarter. There are still 12
-> quarters in 3, but each piece uses 3 of them, so there are 12 ÷ 3 = 4 pieces.
-> That is 3 × 4 ÷ 3, which is 3 × 4/3. The "flip" is those two moves combined:
-> multiply by the bottom number (count the small pieces), then divide by the top
-> number (group them into the bigger pieces).
+
+````markdown
+# Why dividing by a fraction flips it
+
+---
+
+Division asks how many of one thing fit into another, and with a fraction that count takes two moves. Multiplying by the bottom number counts the small pieces, and dividing by the top number groups them, which together is "flip and multiply".
+
+The answer works it out in two steps: 1 · quarters, 2 · three-quarter pieces.
+
+---
+
+## 1. 🧮 How many quarters fit into 3
+
+6 ÷ 2 asks how many 2s fit into 6, and 3 ÷ ¼ asks how many quarters fit into 3. Each whole holds 4 quarters, so 3 wholes hold 3 × 4 = 12, and dividing by ¼ became multiplying by 4.
+
+---
+
+## 2. 🧩 Bigger pieces need one more move
+
+Now try 3 ÷ ¾, with pieces three times as big as a quarter. There are still 12 quarters in 3, but each piece uses 3 of them, so there are 12 ÷ 3 = 4 pieces.
+
+The two moves line up with the two halves of the rule.
+
+| Move | Arithmetic | Part of the rule |
+|---|---|---|
+| Count quarters | 3 × 4 = 12 | Multiply by the bottom |
+| Group into threes | 12 ÷ 3 = 4 | Divide by the top |
+
+Together, 3 × 4 ÷ 3 is 3 × 4/3, and that is the flip.
+````
 
 **What changed:**
 - It starts from what division means, which the rule depends on but never
   states.
 - A worked case comes before the general rule, and each step of the case is
   mapped to one half of "flip and multiply".
+- The layout: a `#` title, a two-sentence answer, two `##` sections, and a table
+  that maps each move to its half of the rule.
 <!-- /op:sequencing,examples -->
 
 <!-- op:mechanism -->
@@ -179,26 +272,51 @@ search?
 > boiling point of water, so food cooks faster.
 
 **Better:**
-> In an ordinary pot, water can't get much hotter than about 100 °C at sea level.
-> Extra heat goes into turning water into steam, which escapes, rather than
-> into raising the temperature. How fast food cooks depends mainly on that
-> temperature.
->
-> A pressure cooker seals the steam in. The trapped steam raises the pressure,
-> and at higher pressure water needs more energy before it can boil, so the
-> boiling point rises, to roughly 120 °C in a typical cooker. The food now sits
-> in water and steam about 20 °C hotter than in an open pot, and the
-> temperature-dependent changes that make food tender run considerably faster.
->
-> The same mechanism sets its limits. It only speeds up moist cooking, so it
-> can't brown food the way a dry pan does, and you can't check the food
-> mid-cook without releasing the pressure.
+
+````markdown
+# Why a pressure cooker cooks food faster
+
+---
+
+Cooking speed depends mainly on temperature, and an open pot can't get water much past 100 °C. A pressure cooker traps the steam, which raises the boiling point to roughly 120 °C, so the food cooks in hotter water.
+
+The chain is four links long: trapped steam → higher pressure → higher boiling point → faster cooking. The answer covers it in three steps: 1 · why an open pot stalls, 2 · how sealing changes that, 3 · the limits that follow.
+
+---
+
+## 1. 🛑 An open pot stalls at boiling
+
+At sea level, water in an open pot can't get much hotter than about 100 °C. Extra heat turns water into steam, which escapes, instead of raising the temperature.
+
+---
+
+## 2. 🔒 Sealing raises the boiling point
+
+A pressure cooker seals the steam in, and the trapped steam raises the pressure. At higher pressure water needs more energy before it can boil, so the boiling point rises to roughly 120 °C in a typical cooker.
+
+The bars compare the water temperature in each pot, scaled to the hotter one.
+
+```
+open pot         █████████████████     ~100 °C
+pressure cooker  ████████████████████  ~120 °C
+```
+
+The food sits about 20 °C hotter, and the changes that make it tender run considerably faster.
+
+---
+
+## 3. ⚖️ The same seal sets the limits
+
+It only speeds up moist cooking, so it can't brown food the way a dry pan does. You also can't check the food mid-cook without first releasing the pressure.
+````
 
 **What changed:**
 - The weak version states the chain correctly but skips the two links that make
   it make sense: why an open pot is capped at boiling, and why temperature is
   what matters.
 - The limits are derived from the mechanism rather than listed.
+- The layout: a `#` title, a two-sentence answer, the chain as an inline arrow
+  line, and bars for the two temperatures.
 <!-- /op:mechanism -->
 
 <!-- op:mechanism -->
@@ -219,23 +337,46 @@ function debounce(fn, wait) {
 **Weak:** a line-by-line restatement ("declares a variable timer, returns a
 function, clears the timeout, sets a timeout…").
 
-**Better (outline of the content):**
-- Purpose first: run `fn` only once calls have stopped for `wait` milliseconds,
-  for example to search only after the user stops typing.
-- `timer` lives outside the returned function, so every call shares it. That
-  shared variable is how one call can cancel the call scheduled by the previous
-  one. If it were declared inside, each call would get a fresh `timer` and
-  nothing would be cancelled.
-- `clearTimeout(timer)` cancels the pending run. This is the line that collapses
-  a burst of calls into one. Without it, every call would still fire, only later.
-- `setTimeout(…, wait)` schedules a fresh run, so the delay restarts on every
-  call.
-- `fn.apply(this, args)` inside an arrow function forwards the latest arguments
-  and the caller's `this`. The arrow function keeps `this` from the returned
-  function.
+**Better:**
+
+````markdown
+# What debounce does, and why each part matters
+
+---
+
+`debounce` returns a wrapper that runs `fn` only once calls have stopped for `wait` milliseconds. A search box uses it to query only after the user stops typing.
+
+The answer covers two steps: 1 · the shared timer, 2 · the call that finally fires.
+
+---
+
+## 1. 🔁 The shared timer collapses a burst
+
+`timer` lives outside the returned function, so every call shares it, and that is how one call cancels the run the previous call scheduled. If it were declared inside, each call would get a fresh `timer` and nothing would be cancelled.
+
+- **`clearTimeout(timer)`:** cancels the pending run, so a burst of calls collapses into one run instead of many late ones.
+- **`setTimeout(…, wait)`:** schedules a fresh run, so the delay restarts on every call.
+
+---
+
+## 2. ⏭️ The call that finally fires
+
+`fn.apply(this, args)` forwards the latest arguments and the caller's `this`. The arrow function around it keeps `this` from the returned function, so `fn` sees the `this` the caller used.
+
+The table traces three quick calls, 100 ms apart, with `wait` set to 300 ms.
+
+| Time | Event | Pending run |
+|---|---|---|
+| 0 ms | Call 1 | Due at 300 ms |
+| 100 ms | Call 2 cancels it | Due at 400 ms |
+| 200 ms | Call 3 cancels it | Due at 500 ms |
+| 500 ms | `fn` runs once | None |
+````
 
 **What changed:** the parts are explained in the order that makes the behaviour
-make sense, and each one is paired with what breaks without it.
+make sense, and each one is paired with what breaks without it. The layout gives
+the purpose first, one `##` section per part of the mechanism, and a table that
+traces a burst of calls.
 <!-- /op:mechanism -->
 
 ## Follow-up confusion: repairing one link

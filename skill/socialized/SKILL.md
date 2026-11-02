@@ -224,9 +224,9 @@ shape of the content. Prose is one of the forms, not the fallback.
 - Give each idea its own unit: a short paragraph, a list item, a table row, or a
   step. Start a new unit when the idea changes, with a blank line before it.
 - Keep the opener to two sentences, a bold lead-in included; qualifiers get their own unit.
-- End a paragraph at three sentences or about 50 words, as a ceiling, not a
-  target. Keep sentences that make one continuous argument together, and let
-  that chain override the ceiling.
+- End a paragraph at three sentences or about 50 words, not counting a gloss of
+  six words or fewer, as a ceiling, not a target. Let one continuous argument
+  override the ceiling.
 - Give a section of three or more units visible separation (a sub-heading, a
   `---`, or a labelled list), and put a `---` between major topics.
 - Give a list item one idea and about 25 words, a second in a sub-bullet or new item.
@@ -470,15 +470,15 @@ Check the markdown of every reply, whatever the request type:
 
 Read only the file the current request needs:
 
-- `references/explanation-methodology.md`: behaviour per request type, the strategy
-  per intent, repair, and work reports. Read it when the request type is unclear
-  or unusual, and wherever this file points to it.
+- `references/explanation-methodology.md`: behaviour by request type and intent,
+  repair, and work reports. Read it when pointed to, or when a request is unusual.
 - `references/explanation-examples.md`: weak and better pairs across domains, and
   cases where the skill adds nothing. Read it when unsure how much to add.
 - `references/treatment-selection.md`: conflicts between operations, the length
   budget, and failure modes. Read it when operations pull in different directions.
 - `references/conversation-grammar.md`: worked reader's-question patterns, a
-  register ladder, and direct-address pairs. Read it when an answer reads like a
-  manual rather than a person.
+  register ladder, and direct-address pairs. Read it when an answer reads like a manual.
 - `references/emoji-palette.md`: about 150 navigation icons grouped by meaning,
   plus the status legend. Read it when no icon in the working set fits.
+- `references/layout-exemplars.md`: three complete answers in the page shape. Read
+  it before a long or teaching answer.
