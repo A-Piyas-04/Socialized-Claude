@@ -637,6 +637,37 @@ What still fails:
 The six-link takeaway stays with Phase 9. The overview order, the announcing
 sentence, the uncoloured flowchart and the two glosses are not addressed yet.
 
+**Round 4 (claude.ai, build `725c0a1`):** in `evaluation/layout_capture/round4/`.
+
+| Target | Replicas | Monolith |
+| --- | --- | --- |
+| `#` title of about 8 words | ✅ 8 | ✅ 7 |
+| `---` under the title | ❌ missing | ✅ |
+| Opener of two sentences | ✅ 55 words | ✅ 59 words |
+| 🙋 alone, answer in body | ✅ two | ✅ one |
+| 🧠 analogy, limit named | ✅ | ✅ |
+| Table renders | ✅ | ✅ separator plain |
+| Coloured flowchart, legend first | — | ✅ |
+| Takeaway of 3–4 links | ✅ three | ⚠️ two chains in one |
+| `lint_markdown` clean | ✅ | ✅ |
+
+All four follow-up fixes held. What remains:
+
+- **Title line (replicas):** no `---` under the title. The rule holds in one answer
+  of two.
+- **Glosses swell paragraphs:** every gloss is a parenthesis inside the sentence. The
+  openers and the first sections pass 50 words because of them; the `dense_paragraph`
+  flags in both answers are mostly glosses and 🧪 callouts.
+- **The 🧪 callout always reads as dense:** a question, three options and an answer
+  pass 50 words by design. `structural_metrics` should treat a callout's option list
+  as separate units. That belongs to Phase 9 or 10.
+- **Bold label as heading (replicas):** "**The chain, in short:**" introduces a
+  five-step arrow chain. The chain belongs in a `flowchart LR` overview (Phase 9).
+- **Status legend after its table (replicas):** the visual rule puts the legend line
+  before the table.
+- **Monolith takeaway:** "→ … ; … →" joins two chains; one chain of three or four
+  links is the target (Phase 9).
+
 ---
 
 ### 📝 Phase 8 — Rewrite the examples to match the rules

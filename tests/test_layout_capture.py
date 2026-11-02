@@ -71,6 +71,14 @@ def test_round3_broken_table_is_caught():
     assert [b.code for b in lm.check(read(round3 / "monolith.md"))] == ["broken_table_separator"]
 
 
+def test_round4_capture_renders_cleanly():
+    round4 = EVAL / "layout_capture" / "round4"
+    assert json.loads(read(round4 / "capture.json"))["build"]["commit"] == "725c0a1"
+    for name in ("replicas.md", "monolith.md"):
+        markdown = read(round4 / name)
+        assert lm.check(markdown) == [] and heading_levels(markdown) == {1, 2}
+
+
 def test_round2_baseline_is_recorded():
     """V1 on claude.ai: clean markdown, sections at ##, sub-sections at ###, and no # title."""
     replicas, monolith = read(ROUND2 / "replicas.md"), read(ROUND2 / "monolith.md")
