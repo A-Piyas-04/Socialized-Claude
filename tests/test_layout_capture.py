@@ -56,6 +56,15 @@ def test_round2_capture_files_exist():
         assert answer["screenshots"] and all((ROUND2 / s).is_file() for s in answer["screenshots"])
 
 
+def test_round3_capture_shows_the_phase7_title_and_levels():
+    capture = json.loads(read(EVAL / "layout_capture" / "round3" / "capture.json"))
+    assert capture["build"]["commit"] == "e14f024"
+    for answer in capture["answers"]:
+        markdown = read(EVAL / "layout_capture" / "round3" / answer["markdown"])
+        assert heading_levels(markdown) == {1, 2}
+        assert markdown.startswith("# ") and "\n---\n" in markdown[:400]
+
+
 def test_round2_baseline_is_recorded():
     """V1 on claude.ai: clean markdown, sections at ##, sub-sections at ###, and no # title."""
     replicas, monolith = read(ROUND2 / "replicas.md"), read(ROUND2 / "monolith.md")

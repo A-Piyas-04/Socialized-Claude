@@ -592,8 +592,37 @@ The full build asks all of it.
 - Page shape in every variant.
 - Body guard 480.
 
-**Not verified:** whether claude.ai answers follow the shape. That needs a re-upload
-and new screenshots, or Phase 10.
+**Round 3 (claude.ai, build `e14f024`):** the markdown, pasted by you, is in
+`evaluation/layout_capture/round3/`.
+
+| Phase 7 target | Replicas | Monolith |
+| --- | --- | --- |
+| `#` title, then `---` | ✅ | ✅ but 17 words |
+| `##` only, icon on each | ✅ | ✅ |
+| `---` between sections | ✅ | ✅ |
+| Opener of two sentences | ⚠️ two, 58 words | ❌ three |
+| Overview diagram first | ⚠️ after the map | — |
+| 🙋 question callout | ✅ two | ✅ one |
+| 🧠 analogy, limit named | ✅ | ✅ |
+| Glosses on first use | ✅ nearly all | ✅ |
+| 🎯 and 🧪 callouts | ✅ | ✅ |
+| Markdown renders | ✅ | ❌ table broken |
+
+What still fails:
+
+- **Broken table (monolith):** the separator row is `|---\|---\|---\|---|`. The
+  model escaped the pipes of the separator row, so claude.ai prints the table as
+  text. `lint_markdown.py` misses it, because it only checks a table whose second
+  line is a valid separator.
+- **Answers inside the 🙋 callout:** both answers put the reply inside the blockquote,
+  so the key explanation renders dim, and the callout runs 50 to 75 words.
+- **Long title and long opener:** the monolith title is a 17-word sentence. Its
+  opener has three sentences, the first a bold lead-in.
+- **Order and meta:** the replicas map comes before the overview diagram, and "I'll
+  use one running example." announces instead of teaching.
+- **Six-link takeaway (replicas):** Phase 9 targets three or four links.
+- **Monolith flowchart:** no `classDef` colour; one label of five words.
+- **Unglossed:** "GC pause" and "vacuum".
 
 ---
 

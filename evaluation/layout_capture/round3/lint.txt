@@ -1,0 +1,65 @@
+Linter output for the round-3 answers (claude.ai, build e14f024, after Phase 7). Regenerate with:
+  python scripts/lint_response.py <file>; python scripts/lint_markdown.py <file>
+Known gap: lint_markdown does not see the monolith table, because its separator row is broken by escaped pipes.
+
+== lint_response.py replicas.md (exit 1) ==
+word_count: 963
+block_count: 45
+mean_block_words: 22.93
+max_block_words: 75
+heading_count: 6  (heuristic; descriptive only, never gates anything)
+bullet_count: 7
+numbered_count: 0
+table_count: 1
+code_block_count: 3
+emphasis_count: 7
+mean_sentence_words: 15.48
+max_sentence_words: 35
+passive_sentence_count: 2  (heuristic; descriptive only, never gates anything)
+answer_first_offset: 7  (heuristic; descriptive only, never gates anything)
+visual_count: 4  (heuristic; descriptive only, never gates anything)
+visuals_first_half: 3  (heuristic; descriptive only, never gates anything)
+visuals_second_half: 1  (heuristic; descriptive only, never gates anything)
+max_table_cell_words: 7  (heuristic; descriptive only, never gates anything)
+heading_depth_max: 2  (heuristic; descriptive only, never gates anything)
+whitespace_ratio: 0.32  (heuristic; descriptive only, never gates anything)
+units_per_section: 6.5  (heuristic; descriptive only, never gates anything)
+emphasis_levels_used: 5  (heuristic; descriptive only, never gates anything)
+icon_count: 5  (heuristic; descriptive only, never gates anything)
+decorative_structure_flags: dense_paragraph, dense_paragraph, dense_table_cell, dense_paragraph, dense_paragraph, emphasis_overuse
+(Structural descriptors, not a comprehension score. A response can score perfectly on every metric here and still be wrong, and the linter cannot tell.)
+
+== lint_markdown.py replicas.md (exit 0) ==
+no breaks found
+(Renderer-safety checks on the text given, not a quality score. It cannot watch a live conversation, and a response that passes can still be wrong.)
+
+== lint_response.py monolith.md (exit 1) ==
+word_count: 621
+block_count: 33
+mean_block_words: 19.41
+max_block_words: 59
+heading_count: 4  (heuristic; descriptive only, never gates anything)
+bullet_count: 5
+numbered_count: 0
+table_count: 0
+code_block_count: 1
+emphasis_count: 8
+mean_sentence_words: 12.65
+max_sentence_words: 25
+passive_sentence_count: 0  (heuristic; descriptive only, never gates anything)
+answer_first_offset: 17  (heuristic; descriptive only, never gates anything)
+visual_count: 1  (heuristic; descriptive only, never gates anything)
+visuals_first_half: 0  (heuristic; descriptive only, never gates anything)
+visuals_second_half: 1  (heuristic; descriptive only, never gates anything)
+max_table_cell_words: 0  (heuristic; descriptive only, never gates anything)
+heading_depth_max: 2  (heuristic; descriptive only, never gates anything)
+whitespace_ratio: 0.36  (heuristic; descriptive only, never gates anything)
+units_per_section: 7.25  (heuristic; descriptive only, never gates anything)
+emphasis_levels_used: 5  (heuristic; descriptive only, never gates anything)
+icon_count: 4  (heuristic; descriptive only, never gates anything)
+decorative_structure_flags: dense_paragraph, dense_paragraph, dense_paragraph, emphasis_overuse
+(Structural descriptors, not a comprehension score. A response can score perfectly on every metric here and still be wrong, and the linter cannot tell.)
+
+== lint_markdown.py monolith.md (exit 0) ==
+no breaks found
+(Renderer-safety checks on the text given, not a quality score. It cannot watch a live conversation, and a response that passes can still be wrong.)
