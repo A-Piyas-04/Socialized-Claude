@@ -511,7 +511,7 @@ rule to weigh.
 | Step 1 default reader | Keep practitioner as the default, now that it glosses |
 | `op:conversational` | At least one reader's question in every teaching **and decision** answer, written as a `> 🙋 **…?**` line with the answer right below it |
 | `op:close` | Takeaway and check question become `> 🎯 **Takeaway:**` and `> 🧪 **Check yourself:**` callouts, options as a list |
-| `op:presentation` heading ladder | One title, then sections at the largest level that renders smaller than the title. No level that renders like body text is used as a heading (levels set by Phase 5) |
+| `op:presentation` heading ladder | One `#` title, underlined, then `##` sections. Section headings are not underlined. `###` and `####` give no size on claude.ai (Phase 5 probe), so depth below `##` comes from separators, numbering and callouts. The underline technique is set by `evaluation/underline_probe.md` |
 | `op:presentation` opener | The opening paragraph is two sentences at most; any qualifier moves into its own short unit |
 | New always-on "Page shape" section, after Scope | The skeleton in short form (~20 lines), stated as defaults for any answer of two or more sections |
 | Methodology §15 (moved in Phase 6) | "None of them is a template" becomes "the page shape is fixed; the wording never is" |
@@ -610,7 +610,7 @@ framing that heuristics never gate.
 | # | Decision | Why it is yours |
 | --- | --- | --- |
 | 1 | Gloss terms and add an analogy for practitioners too? | Fixes R1; makes practitioner answers longer |
-| 2 | `#` or `##` for the title? | Decided by the render probe; yours to confirm |
+| 2 | `#` or `##` for the title? | ✅ Decided 2026-11-02: `#`, underlined, title only |
 | 3 | Move strategy, repair and work-report detail to references? | Frees the room; rare cases read on demand |
 | 4 | Icons on bullet labels as well as headings? | More colour, more drift risk |
 | 5 | Spend subscription quota on Phase 10 runs? | 20 answers per comparison |
