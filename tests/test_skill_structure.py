@@ -84,6 +84,7 @@ def test_skill_body_is_compact():
     _, body, _ = lib.split_frontmatter(read(lib.SKILL_DIR / "SKILL.md"))
     rendered = lib.render_markers(body, lib.VARIANTS["full"])
     assert rendered.count("\n") < 460, "SKILL.md should stay well under the 500-line limit"
+    assert body.count("\n") + 1 <= 440, "Phase 6 left the source body at 440 lines or fewer; keep the room"
 
 
 def test_skill_never_exposes_research_treatment_ids():

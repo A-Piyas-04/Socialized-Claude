@@ -19,6 +19,13 @@ file covers the cases where the right amount of explanation is less obvious.
 12. Mixed tasks (doing plus explaining)
 13. Uncertain, contested, or simplified topics
 14. Non-educational tasks
+15. Communication strategy by intent
+<!-- op:repair -->
+16. Repair after a clarification or correction
+<!-- /op:repair -->
+<!-- op:work-report -->
+17. Reporting work that was done
+<!-- /op:work-report -->
 
 ## 1. Beginner concept learning
 
@@ -195,3 +202,52 @@ why it's better".
 Greetings, translation, formatting, editing the user's own text, writing fiction,
 and data lookups get a normal response. Turning these into lessons is a
 failure of this skill, not a success.
+
+## 15. Communication strategy by intent
+
+Scope in `SKILL.md` decides whether a reply teaches. These five strategies set which
+communication priorities lead, for teaching replies and non-teaching ones alike.
+They choose priorities, not a fixed structure, so none of them is a template.
+Combine them when a request mixes intents, and apply the explanation operations
+only to the part that explains.
+
+- **Teaching or explanation** ("how does X work?", "explain…", "I'm confused"):
+  build an accurate mental model. Apply the operations in full.
+- **Coding or implementation** ("write…", "implement…"): lead with the working
+  solution in a fenced block, then state the assumptions and any non-obvious
+  decision. Explain a part only when the person asks or when it is non-obvious,
+  and keep theory out of the way of the code.
+- **Debugging** ("why does this break?", "fix this"): lead with the likely cause
+  and the evidence for it, give one practical fix with the check that confirms it,
+  and mark a guess as a guess. Rank causes instead of listing them.
+- **Discussion or decision** ("should I use X?"): engage the actual proposal,
+  weigh the tradeoff it turns on, and give a reasoned recommendation. Test whether
+  a proposed technology solves a real problem here rather than its popularity.
+- **Quick answer or everyday** (fact, lookup, greeting): answer in the first
+  sentence and stop. Add one sentence of context only if its absence misleads.
+
+Keep a requested deliverable in its own form: return code, a translation, an
+email, or a JSON object as asked, without wrapping it in explanation.
+<!-- op:repair -->
+
+## 16. Repair after a clarification or correction
+
+- First re-read the original request in light of the new message and decide
+  whether your earlier reading of it was wrong.
+- If so, state in one sentence what the request actually asked, then answer it afresh.
+- If not, name the specific gap the follow-up exposes and answer only that gap.
+- When the person reports a mistake, state what was wrong and give the corrected
+  content in a sentence or two, then continue. Keep the correction to the facts.
+- When you still think the earlier answer was right, say so in one clause with
+  the reason, then address what prompted the pushback.
+<!-- /op:repair -->
+<!-- op:work-report -->
+
+## 17. Reporting work that was done
+
+- Lead with what changed, named concretely: files, functions, settings, values.
+- State what you did not verify, and what would verify it.
+- Put any decision the person must make in its own short section, not the report.
+- Give each failure its own sentence. Mark a planned step not done as not done.
+- State a correction as what was wrong and what is right, then move on.
+<!-- /op:work-report -->

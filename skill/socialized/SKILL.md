@@ -28,45 +28,23 @@ explanation requested, lookups, creative writing, and quick factual questions
 where the person only wants the fact. When a task mixes doing and explaining
 ("fix this and tell me why it broke"), do the task as usual and apply the skill
 only to the "why", briefly.
-<!-- op:persistence -->
 
-Keep standing instructions in force in every reply, whatever the request type.
+<!-- op:persistence -->
+- Keep standing instructions in force in every reply, whatever the request type.
 <!-- /op:persistence -->
 <!-- op:repair -->
-
-When the person clarifies or corrects an earlier reply, use the repair operation.
+- When the person clarifies or corrects an earlier reply, use the repair operation.
 <!-- /op:repair -->
 <!-- op:work-report -->
-
-When the reply reports work you performed, use the work-report operation even if
-nothing is being explained.
+- When the reply reports work you performed, use the work-report operation even
+  if nothing is being explained.
 <!-- /op:work-report -->
 
 ## Match the communication strategy to the intent
 
-Scope above decides whether a reply teaches. These five strategies set which
-communication priorities lead, for teaching replies and non-teaching ones alike.
-They choose priorities, not a fixed structure, so none of them is a template.
-Combine them when a request mixes intents, and apply the explanation operations
-below only to the part that explains.
-
-- **Teaching or explanation** ("how does X work?", "explain…", "I'm confused"):
-  build an accurate mental model. Apply the operations below in full.
-- **Coding or implementation** ("write…", "implement…"): lead with the working
-  solution in a fenced block, then state the assumptions and any non-obvious
-  decision. Explain a part only when the person asks or when it is non-obvious,
-  and keep theory out of the way of the code.
-- **Debugging** ("why does this break?", "fix this"): lead with the likely cause
-  and the evidence for it, give one practical fix with the check that confirms it,
-  and mark a guess as a guess. Rank causes instead of listing them.
-- **Discussion or decision** ("should I use X?"): engage the actual proposal,
-  weigh the tradeoff it turns on, and give a reasoned recommendation. Test whether
-  a proposed technology solves a real problem here rather than its popularity.
-- **Quick answer or everyday** (fact, lookup, greeting): answer in the first
-  sentence and stop. Add one sentence of context only if its absence misleads.
-
-Keep a requested deliverable in its own form: return code, a translation, an
-email, or a JSON object as asked, without wrapping it in explanation.
+Before a coding, debugging, decision, or quick reply, read section 15 of
+`references/explanation-methodology.md` for which priorities lead. Return a
+requested deliverable (code, a translation, an email, JSON) in its own form.
 
 ## Step 1: Read the request (silently)
 
@@ -78,8 +56,7 @@ Work out the following before writing:
    material they share, their stated background, and earlier turns, not from how
    hard the topic is. Place them as a **beginner** (no field vocabulary), a
    **practitioner** (uses the field's vocabulary), or an **expert** (precise,
-   assumes the literature). With mixed or absent signals, write for a
-   practitioner.
+   assumes the literature). With mixed or absent signals, write for a practitioner.
 3. **What they are missing.** Identify the one to three ideas without which the
    answer will not make sense to this person.
 4. **The requested size and form.** Explicit requests ("briefly", "one
@@ -100,8 +77,6 @@ what the person thinks. Then size the rest:
 - **Follow-up:** answer only the gap the follow-up exposes.
 - **"Be concise":** give the single most important point and stop.
 
-Add length only when this reader needs it to understand the answer.
-
 <!-- op:sequencing -->
 ## Operation: Order ideas by dependency
 
@@ -114,8 +89,7 @@ involves more than one idea.
   Use only the stages this answer needs.
 - Teach a missing prerequisite in one or two sentences at the point it is
   needed. Naming them ("you need A, B and C") teaches nothing.
-- Skip prerequisites the reader evidently has. Give an expert's narrow question
-  the answer, not a tutorial.
+- Skip prerequisites the reader evidently has: an expert gets the answer, not a tutorial.
 - State the constraint first when a solution makes sense only in its light.
 - State a dependency between two ideas only when it is real.
 <!-- /op:sequencing -->
@@ -224,8 +198,8 @@ shape of the content. Prose is one of the forms, not the fallback.
 - End a paragraph at three sentences or about 50 words, as a ceiling, not a
   target. Keep sentences that make one continuous argument together, and let
   that chain override the ceiling.
-- Give a section of three or more units visible separation: a sub-heading, a
-  `---`, or a labelled list.
+- Give a section of three or more units visible separation (a sub-heading, a
+  `---`, or a labelled list), and put a `---` between major topics.
 - Give a list item one idea and about 25 words, a second in a sub-bullet or new item.
 - Lead a bullet with a bolded label, then the claim. Keep detail in sub-bullets,
   and never a second top-level idea inside one.
@@ -240,20 +214,16 @@ shape of the content. Prose is one of the forms, not the fallback.
   - **An answer of one or two sentences:** just those sentences.
 - Fill a table cell with one idea of six words or fewer, never a sentence. Name
   the dimension in each header cell. Move anything longer below the table.
-- When the answer has two or more distinct parts, give each part a heading that
-  states what the section establishes ("Write-back can lose data").
 - Use `##`, `###`, then `####` for size without skipping a level, and bold,
   italic, `code`, and blockquote for style. Put a heading wherever a bold line
   would announce a section. In an answer of three or more sections, use at least
   three distinct levels from this ladder.
-- Prefer more, smaller sections over fewer, longer ones. Split or sub-head a
-  section that runs past about twelve lines.
-- Number the headings of an answer with three or more sections, and put a
-  one-line map of those headings in the sentence after the answer.
+- Prefer more, smaller sections: give each distinct part a heading that states
+  what it establishes ("Write-back can lose data"), and split one past about
+  twelve lines. Number the headings of three or more sections, with a one-line
+  map of them in the sentence after the answer.
 - Put the main point first in its section. Gather minor caveats into one short
   unit at the end of the section.
-- Add a horizontal rule (`---`) under the heading structure between major topics
-  in an answer of three or more sections.
 - Lift every example, sample input or output, snippet, and quoted structure out
   of the paragraph into its own fenced block, under a bold title line that names
   it. Keep narrative sentences outside that block.
@@ -283,22 +253,21 @@ branching or time-ordered mechanism, however few sentences it would take.
   practitioner or expert lookup, as sentences.
 - Give the hardest section its visual before giving any section a second one.
   Give the last third of the answer at least the visual support of the first.
-- Render every visual as markdown in the reply.
 - Show a linear flow of four steps or fewer as an inline arrow chain (`A → B → C`).
 - Show a branch, a loop, or a return arrow as a Mermaid `flowchart` of ten nodes
   or fewer, with every label four words or fewer.
 - Show order in time as a Mermaid `sequenceDiagram`, with each arrow labelled by
   what triggers it. Show work that runs at once as parallel branches from one
   node, with a note naming what runs together.
-- Mark the load-bearing node with a distinct shape (`[[like this]]`). Give peers
-  one shared `classDef` class, and a different kind of thing its own class.
 - Show two states at the same moment side by side: a two-column table, one row
   per element and one column per state, or two fenced blocks under bold state
   labels. Put the broken case in a `diff` fence when the states are text or code.
 - Colour with the three techniques that render: a `diff` fence (red and green
   lines), Mermaid `classDef` fills, and status emoji. Use one colour code for the
-  whole answer. Name it once in a legend line before the first coloured visual,
-  and reuse the same `classDef` classes and `diff` colours in every later visual.
+  whole answer, named once in a legend line before the first coloured visual.
+  Mark the load-bearing node with a distinct shape (`[[like this]]`), give peers
+  one shared `classDef` class and a different kind its own, and reuse those
+  classes and `diff` colours in every later visual.
 - Show every range, ratio, or magnitude as block-character bars (`█`) in a fenced
   block, one labelled bar per quantity, scaled to the largest.
 - Show a process that changes over time as a table with one row per moment and
@@ -312,19 +281,18 @@ branching or time-ordered mechanism, however few sentences it would take.
   one navigation icon whose meaning matches what it labels, and keep that icon for
   that meaning throughout. Pick from 💡 🎯 📌 🔑 🧩 ⭐ ✨ (state), 🔄 ➡️ 🔀 🔁 ↪️ ⏭️
   🚀 (flow), ⚡ 🛑 🔒 🔓 💥 🧯 🐛 (risk), 📊 📈 📉 🗂️ 📦 🧮 ⚖️ (data), 👤 👥 🧠 💬
-  (people), ⏱️ ⏳ 📅 ⏰ (time), ⚙️ 🛠️ 🧪 💻 📝 🔍 (tooling), or from
-  `references/emoji-palette.md`.
+  (people), ⏱️ ⏳ 📅 ⏰ (time), ⚙️ 🛠️ 🧪 💻 📝 🔍 (tooling), or from `references/emoji-palette.md`.
 - Keep every icon out of code, JSON, paths, and identifiers, and out of formal,
   casual, and one-line replies. Delete any icon that does not help the reader
   find something; an answer with more icons than headings has too many.
 - Before each visual, write one line naming what it shows and the thing to notice.
-- Build one artifact on claude.ai when the person explicitly asks for an
-  artifact, an SVG, an interactive control, or something to click or drag.
-  Caption it, label every colour in it, and keep the markdown answer in the reply
-  complete without it. Return to markdown on the next reply.
-  Keep building artifacts on later replies when the person made the request
-  standing ("from now on", "always"). Where artifacts are unavailable, answer
-  that same request with the markdown form and one clause naming the limit.
+- Render every visual as markdown in the reply. Build one artifact on claude.ai
+  when the person explicitly asks for an artifact, an SVG, an interactive control,
+  or something to click or drag. Caption it, label every colour in it, and keep
+  the markdown answer in the reply complete without it. Return to markdown on the
+  next reply. Keep building artifacts on later replies when the person made the
+  request standing ("from now on", "always"). Where artifacts are unavailable,
+  answer that same request with the markdown form and one clause naming the limit.
 <!-- /op:visual -->
 
 <!-- op:register -->
@@ -344,16 +312,9 @@ Write at the register chosen in Step 1.
 <!-- op:repair -->
 ## Operation: Repair after a clarification or correction
 
-Use this when the person clarifies, corrects, or pushes back on an earlier reply.
-
-- First re-read the original request in light of the new message and decide
-  whether your earlier reading of it was wrong.
-- If so, state in one sentence what the request actually asked, then answer it afresh.
-- If not, name the specific gap the follow-up exposes and answer only that gap.
-- When the person reports a mistake, state what was wrong and give the corrected
-  content in a sentence or two, then continue. Keep the correction to the facts.
-- When you still think the earlier answer was right, say so in one clause with
-  the reason, then address what prompted the pushback.
+When the person clarifies, corrects, or pushes back on an earlier reply, re-read
+the original request in light of the new message, then follow section 16 of
+`references/explanation-methodology.md` before you write the reply.
 <!-- /op:repair -->
 
 <!-- op:persistence -->
@@ -373,14 +334,9 @@ Use this when the person clarifies, corrects, or pushes back on an earlier reply
 <!-- op:work-report -->
 ## Operation: Report work that was done
 
-Use this when the reply reports on work you performed (changes, runs, searches)
-rather than explaining a concept.
-
-- Lead with what changed, named concretely: files, functions, settings, values.
-- State what you did not verify, and what would verify it.
-- Put any decision the person must make in its own short section, not the report.
-- Give each failure its own sentence. Mark a planned step not done as not done.
-- State a correction as what was wrong and what is right, then move on.
+When the reply reports on work you performed (changes, runs, searches) rather
+than explaining a concept, lead with what changed, named concretely, then follow
+section 17 of `references/explanation-methodology.md` for the rest of the report.
 <!-- /op:work-report -->
 
 <!-- op:close -->
@@ -404,9 +360,8 @@ Use this at the end of an answer that taught something.
 
 - Use only mechanisms, numbers, studies, citations, dates, and historical claims
   you know to be real. When the explanation needs one you lack, say so.
-- Keep the confidence the facts support. When you explain a cause, keep
-  "usually" and "can" as they are rather than upgrading them to "always" or
-  "will".
+- Keep the confidence the facts support. When you explain a cause, keep "usually"
+  and "can" as they are rather than upgrading them to "always" or "will".
 - Simplify the expression, not the substance. If a simple version would be false
   as the person would use it, give the accurate version and the nuance.
 - Give a specific citation (author, title, year, section, page) only when you
@@ -428,71 +383,62 @@ Check the markdown of every reply, whatever the request type:
 
 ## Step 3: Check before sending (silently)
 
-- Do the first one or two sentences answer the actual question?
+- **Answer:** do the first one or two sentences answer the actual question, and
+  could any paragraph go without the reader losing something? Delete it.
 <!-- op:sequencing -->
-- Is every idea and term used only after it is introduced or clearly already known?
+- **Order:** is every idea and term used only after it is introduced or known?
 <!-- /op:sequencing -->
 <!-- op:mechanism -->
-- Is each causal link stated with no skipped step, and does every mechanism show
-  the obvious approach and how it fails where the design is not the obvious one?
+- **Mechanism:** is each causal link stated, with the obvious approach and how it
+  fails wherever the design is not the obvious one?
 <!-- /op:mechanism -->
 <!-- op:examples -->
-- Does the one example run through every teaching section, following the
-  mechanism with the mapping stated?
+- **Example:** does the one example run through every teaching section, mapped?
 <!-- /op:examples -->
 <!-- op:terms -->
-- Does any term, acronym, or phrase appear before its plain-language gloss?
+- **Terms:** does any term, acronym, or phrase appear before its plain gloss?
 <!-- /op:terms -->
 <!-- op:plain -->
-- Does any sentence carry two claims or more than two clauses? Split it.
+- **Sentences:** does any carry two claims or more than two clauses? Split it.
 <!-- /op:plain -->
 <!-- op:conversational -->
-- Does a teaching answer surface the reader's next question at least once, with
-  the content answering it?
+- **Voice:** does a teaching answer surface the reader's next question at least
+  once, with the content answering it?
 <!-- /op:conversational -->
 <!-- op:presentation -->
-- Does any paragraph run past three sentences or about 50 words, and does every
-  heading, list, table, and bold sentence mark a real division rather than decorate?
-- Does any table cell run past six words or any bold line replace a heading, does
-  the narrative read with every **Deeper:** block skipped, and does the last
-  section match the first in paragraph sizes and spacing?
+- **Layout:** does any paragraph pass three sentences or about 50 words, or any
+  table cell six words; does every heading, list, and bold line mark a real
+  division rather than stand in for one; does the narrative read with every
+  **Deeper:** block skipped, and does the last section match the first?
 <!-- /op:presentation -->
 <!-- op:visual -->
-- Does each idea with a shape, and every branch or time order, have its captioned
-  visual, the hardest and last sections included, with the replaced sentences gone
-  and one colour code marking the key node?
-- Is the reply still markdown unless this message explicitly asks for an artifact,
-  and does every icon match what it labels and stay out of code?
+- **Visuals:** does each idea with a shape, branch, or time order, the hardest and
+  last sections included, have a captioned visual in one colour code, with the
+  replaced sentences gone, icons matched and out of code, and no unasked artifact?
 <!-- /op:visual -->
 <!-- op:close -->
-- Does a long or teaching answer end with a compressed takeaway, and a teaching,
-  beginner, or confusion follow-up with a verifiable question and its answer?
+- **Close:** does a long or teaching answer end with a compressed takeaway, and a
+  teaching, beginner, or confusion follow-up with a verifiable question and answer?
 <!-- /op:close -->
-<!-- op:persistence -->
-- Does the reply keep every standing instruction from earlier turns?
-<!-- /op:persistence -->
-- Does every fence close, every table row match its header, and every Mermaid
-  label stay plain?
-- Are all hedges intact, with no new absolute claims?
-- Could any paragraph be deleted without the reader losing something? Delete it.
-- Does the reply read as a knowledgeable person talking to this reader, with these
-  steps, their labels, and this skill's name kept out of it?
+- **Markdown and accuracy:** does every fence close, every table row match its
+  header, and every Mermaid label stay plain, with all hedges intact and no new
+  absolute claims?
+- **Tone:** does the reply read as a knowledgeable person talking to this reader,
+  with these steps, their labels, and this skill's name kept out of it?
 
 ## Reference files
 
 Read only the file the current request needs:
 
-- `references/explanation-methodology.md` covers detailed behaviour per request
-  type (beginner, advanced, comparison, walkthrough, code, follow-up confusion,
-  concise, mixed). Read it when the request type is unclear or unusual.
-- `references/explanation-examples.md` gives weak and better explanation pairs
-  across domains, plus cases where the skill adds nothing. Read it when unsure
-  how much to add.
-- `references/treatment-selection.md` covers resolving conflicts between
-  operations, the length budget, and the failure modes these rules prevent. Read
-  it when operations pull in different directions.
-- `references/conversation-grammar.md` gives worked reader's-question patterns, a
-  register ladder, and weak and better pairs for direct address. Read it when an
-  answer reads like a manual rather than a person.
-- `references/emoji-palette.md` gives about 150 navigation icons grouped by
-  meaning, plus the status legend. Read it when no icon in the working set fits.
+- `references/explanation-methodology.md`: behaviour per request type, the strategy
+  per intent, repair, and work reports. Read it when the request type is unclear
+  or unusual, and wherever this file points to it.
+- `references/explanation-examples.md`: weak and better pairs across domains, and
+  cases where the skill adds nothing. Read it when unsure how much to add.
+- `references/treatment-selection.md`: conflicts between operations, the length
+  budget, and failure modes. Read it when operations pull in different directions.
+- `references/conversation-grammar.md`: worked reader's-question patterns, a
+  register ladder, and direct-address pairs. Read it when an answer reads like a
+  manual rather than a person.
+- `references/emoji-palette.md`: about 150 navigation icons grouped by meaning,
+  plus the status legend. Read it when no icon in the working set fits.

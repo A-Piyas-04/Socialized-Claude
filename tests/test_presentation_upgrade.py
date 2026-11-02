@@ -1,9 +1,13 @@
-"""Invariants for the Phase 1-4 skill upgrade (docs/SKILL_UPGRADE_PLAN.md).
+"""Invariants for the skill upgrade, Phases 1-4 (docs/SKILL_UPGRADE_PLAN.md) and Phases 5-6
+(docs/SKILL_UPGRADE_PLAN_V2.md).
 
 Each rule is checked against the build that carries it, not against a pinned sentence: a rule
 owned by an operation must appear in that operation's single-op build more often than in the core
 build, and an always-on rule must appear in the core build. Anchors are the smallest tokens that
 carry a rule, so rewording a rule stays cheap and deleting one fails here.
+
+Phase 6 moved rules out of SKILL.md into a reference. Each moved rule is checked the same way in
+the reference, and its pointer in SKILL.md is checked like any other rule.
 """
 
 import re
@@ -50,6 +54,23 @@ RULES = [
     (4, "no heading jumps", None, ["one level at a time"]),
     (4, "palette-only emoji", None, ["every emoji from the palette"]),
     (4, "Step 3 markdown check", None, ["every Mermaid label stay plain"]),
+]
+
+METHODOLOGY = "references/explanation-methodology.md"
+
+# (name, operation or None for always-on, anchors in the reference, pointer anchor in SKILL.md)
+MOVED = [
+    ("strategy per intent", None,
+     ["## 15. Communication strategy by intent", "Rank causes instead of listing them",
+      "Keep a requested deliverable in its own form"],
+     "section 15 of"),
+    ("repair detail", "repair",
+     ["## 16. Repair after a clarification or correction", "decide whether your earlier reading of it was wrong",
+      "still think the earlier answer was right"],
+     "section 16 of"),
+    ("work-report detail", "work-report",
+     ["## 17. Reporting work that was done", "State what you did not verify", "Mark a planned step not done"],
+     "section 17 of"),
 ]
 
 
@@ -116,6 +137,42 @@ def test_every_upgrade_rule_is_present():
 @pytest.mark.parametrize("phase, name, op, anchors", RULES, ids=[r[1] for r in RULES])
 def test_removing_a_rule_is_caught(phase, name, op, anchors):
     assert name in missing_rules(remove_units_containing(skill_text(), anchors[0]))
+
+
+def reference_text() -> str:
+    return (lib.SKILL_DIR / METHODOLOGY).read_text(encoding="utf-8")
+
+
+def carried(source: str, op: str | None, anchors: list[str]) -> bool:
+    core = norm(lib.render_markers(source, frozenset()))
+    if op is None:
+        return all(norm(a) in core for a in anchors)
+    built = norm(lib.render_markers(source, frozenset({op})))
+    return all(built.count(norm(a)) > core.count(norm(a)) for a in anchors)
+
+
+def missing_moves(skill: str, reference: str) -> list[str]:
+    return [name for name, op, anchors, pointer in MOVED
+            if not (carried(reference, op, anchors) and carried(body(skill), op, [pointer]))]
+
+
+def test_every_moved_rule_is_reachable():
+    assert METHODOLOGY in skill_text()
+    assert missing_moves(skill_text(), reference_text()) == []
+
+
+@pytest.mark.parametrize("name, op, anchors, pointer", MOVED, ids=[m[0] for m in MOVED])
+def test_removing_a_pointer_or_a_moved_rule_is_caught(name, op, anchors, pointer):
+    assert name in missing_moves(remove_units_containing(skill_text(), pointer), reference_text())
+    for anchor in anchors:
+        assert name in missing_moves(skill_text(), remove_units_containing(reference_text(), anchor))
+
+
+def test_moved_rules_left_skill_md():
+    text = norm(skill_text())
+    for _, _, anchors, _ in MOVED:
+        for anchor in anchors[1:]:
+            assert norm(anchor) not in text, f"{anchor!r} should live only in {METHODOLOGY}"
 
 
 def test_paragraph_ceiling_matches_the_dense_paragraph_gate():

@@ -259,3 +259,26 @@ needs to decide. No progress narrative.
 - Phase 5 finding: `icon_count` misses an icon that follows a section number
   (`## 1. 🧩`). It is left unchanged, as a heuristic that never gates; Phase 10's
   conformance score handles numbered headings.
+- Skill upgrade V2 Phase 6 (make room), user 2026-11-02: the user approved moving the
+  strategy section fully to a reference, which reverses its embedding in `2714c69`.
+  It is now `references/explanation-methodology.md` §15, always-on, and `SKILL.md`
+  keeps the heading and a 3-line pointer. The repair and work-report bullets moved to
+  §16 and §17 inside `op:repair` and `op:work-report` markers. Each operation keeps its
+  `## Operation:` heading and a one-paragraph pointer, and the Scope pointers became
+  marked bullets. No new skill file was added.
+- Phase 6 Step 3: 17 questions became 12, labelled and in page-shape order, not the
+  9 the plan named. Every operation check stays inside its own markers, so each
+  single-op ablation build keeps its check. The persistence check was cut as a
+  duplicate of `op:persistence`'s "check the reply against each one".
+- Phase 6 merges, dropping no rule:
+  - visible separation with the `---` between topics;
+  - the parts-get-headings rule with smaller sections and the numbered map;
+  - "render as markdown" with the artifact rule;
+  - the load-bearing node and `classDef` peers with the colour-code rule;
+  - Step 2's closing length line (a duplicate) was removed;
+  - the `op:sequencing` expert clause was shortened, because Step 2 carries it.
+- Phase 6 counts: the `SKILL.md` body is 440 lines in the validator's count (it was
+  494), and 389 rendered (guard 460). A raw-body guard of 440 or fewer is in
+  `test_skill_structure.py`. `test_presentation_upgrade.py` gains a `MOVED` registry
+  (moved rule in the reference, plus its pointer) with removal tests. The V2 change
+  record is `docs/SKILL_UPGRADE_PLAN_V2.md`.

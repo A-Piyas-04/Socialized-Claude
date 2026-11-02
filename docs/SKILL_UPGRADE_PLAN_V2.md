@@ -428,6 +428,54 @@ after Phase 6  █████████████████████�
 **Acceptance:** body at most 440 lines; every moved rule still reachable by a
 pointer; `test_presentation_upgrade.py` registry updated and green.
 
+#### Status (2026-11-02): ✅ done
+
+Counts are the validator's (`body.count("\n") + 1`).
+
+```
+before Phase 6  █████████████████████████████████████████████████░  494 / 500
+after Phase 6   ████████████████████████████████████████████░░░░░░  440 / 500   rendered 389
+```
+
+| Move | Where it went | Lines |
+| --- | --- | --- |
+| Strategy, repair, work-report detail, Step 3 | Methodology §15–17; Step 3 regrouped | −34 |
+| Duplicate bullets merged | `op:presentation`, `op:visual` | −4 |
+| Pointer paragraphs and tightenings | Listed below | −16 |
+
+**Methodology file:** all moved text is in `references/explanation-methodology.md`. The
+repair and work-report sections sit inside their op markers, so `rep` and `wrep` keep
+them and `core` does not. Each operation keeps its heading and a pointer line.
+
+**Step 3:** it stops at 12, not 9. Every operation check stays inside its own markers,
+so each single-op ablation build keeps its check; a block marked with two operations
+would drop out of both. Merged pairs: answer-first with delete-a-paragraph, markdown
+with hedges, the two presentation checks, and the two visual checks. The persistence
+check was cut because `op:persistence` already says to check every standing
+instruction before sending.
+
+**Smaller tightenings (no rule dropped):**
+
+- The repair and work-report pointers became one paragraph each, under their heading.
+- Step 2's closing "add length only when…" line, which repeats the "conceptual why or
+  how" rule.
+- The Scope pointers became three marked bullets.
+- The Reference files entries were shortened.
+- Four bullets were reflowed.
+- The expert clause in `op:sequencing` now leans on Step 2's "narrow advanced
+  question".
+
+**Tests:**
+
+- `MOVED` in `test_presentation_upgrade.py`: each moved rule is checked in the
+  reference for the right build, and so is its pointer in `SKILL.md`. Deleting either
+  fails.
+- A raw-body guard of 440 or fewer lines in `test_skill_structure.py`.
+
+**Phase 7 line references, now:** `op:register` practitioner is `SKILL.md` line 305,
+and the Step 1 default is line 59. "None of them is a template" now lives in
+methodology §15.
+
 ---
 
 ### 🗺️ Phase 7 — Fix the conflicts, then fix the shape
@@ -437,14 +485,14 @@ rule to weigh.
 
 | Where | Change |
 | --- | --- |
-| `op:register` practitioner (lines 336–337) | Keep the field's vocabulary, **and** gloss each specialist term in a parenthesis of six words or fewer. Keep one analogy in any teaching answer. Only the expert register drops both |
+| `op:register` practitioner (line 305 after Phase 6) | Keep the field's vocabulary, **and** gloss each specialist term in a parenthesis of six words or fewer. Keep one analogy in any teaching answer. Only the expert register drops both |
 | Step 1 default reader | Keep practitioner as the default, now that it glosses |
 | `op:conversational` | At least one reader's question in every teaching **and decision** answer, written as a `> 🙋 **…?**` line with the answer right below it |
 | `op:close` | Takeaway and check question become `> 🎯 **Takeaway:**` and `> 🧪 **Check yourself:**` callouts, options as a list |
 | `op:presentation` heading ladder | One title, then sections at the largest level that renders smaller than the title. No level that renders like body text is used as a heading (levels set by Phase 5) |
 | `op:presentation` opener | The opening paragraph is two sentences at most; any qualifier moves into its own short unit |
 | New always-on "Page shape" section, after Scope | The skeleton in short form (~20 lines), stated as defaults for any answer of two or more sections |
-| Line 48 | "None of them is a template" becomes "the page shape is fixed; the wording never is" |
+| Methodology §15 (moved in Phase 6) | "None of them is a template" becomes "the page shape is fixed; the wording never is" |
 
 **Acceptance:**
 
