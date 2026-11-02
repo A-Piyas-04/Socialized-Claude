@@ -28,6 +28,7 @@ def test_render_probe_shows_every_level_and_renders_cleanly():
     for device in ("**A bold line", "\n---\n", "> A plain blockquote", "> 🙋", "> 🧠", "> 🎯", "> 🧪"):
         assert device in probe, device
     assert lm.check(probe) == []
+    assert (EVAL / "layout_capture" / "render_probe-claude-ai.png").is_file()
 
 
 def test_layout_prompts_are_unique_and_cover_the_capture():

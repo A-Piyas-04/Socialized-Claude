@@ -178,7 +178,8 @@ round 2 answers have zero analogies and leave Raft, Paxos and p95 unexplained.
 - The skill's ladder is `##`, `###`, `####` with no title rule. The model numbers
   sections but never writes a top-level title, so the largest size never appears.
 - **Confirmed in Phase 5:** the raw markdown shows `##` for sections and `###` for
-  sub-sections, and both render almost alike on claude.ai. Only `#` is untested.
+  sub-sections. The render probe shows `##`, `###` and `####` at the same size on
+  claude.ai, and only `#` is visibly larger.
 
 ### R3. Turns of the conversation have no visible form
 
@@ -350,7 +351,8 @@ a stale install impossible to miss again.
 
 **Acceptance:**
 
-- ⬜ A screenshot of the render probe, and the heading levels that look distinct.
+- ✅ A screenshot of the render probe, and the heading levels that look distinct
+  (`evaluation/layout_capture/render_probe-claude-ai.png`).
 - ✅ Raw markdown of the round 2 answers saved, with the levels the model used.
 - ✅ Version stamp in the built skill (`metadata.version: 2.0-dev`). Seeing it in the
   installed copy on claude.ai is yours to check.
@@ -367,7 +369,8 @@ The `collect_cc` capture was dropped: you supplied the answers by hand. They liv
 - `lint.txt`, the output of both linters.
 
 The prompts are also in `evaluation/layout_prompts.json`. The probe is
-`evaluation/render_probe.md`.
+`evaluation/render_probe.md`, and its claude.ai screenshot is
+`evaluation/layout_capture/render_probe-claude-ai.png`.
 
 **Heading levels:**
 
@@ -375,8 +378,27 @@ The prompts are also in `evaluation/layout_prompts.json`. The probe is
   Neither writes a `#` title.
 - On claude.ai, `##` and `###` render as bold text barely larger than the body, and
   almost alike. The `##`, `###`, `####` ladder gives no visible hierarchy there.
-- Phase 7's title rule waits on one question the probe answers: does `#` render
-  clearly larger?
+
+**Render probe on claude.ai** (`render_probe-claude-ai.png`):
+
+| Device | How it renders |
+| --- | --- |
+| `#` | ✅ Visibly larger than body, bold |
+| `##`, `###`, `####` | ❌ Same size as each other, bold, barely above body |
+| Bold line | ❌ Looks like `####` |
+| `---` | ⚠️ A faint hairline |
+| Blockquote | ⚠️ Left bar, dimmer grey text |
+
+Two consequences for Phase 7:
+
+- **Size:** a `#` title is the only level that adds visible size. `###` and `####`
+  give no size over `##`, so depth below `##` must come from separators, numbering
+  and callouts, as section 3 anticipated. That answers decision 2 with `#`, for you
+  to confirm.
+- **Callouts recede:** blockquote text renders dimmer than body text. A 🎯 or 🧪
+  callout stands apart through its bar and icon, but it reads quieter, not louder.
+  The callout's key words need bold, and the one sentence that must not be missed
+  stays in body text.
 
 **What else the markdown shows:**
 

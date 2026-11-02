@@ -251,9 +251,11 @@ needs to decide. No progress narrative.
   in every variant. `evaluation/render_probe.md` is the one-message probe for claude.ai
   heading sizes. `evaluation/layout_prompts.json` starts with the two round-2 prompts,
   stored verbatim without the `/socialized` prefix.
-- Phase 5 finding: the model writes `##` sections and `###` sub-sections, and claude.ai
-  renders the two almost alike. Whether `#` is visibly larger is the one open question,
-  and Phase 7's title rule waits for the probe screenshot. `tests/test_layout_capture.py`
+- Phase 5 finding: the model writes `##` sections and `###` sub-sections. The render
+  probe (`evaluation/layout_capture/render_probe-claude-ai.png`) shows `##`, `###`,
+  `####` and a bold line at one size on claude.ai; only `#` is visibly larger.
+  Blockquote text renders dimmer than body. Phase 7 takes `#` for the title, pending
+  the user's confirmation of V2 decision 2. `tests/test_layout_capture.py`
   pins the round-2 baseline (no `lint_markdown` break; heading levels {2, 3} and {2}).
   It is a record, not a gate.
 - Phase 5 finding: `icon_count` misses an icon that follows a section number
