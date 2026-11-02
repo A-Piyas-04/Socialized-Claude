@@ -1,0 +1,17 @@
+{
+  "description": "Prompts for layout conformance runs (docs/SKILL_UPGRADE_PLAN_V2.md, Phases 5 and 10). Questions are verbatim, without the /socialized prefix used on claude.ai. Phase 10 adds the rest.",
+  "prompts": [
+    {
+      "id": "layout_replicas",
+      "intent": "mechanism",
+      "register": "practitioner",
+      "question": "Why does adding more replicas to a database sometimes make writes slower instead of faster? Walk me through the actual chain of cause and effect.."
+    },
+    {
+      "id": "layout_monolith",
+      "intent": "decision",
+      "register": "practitioner",
+      "question": "We're deciding between keeping our monolith, splitting out two services, or going full microservices. Team of six, one product, about 40k daily users. What should we do??"
+    }
+  ]
+}

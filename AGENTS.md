@@ -241,3 +241,21 @@ needs to decide. No progress narrative.
   single-op or core build, a removal test per rule, and ties between skill numbers and
   linter thresholds). The phrase tests in `test_skill_structure.py` stay. The change
   record for Phases 1–4 lives in `docs/SKILL_UPGRADE_PLAN.md`, not a new document.
+- Skill upgrade V2 Phase 5 (diagnose, `docs/SKILL_UPGRADE_PLAN_V2.md`), user
+  2026-11-02: the round-2 claude.ai answers were supplied by the user (raw markdown and
+  screenshots), not captured through `collect_cc`. This is a user-approved exception to
+  "nothing by hand", for this diagnosis only. The evidence is in
+  `evaluation/layout_capture/round2/`, with `capture.json` recording build `e93f3c0`
+  and the explicit `/socialized` invocation. It says nothing about auto-activation.
+- Phase 5: `SKILL.md` frontmatter carries `metadata: {version: "2.0-dev"}`, identical
+  in every variant. `evaluation/render_probe.md` is the one-message probe for claude.ai
+  heading sizes. `evaluation/layout_prompts.json` starts with the two round-2 prompts,
+  stored verbatim without the `/socialized` prefix.
+- Phase 5 finding: the model writes `##` sections and `###` sub-sections, and claude.ai
+  renders the two almost alike. Whether `#` is visibly larger is the one open question,
+  and Phase 7's title rule waits for the probe screenshot. `tests/test_layout_capture.py`
+  pins the round-2 baseline (no `lint_markdown` break; heading levels {2, 3} and {2}).
+  It is a record, not a gate.
+- Phase 5 finding: `icon_count` misses an icon that follows a section number
+  (`## 1. 🧩`). It is left unchanged, as a heuristic that never gates; Phase 10's
+  conformance score handles numbered headings.

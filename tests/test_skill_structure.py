@@ -63,6 +63,15 @@ def test_metadata_meets_claude_ai_limits():
     assert set(meta) <= lib.ALLOWED_FRONTMATTER_KEYS
 
 
+def test_build_carries_a_version_stamp(tmp_path):
+    meta = frontmatter(lib.SKILL_DIR)
+    assert isinstance(meta.get("metadata"), dict) and meta["metadata"].get("version"), \
+        "SKILL.md needs metadata.version so an installed build can be identified"
+    out, _ = build("full", out_dir=tmp_path)
+    packaged, _, _ = lib.split_frontmatter(zip_texts(out)["socialized/SKILL.md"])
+    assert packaged["metadata"] == meta["metadata"]
+
+
 def test_required_reference_files_exist_and_are_linked():
     body = read(lib.SKILL_DIR / "SKILL.md")
     for name in ("explanation-methodology.md", "treatment-selection.md", "explanation-examples.md",
@@ -447,7 +456,7 @@ def test_variants_share_identical_metadata(tmp_path):
     for variant in lib.VARIANTS:
         out, _ = build(variant, out_dir=tmp_path)
         meta, _, _ = lib.split_frontmatter(zip_texts(out)["socialized/SKILL.md"])
-        metas.add((meta["name"], meta["description"]))
+        metas.add((meta["name"], meta["description"], json.dumps(meta.get("metadata"), sort_keys=True)))
     assert len(metas) == 1, "ablation variants must not differ in activation metadata"
 
 

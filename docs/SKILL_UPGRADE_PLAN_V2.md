@@ -177,8 +177,8 @@ round 2 answers have zero analogies and leave Raft, Paxos and p95 unexplained.
   lines), which claude.ai styles almost alike.
 - The skill's ladder is `##`, `###`, `####` with no title rule. The model numbers
   sections but never writes a top-level title, so the largest size never appears.
-- **Still unconfirmed:** the exact levels the model wrote. Phase 5's render probe and
-  raw-markdown capture settle it before any rule changes.
+- **Confirmed in Phase 5:** the raw markdown shows `##` for sections and `###` for
+  sub-sections, and both render almost alike on claude.ai. Only `#` is untested.
 
 ### R3. Turns of the conversation have no visible form
 
@@ -351,8 +351,60 @@ a stale install impossible to miss again.
 **Acceptance:**
 
 - ⬜ A screenshot of the render probe, and the heading levels that look distinct.
-- ⬜ Raw markdown of the round 2 answers saved, with the levels the model used.
-- ⬜ Version stamp visible in the installed skill.
+- ✅ Raw markdown of the round 2 answers saved, with the levels the model used.
+- ✅ Version stamp in the built skill (`metadata.version: 2.0-dev`). Seeing it in the
+  installed copy on claude.ai is yours to check.
+
+#### Status (2026-11-02)
+
+The `collect_cc` capture was dropped: you supplied the answers by hand. They live in
+`evaluation/layout_capture/round2/`:
+
+- `replicas.md` and `monolith.md`, copied from claude.ai;
+- nine screenshots in reading order;
+- `capture.json`, recording build `e93f3c0`, the explicit `/socialized` invocation and
+  the prompts;
+- `lint.txt`, the output of both linters.
+
+The prompts are also in `evaluation/layout_prompts.json`. The probe is
+`evaluation/render_probe.md`.
+
+**Heading levels:**
+
+- Both answers write sections as `##`, and replicas writes sub-sections as `###`.
+  Neither writes a `#` title.
+- On claude.ai, `##` and `###` render as bold text barely larger than the body, and
+  almost alike. The `##`, `###`, `####` ladder gives no visible hierarchy there.
+- Phase 7's title rule waits on one question the probe answers: does `#` render
+  clearly larger?
+
+**What else the markdown shows:**
+
+- **Opener:** replicas runs four sentences and about 55 words; monolith runs three.
+- **Separators:** monolith has `---` only after the map and before the takeaway.
+- **Close:** replicas uses a `## Takeaway` heading; monolith uses a
+  `**Takeaway:**` line. Neither is a callout.
+- **Check options:** replicas writes bare `A)` lines, which render as one block.
+  Monolith writes a `-` list.
+- **Reader's questions:** replicas has two, as bold lead-ins inside a paragraph.
+  Monolith has none.
+- **Callouts:** only **For implementers:** and **Deeper:**. There is no 🙋, 🧠, 🎯
+  or 🧪.
+- **Unglossed:** Raft, Paxos, Dynamo-style, `W`, `R + W > N`, backpressure, log
+  segments, p95.
+
+**Linters:**
+
+- `lint_markdown.py`: no breaks in either answer.
+- `lint_response.py`, replicas: `heading_thin`, four `dense_paragraph`,
+  `empty_transition`, `emphasis_overuse`.
+- `lint_response.py`, monolith: `dense_paragraph`, `bullets_unconnected`,
+  `empty_transition`, `emphasis_overuse`.
+
+**A metric gap for Phase 10:** `icon_count` reads 0 for both answers, though every
+section heading carries an icon. The metric expects the icon first, and these headings
+put a number first (`## 1. 🧩 …`). Phase 10's conformance score must look past the
+number.
 
 ---
 

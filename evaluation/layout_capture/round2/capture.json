@@ -1,0 +1,27 @@
+{
+  "notice": "Surface: claude.ai, not Claude Code. Answers and screenshots were captured by the project owner by hand (Phase 5 exception, see AGENTS.md Decisions). Both prompts were invoked explicitly with /socialized, so this evidence says nothing about automatic activation.",
+  "round": 2,
+  "surface": "claude.ai",
+  "date": "2026-11-02",
+  "build": {
+    "commit": "e93f3c0",
+    "description": "V1 build after Phase 4 (dist/socialized.zip at that commit), uploaded to claude.ai"
+  },
+  "invocation": "/socialized",
+  "answers": [
+    {
+      "prompt_id": "layout_replicas",
+      "prompt": "Why does adding more replicas to a database sometimes make writes slower instead of faster? Walk me through the actual chain of cause and effect..",
+      "markdown": "replicas.md",
+      "markdown_source": "claude.ai copy, pasted by the user",
+      "screenshots": ["replicas-1.png", "replicas-2.png", "replicas-3.png", "replicas-4.png", "replicas-5.png"]
+    },
+    {
+      "prompt_id": "layout_monolith",
+      "prompt": "We're deciding between keeping our monolith, splitting out two services, or going full microservices. Team of six, one product, about 40k daily users. What should we do??",
+      "markdown": "monolith.md",
+      "markdown_source": "claude.ai copy, pasted by the user",
+      "screenshots": ["monolith-1.png", "monolith-2.png", "monolith-3.png", "monolith-4.png"]
+    }
+  ]
+}
