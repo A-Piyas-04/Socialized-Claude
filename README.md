@@ -78,6 +78,7 @@ python -m pytest                          # 186 tests
 python scripts/validate_skill.py          # validate the skill source
 python scripts/package_skill.py           # rebuild dist/socialized.zip (deterministic)
 python scripts/validate_skill.py dist/socialized.zip
+python scripts/lint_markdown.py response.md   # renderer-safety check of one response
 python research/recompute_archive_stats.py
 ```
 

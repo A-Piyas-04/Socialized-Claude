@@ -437,7 +437,8 @@ def test_variants_contain_exactly_their_operations(tmp_path, variant):
     for op, heading in HEADINGS.items():
         assert (heading in skill_text) == (op in lib.VARIANTS[variant]), (variant, op)
     for always in ("## Scope: decide first whether this applies", "## Step 2: Size the answer",
-                   "## Accuracy rules (always apply)", "## Step 3: Check before sending (silently)"):
+                   "## Accuracy rules (always apply)", "## Markdown that renders (always apply)",
+                   "## Step 3: Check before sending (silently)"):
         assert always in skill_text
 
 

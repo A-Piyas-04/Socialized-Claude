@@ -3,10 +3,10 @@
 > **Written for:** the project owner and whoever implements the phases.
 > **Scope:** `skill/socialized/` only. No plugin work in any phase.
 > **Branch:** started on `skill-only` at `2714c69` — the last commit before plugins
-> existed. Phase 1 is `280a31e` and Phase 2 is `1b8a1b4` on `skill-only`. Phase 3 is
-> on `skill-upgrade-phase-3`, branched from `1b8a1b4`.
-> **Status (2026-11-02):** Phases 1–3 ✅ complete, Phase 4 ⬜ not started. Each
-> phase's behavioural check is still open, and only you can do it.
+> existed. Phases 1–3 are `280a31e`, `1b8a1b4`, and `a105958` on `skill-only`.
+> Phase 4 is on `skill-upgrade-phase-4`, branched from `d2657e2`.
+> **Status (2026-11-02):** all four phases ✅ complete. Each phase's behavioural
+> check is still open, and only you can do it.
 
 ---
 
@@ -23,8 +23,8 @@ So: **space first, then voice, then visuals, then durability.**
 | --- | --- | --- | --- |
 | 1 | 🧱 Space and hierarchy | better structure, spacious, whitespace in one view, font size and style, many sections, bullet structure | ✅ complete |
 | 2 | 💬 Human voice | conversation between two people, sequential, analogy, scenario, examples, no unexplained jargon | ✅ complete |
-| 3 | 🎨 Visual and colour | flowcharts, diagrams, huge emoji set, colourful characters, markdown over SVG | ✅ complete |
-| 4 | 🛡️ Durability | markdown never breaks, and none of the above silently regresses | ⬜ not started |
+| 3 | 👀 Visual and colour | flowcharts, diagrams, huge emoji set, colourful characters, markdown over SVG | ✅ complete |
+| 4 | 🛡️ Durability | markdown never breaks, and none of the above silently regresses | ✅ complete |
 
 ---
 
@@ -42,16 +42,17 @@ start     ███████████████████████�
 Phase 1   ████████████████████████████████████████████░░░░░░  439 / 500   rendered 392
 Phase 2   ███████████████████████████████████████████████░░░  471 / 500   rendered 418
 Phase 3   █████████████████████████████████████████████████░  485 / 500   rendered 432
+Phase 4   █████████████████████████████████████████████████░  494 / 500   rendered 441
 ```
 
-Phase 4 starts with **15 body lines** of room.
+After Phase 4, **6 body lines** remain. Any further rule must displace one.
 
 Three consequences, which the phases are built around:
 
 - 🔁 **Phase 1 must reclaim space before it spends any.** A compression pass over
   the twelve operations — merging duplicate wordings, not dropping rules — is the
   first task, not a nice-to-have.
-- 📚 **Bulk material goes into reference files.** References are not line-capped.
+- 🗂️ **Bulk material goes into reference files.** References are not line-capped.
   The emoji catalogue and the conversation patterns belong there, with one
   pointer line each in `SKILL.md`.
 - ✋ **Every later addition must displace something.** Once Phase 1's headroom is
@@ -181,7 +182,7 @@ sake.
 
 ---
 
-## 🎨 Phase 3 — Visual and colour ✅ complete
+## 👀 Phase 3 — Visual and colour ✅ complete
 
 **Goal:** the page is colourful and diagrammatic in **markdown**, with SVG and
 artifacts as rare exceptions.
@@ -246,7 +247,7 @@ never-in-code rule. If an answer has more icons than headings, it has failed.
 
 ---
 
-## 🛡️ Phase 4 — Durability ⬜ not started
+## 🛡️ Phase 4 — Durability ✅ complete
 
 **Goal:** the markdown never breaks, and Phases 1–3 cannot silently regress.
 
@@ -263,9 +264,9 @@ things that render as garbage when they go wrong.
 | 🧨 Fence collapse | A fenced block inside a fenced block with the same backtick count | Outer fence uses more backticks than any inner one |
 | 📐 Table rupture | An unescaped pipe inside a cell | Escape it, or move the content under the table |
 | 🧩 Mermaid blank render | A parenthesis, quote or arrow inside a node label | Keep labels to plain words, four or fewer |
-| 📱 Mobile overflow | More than four table columns | The existing four-column cap, enforced |
-| 🔤 Tofu boxes | An emoji outside the common set | The palette is limited to Emoji 11 single code points; your render check confirms it |
-| 🪜 Heading jump | `##` straight to `####` | The existing no-skip rule, checked |
+| 📏 Mobile overflow | More than four table columns | The existing four-column cap, enforced |
+| 🔣 Tofu boxes | An emoji outside the common set | The palette is limited to Emoji 11 single code points; your render check confirms it |
+| ⤵️ Heading jump | `##` straight to `####` | The existing no-skip rule, checked |
 
 ### Edits
 
@@ -280,12 +281,17 @@ things that render as garbage when they go wrong.
 
 ### ✅ Acceptance
 
-- ⬜ `python scripts/lint_markdown.py` catches all six break classes on crafted
-  samples.
-- ⬜ `python -m pytest -q` green, and the new suite fails if any Phase 1–3 rule is
-  removed from `SKILL.md`.
-- ⬜ The 500-line budget still holds, with the headroom spent deliberately. Phase 4
-  starts with **15 body lines** (485/500) and **28 rendered lines** (432/460).
+- ✅ `python scripts/lint_markdown.py` catches all six break classes on crafted
+  samples, under seven codes (fences get two: `unclosed_fence`, `nested_fence`).
+  `SKILL.md` and every reference file pass it. _(done 2026-11-02)_
+- ✅ `python -m pytest -q` green: **473 passed, 1 skipped**. In
+  `tests/test_presentation_upgrade.py`, one removal test per rule deletes that
+  rule from a copy of `SKILL.md` and checks it is reported missing, so removing
+  any Phase 1–4 rule fails the suite. _(done 2026-11-02)_
+- ✅ The 500-line budget holds: body **494/500**, rendered **441/460**. Two merges
+  paid for the new section (see the change record below). _(done 2026-11-02)_
+- ⬜ Run a long answer through `python scripts/lint_markdown.py`, then look at it
+  rendered. **The linter only sees text you hand it; reading real output is still yours.**
 
 ### 🚨 Risk
 
@@ -323,10 +329,50 @@ and keep what you have.
 | 1 | Paragraph ceiling at 3 sentences, or 2? | ✅ 3 sentences, about 50 words |
 | 2 | Thirteen operations, or fold into `op:plain`? | ✅ Thirteen; no new sweep arm |
 | 3 | About 150 icons, or a tighter set? | ✅ 153 icons, 42 inline |
-| 4 | Stop after Phase 2, or run all four? | ⬜ Open: Phase 4 not started |
+| 4 | Stop after Phase 2, or run all four? | ✅ All four run |
 
 Each resolved decision is recorded with its reasoning under "Decisions" in
 `AGENTS.md`.
 
-**The takeaway:** your fifteen asks became four phases with a forced order. Three
-are done, and the 15 body lines left are Phase 4's whole budget.
+## 🧾 Change record (Phases 1–4)
+
+Every merge and every superseded rule, in one place. No rule was dropped: each
+merge folded one wording into another that already said the same thing.
+
+### Merges
+
+| Phase | Where | Merged |
+| --- | --- | --- |
+| 1 | `op:sequencing` | Obvious-approach bullet, kept in `op:mechanism` |
+| 1 | Accuracy rules | Duplicate "unsure of a fact" bullet |
+| 1 | `op:register` | Beginner rule, folded into "explain simply" |
+| 1 | `op:close` | Interactive-offer rule, compressed |
+| 1 | `op:plain` | Section-map rule, compressed |
+| 1 | Step 3 | 17 questions became 11 |
+| 3 | `op:visual` | Colour techniques, into the one-colour-code bullet |
+| 3 | Step 3 | New visual checks, into the two visual questions |
+| 4 | `op:presentation` | Blank-line and new-unit bullets, into two |
+| 4 | `op:conversational` | No-praise and no-persona bullets, into one |
+
+Phase 1's `op:sequencing` merge removes the obvious-approach rule from the
+single-operation `seq` ablation build only. The `full` build and the frozen
+`pilot16-cc` build are unaffected.
+
+### Superseded rules
+
+| Phase | Old rule | Replaced by |
+| --- | --- | --- |
+| 1 | Paragraph of 4 sentences or 80 words | 3 sentences or about 50, with a causal exception |
+| 1 | `DENSE_SENTENCES` 5, `DENSE_PARAGRAPH_WORDS` 80 | 4 and 50 |
+| 2 | "Prefer a direct case over an analogy" | Analogy given equal standing |
+| 2 | Scenario only for beginners | Scenario opens any teaching answer |
+| 2 | Terms the reader "clearly knows" stay undefined | Only terms the reader used |
+| 3 | Six status icons "and no other symbols" | Status layer plus navigation layer |
+| 3 | Headings stay unmarked | A palette icon may open a heading |
+| 3 | Diagram only past three sentences | Every branch or time order in a teaching answer |
+| 3 | Artifact plus "a short markdown answer" | Markdown complete without the artifact |
+| 3 | `treatment-selection.md`: "emoji as structure" | "Emoji as decoration", plus "emoji soup" |
+| 4 | Render rules only inside operations | Always-on "Markdown that renders" section |
+
+**The takeaway:** your fifteen asks became four phases with a forced order. All
+four are done, and the 6 body lines left mean any further rule must displace one.

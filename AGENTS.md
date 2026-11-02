@@ -216,3 +216,28 @@ needs to decide. No progress narrative.
   `research/baseline_structural_metrics.json` regenerated (only `icon_count` added).
 - Phase 3 budget: nothing merged away beyond the colour bullet; SKILL.md body is 485
   lines (guard 500), rendered 432 (test guard 460), leaving 15 body lines for Phase 4.
+- Skill upgrade Phase 4 (durability, `docs/SKILL_UPGRADE_PLAN.md`), user 2026-11-02: new
+  always-on section "Markdown that renders (always apply)" between the accuracy rules
+  and Step 3, with no op markers, so every variant including `core` carries it. Six
+  rules: fence width, escaped pipes, row cell count plus the four-column cap, plain
+  Mermaid labels, no heading jumps, palette-only emoji. Step 3 gains one unmarked
+  check. The four-column and no-skip rules stay in `op:presentation` as well.
+- Phase 4 reclaim, dropping no rule: `op:presentation`'s three blank-line/new-unit
+  bullets became two plus the visible-separation bullet; `op:conversational`'s
+  no-praise and no-persona bullets became one (5 rules remain). SKILL.md body is 494
+  lines (guard 500), rendered 441 (test guard 460).
+- Phase 4 linter `scripts/lint_markdown.py` (standalone, stdlib only, exit 1 on any
+  break): `unclosed_fence`, `nested_fence`, `table_pipe_mismatch`, `wide_table`,
+  `mermaid_label` (flowchart node and edge labels only; sequence-diagram text is
+  free), `heading_jump` (the first heading may start at any level),
+  `emoji_outside_palette`. The emoji check covers U+1F000–U+1FAFF plus joiners, flag
+  letters and keycaps; U+2600–U+27BF symbols such as a check mark are not flagged,
+  because they render as text glyphs everywhere. A nested same-width fence reports
+  `nested_fence` and the `unclosed_fence` that follows, since a renderer does the same.
+  It is not wired into `lint_response.py` or the evaluation harness.
+- Phase 4 tests: `tests/test_markdown_safety.py` (one crafted break per code, a clean
+  sample, legitimate fixtures, and every skill file must pass) and
+  `tests/test_presentation_upgrade.py` (a 33-rule registry checked against the
+  single-op or core build, a removal test per rule, and ties between skill numbers and
+  linter thresholds). The phrase tests in `test_skill_structure.py` stay. The change
+  record for Phases 1–4 lives in `docs/SKILL_UPGRADE_PLAN.md`, not a new document.

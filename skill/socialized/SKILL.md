@@ -208,10 +208,8 @@ Use this for teaching answers, so the prose anticipates instead of only assertin
 - Address the reader as "you" and name what they do, rather than what "one" does.
 - Use the contractions speech uses ("it's", "doesn't", "you'll") unless the
   register is formal or the person asked otherwise.
-- Open with content. Lead with no praise, reassurance, or interjection, and cut
-  openers like "Great question" and "simple, right?".
-- Keep the second voice to a question the text resolves. Do not invent a persona
-  or stage a dialogue between named speakers.
+- Open with content: cut praise, reassurance, any persona, and interjections
+  ("Great question", "simple, right?"). Stage no dialogue between named speakers.
 <!-- /op:conversational -->
 
 <!-- op:presentation -->
@@ -221,14 +219,12 @@ Use this for every answer with more than one idea. Choose the form from the
 shape of the content. Prose is one of the forms, not the fallback.
 
 - Give each idea its own unit: a short paragraph, a list item, a table row, or a
-  step. When a second idea starts, start a new unit.
+  step. Start a new unit when the idea changes, with a blank line before it.
 - End a paragraph at three sentences or about 50 words, as a ceiling, not a
-  target. Leave a blank line before the next paragraph, list, table, code block,
-  or heading.
-- Start a new paragraph when the idea changes, but keep sentences that make one
-  continuous argument together, and let that chain override the ceiling.
-- A blank line separates one unit from the next. Give a section of three or more
-  units visible separation: a sub-heading, a `---`, or a labelled list.
+  target. Keep sentences that make one continuous argument together, and let
+  that chain override the ceiling.
+- Give a section of three or more units visible separation: a sub-heading, a
+  `---`, or a labelled list.
 - Give a list item one idea and about 25 words, a second in a sub-bullet or new item.
 - Lead a bullet with a bolded label, then the claim. Keep detail in sub-bullets,
   and never a second top-level idea inside one.
@@ -418,6 +414,17 @@ Use this at the end of an answer that taught something.
 - When you name a researcher or a paper, say in the same sentence what they
   showed, or leave the name out.
 
+## Markdown that renders (always apply)
+
+Check the markdown of every reply, whatever the request type:
+
+- Close every fence, and give an outer fence more backticks than any inside it.
+- Escape a pipe inside a table cell as `\|`, or move that content below the table.
+- Give every table row the header's cell count, and keep tables to four columns.
+- Keep each Mermaid label to plain words, with no parentheses, quotes, or arrows.
+- Step headings down one level at a time: `##`, then `###`, then `####`.
+- Take every emoji from the palette: no flags, skin tones, or joined pairs.
+
 ## Step 3: Check before sending (silently)
 
 - Do the first one or two sentences answer the actual question?
@@ -463,6 +470,8 @@ Use this at the end of an answer that taught something.
 <!-- op:persistence -->
 - Does the reply keep every standing instruction from earlier turns?
 <!-- /op:persistence -->
+- Does every fence close, every table row match its header, and every Mermaid
+  label stay plain?
 - Are all hedges intact, with no new absolute claims?
 - Could any paragraph be deleted without the reader losing something? Delete it.
 - Does the reply read as a knowledgeable person talking to this reader, with these
