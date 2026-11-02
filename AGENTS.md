@@ -144,3 +144,26 @@ needs to decide. No progress narrative.
   `uncaptioned_specimen`, `flat_visual`. New heuristics that never gate:
   `visuals_first_half`, `visuals_second_half`, `max_table_cell_words`,
   `heading_depth_max`.
+- Skill upgrade Phase 1 (space and hierarchy, `docs/SKILL_UPGRADE_PLAN.md`), user
+  2026-11-02: paragraph ceiling tightened to three sentences / about 50 words, as a
+  ceiling with a stated exception for one continuous causal argument. The matching
+  gate thresholds move with it: `DENSE_SENTENCES` 5→4, `DENSE_PARAGRAPH_WORDS` 80→50
+  (verified: 0 of the 24 structural fixtures change `dense_paragraph` status).
+- Phase 1 added to `op:presentation`: blank line as unit separator with visible
+  separation at three or more units; an emphasis ladder (`##`/`###`/`####` for size,
+  bold/italic/`code`/blockquote for style, three distinct levels at three or more
+  sections); prefer more, smaller sections (split past ~12 lines); and a bolded-label
+  lead for bullets.
+- Phase 1 reclaim, dropping no rule, each a duplicate wording: removed the
+  `op:sequencing` obvious-approach bullet (kept the fuller `op:mechanism` copy); this
+  removes that rule from the single-op `seq` ablation arm only — `full` and the frozen
+  `pilot16-cc`/`explanation-lab` build are unaffected. Removed the duplicate accuracy
+  "unsure of a fact" bullet; folded the beginner-register rule into "explain simply";
+  compressed the `op:close` interactive-offer and `op:plain` section-map rules; and
+  compressed Step 3 from 17 questions to 11 (every check kept; the four presentation
+  and three visual questions merged to two each).
+- Phase 1 metrics: added never-gating heuristics `whitespace_ratio`,
+  `units_per_section`, `emphasis_levels_used`; `heading_count` (pre-existing) is now
+  labelled a heuristic in `lint_response.py`. None appear in
+  `decorative_structure_flags`. SKILL.md body is 439 lines (guard 500), rendered 392
+  (test guard 460).

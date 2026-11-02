@@ -180,3 +180,31 @@ def test_regenerate_reads_only_the_archive_claude_answers(tmp_path):
     assert {a["style"] for a in result["answers"]} == {"base", "tutor", "pedagogical"}
     assert all(a["model_id"].startswith("claude") for a in result["answers"])
     assert "not a comprehension score" in result["disclaimer"]
+
+
+def test_dense_paragraph_gate_tracks_the_tightened_ceiling():
+    over = " ".join(["word"] * 55) + "."
+    assert "dense_paragraph" in sm.decorative_structure_flags(over)
+    under = " ".join(["word"] * 45) + "."
+    assert "dense_paragraph" not in sm.decorative_structure_flags(under)
+    four_sentences = "One here. Two here. Three here. Four here."
+    assert "dense_paragraph" in sm.decorative_structure_flags(four_sentences)
+    three_sentences = "One short line. Two short line. Three short line."
+    assert "dense_paragraph" not in sm.decorative_structure_flags(three_sentences)
+
+
+def test_new_presentation_heuristics_are_labelled_and_never_gate(tmp_path, capsys):
+    md = ("## One\n\nA line here. Another one here.\n\n### Two\n\n"
+          "This uses *italic* and `code` and **bold** text.\n\n> Deeper: a note here.\n")
+    path = tmp_path / "ladder.md"
+    path.write_text(md, encoding="utf-8")
+    assert lint_response.main([str(path)]) == 0, "form heuristics must not change the exit status"
+    out = capsys.readouterr().out
+    expected = sm.metrics(md)
+    for field in ("whitespace_ratio", "units_per_section", "emphasis_levels_used"):
+        assert f"{field}: {expected[field]}  (heuristic; descriptive only, never gates anything)" in out
+    assert lint_response.main([str(path), "--json"]) == 0
+    data = json.loads(capsys.readouterr().out)
+    for field in ("whitespace_ratio", "units_per_section", "emphasis_levels_used", "heading_count"):
+        assert field in data["heuristic_fields"]
+    assert data["decorative_structure_flags"] == []

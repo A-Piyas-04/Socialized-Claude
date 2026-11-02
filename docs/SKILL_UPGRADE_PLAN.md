@@ -91,11 +91,12 @@ than incidental.
 
 ### ✅ Acceptance
 
-- `SKILL.md` is back under 440 lines, leaving real headroom for Phases 2–4.
-- `python -m pytest -q` green.
-- Run three of your own prompts. The test is whether a section fits in one screen
+- ✅ `SKILL.md` body is **439 lines** (was 469), rendered full variant **392** —
+  under both guards, leaving headroom for Phases 2–4. _(done 2026-11-02)_
+- ✅ `python -m pytest -q` green: **401 passed, 1 skipped**. _(done 2026-11-02)_
+- ⬜ Run three of your own prompts. The test is whether a section fits in one screen
   without scrolling, and whether you can find the answer by scanning headings
-  alone.
+  alone. **This behavioural check is still yours — it cannot be automated.**
 
 ### 🚨 Risk
 

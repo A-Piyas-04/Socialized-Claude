@@ -369,8 +369,8 @@ def test_close_rules_name_actions():
 def test_presentation_names_scanning_rules():
     text = read(lib.SKILL_DIR / "SKILL.md")
     block = text.split("<!-- op:presentation -->", 1)[1].split("<!-- /op:presentation -->", 1)[0]
-    for required in ("backticks", "`##`", "`###`", "bold title line", "six words", "four columns",
-                     "**Deeper:**", "last section"):
+    for required in ("backticks", "`##`", "`###`", "`####`", "three sentences", "50 words",
+                     "bold title line", "six words", "four columns", "**Deeper:**", "last section"):
         assert required in block, required
 
 

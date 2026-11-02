@@ -29,6 +29,16 @@ Definitions (all heuristics; the TypeScript port in extension/ must match them e
                The most words in any table cell, header included. A heuristic, never a gate.
   heading_depth_max
                The deepest heading level used (0 when there is none). A heuristic, never a gate.
+  whitespace_ratio
+               Blank lines divided by total lines. A heuristic, never a gate.
+  units_per_section
+               The mean number of non-heading blocks per heading section, counting only the
+               blocks that follow a heading (0.0 when there is no heading). A heuristic, never
+               a gate.
+  emphasis_levels_used
+               How many distinct emphasis devices the response uses, counting each heading depth
+               present as one device plus bold, italic, inline code, and blockquote. A heuristic,
+               never a gate.
 
 decorative_structure_flags (each a short code):
   heading_thin          a heading whose section holds fewer than 2 sentences
@@ -41,7 +51,7 @@ decorative_structure_flags (each a short code):
   whitespace_padding    4+ prose paragraphs of which at least 75% are a single sentence
   uncaptioned_visual    a table, or a fenced diagram or bar block, with no prose sentence
                         directly before it
-  dense_paragraph       a prose paragraph of 5+ sentences or more than 80 words, or a list
+  dense_paragraph       a prose paragraph of 4+ sentences or more than 50 words, or a list
                         item of more than 40 words
   dense_table_cell      a table whose cells include one of more than 6 words or more than one
                         sentence
@@ -75,8 +85,11 @@ CONNECTIVE_RE = re.compile(r"(?i)\b(because|so|therefore|which means|if)\b")
 EMOJI_RE = re.compile("[\U0001F300-\U0001FAFF\u2600-\u27BF\u2B50\u2B55\u2705\u274C\u2714\u2716]")
 LEGEND = frozenset(mark.replace("\ufe0f", "") for mark in ("✅", "❌", "⚠️", "🟢", "🟡", "🔴"))
 VISUAL_CODE_RE = re.compile(r"```\s*mermaid\b|[█▓▒░]{2,}|-->|──>|│|├|└")
-DENSE_SENTENCES = 5
-DENSE_PARAGRAPH_WORDS = 80
+ITALIC_RE = re.compile(r"\*(?=\S)[^*\n]+?(?<=\S)\*|(?<![A-Za-z0-9_])_(?=\S)[^_\n]+?(?<=\S)_(?![A-Za-z0-9_])")
+INLINE_CODE_RE = re.compile(r"`[^`\n]+`")
+BLOCKQUOTE_RE = re.compile(r"^\s{0,3}>")
+DENSE_SENTENCES = 4
+DENSE_PARAGRAPH_WORDS = 50
 DENSE_ITEM_WORDS = 40
 TABLE_CELL_WORDS = 6
 TABLE_MAX_COLUMNS = 4
@@ -408,6 +421,41 @@ def decorative_structure_flags(markdown: str) -> list[str]:
     return flags
 
 
+def whitespace_ratio(markdown: str) -> float:
+    if not markdown.strip():
+        return 0.0
+    lines = markdown.replace("\r\n", "\n").split("\n")
+    blank = sum(1 for line in lines if not line.strip())
+    return round(blank / len(lines), 2)
+
+
+def units_per_section(blocks: list[Block]) -> float:
+    headings = [i for i, b in enumerate(blocks) if b.kind == "heading"]
+    if not headings:
+        return 0.0
+    counts = []
+    for idx, start in enumerate(headings):
+        end = headings[idx + 1] if idx + 1 < len(headings) else len(blocks)
+        counts.append(sum(1 for b in blocks[start + 1:end] if b.kind != "heading"))
+    return round(sum(counts) / len(counts), 2)
+
+
+def emphasis_levels_used(markdown: str, blocks: list[Block]) -> int:
+    prose = "\n".join("\n".join(b.lines) for b in blocks if b.kind != "code")
+    depths = {heading_level(b) for b in blocks if b.kind == "heading"}
+    depths.discard(0)
+    devices = len(depths)
+    if bold_spans(markdown) > 0:
+        devices += 1
+    if ITALIC_RE.search(INLINE_CODE_RE.sub("", BOLD_RE.sub("", prose))):
+        devices += 1
+    if INLINE_CODE_RE.search(prose):
+        devices += 1
+    if any(BLOCKQUOTE_RE.match(line) for b in blocks if b.kind != "code" for line in b.lines):
+        devices += 1
+    return devices
+
+
 def metrics(markdown: str, question: str | None = None) -> dict:
     blocks = parse_blocks(markdown)
     counted = [b for b in blocks if b.kind != "code"]
@@ -434,5 +482,8 @@ def metrics(markdown: str, question: str | None = None) -> dict:
         "max_table_cell_words": max((cell_words(c) for b in blocks if b.kind == "table"
                                      for row in table_rows(b) for c in row), default=0),
         "heading_depth_max": max((heading_level(b) for b in blocks), default=0),
+        "whitespace_ratio": whitespace_ratio(markdown),
+        "units_per_section": units_per_section(blocks),
+        "emphasis_levels_used": emphasis_levels_used(markdown, blocks),
         "decorative_structure_flags": decorative_structure_flags(markdown),
     }

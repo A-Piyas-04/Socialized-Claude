@@ -16,9 +16,9 @@
     "work-report"
   ],
   "zip": "socialized.zip",
-  "zip_sha256": "0589b3de7db8b83f083a127e184357a2816789f3d8593822e308675ea341d232",
+  "zip_sha256": "903aacd3726806531d623c246877910ca7e6f4aa5bbd9be8a8387a807d8c85be",
   "files": {
-    "SKILL.md": "7d8d4a34be3ecbc806705e77fd590d20f77721382ed2cab929787dcf3cc86be7",
+    "SKILL.md": "075bcc1716c956e25c1ef6722c7cc21275d8b866d8f20d9a4961dfc7035e319e",
     "references/explanation-examples.md": "b060f359100e9e5f0a0718be376a29bd8d37e424f80f07b34e301858ddcfefec",
     "references/explanation-methodology.md": "21af09a61005f7367e90fa03c9cffc9558b31bd47d7dcaa390c992bcfad22e90",
     "references/treatment-selection.md": "25b5d093f60532aaeec46fe7b459869ccec3eacd5a8fa408b466f3b0fd66f50a"
