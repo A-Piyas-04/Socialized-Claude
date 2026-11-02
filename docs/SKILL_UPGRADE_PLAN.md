@@ -219,11 +219,15 @@ Hard limits that keep it from becoming noise:
 
 ### ✅ Acceptance
 
-- Every emoji in the palette renders in your terminal **and** on claude.ai. Drop
-  any that does not — this needs checking, not assuming.
-- `python -m pytest -q` green.
-- A long answer of yours has at least one diagram, and no icon you would call
-  decoration.
+- ✅ `references/emoji-palette.md` holds **153** navigation icons in seven meaning
+  groups, plus the closed status six; `op:visual` carries a 42-icon working set.
+  `SKILL.md` body **485/500**, rendered **432/460**. _(done 2026-11-02)_
+- ✅ `python -m pytest -q` green: **410 passed, 1 skipped**. _(done 2026-11-02)_
+- ⬜ Every emoji in the palette renders in your terminal **and** on claude.ai. Drop
+  any that does not — this needs checking, not assuming. The palette is limited to
+  single code points from Emoji 11 or earlier, but **the render check is still yours.**
+- ⬜ A long answer of yours has at least one diagram, and no icon you would call
+  decoration. **This behavioural check is still yours — it cannot be automated.**
 
 ### 🚨 Risk
 

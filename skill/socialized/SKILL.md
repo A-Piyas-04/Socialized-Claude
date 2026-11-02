@@ -278,7 +278,8 @@ shape of the content. Prose is one of the forms, not the fallback.
 
 Use this for every idea in the answer whose content has parts, containment, a
 flow, a branch, an order in time, two states, or a proportion, when spelling that
-shape out would take three or more sentences.
+shape out would take three or more sentences. In a teaching answer, draw every
+branching or time-ordered mechanism, however few sentences it would take.
 
 - Draw one visual for each such idea, in the section that teaches it, and delete
   the sentences the visual replaces. Give a one- or two-sentence answer, and a
@@ -297,23 +298,33 @@ shape out would take three or more sentences.
 - Show two states at the same moment side by side: a two-column table, one row
   per element and one column per state, or two fenced blocks under bold state
   labels. Put the broken case in a `diff` fence when the states are text or code.
-- Use one colour code for the whole answer. Name it once in a legend line before
-  the first coloured visual, and reuse the same `classDef` classes and `diff`
-  colours in every later visual.
+- Colour with the three techniques that render: a `diff` fence (red and green
+  lines), Mermaid `classDef` fills, and status emoji. Use one colour code for the
+  whole answer. Name it once in a legend line before the first coloured visual,
+  and reuse the same `classDef` classes and `diff` colours in every later visual.
 - Show every range, ratio, or magnitude as block-character bars (`█`) in a fenced
   block, one labelled bar per quantity, scaled to the largest.
 - Show a process that changes over time as a table with one row per moment and
   the state in that row. End the answer with one line offering an interactive
   version. In a terminal, add one short command the reader can run when safe.
-- Mark a status with this legend, and no other symbols: ✅ works, ❌ broken,
-  ⚠️ caution, 🟢 🟡 🔴 for degrees of one property. Use at least two distinct
-  markers, put each at the start of its item or cell, and name what the markers
-  mean in the caption. Keep headings and step numbers as words.
+- Mark a status with the closed legend: ✅ works, ❌ broken, ⚠️ caution, 🟢 🟡 🔴
+  for degrees of one property. Use at least two distinct markers, put each at the
+  start of its list item or table cell, and name what they mean in the caption.
+  Keep status markers off headings and step numbers.
+- In a teaching or long answer, open a heading, a callout, or a bullet label with
+  one navigation icon whose meaning matches what it labels, and keep that icon for
+  that meaning throughout. Pick from 💡 🎯 📌 🔑 🧩 ⭐ ✨ (state), 🔄 ➡️ 🔀 🔁 ↪️ ⏭️
+  🚀 (flow), ⚡ 🛑 🔒 🔓 💥 🧯 🐛 (risk), 📊 📈 📉 🗂️ 📦 🧮 ⚖️ (data), 👤 👥 🧠 💬
+  (people), ⏱️ ⏳ 📅 ⏰ (time), ⚙️ 🛠️ 🧪 💻 📝 🔍 (tooling), or from
+  `references/emoji-palette.md`.
+- Keep every icon out of code, JSON, paths, and identifiers, and out of formal,
+  casual, and one-line replies. Delete any icon that does not help the reader
+  find something; an answer with more icons than headings has too many.
 - Before each visual, write one line naming what it shows and the thing to notice.
 - Build one artifact on claude.ai when the person explicitly asks for an
   artifact, an SVG, an interactive control, or something to click or drag.
-  Caption it, label every colour in it, and keep a short markdown answer in the
-  reply so the artifact supports the text. Return to markdown on the next reply.
+  Caption it, label every colour in it, and keep the markdown answer in the reply
+  complete without it. Return to markdown on the next reply.
   Keep building artifacts on later replies when the person made the request
   standing ("from now on", "always"). Where artifacts are unavailable, answer
   that same request with the markdown form and one clause naming the limit.
@@ -439,10 +450,11 @@ Use this at the end of an answer that taught something.
   section match the first in paragraph sizes and spacing?
 <!-- /op:presentation -->
 <!-- op:visual -->
-- Does each idea with a shape have its captioned visual, the hardest and last
-  sections included, with the replaced sentences gone and one colour code marking
-  the key node?
-- Is the reply still markdown unless this message explicitly asks for an artifact?
+- Does each idea with a shape, and every branch or time order, have its captioned
+  visual, the hardest and last sections included, with the replaced sentences gone
+  and one colour code marking the key node?
+- Is the reply still markdown unless this message explicitly asks for an artifact,
+  and does every icon match what it labels and stay out of code?
 <!-- /op:visual -->
 <!-- op:close -->
 - Does a long or teaching answer end with a compressed takeaway, and a teaching,
@@ -472,3 +484,5 @@ Read only the file the current request needs:
 - `references/conversation-grammar.md` gives worked reader's-question patterns, a
   register ladder, and weak and better pairs for direct address. Read it when an
   answer reads like a manual rather than a person.
+- `references/emoji-palette.md` gives about 150 navigation icons grouped by
+  meaning, plus the status legend. Read it when no icon in the working set fits.

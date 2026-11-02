@@ -17,12 +17,13 @@
     "work-report"
   ],
   "zip": "socialized.zip",
-  "zip_sha256": "3e668a17a563151c2094afe4958667678634ad1adecf8f7cadde8ff23cd5e70e",
+  "zip_sha256": "5ddb83abbe6a979397843426c5df1000ff8582d353e8690fd4cc51d851c73507",
   "files": {
-    "SKILL.md": "a27a980ab5964d2a7a419918ae0cdfba6efb77340af0c89a88809187bfb46ac4",
+    "SKILL.md": "fcabdce424d57718a31d776a650b182cd02fef5b06d7004dafc7fdd19e69a590",
     "references/conversation-grammar.md": "c165fd92f206cfdda1401a0a44f69cb19e91950fb745433b335b432495459f97",
+    "references/emoji-palette.md": "a96099a27b3e13823a50b2970e7979eab3feaf9b479d09a6a26061d7214ccaff",
     "references/explanation-examples.md": "b060f359100e9e5f0a0718be376a29bd8d37e424f80f07b34e301858ddcfefec",
     "references/explanation-methodology.md": "21af09a61005f7367e90fa03c9cffc9558b31bd47d7dcaa390c992bcfad22e90",
-    "references/treatment-selection.md": "25b5d093f60532aaeec46fe7b459869ccec3eacd5a8fa408b466f3b0fd66f50a"
+    "references/treatment-selection.md": "a5fe1462eb9c111d053baf006163eee39deccde917d09830babfb25e1678386b"
   }
 }

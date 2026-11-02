@@ -24,6 +24,7 @@
       "whitespace_ratio": 0.27,
       "units_per_section": 0.0,
       "emphasis_levels_used": 0,
+      "icon_count": 0,
       "decorative_structure_flags": []
     }
   },
@@ -52,6 +53,7 @@
       "whitespace_ratio": 0.29,
       "units_per_section": 0.0,
       "emphasis_levels_used": 0,
+      "icon_count": 0,
       "decorative_structure_flags": [
         "bullets_unconnected"
       ]
@@ -82,6 +84,7 @@
       "whitespace_ratio": 0.38,
       "units_per_section": 0.0,
       "emphasis_levels_used": 0,
+      "icon_count": 0,
       "decorative_structure_flags": []
     }
   },
@@ -110,6 +113,7 @@
       "whitespace_ratio": 0.3,
       "units_per_section": 0.0,
       "emphasis_levels_used": 0,
+      "icon_count": 0,
       "decorative_structure_flags": []
     }
   },
@@ -138,6 +142,7 @@
       "whitespace_ratio": 0.5,
       "units_per_section": 1.0,
       "emphasis_levels_used": 1,
+      "icon_count": 0,
       "decorative_structure_flags": [
         "heading_thin",
         "heading_thin"
@@ -169,6 +174,7 @@
       "whitespace_ratio": 0.43,
       "units_per_section": 3.0,
       "emphasis_levels_used": 1,
+      "icon_count": 2,
       "decorative_structure_flags": [
         "emoji_structure",
         "bullets_unconnected"
@@ -200,6 +206,7 @@
       "whitespace_ratio": 0.5,
       "units_per_section": 0.0,
       "emphasis_levels_used": 1,
+      "icon_count": 0,
       "decorative_structure_flags": [
         "emphasis_overuse"
       ]
@@ -230,6 +237,7 @@
       "whitespace_ratio": 0.5,
       "units_per_section": 0.0,
       "emphasis_levels_used": 0,
+      "icon_count": 0,
       "decorative_structure_flags": [
         "empty_transition"
       ]
@@ -260,6 +268,7 @@
       "whitespace_ratio": 0.33,
       "units_per_section": 0.0,
       "emphasis_levels_used": 0,
+      "icon_count": 0,
       "decorative_structure_flags": []
     }
   },
@@ -288,6 +297,7 @@
       "whitespace_ratio": 0.5,
       "units_per_section": 0.0,
       "emphasis_levels_used": 0,
+      "icon_count": 0,
       "decorative_structure_flags": []
     }
   },
@@ -316,6 +326,7 @@
       "whitespace_ratio": 0.25,
       "units_per_section": 0.0,
       "emphasis_levels_used": 0,
+      "icon_count": 0,
       "decorative_structure_flags": []
     }
   },
@@ -344,6 +355,7 @@
       "whitespace_ratio": 0.5,
       "units_per_section": 0.0,
       "emphasis_levels_used": 0,
+      "icon_count": 0,
       "decorative_structure_flags": []
     }
   },
@@ -372,6 +384,7 @@
       "whitespace_ratio": 0.5,
       "units_per_section": 0.0,
       "emphasis_levels_used": 0,
+      "icon_count": 0,
       "decorative_structure_flags": []
     }
   },
@@ -400,6 +413,7 @@
       "whitespace_ratio": 0.29,
       "units_per_section": 0.0,
       "emphasis_levels_used": 0,
+      "icon_count": 0,
       "decorative_structure_flags": [
         "table_thin"
       ]
@@ -430,6 +444,7 @@
       "whitespace_ratio": 0.5,
       "units_per_section": 0.0,
       "emphasis_levels_used": 0,
+      "icon_count": 0,
       "decorative_structure_flags": [
         "whitespace_padding"
       ]
@@ -460,6 +475,7 @@
       "whitespace_ratio": 0.2,
       "units_per_section": 0.0,
       "emphasis_levels_used": 0,
+      "icon_count": 0,
       "decorative_structure_flags": [
         "uncaptioned_visual"
       ]
@@ -490,6 +506,7 @@
       "whitespace_ratio": 0.5,
       "units_per_section": 0.0,
       "emphasis_levels_used": 0,
+      "icon_count": 0,
       "decorative_structure_flags": [
         "dense_paragraph"
       ]
@@ -520,6 +537,7 @@
       "whitespace_ratio": 0.5,
       "units_per_section": 0.0,
       "emphasis_levels_used": 1,
+      "icon_count": 0,
       "decorative_structure_flags": [
         "bold_as_heading"
       ]
@@ -550,6 +568,7 @@
       "whitespace_ratio": 0.2,
       "units_per_section": 0.0,
       "emphasis_levels_used": 0,
+      "icon_count": 0,
       "decorative_structure_flags": []
     }
   },
@@ -578,6 +597,7 @@
       "whitespace_ratio": 0.29,
       "units_per_section": 0.0,
       "emphasis_levels_used": 0,
+      "icon_count": 0,
       "decorative_structure_flags": [
         "dense_table_cell"
       ]
@@ -608,6 +628,7 @@
       "whitespace_ratio": 0.22,
       "units_per_section": 0.0,
       "emphasis_levels_used": 0,
+      "icon_count": 0,
       "decorative_structure_flags": [
         "flat_visual"
       ]
@@ -638,6 +659,7 @@
       "whitespace_ratio": 0.33,
       "units_per_section": 0.0,
       "emphasis_levels_used": 0,
+      "icon_count": 0,
       "decorative_structure_flags": []
     }
   },
@@ -666,6 +688,7 @@
       "whitespace_ratio": 0.33,
       "units_per_section": 2.0,
       "emphasis_levels_used": 1,
+      "icon_count": 0,
       "decorative_structure_flags": [
         "uncaptioned_specimen"
       ]
@@ -696,6 +719,7 @@
       "whitespace_ratio": 0.29,
       "units_per_section": 0.0,
       "emphasis_levels_used": 0,
+      "icon_count": 0,
       "decorative_structure_flags": [
         "wide_table"
       ]

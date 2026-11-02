@@ -9,6 +9,7 @@ from pathlib import Path
 import pytest
 
 import skilllib as lib
+import structural_metrics as sm
 from package_skill import build
 from validate_skill import validate_dir, validate_zip
 
@@ -65,7 +66,7 @@ def test_metadata_meets_claude_ai_limits():
 def test_required_reference_files_exist_and_are_linked():
     body = read(lib.SKILL_DIR / "SKILL.md")
     for name in ("explanation-methodology.md", "treatment-selection.md", "explanation-examples.md",
-                 "conversation-grammar.md"):
+                 "conversation-grammar.md", "emoji-palette.md"):
         assert (lib.SKILL_DIR / "references" / name).is_file()
         assert f"references/{name}" in body
 
@@ -269,6 +270,7 @@ def test_production_zip_structure(tmp_path):
         "socialized/references/treatment-selection.md",
         "socialized/references/explanation-examples.md",
         "socialized/references/conversation-grammar.md",
+        "socialized/references/emoji-palette.md",
     }
     for name, text in texts.items():
         assert "op:" not in text, f"marker left in {name}"
@@ -356,6 +358,24 @@ def test_visual_rules_name_actions_and_keep_artifacts_opt_in():
                      "one colour code", "interactive"):
         assert required in block, required
     assert "at most two in an answer" not in block, "the per-answer cap was replaced by a per-idea budget"
+
+
+def test_visual_rules_name_the_colour_techniques_and_two_icon_layers():
+    text = read(lib.SKILL_DIR / "SKILL.md")
+    block = text.split("<!-- op:visual -->", 1)[1].split("<!-- /op:visual -->", 1)[0]
+    for required in ("`diff` fence", "`classDef`", "status emoji", "closed legend", "navigation icon",
+                     "references/emoji-palette.md", "branching or time-ordered"):
+        assert required in block, required
+    assert "no other symbols" not in block, "the closed six-icon rule was replaced by two layers"
+
+
+def test_working_set_icons_are_all_in_the_palette():
+    text = read(lib.SKILL_DIR / "SKILL.md")
+    block = text.split("<!-- op:visual -->", 1)[1].split("<!-- /op:visual -->", 1)[0]
+    rule = next(line for line in block.split("\n- ") if "navigation icon" in line)
+    working = {c for c in rule.replace("\ufe0f", "") if sm.EMOJI_RE.match(c) or c in sm.NAV_ICONS}
+    assert 35 <= len(working) <= 45, len(working)
+    assert working <= sm.NAV_ICONS, working - sm.NAV_ICONS
 
 
 def test_close_rules_name_actions():

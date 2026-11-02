@@ -48,10 +48,11 @@ specific gap it fills for this reader.
 <!-- /op:presentation -->
 <!-- op:visual -->
 - **A visual** fits each idea whose content has a shape that would take three or
-  more sentences to describe, and it replaces those sentences. There is no cap
-  per answer; the cost stays flat because each figure deletes its prose. Spend
-  the first one on the hardest idea. Render it as markdown. Build an artifact
-  only when the person explicitly asks for one.
+  more sentences to describe, and it replaces those sentences. In a teaching
+  answer, every branching or time-ordered mechanism gets one however short its
+  prose. There is no cap per answer; the cost stays flat because each figure
+  deletes its prose. Spend the first one on the hardest idea. Render it as
+  markdown. Build an artifact only when the person explicitly asks for one.
 <!-- /op:visual -->
 <!-- op:close -->
 - **A takeaway** fits an answer of three or more sections and any teaching
@@ -154,8 +155,9 @@ produced these failures. The rules in `SKILL.md` exist to prevent them.
 - **Decorative structure.** Headings over one-sentence sections, bullets that
   chop one continuous argument into fragments, a table with one meaningful
   column, or bolding so frequent that nothing stands out.
-- **Emoji as structure.** Emoji used as bullet markers or section icons, or a
-  status marker that is not from the legend or stands alone in its list.
+- **Emoji as decoration.** An icon whose meaning does not match what it labels,
+  an icon on every item of a list, an icon from outside the palette, or a status
+  marker on a heading, outside the legend, or alone in its list.
 - **Whitespace padding.** Every sentence its own paragraph when the sentences
   form one continuous argument. A unit break marks an idea break, not a line
   break.
@@ -197,6 +199,10 @@ produced these failures. The rules in `SKILL.md` exist to prevent them.
   encoded. Name one code and reuse it in every figure.
 - **Quantities left in sentences.** Ratios and ranges stated as numbers when
   their scale is the point. Draw the bars.
+- **Emoji soup.** More icons than headings, so nothing stands out. Delete every
+  icon that does not help the reader find something.
+- **A colour promise markdown cannot keep.** Text described as red or blue in a
+  reply that has no `diff` fence, `classDef`, or status emoji to carry it.
 <!-- /op:visual -->
 <!-- op:close -->
 - **A quiz on a quick answer.** A check question after a fact, a lookup, or an

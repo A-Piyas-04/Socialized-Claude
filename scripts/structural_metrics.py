@@ -39,15 +39,19 @@ Definitions (all heuristics; the TypeScript port in extension/ must match them e
                How many distinct emphasis devices the response uses, counting each heading depth
                present as one device plus bold, italic, inline code, and blockquote. A heuristic,
                never a gate.
+  icon_count   Headings, list items, and blockquotes that open with a status-legend marker or a
+               navigation icon from references/emoji-palette.md. A heuristic, never a gate.
 
 decorative_structure_flags (each a short code):
   heading_thin          a heading whose section holds fewer than 2 sentences
   table_thin            a table with fewer than 2 data columns besides the first (label) column
   bullets_unconnected   a run of 2+ unordered list items, not a labelled list, in which no item
                         contains a connective (because, so, therefore, which means, if)
-  emoji_structure       an emoji opening a heading or list item. A list item is exempt when its
-                        marker is from the status legend (✅ ❌ ⚠️ 🟢 🟡 🔴) and the same list
-                        uses at least two distinct legend markers. A heading is never exempt.
+  emoji_structure       an emoji opening a heading or list item. A heading or list item is exempt
+                        when it opens with a navigation icon from references/emoji-palette.md. A
+                        list item is also exempt when its marker is from the status legend (✅ ❌ ⚠️
+                        🟢 🟡 🔴) and the same list uses at least two distinct legend markers. A
+                        status marker on a heading is never exempt.
   whitespace_padding    4+ prose paragraphs of which at least 75% are a single sentence
   uncaptioned_visual    a table, or a fenced diagram or bar block, with no prose sentence
                         directly before it
@@ -71,6 +75,7 @@ from __future__ import annotations
 
 import re
 from dataclasses import dataclass
+from pathlib import Path
 
 HEADING_RE = re.compile(r"^\s{0,3}#{1,6}\s+(.*)$")
 BULLET_RE = re.compile(r"^\s*[-*+]\s+(.*)$")
@@ -84,6 +89,9 @@ SENTENCE_SPLIT_RE = re.compile(r"(?<=[.!?])[\"')\]]*\s+")
 CONNECTIVE_RE = re.compile(r"(?i)\b(because|so|therefore|which means|if)\b")
 EMOJI_RE = re.compile("[\U0001F300-\U0001FAFF\u2600-\u27BF\u2B50\u2B55\u2705\u274C\u2714\u2716]")
 LEGEND = frozenset(mark.replace("\ufe0f", "") for mark in ("✅", "❌", "⚠️", "🟢", "🟡", "🔴"))
+PALETTE_PATH = Path(__file__).resolve().parent.parent / "skill" / "socialized" / "references" / "emoji-palette.md"
+PALETTE_ROW_RE = re.compile(r"^\|\s*([^|\s]+)\s*\|", re.MULTILINE)
+LEAD_RE = re.compile(r"^\s*(?:(?:#{1,6}|[-*+]|\d+[.)])\s+|>\s*)")
 VISUAL_CODE_RE = re.compile(r"```\s*mermaid\b|[█▓▒░]{2,}|-->|──>|│|├|└")
 ITALIC_RE = re.compile(r"\*(?=\S)[^*\n]+?(?<=\S)\*|(?<![A-Za-z0-9_])_(?=\S)[^_\n]+?(?<=\S)_(?![A-Za-z0-9_])")
 INLINE_CODE_RE = re.compile(r"`[^`\n]+`")
@@ -245,8 +253,26 @@ def answer_first_offset(markdown: str, question: str | None = None) -> int:
     return offset
 
 
+def load_nav_icons(path: Path = PALETTE_PATH) -> frozenset[str]:
+    """Single-code-point icons in the palette's table rows, minus the closed status legend."""
+    cells = {cell.replace("\ufe0f", "") for cell in PALETTE_ROW_RE.findall(path.read_text(encoding="utf-8"))}
+    return frozenset(cell for cell in cells if len(cell) == 1) - LEGEND
+
+
+NAV_ICONS = load_nav_icons()
+
+
+def lead_text(line: str) -> str:
+    return LEAD_RE.sub("", line, count=1).lstrip("*_ ")
+
+
+def leading_icon(line: str) -> str | None:
+    first = lead_text(line)[:1]
+    return first if first in NAV_ICONS or first in LEGEND else None
+
+
 def legend_mark(line: str) -> str | None:
-    stripped = re.sub(r"^\s*(#{1,6}|[-*+]|\d+[.)])\s+", "", line).lstrip("*_ ")
+    stripped = lead_text(line)
     match = EMOJI_RE.match(stripped)
     if not match:
         return None
@@ -381,8 +407,9 @@ def decorative_structure_flags(markdown: str) -> list[str]:
                 flags.append("table_thin")
     exempt = legend_exempt(blocks)
     for i, block in enumerate(blocks):
-        if (i not in exempt and block.kind in {"heading", "bullet", "numbered"} and EMOJI_RE.match(
-                re.sub(r"^\s*(#{1,6}|[-*+]|\d+[.)])\s+", "", block.lines[0]).lstrip("*_ "))):
+        lead = lead_text(block.lines[0])
+        if (i not in exempt and block.kind in {"heading", "bullet", "numbered"} and EMOJI_RE.match(lead)
+                and lead[:1] not in NAV_ICONS):
             flags.append("emoji_structure")
         if is_visual(block) and not has_caption(blocks, i):
             flags.append("uncaptioned_visual")
@@ -456,6 +483,12 @@ def emphasis_levels_used(markdown: str, blocks: list[Block]) -> int:
     return devices
 
 
+def icon_count(blocks: list[Block]) -> int:
+    labelled = [b for b in blocks if b.kind in {"heading", "bullet", "numbered"}
+                or (b.kind == "paragraph" and BLOCKQUOTE_RE.match(b.lines[0]))]
+    return sum(leading_icon(b.lines[0]) is not None for b in labelled)
+
+
 def metrics(markdown: str, question: str | None = None) -> dict:
     blocks = parse_blocks(markdown)
     counted = [b for b in blocks if b.kind != "code"]
@@ -485,5 +518,6 @@ def metrics(markdown: str, question: str | None = None) -> dict:
         "whitespace_ratio": whitespace_ratio(markdown),
         "units_per_section": units_per_section(blocks),
         "emphasis_levels_used": emphasis_levels_used(markdown, blocks),
+        "icon_count": icon_count(blocks),
         "decorative_structure_flags": decorative_structure_flags(markdown),
     }

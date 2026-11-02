@@ -124,6 +124,34 @@ def test_dense_list_item_and_legend_emoji_are_distinct():
     assert "emoji_structure" in sm.decorative_structure_flags(bare)
 
 
+def test_palette_is_the_open_navigation_layer():
+    assert 140 <= len(sm.NAV_ICONS) <= 160
+    assert not sm.NAV_ICONS & sm.LEGEND, "status markers stay a closed, separate layer"
+    assert all(len(icon) == 1 for icon in sm.NAV_ICONS), "single code points only; no joined sequences"
+
+
+def test_navigation_icons_lead_headings_bullets_and_callouts_without_flagging():
+    heading = "## 🔑 The key idea\n\nThe cache holds recent lines. Misses go to memory.\n"
+    assert sm.decorative_structure_flags(heading) == []
+    labels = "- 🔒 **Locked:** writers wait, so reads stay consistent\n- ⏱️ **Timeout:** the lock expires\n"
+    assert "emoji_structure" not in sm.decorative_structure_flags(labels)
+    assert sm.metrics(heading + "\n> 💡 **Deeper:** lines are 64 bytes.\n" + "\n" + labels)["icon_count"] == 4
+
+
+def test_status_marker_on_a_heading_and_off_palette_emoji_still_flag():
+    assert "emoji_structure" in sm.decorative_structure_flags("## ✅ Done\n\nIt passed. Every check ran.\n")
+    assert "emoji_structure" in sm.decorative_structure_flags("## 🎃 Spooky\n\nIt ran. Then it stopped.\n")
+    assert "emoji_structure" in sm.decorative_structure_flags("- ✅ only one marker\n- still one marker\n")
+    assert sm.metrics("Prose with 💡 inside a sentence.\n\n```\n🔑 in code\n```\n")["icon_count"] == 0
+
+
+def test_icon_count_is_labelled_and_never_gates(tmp_path, capsys):
+    path = tmp_path / "icons.md"
+    path.write_text("## 🧪 Testing\n\nRun the suite first. It catches regressions.\n", encoding="utf-8")
+    assert lint_response.main([str(path)]) == 0
+    assert "icon_count: 1  (heuristic; descriptive only, never gates anything)" in capsys.readouterr().out
+
+
 def test_bold_title_above_a_block_is_a_label_not_a_heading():
     specimen = "**Example: the client setting**\n\n```toml\ntimeout = 30\n```\n"
     assert sm.decorative_structure_flags(specimen) == []

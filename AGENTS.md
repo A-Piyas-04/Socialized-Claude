@@ -190,3 +190,29 @@ needs to decide. No progress narrative.
 - Phase 2: new reference `references/conversation-grammar.md` (worked reader's-question
   patterns, a register ladder, direct-address/contraction pairs). SKILL.md body is 471
   lines (guard 500), rendered 418 (test guard 460).
+- Skill upgrade Phase 3 (visual and colour, `docs/SKILL_UPGRADE_PLAN.md`), user
+  2026-11-02: icons become two layers. Status stays the closed six (✅ ❌ ⚠️ 🟢 🟡 🔴),
+  lists and tables only, two or more distinct markers, never on a heading. Navigation
+  is open: one icon opening a heading, callout, or bullet label, meaning-matched,
+  teaching and long answers only, never in code. This supersedes "headings stay
+  unmarked" and the "and no other symbols" clause for navigation icons only.
+- Phase 3: new reference `references/emoji-palette.md`, 153 navigation icons in seven
+  meaning groups (state, flow, risk, data, people, time, tooling), single code points
+  from Emoji 11 or earlier (no ZWJ, flags, skin tones, keycaps). `op:visual` keeps a
+  42-icon working set inline. The linter's `NAV_ICONS` is parsed from the palette's
+  table rows (minus the status six), so the two cannot drift.
+- Phase 3 `op:visual`: colour is named as the three techniques that render (`diff`
+  fence, `classDef`, status emoji), merged into the existing one-colour-code bullet.
+  Every branching or time-ordered mechanism in a teaching answer gets a diagram
+  regardless of the three-sentence bar. The artifact exception now requires the
+  markdown answer to stay complete without the artifact (was "a short markdown
+  answer"). Step 3's two visual questions absorb the new checks (no new question).
+  `treatment-selection.md` mirrors the always-diagram rule and gains "emoji soup" and
+  "colour promise" failure modes; "emoji as structure" became "emoji as decoration".
+- Phase 3 linter: `emoji_structure` now exempts a heading or list item opening with a
+  palette icon; status markers on headings and off-palette emoji still flag. The
+  `emoji_structure` fixture's 🚀 (now in the palette) became 🎃. New never-gating
+  heuristic `icon_count`; `visual_count` already existed, so it was not re-added.
+  `research/baseline_structural_metrics.json` regenerated (only `icon_count` added).
+- Phase 3 budget: nothing merged away beyond the colour bullet; SKILL.md body is 485
+  lines (guard 500), rendered 432 (test guard 460), leaving 15 body lines for Phase 4.
