@@ -31,6 +31,11 @@ def test_render_probe_shows_every_level_and_renders_cleanly():
     assert (EVAL / "layout_capture" / "render_probe-claude-ai.png").is_file()
 
 
+def test_underline_probe_renders_cleanly_and_has_its_screenshot():
+    assert lm.check(read(EVAL / "underline_probe.md")) == []
+    assert (EVAL / "layout_capture" / "underline_probe-claude-ai.png").is_file()
+
+
 def test_layout_prompts_are_unique_and_cover_the_capture():
     prompts = json.loads(read(EVAL / "layout_prompts.json"))["prompts"]
     ids = [p["id"] for p in prompts]

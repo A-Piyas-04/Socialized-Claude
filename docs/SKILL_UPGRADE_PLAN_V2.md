@@ -400,6 +400,15 @@ Two consequences for Phase 7:
   The callout's key words need bold, and the one sentence that must not be missed
   stays in body text.
 
+**Underline probe on claude.ai** (`underline_probe-claude-ai.png`), for the `#` title:
+
+| Technique | How it renders |
+| --- | --- |
+| `---` under the title | ⚠️ Full-width hairline after a gap; reads as a divider |
+| `<u>…</u>` | ❌ Tags shown as literal text |
+| Combining U+0332 | ⚠️ A true underline, broken at spaces and punctuation |
+| `---` under a `##` | ⚠️ Same as under the title |
+
 **What else the markdown shows:**
 
 - **Opener:** replicas runs four sentences and about 55 words; monolith runs three.
