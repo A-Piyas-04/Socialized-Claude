@@ -31,7 +31,7 @@ under it resolve it.
 > Write-back caching holds the new value in the cache and writes it to main memory
 > later, when the line is evicted.
 >
-> **So why not just write to memory every time?**
+> > 🙋 **So why not just write to memory every time?**
 >
 > Because every write would then wait on memory, and memory is roughly a hundred
 > times slower than the cache. You would pay that cost on every single write.
@@ -50,7 +50,7 @@ under it resolve it.
 > An index is a sorted copy of one column, kept beside the table, so a lookup on
 > that column jumps straight to the rows instead of scanning every one.
 >
-> **If it only helps, why not index every column?**
+> > 🙋 **If it only helps, why not index every column?**
 >
 > Because the database has to update each index on every insert and update. Five
 > indexes mean five extra writes per row, so you add an index where reads are hot
@@ -71,7 +71,7 @@ under it resolve it.
 > A hash turns the key into a slot number, and you read that slot directly, so the
 > work does not grow with the number of stored items.
 >
-> **Then where does the O(n) worst case come from?**
+> > 🙋 **Then where does the O(n) worst case come from?**
 >
 > From collisions: when many keys land in the same slot, that slot holds a list
 > you must scan one entry at a time. A good hash and timely resizing keep each
@@ -91,7 +91,7 @@ under it resolve it.
 > A retry resends a request that failed, on the assumption the failure was
 > temporary.
 >
-> **How could retrying make things worse?**
+> > 🙋 **How could retrying make things worse?**
 >
 > When a service is already overloaded, every client retrying at once multiplies
 > the traffic hitting it, which keeps it overloaded. Exponential backoff spreads

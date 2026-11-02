@@ -530,9 +530,70 @@ rule to weigh.
 
 **Acceptance:**
 
-- ⬜ Every conflict in R6 has one written resolution.
-- ⬜ Step 3 asks: "Is there a title, does every section heading carry its icon, and is
+- ✅ Every conflict in R6 has one written resolution.
+- ✅ Step 3 asks: "Is there a title, does every section heading carry its icon, and is
   there a 🙋 question, a 🧠 analogy, and a 🎯 takeaway callout?"
+
+#### Status (2026-11-02): ✅ done
+
+```
+after Phase 6   ████████████████████████████████████████████░░░░░░  440 / 500
+after Phase 7   ████████████████████████████████████████████████░░  480 / 500   rendered 415
+```
+
+How each R6 conflict was resolved:
+
+| Conflict | Resolution in the rules |
+| --- | --- |
+| Practitioner vs gloss every term | Practitioner glosses in a short parenthesis; only expert drops it |
+| Practitioner vs analogy | One 🧠 callout in non-expert teaching and decision answers |
+| Answer first vs scenario first | Answer sentences first; the scenario opens section 1 |
+| Heading ladder vs visible size | One `#` title over `##` sections; no depth from `###` or `####` |
+| "Not a template" vs fixed shape | "The shape is fixed; the wording never is" |
+
+Each resolution is also stated in `references/treatment-selection.md` §2.
+
+**Page shape:**
+
+- A new always-on section follows Scope.
+- Each slot sits inside its operation's markers, so a single-op build carries only
+  its own slots. The `core` build gets the heading, the fixed-shape sentence and the
+  Answer slot.
+- The slots are: title, answer, overview diagram, map and sections, 🙋 question, 🧠
+  analogy, glosses, and the 🎯 and 🧪 close.
+
+**Other rule changes:**
+
+- The reader's question applies to decision answers too, as a `> 🙋 **…?**` line.
+- The close is two callouts, with the options as a list and **Answer:** inside.
+- The opener is two sentences at most.
+- The must-not-miss bold sentence stays in body text, because callouts render
+  dimmer.
+- The markdown section gains the blank line before a `---` under text.
+- `conversation-grammar.md` shows its worked questions in the 🙋 form.
+
+**Step 3:** the acceptance question is split across the marked checks:
+
+- title in Layout;
+- section icon in Visuals;
+- 🙋 in Voice;
+- 🧠 in Example;
+- 🎯 and 🧪 in Close.
+
+The full build asks all of it.
+
+**Tests:**
+
+- 25 new registry rules, each with a removal test.
+- Three superseded anchors updated: the emphasis ladder, the bolded question line,
+  and "equal standing".
+- A retired-phrase test across every skill file.
+- A Page shape slot test.
+- Page shape in every variant.
+- Body guard 480.
+
+**Not verified:** whether claude.ai answers follow the shape. That needs a re-upload
+and new screenshots, or Phase 10.
 
 ---
 

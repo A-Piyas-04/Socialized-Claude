@@ -24,17 +24,17 @@ RULES = [
     (1, "paragraph ceiling", "presentation", ["three sentences", "50 words"]),
     (1, "continuous-argument exception", "presentation", ["continuous argument"]),
     (1, "visible separation", "presentation", ["visible separation"]),
-    (1, "emphasis ladder", "presentation", ["three distinct levels", "`####`", "blockquote"]),
+    (1, "emphasis styles", "presentation", ["Use bold, italic, `code`, and blockquote for style"]),
     (1, "smaller sections", "presentation", ["twelve lines"]),
     (1, "bolded-label bullets", "presentation", ["bolded label"]),
     (2, "conversational operation", "conversational", ["## Operation: Write the reader's next question"]),
-    (2, "reader's-question move", "conversational", ["its own bolded line"]),
+    (2, "reader's-question move", "conversational", ["`> 🙋 **…?**` line, then answer it"]),
     (2, "anti-chattiness", "conversational", ["praise", "persona"]),
     (2, "direct address", "conversational", ['"you"']),
     (2, "contractions", "conversational", ["contractions"]),
     (2, "Step 3 reader's-question check", "conversational", ["surface the reader's next question"]),
     (2, "scenario opening", "examples", ["concrete situation"]),
-    (2, "analogy equal standing", "examples", ["equal standing"]),
+    (2, "analogy beside the case", "examples", ["beside that case and never in its place"]),
     (2, "state, action, result", "examples", ["state, then action, then result"]),
     (2, "gloss before use", "terms", ["first appears or the one before it"]),
     (2, "conversation-grammar pointer", None, ["references/conversation-grammar.md"]),
@@ -54,6 +54,40 @@ RULES = [
     (4, "no heading jumps", None, ["one level at a time"]),
     (4, "palette-only emoji", None, ["every emoji from the palette"]),
     (4, "Step 3 markdown check", None, ["every Mermaid label stay plain"]),
+    (7, "page shape section", None, ["## Page shape (answers of two or more sections)"]),
+    (7, "shape fixed, wording free", None, ["The shape is fixed; the wording never is"]),
+    (7, "title before the answer", None, ["any heading except the title"]),
+    (7, "blank line before a rule", None, ["or the text becomes a heading"]),
+    (7, "title slot", "presentation", ["**Title:** one `#` line, a blank line, then `---`"]),
+    (7, "title and sections", "presentation", ["in its `#` title, use `##` for every section"]),
+    (7, "no depth from ### or ####", "presentation", ["not from `###` or `####`"]),
+    (7, "two-sentence opener", "presentation", ["opening paragraph to two sentences"]),
+    (7, "bold stays in body text", "presentation", ["in body text rather than a callout"]),
+    (7, "overview slot", "visual", ["**Overview:**"]),
+    (7, "question slot", "conversational", ["**Question:** at least one"]),
+    (7, "decision answers ask too", "conversational", ["every teaching and decision answer"]),
+    (7, "analogy slot", "examples", ["**Analogy:** one"]),
+    (7, "scenario after the answer", "examples", ["first section after the answer"]),
+    (7, "gloss slot", "terms", ["**Terms:** a short gloss"]),
+    (7, "close slot", "close", ["**Close:** a"]),
+    (7, "takeaway callout", "close", ["callout that compresses the mechanism"]),
+    (7, "check-yourself callout", "close", ["`> 🧪 **Check yourself:**` callout holding"]),
+    (7, "practitioner glosses and analogy", "register", ["parenthesis of six words or fewer", "Keep one analogy in any"]),
+    (7, "expert drops both", "register", ["drop both the glosses and the analogy"]),
+    (7, "Step 3 title", "presentation", ["is there a `#` title over"]),
+    (7, "Step 3 section icon", "visual", ["an icon on every section heading"]),
+    (7, "Step 3 question line", "conversational", ["as a 🙋 line"]),
+    (7, "Step 3 analogy", "examples", ["is there a 🧠 analogy callout"]),
+    (7, "Step 3 close callouts", "close", ["compressed 🎯 takeaway"]),
+]
+
+# Phrases of rules that Phase 7 replaced because they switched another rule off.
+RETIRED = [
+    "not on definitions or analogies",
+    "none of them is a template",
+    "three distinct levels",
+    "its own bolded line or short heading",
+    "An example beats an analogy",
 ]
 
 METHODOLOGY = "references/explanation-methodology.md"
@@ -173,6 +207,24 @@ def test_moved_rules_left_skill_md():
     for _, _, anchors, _ in MOVED:
         for anchor in anchors[1:]:
             assert norm(anchor) not in text, f"{anchor!r} should live only in {METHODOLOGY}"
+
+
+def test_retired_conflicting_rules_stay_gone():
+    for path in lib.iter_skill_files(lib.SKILL_DIR):
+        text = norm(path.read_text(encoding="utf-8")).lower()
+        for phrase in RETIRED:
+            assert norm(phrase).lower() not in text, f"{path.name} brings back {phrase!r}"
+
+
+def test_page_shape_slots_follow_their_operations():
+    source = body(skill_text())
+    shape = lambda ops: lib.render_markers(source, ops).split("## Page shape", 1)[1].split("\n## ", 1)[0]
+    core = shape(frozenset())
+    assert "**Answer:**" in core and "**Title:**" not in core and "🙋" not in core and "🎯" not in core
+    full = shape(lib.VARIANTS["full"])
+    for slot in ("**Title:**", "**Answer:**", "**Overview:**", "**Map and sections:**", "**Question:**",
+                 "**Analogy:**", "**Terms:**", "**Close:**"):
+        assert slot in full, slot
 
 
 def test_paragraph_ceiling_matches_the_dense_paragraph_gate():

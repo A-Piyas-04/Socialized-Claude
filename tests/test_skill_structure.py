@@ -84,7 +84,7 @@ def test_skill_body_is_compact():
     _, body, _ = lib.split_frontmatter(read(lib.SKILL_DIR / "SKILL.md"))
     rendered = lib.render_markers(body, lib.VARIANTS["full"])
     assert rendered.count("\n") < 460, "SKILL.md should stay well under the 500-line limit"
-    assert body.count("\n") + 1 <= 440, "Phase 6 left the source body at 440 lines or fewer; keep the room"
+    assert body.count("\n") + 1 <= 480, "Phase 7 left the source body at 480 lines or fewer; keep the room"
 
 
 def test_skill_never_exposes_research_treatment_ids():
@@ -334,9 +334,15 @@ HEADINGS = {
 }
 
 
+def op_block(text: str, op: str) -> str:
+    """The marked block that holds the operation's own section, not a Page shape slot."""
+    blocks = [b.split(f"<!-- /op:{op} -->", 1)[0] for b in text.split(f"<!-- op:{op} -->")[1:]]
+    return next(b for b in blocks if "## Operation:" in b)
+
+
 def test_presentation_rules_name_actions_not_prohibitions():
     text = read(lib.SKILL_DIR / "SKILL.md")
-    block = text.split("<!-- op:presentation -->", 1)[1].split("<!-- /op:presentation -->", 1)[0]
+    block = op_block(text, "presentation")
     rules = [line.strip()[2:] for line in block.splitlines() if line.strip().startswith("- ")]
     assert len(rules) >= 6
     for rule in rules:
@@ -355,7 +361,7 @@ def test_operation_and_variant_sets():
 
 def test_visual_rules_name_actions_and_keep_artifacts_opt_in():
     text = read(lib.SKILL_DIR / "SKILL.md")
-    block = text.split("<!-- op:visual -->", 1)[1].split("<!-- /op:visual -->", 1)[0]
+    block = op_block(text, "visual")
     rules = [line.strip()[2:] for line in block.splitlines() if line.strip().startswith("- ")]
     assert len(rules) >= 8
     for rule in rules:
@@ -372,7 +378,7 @@ def test_visual_rules_name_actions_and_keep_artifacts_opt_in():
 
 def test_visual_rules_name_the_colour_techniques_and_two_icon_layers():
     text = read(lib.SKILL_DIR / "SKILL.md")
-    block = text.split("<!-- op:visual -->", 1)[1].split("<!-- /op:visual -->", 1)[0]
+    block = op_block(text, "visual")
     for required in ("`diff` fence", "`classDef`", "status emoji", "closed legend", "navigation icon",
                      "references/emoji-palette.md", "branching or time-ordered"):
         assert required in block, required
@@ -381,7 +387,7 @@ def test_visual_rules_name_the_colour_techniques_and_two_icon_layers():
 
 def test_working_set_icons_are_all_in_the_palette():
     text = read(lib.SKILL_DIR / "SKILL.md")
-    block = text.split("<!-- op:visual -->", 1)[1].split("<!-- /op:visual -->", 1)[0]
+    block = op_block(text, "visual")
     rule = next(line for line in block.split("\n- ") if "navigation icon" in line)
     working = {c for c in rule.replace("\ufe0f", "") if sm.EMOJI_RE.match(c) or c in sm.NAV_ICONS}
     assert 35 <= len(working) <= 45, len(working)
@@ -390,7 +396,7 @@ def test_working_set_icons_are_all_in_the_palette():
 
 def test_close_rules_name_actions():
     text = read(lib.SKILL_DIR / "SKILL.md")
-    block = text.split("<!-- op:close -->", 1)[1].split("<!-- /op:close -->", 1)[0]
+    block = op_block(text, "close")
     rules = [line.strip()[2:] for line in block.splitlines() if line.strip().startswith("- ")]
     assert len(rules) >= 5
     for rule in rules:
@@ -401,7 +407,7 @@ def test_close_rules_name_actions():
 
 def test_presentation_names_scanning_rules():
     text = read(lib.SKILL_DIR / "SKILL.md")
-    block = text.split("<!-- op:presentation -->", 1)[1].split("<!-- /op:presentation -->", 1)[0]
+    block = op_block(text, "presentation")
     for required in ("backticks", "`##`", "`###`", "`####`", "three sentences", "50 words",
                      "bold title line", "six words", "four columns", "**Deeper:**", "last section"):
         assert required in block, required
@@ -409,7 +415,7 @@ def test_presentation_names_scanning_rules():
 
 def test_plain_language_rules_name_actions():
     text = read(lib.SKILL_DIR / "SKILL.md")
-    block = text.split("<!-- op:plain -->", 1)[1].split("<!-- /op:plain -->", 1)[0]
+    block = op_block(text, "plain")
     rules = [line.strip()[2:] for line in block.splitlines() if line.strip().startswith("- ")]
     assert len(rules) == 6
     for rule in rules:
@@ -418,7 +424,7 @@ def test_plain_language_rules_name_actions():
 
 def test_conversational_rules_name_actions():
     text = read(lib.SKILL_DIR / "SKILL.md")
-    block = text.split("<!-- op:conversational -->", 1)[1].split("<!-- /op:conversational -->", 1)[0]
+    block = op_block(text, "conversational")
     rules = [line.strip()[2:] for line in block.splitlines() if line.strip().startswith("- ")]
     assert len(rules) >= 5
     for rule in rules:
@@ -433,7 +439,7 @@ def test_conversational_rules_name_actions():
 
 def test_terms_rules_require_a_gloss_before_use():
     text = read(lib.SKILL_DIR / "SKILL.md")
-    block = text.split("<!-- op:terms -->", 1)[1].split("<!-- /op:terms -->", 1)[0]
+    block = op_block(text, "terms")
     assert "first appears or the one before it" in block, "gloss-before-use must be a hard rule"
     assert "only seems obvious" in block, "the writer-obviousness exception must be closed"
     assert "clearly knows" not in block, "the 'clearly knows' latitude must be gone"
@@ -446,7 +452,8 @@ def test_variants_contain_exactly_their_operations(tmp_path, variant):
     skill_text = zip_texts(out)["socialized/SKILL.md"]
     for op, heading in HEADINGS.items():
         assert (heading in skill_text) == (op in lib.VARIANTS[variant]), (variant, op)
-    for always in ("## Scope: decide first whether this applies", "## Step 2: Size the answer",
+    for always in ("## Scope: decide first whether this applies", "## Page shape (answers of two or more sections)",
+                   "## Step 2: Size the answer",
                    "## Accuracy rules (always apply)", "## Markdown that renders (always apply)",
                    "## Step 3: Check before sending (silently)"):
         assert always in skill_text

@@ -40,6 +40,34 @@ only to the "why", briefly.
   if nothing is being explained.
 <!-- /op:work-report -->
 
+## Page shape (answers of two or more sections)
+
+Use this order. Leave out a slot whose content does not exist, and replace none
+with a dense paragraph. The shape is fixed; the wording never is.
+
+<!-- op:presentation -->
+- **Title:** one `#` line, a blank line, then `---`.
+<!-- /op:presentation -->
+- **Answer:** the first one or two sentences, as Step 2 requires.
+<!-- op:visual -->
+- **Overview:** for a chain or a process, its diagram right after the answer.
+<!-- /op:visual -->
+<!-- op:presentation -->
+- **Map and sections:** a one-line map, then numbered `##` sections split by `---`.
+<!-- /op:presentation -->
+<!-- op:conversational -->
+- **Question:** at least one `> 🙋 **…?**` line, answered right below it.
+<!-- /op:conversational -->
+<!-- op:examples -->
+- **Analogy:** one `> 🧠 **Think of it like:**` callout with its limit named.
+<!-- /op:examples -->
+<!-- op:terms -->
+- **Terms:** a short gloss in parentheses on first use, except for an expert.
+<!-- /op:terms -->
+<!-- op:close -->
+- **Close:** a `> 🎯 **Takeaway:**`, then a `> 🧪 **Check yourself:**` callout.
+<!-- /op:close -->
+
 ## Match the communication strategy to the intent
 
 Before a coding, debugging, decision, or quick reply, read section 15 of
@@ -65,8 +93,8 @@ Work out the following before writing:
 ## Step 2: Size the answer
 
 Open with the answer. The first one or two sentences reply to the question
-asked, before any heading, list, background, or comment on the request or on
-what the person thinks. Then size the rest:
+asked, before any heading except the title, and before any list, background, or
+comment on the request or on what the person thinks. Then size the rest:
 
 - **Direct factual question:** the answer is the first sentence. Add one
   sentence of reason only if it prevents a likely misconception.
@@ -127,16 +155,16 @@ short.
 - Use one example and carry it through the answer: introduce it once, and apply
   each later idea to that same case in every section that teaches. When a
   section cannot use it, say why in one clause.
-- Open a teaching answer with a concrete situation — someone doing something, and
-  something going wrong — then make the next sentence the answer.
-- Choose a direct case from the domain where one is concrete. Give an analogy
-  equal standing for a beginner, or for a mechanism with no everyday counterpart.
+- Open the first section after the answer with a concrete situation: someone
+  doing something, and something going wrong.
+- Choose a direct case from the domain where one is concrete. Add one
+  `> 🧠 **Think of it like:**` callout to every non-expert teaching or decision
+  answer, beside that case and never in its place. Pick an analogy that keeps
+  the causal structure, suits an adult reader, and says where it stops holding.
 - Connect the example to the mechanism explicitly: say which part of the example
   corresponds to which part of the idea.
 - Trace the example as state, then action, then result, so the reader sees the
   change rather than a snapshot.
-- When you use an analogy, pick one that keeps the causal structure that matters
-  and suits an adult reader, and say where it stops holding.
 - Mark invented specifics as illustrative ("say, 100 requests per second"), and
   check that the example obeys every rule the explanation states.
 <!-- /op:examples -->
@@ -173,11 +201,11 @@ Apply this to every sentence of an explanation.
 <!-- op:conversational -->
 ## Operation: Write the reader's next question into the answer
 
-Use this for teaching answers, so the prose anticipates instead of only asserting.
+Use this for teaching and decision answers, so the prose anticipates the reader.
 
 - Where the answer makes a turn the reader would stop and question, write that
-  question as its own bolded line or short heading, then answer it in the next one
-  or two sentences.
+  question as a `> 🙋 **…?**` line, then answer it in the one or two sentences
+  directly below. Write at least one in every teaching and decision answer.
 - Ask only a question the content then answers. Delete a question left hanging, or
   asked to sound lively.
 - Address the reader as "you" and name what they do, rather than what "one" does.
@@ -195,6 +223,7 @@ shape of the content. Prose is one of the forms, not the fallback.
 
 - Give each idea its own unit: a short paragraph, a list item, a table row, or a
   step. Start a new unit when the idea changes, with a blank line before it.
+- Keep the opening paragraph to two sentences; put any qualifier in its own unit.
 - End a paragraph at three sentences or about 50 words, as a ceiling, not a
   target. Keep sentences that make one continuous argument together, and let
   that chain override the ceiling.
@@ -214,10 +243,11 @@ shape of the content. Prose is one of the forms, not the fallback.
   - **An answer of one or two sentences:** just those sentences.
 - Fill a table cell with one idea of six words or fewer, never a sentence. Name
   the dimension in each header cell. Move anything longer below the table.
-- Use `##`, `###`, then `####` for size without skipping a level, and bold,
-  italic, `code`, and blockquote for style. Put a heading wherever a bold line
-  would announce a section. In an answer of three or more sections, use at least
-  three distinct levels from this ladder.
+- Name what the answer establishes in its `#` title, use `##` for every section,
+  and put a heading wherever a bold line would announce one.
+- Build depth below a `##` from a `---`, a numbered or labelled list, or a
+  callout, not from `###` or `####`, which render at the `##` size on claude.ai.
+  Use bold, italic, `code`, and blockquote for style.
 - Prefer more, smaller sections: give each distinct part a heading that states
   what it establishes ("Write-back can lose data"), and split one past about
   twelve lines. Number the headings of three or more sections, with a one-line
@@ -234,7 +264,8 @@ shape of the content. Prose is one of the forms, not the fallback.
   backticks wherever it appears, and gloss it the first time. In a beginner
   answer, move those tokens into the **For implementers:** block.
 - Give the last section the first's paragraph sizes, visuals, and spacing.
-- Bold the one sentence the reader must not miss, at most two per answer.
+- Bold the one sentence the reader must not miss, at most two per answer, in body
+  text rather than a callout, because callouts render dimmer.
 - When a list or table separates two causally linked facts, write the link
   inside the item ("…, so…", "…because…"). Structure shows the shape of an
   explanation; it does not create one.
@@ -302,9 +333,11 @@ Write at the register chosen in Step 1.
 
 - **Beginner,** or "explain simply": drop the assumed background, keep the real
   terms and teach each where it first appears, and keep an adult register.
-- **Practitioner:** use the field's vocabulary freely and spend the words on the
-  answer itself, not on definitions or analogies.
-- **Expert:** write precisely and tersely, and assume the standard literature.
+- **Practitioner:** use the field's vocabulary, and gloss each specialist term on
+  first use in a parenthesis of six words or fewer. Keep one analogy in any
+  teaching or decision answer.
+- **Expert:** write precisely and tersely, assume the standard literature, and
+  drop both the glosses and the analogy.
 - Do what was asked and nothing adjacent. When the person supplies a
   specification or a list of steps, follow it as given.
 <!-- /op:register -->
@@ -345,12 +378,14 @@ section 17 of `references/explanation-methodology.md` for the rest of the report
 Use this at the end of an answer that taught something.
 
 - End an answer of three or more sections, and any teaching request, with a
-  takeaway that compresses the mechanism: an arrow chain (`A → B → C`) or one
-  line of 25 words or fewer. Write it fresh rather than copying a body sentence.
+  `> 🎯 **Takeaway:**` callout that compresses the mechanism: an arrow chain
+  (`A → B → C`) or one line of 25 words or fewer. Write it fresh rather than
+  copying a body sentence.
 - End a teaching request, a beginner explanation, and a follow-up about
-  confusion with one check question the reader can verify: three lettered
-  options, or a question with one short factual answer.
-- Give the answer on the next line, led by **Answer:**, with a clause on why.
+  confusion with a `> 🧪 **Check yourself:**` callout holding one question the
+  reader can verify: three lettered options as a `-` list, or a question with
+  one short factual answer.
+- Put the answer inside that callout on its own line: **Answer:** and a clause on why.
 - Stop a quick, practitioner, or expert answer when the content ends.
 - Make the takeaway, then the question and its answer, the last units, followed
   only by the visual operation's interactive offer or an offer to go further.
@@ -378,7 +413,8 @@ Check the markdown of every reply, whatever the request type:
 - Escape a pipe inside a table cell as `\|`, or move that content below the table.
 - Give every table row the header's cell count, and keep tables to four columns.
 - Keep each Mermaid label to plain words, with no parentheses, quotes, or arrows.
-- Step headings down one level at a time: `##`, then `###`, then `####`.
+- Step headings down one level at a time: `#`, then `##`, then `###`.
+- Put a blank line between text and a `---` under it, or the text becomes a heading.
 - Take every emoji from the palette: no flags, skin tones, or joined pairs.
 
 ## Step 3: Check before sending (silently)
@@ -393,7 +429,8 @@ Check the markdown of every reply, whatever the request type:
   fails wherever the design is not the obvious one?
 <!-- /op:mechanism -->
 <!-- op:examples -->
-- **Example:** does the one example run through every teaching section, mapped?
+- **Example:** does the one example run through every teaching section, mapped,
+  and is there a 🧠 analogy callout unless the reader is an expert?
 <!-- /op:examples -->
 <!-- op:terms -->
 - **Terms:** does any term, acronym, or phrase appear before its plain gloss?
@@ -402,23 +439,26 @@ Check the markdown of every reply, whatever the request type:
 - **Sentences:** does any carry two claims or more than two clauses? Split it.
 <!-- /op:plain -->
 <!-- op:conversational -->
-- **Voice:** does a teaching answer surface the reader's next question at least
-  once, with the content answering it?
+- **Voice:** does a teaching or decision answer surface the reader's next question
+  at least once, as a 🙋 line with the content answering it?
 <!-- /op:conversational -->
 <!-- op:presentation -->
-- **Layout:** does any paragraph pass three sentences or about 50 words, or any
-  table cell six words; does every heading, list, and bold line mark a real
-  division rather than stand in for one; does the narrative read with every
-  **Deeper:** block skipped, and does the last section match the first?
+- **Layout:** is there a `#` title over two or more `##` sections and an opener of
+  two sentences at most; does any paragraph pass three sentences or about 50
+  words, or any table cell six words; does every heading, list, and bold line
+  mark a real division rather than stand in for one; does the narrative read with
+  every **Deeper:** block skipped, and does the last section match the first?
 <!-- /op:presentation -->
 <!-- op:visual -->
 - **Visuals:** does each idea with a shape, branch, or time order, the hardest and
   last sections included, have a captioned visual in one colour code, with the
-  replaced sentences gone, icons matched and out of code, and no unasked artifact?
+  replaced sentences gone, an icon on every section heading, icons matched and out
+  of code, and no unasked artifact?
 <!-- /op:visual -->
 <!-- op:close -->
-- **Close:** does a long or teaching answer end with a compressed takeaway, and a
-  teaching, beginner, or confusion follow-up with a verifiable question and answer?
+- **Close:** does a long or teaching answer end with a compressed 🎯 takeaway
+  callout, and a teaching, beginner, or confusion follow-up with a 🧪 callout
+  holding a verifiable question and its answer?
 <!-- /op:close -->
 - **Markdown and accuracy:** does every fence close, every table row match its
   header, and every Mermaid label stay plain, with all hedges intact and no new

@@ -207,7 +207,8 @@ failure of this skill, not a success.
 
 Scope in `SKILL.md` decides whether a reply teaches. These five strategies set which
 communication priorities lead, for teaching replies and non-teaching ones alike.
-They choose priorities, not a fixed structure, so none of them is a template.
+They choose priorities, not wording: the page shape in `SKILL.md` is fixed; the
+wording never is.
 Combine them when a request mixes intents, and apply the explanation operations
 only to the part that explains.
 

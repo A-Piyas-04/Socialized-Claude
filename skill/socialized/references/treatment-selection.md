@@ -76,9 +76,25 @@ specific gap it fills for this reader.
 - **Accuracy beats simplicity.** If the simple version would be wrong in a way
   that matters, give the accurate version with a short nuance.
 <!-- op:examples -->
-- **An example beats an analogy** when both would work. A direct case from the
-  domain cannot mislead about the domain the way an analogy can.
+- **The example carries the answer; the analogy sits beside it.** A direct case
+  from the domain runs through every section, because it cannot mislead about the
+  domain the way an analogy can. The analogy gets one 🧠 callout next to it.
+- **The answer comes first; the scenario opens the first section.** Step 2's
+  answer sentences stay first, and the concrete situation follows them.
 <!-- /op:examples -->
+<!-- op:register -->
+- **A practitioner still gets glosses and an analogy.** Field vocabulary stays,
+  each specialist term gets a short gloss in parentheses on first use, and a
+  teaching or decision answer keeps one analogy. Only an expert drops both.
+<!-- /op:register -->
+<!-- op:presentation -->
+- **Size comes from the title, not from deeper headings.** On claude.ai `##`,
+  `###` and `####` render alike, so an answer gets one `#` title and `##`
+  sections, and depth below that comes from separators, lists, and callouts.
+<!-- /op:presentation -->
+- **The page shape is fixed; the wording never is.** The strategy for the intent
+  chooses priorities and words. The slots and their order come from the page
+  shape in `SKILL.md`.
 
 ## 3. The length budget
 

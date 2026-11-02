@@ -291,3 +291,37 @@ needs to decide. No progress narrative.
   `test_skill_structure.py`. `test_presentation_upgrade.py` gains a `MOVED` registry
   (moved rule in the reference, plus its pointer) with removal tests. The V2 change
   record is `docs/SKILL_UPGRADE_PLAN_V2.md`.
+- Skill upgrade V2 Phase 7 (conflicts and shape), user 2026-11-02: a new always-on
+  "Page shape" section follows Scope. Each slot sits inside its operation's markers
+  (user's choice, to keep ablation builds clean); `core` carries only the heading, the
+  fixed-shape sentence and the Answer slot.
+- Phase 7 conflict fixes:
+  - `op:register` practitioner glosses each specialist term in a parenthesis of six
+    words or fewer and keeps one analogy; only expert drops both.
+  - `op:examples` puts the scenario at the start of the first section after the
+    answer, and requires one `> 🧠 **Think of it like:**` callout in every non-expert
+    teaching or decision answer, beside the running example.
+  - Step 2 allows the title before the answer.
+  - Methodology §15 now says "the page shape … is fixed; the wording never is".
+- Phase 7 supersedes these Phase 1 and Phase 2 rules:
+  - the `##`/`###`/`####` ladder and "three distinct levels" are retired;
+  - an answer of two or more sections gets one `#` title, a blank line and `---`,
+    then `##` sections, with depth from separators, lists and callouts;
+  - the reader's question moves from "its own bolded line or short heading" to a
+    `> 🙋 **…?**` line and extends to decision answers;
+  - "analogy equal standing" and treatment-selection's "an example beats an
+    analogy" are replaced by "the analogy sits beside the example".
+  - `tests/test_presentation_upgrade.py::RETIRED` keeps these phrases out.
+- Phase 7 forms:
+  - the close is a `> 🎯 **Takeaway:**` callout and a `> 🧪 **Check yourself:**`
+    callout, with the options as a list and **Answer:** inside;
+  - the opener is two sentences at most;
+  - the must-not-miss bold stays in body text (the probe showed callouts render
+    dimmer);
+  - the markdown section requires a blank line before a `---` under text.
+- Phase 7 Step 3: the acceptance question is split across the marked Layout,
+  Visuals, Voice, Example and Close checks, so no check leaks into another
+  operation's build. Tests that read an operation's block now pick the block holding
+  its `## Operation:` heading (`op_block`), because Page shape slots share the markers.
+- Phase 7 counts: the body is 480 lines (validator count, guard 480 or fewer), 415
+  rendered (guard 460). That leaves 20 lines for Phases 8 and 9.
