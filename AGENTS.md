@@ -167,3 +167,26 @@ needs to decide. No progress narrative.
   labelled a heuristic in `lint_response.py`. None appear in
   `decorative_structure_flags`. SKILL.md body is 439 lines (guard 500), rendered 392
   (test guard 460).
+- Skill upgrade Phase 2 (human voice, `docs/SKILL_UPGRADE_PLAN.md`), user 2026-11-02:
+  added a 13th operation `op:conversational` (heading "Write the reader's next
+  question into the answer"), carrying the implied-second-voice move, direct address,
+  contractions, and the anti-chattiness guard (no praise, no staged persona). This is
+  the stop-and-ask approval AGENTS.md requires for adding an operation. OPERATIONS is
+  now 13, VARIANTS 16 (new `conv` single-op key).
+- Phase 2: no `V_conv` sweep arm added to `evaluation/conditions.json`; the sweep
+  stays at 15 arms, so no extra judge tokens. The arm can be added later in one data
+  edit when the sweep is run.
+- Phase 2 `op:examples`: the analogy demotion is reversed — a direct case is kept
+  where one is concrete, and analogy is given equal standing for a beginner or a
+  mechanism with no everyday counterpart; the keep-the-causal-structure guard stays.
+  The mirror in `references/treatment-selection.md` ("an example beats an analogy")
+  is left as the conflict-resolution rule it already is (it says "when both would
+  work"), so no change was needed there. Also widened the scenario rule from
+  beginners to any teaching answer, and added state→action→result tracing.
+- Phase 2 `op:terms`: tightened to gloss-before-use for every term, acronym, and set
+  phrase (foreign terms included), with no writer-obviousness exception. The old
+  "leave terms the reader used or clearly knows undefined" latitude is narrowed to
+  only terms the reader themselves used; the "clearly knows" half is dropped.
+- Phase 2: new reference `references/conversation-grammar.md` (worked reader's-question
+  patterns, a register ladder, direct-address/contraction pairs). SKILL.md body is 471
+  lines (guard 500), rendered 418 (test guard 460).

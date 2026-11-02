@@ -3,6 +3,7 @@
   "variant": "full",
   "enabled_operations": [
     "close",
+    "conversational",
     "examples",
     "mechanism",
     "persistence",
@@ -16,9 +17,10 @@
     "work-report"
   ],
   "zip": "socialized.zip",
-  "zip_sha256": "903aacd3726806531d623c246877910ca7e6f4aa5bbd9be8a8387a807d8c85be",
+  "zip_sha256": "3e668a17a563151c2094afe4958667678634ad1adecf8f7cadde8ff23cd5e70e",
   "files": {
-    "SKILL.md": "075bcc1716c956e25c1ef6722c7cc21275d8b866d8f20d9a4961dfc7035e319e",
+    "SKILL.md": "a27a980ab5964d2a7a419918ae0cdfba6efb77340af0c89a88809187bfb46ac4",
+    "references/conversation-grammar.md": "c165fd92f206cfdda1401a0a44f69cb19e91950fb745433b335b432495459f97",
     "references/explanation-examples.md": "b060f359100e9e5f0a0718be376a29bd8d37e424f80f07b34e301858ddcfefec",
     "references/explanation-methodology.md": "21af09a61005f7367e90fa03c9cffc9558b31bd47d7dcaa390c992bcfad22e90",
     "references/treatment-selection.md": "25b5d093f60532aaeec46fe7b459869ccec3eacd5a8fa408b466f3b0fd66f50a"

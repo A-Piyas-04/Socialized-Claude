@@ -54,8 +54,8 @@ so a short factual exchange never pays their context cost.
 3. **Size the answer.** Defaults per request type. An explicit length request
    overrides all of them.
 4. **Operations.** Dependency ordering, mechanism, example, terms,
-   presentation, register, repair, persistence, work report, plain language.
-   Each carries its
+   presentation, visual, register, repair, persistence, work report, plain
+   language, conversational voice, and close — thirteen in all. Each carries its
    own "use when" and "skip when" rules, and every rule names an action.
 5. **Accuracy rules.** No invented mechanisms or facts, hedges preserved,
    simplify expression rather than substance.
@@ -133,7 +133,10 @@ when all of them are enabled.
 | `persist` | persistence |
 | `wrep` | work report |
 | `plain` | plain language |
-| `full` | all ten (production) |
+| `conv` | conversational voice |
+| `visual` | visual |
+| `close` | close |
+| `full` | all thirteen (production) |
 
 All variants keep **identical name and description**, so automatic activation
 sees the same metadata. Tests enforce this, and also that each variant contains

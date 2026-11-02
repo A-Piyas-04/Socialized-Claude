@@ -64,7 +64,8 @@ def test_metadata_meets_claude_ai_limits():
 
 def test_required_reference_files_exist_and_are_linked():
     body = read(lib.SKILL_DIR / "SKILL.md")
-    for name in ("explanation-methodology.md", "treatment-selection.md", "explanation-examples.md"):
+    for name in ("explanation-methodology.md", "treatment-selection.md", "explanation-examples.md",
+                 "conversation-grammar.md"):
         assert (lib.SKILL_DIR / "references" / name).is_file()
         assert f"references/{name}" in body
 
@@ -267,6 +268,7 @@ def test_production_zip_structure(tmp_path):
         "socialized/references/explanation-methodology.md",
         "socialized/references/treatment-selection.md",
         "socialized/references/explanation-examples.md",
+        "socialized/references/conversation-grammar.md",
     }
     for name, text in texts.items():
         assert "op:" not in text, f"marker left in {name}"
@@ -314,6 +316,7 @@ HEADINGS = {
     "persistence": "## Operation: Keep standing instructions in force",
     "work-report": "## Operation: Report work that was done",
     "plain": "## Operation: Write plain sentences",
+    "conversational": "## Operation: Write the reader's next question into the answer",
     "visual": "## Operation: Show the shape instead of describing it",
     "close": "## Operation: Close with something to keep",
 }
@@ -330,12 +333,12 @@ def test_presentation_rules_name_actions_not_prohibitions():
 
 
 def test_operation_and_variant_sets():
-    assert len(lib.OPERATIONS) == 12 and set(HEADINGS) == set(lib.OPERATIONS)
+    assert len(lib.OPERATIONS) == 13 and set(HEADINGS) == set(lib.OPERATIONS)
     assert lib.VARIANTS["full"] == frozenset(lib.OPERATIONS) and lib.VARIANTS["core"] == frozenset()
-    assert len(lib.VARIANTS) == 15
+    assert len(lib.VARIANTS) == 16
     singles = {next(iter(ops)) for ops in lib.VARIANTS.values() if len(ops) == 1}
     assert singles == {"sequencing", "mechanism", "presentation", "register", "repair", "persistence",
-                       "work-report", "plain", "visual", "close"}
+                       "work-report", "plain", "conversational", "visual", "close"}
 
 
 def test_visual_rules_name_actions_and_keep_artifacts_opt_in():
@@ -381,6 +384,29 @@ def test_plain_language_rules_name_actions():
     assert len(rules) == 6
     for rule in rules:
         assert not rule.lower().startswith(("do not", "don't", "never", "avoid")), rule
+
+
+def test_conversational_rules_name_actions():
+    text = read(lib.SKILL_DIR / "SKILL.md")
+    block = text.split("<!-- op:conversational -->", 1)[1].split("<!-- /op:conversational -->", 1)[0]
+    rules = [line.strip()[2:] for line in block.splitlines() if line.strip().startswith("- ")]
+    assert len(rules) >= 5
+    for rule in rules:
+        assert not rule.lower().startswith(("do not", "don't", "never", "avoid", "only")), rule
+    joined = " ".join(rules).lower()
+    assert "question" in joined, "the reader's-question move must be named"
+    assert '"you"' in block, "direct address must be named"
+    assert "contraction" in joined, "contractions must be named"
+    for guard in ("praise", "persona"):
+        assert guard in joined, f"the anti-chattiness guard must name {guard}"
+
+
+def test_terms_rules_require_a_gloss_before_use():
+    text = read(lib.SKILL_DIR / "SKILL.md")
+    block = text.split("<!-- op:terms -->", 1)[1].split("<!-- /op:terms -->", 1)[0]
+    assert "first appears or the one before it" in block, "gloss-before-use must be a hard rule"
+    assert "only seems obvious" in block, "the writer-obviousness exception must be closed"
+    assert "clearly knows" not in block, "the 'clearly knows' latitude must be gone"
 
 
 @pytest.mark.parametrize("variant", sorted(lib.VARIANTS))

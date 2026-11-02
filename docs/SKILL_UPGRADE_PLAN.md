@@ -155,11 +155,13 @@ heading and two sentences, and it is what makes prose feel like speech.
 
 ### ✅ Acceptance
 
-- Twelve operations become thirteen **only if** Phase 1 freed the lines. Otherwise
-  the conversational rules merge into `op:plain` and the count stays at twelve.
-- `python -m pytest -q` green.
-- Read an answer aloud. If you would not say that sentence to a colleague, the
-  phase is not done.
+- ✅ Twelve operations became **thirteen** — Phase 1 freed the lines (body 471/500,
+  rendered 418/460), so `op:conversational` was added rather than folded into
+  `op:plain`. A `conv` variant key was added; no `V_conv` sweep arm. _(done 2026-11-02)_
+- ✅ `python -m pytest -q` green: **404 passed, 1 skipped**. _(done 2026-11-02)_
+- ⬜ Read an answer aloud. If you would not say that sentence to a colleague, the
+  phase is not done. **This behavioural check, and watching for the chattiness risk
+  below, is still yours — it cannot be automated.**
 
 ### 🚨 Risk
 

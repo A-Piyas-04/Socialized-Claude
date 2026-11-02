@@ -152,12 +152,14 @@ short.
 - Use one example and carry it through the answer: introduce it once, and apply
   each later idea to that same case in every section that teaches. When a
   section cannot use it, say why in one clause.
-- For a beginner's conceptual question, make sentence one a concrete situation
-  (a person, or something going wrong) and sentence two the answer.
-- Prefer a direct case from the domain, such as a specific input traced through
-  the process, over an analogy.
+- Open a teaching answer with a concrete situation — someone doing something, and
+  something going wrong — then make the next sentence the answer.
+- Choose a direct case from the domain where one is concrete. Give an analogy
+  equal standing for a beginner, or for a mechanism with no everyday counterpart.
 - Connect the example to the mechanism explicitly: say which part of the example
   corresponds to which part of the idea.
+- Trace the example as state, then action, then result, so the reader sees the
+  change rather than a snapshot.
 - When you use an analogy, pick one that keeps the causal structure that matters
   and suits an adult reader, and say where it stops holding.
 - Mark invented specifics as illustrative ("say, 100 requests per second"), and
@@ -169,9 +171,10 @@ short.
 
 - Call each concept by the field's established name. The reader will meet the
   term again, so teach it rather than paraphrase it.
-- Define a load-bearing term this reader probably lacks in the sentence where it
-  first appears. Gloss a foreign-language term the same way.
-- Leave terms the reader used or clearly knows undefined.
+- Gloss every term, acronym, and set phrase in plain language in the sentence
+  where it first appears or the one before it, foreign-language terms included.
+  Grant no exception to a term that only seems obvious to the writer.
+- Leave undefined only a term the reader themselves used.
 - Introduce only the terms the answer needs.
 <!-- /op:terms -->
 
@@ -191,6 +194,25 @@ Apply this to every sentence of an explanation.
 - Start with the content. Keep only the presentation operation's one-line section
   map, and delete every other sentence whose job is to preview or announce.
 <!-- /op:plain -->
+
+<!-- op:conversational -->
+## Operation: Write the reader's next question into the answer
+
+Use this for teaching answers, so the prose anticipates instead of only asserting.
+
+- Where the answer makes a turn the reader would stop and question, write that
+  question as its own bolded line or short heading, then answer it in the next one
+  or two sentences.
+- Ask only a question the content then answers. Delete a question left hanging, or
+  asked to sound lively.
+- Address the reader as "you" and name what they do, rather than what "one" does.
+- Use the contractions speech uses ("it's", "doesn't", "you'll") unless the
+  register is formal or the person asked otherwise.
+- Open with content. Lead with no praise, reassurance, or interjection, and cut
+  openers like "Great question" and "simple, right?".
+- Keep the second voice to a question the text resolves. Do not invent a persona
+  or stage a dialogue between named speakers.
+<!-- /op:conversational -->
 
 <!-- op:presentation -->
 ## Operation: Give the answer the shape of its content
@@ -399,9 +421,16 @@ Use this at the end of an answer that taught something.
 - Does the one example run through every teaching section, following the
   mechanism with the mapping stated?
 <!-- /op:examples -->
+<!-- op:terms -->
+- Does any term, acronym, or phrase appear before its plain-language gloss?
+<!-- /op:terms -->
 <!-- op:plain -->
 - Does any sentence carry two claims or more than two clauses? Split it.
 <!-- /op:plain -->
+<!-- op:conversational -->
+- Does a teaching answer surface the reader's next question at least once, with
+  the content answering it?
+<!-- /op:conversational -->
 <!-- op:presentation -->
 - Does any paragraph run past three sentences or about 50 words, and does every
   heading, list, table, and bold sentence mark a real division rather than decorate?
@@ -440,3 +469,6 @@ Read only the file the current request needs:
 - `references/treatment-selection.md` covers resolving conflicts between
   operations, the length budget, and the failure modes these rules prevent. Read
   it when operations pull in different directions.
+- `references/conversation-grammar.md` gives worked reader's-question patterns, a
+  register ladder, and weak and better pairs for direct address. Read it when an
+  answer reads like a manual rather than a person.
