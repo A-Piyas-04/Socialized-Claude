@@ -257,9 +257,12 @@ needs to decide. No progress narrative.
   Blockquote text renders dimmer than body.
 - V2 decision 2 (user, 2026-11-02): an answer's one `#` title is underlined, because
   the `#` size gain alone is not apparent. Only the title is underlined; `##` section
-  headings are not. Markdown has no underline, so the technique (a `---` under the
-  title, `<u>`, or combining U+0332) waits for `evaluation/underline_probe.md` to be
-  rendered on claude.ai. Phase 7 writes the rule. `tests/test_layout_capture.py`
+  headings are not. The underline probe (`evaluation/underline_probe.md`, screenshot
+  `evaluation/layout_capture/underline_probe-claude-ai.png`) showed `<u>` printed
+  literally, and combining U+0332 underlining but broken at spaces and unsafe for
+  copy and screen readers. The user chose a `---` line directly under the title, with
+  a blank line between them so it stays a thematic break rather than a setext
+  heading. Phase 7 writes the rule. `tests/test_layout_capture.py`
   pins the round-2 baseline (no `lint_markdown` break; heading levels {2, 3} and {2}).
   It is a record, not a gate.
 - Phase 5 finding: `icon_count` misses an icon that follows a section number
