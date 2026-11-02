@@ -2,7 +2,11 @@
 
 > **Written for:** the project owner and whoever implements the phases.
 > **Scope:** `skill/socialized/` only. No plugin work in any phase.
-> **Branch:** `skill-only`, at `2714c69` — the last commit before plugins existed.
+> **Branch:** started on `skill-only` at `2714c69` — the last commit before plugins
+> existed. Phase 1 is `280a31e` and Phase 2 is `1b8a1b4` on `skill-only`. Phase 3 is
+> on `skill-upgrade-phase-3`, branched from `1b8a1b4`.
+> **Status (2026-11-02):** Phases 1–3 ✅ complete, Phase 4 ⬜ not started. Each
+> phase's behavioural check is still open, and only you can do it.
 
 ---
 
@@ -15,27 +19,32 @@ is still a textbook. And all of it is worthless if the markdown renders broken.
 
 So: **space first, then voice, then visuals, then durability.**
 
-| Phase | Theme | Your words it answers |
-| --- | --- | --- |
-| 1 | 🧱 Space and hierarchy | better structure, spacious, whitespace in one view, font size and style, many sections, bullet structure |
-| 2 | 💬 Human voice | conversation between two people, sequential, analogy, scenario, examples, no unexplained jargon |
-| 3 | 🎨 Visual and colour | flowcharts, diagrams, huge emoji set, colourful characters, markdown over SVG |
-| 4 | 🛡️ Durability | markdown never breaks, and none of the above silently regresses |
+| Phase | Theme | Your words it answers | Status |
+| --- | --- | --- | --- |
+| 1 | 🧱 Space and hierarchy | better structure, spacious, whitespace in one view, font size and style, many sections, bullet structure | ✅ complete |
+| 2 | 💬 Human voice | conversation between two people, sequential, analogy, scenario, examples, no unexplained jargon | ✅ complete |
+| 3 | 🎨 Visual and colour | flowcharts, diagrams, huge emoji set, colourful characters, markdown over SVG | ✅ complete |
+| 4 | 🛡️ Durability | markdown never breaks, and none of the above silently regresses | ⬜ not started |
 
 ---
 
 ## ⚠️ The constraint that shapes everything
 
-`SKILL.md` is **472 of its 500 permitted body lines**. You have 28 lines of room.
+When this plan was written, `SKILL.md` was **472 of its 500 permitted body
+lines**, which left 28 lines of room. Every item on your list adds instructions.
+Written naively, the list needed roughly 150 new lines, and that did not fit.
+
+Here is how the budget moved through each phase (one block is 10 lines). The
+rendered count is the full build, which has a test guard of 460.
 
 ```
-SKILL.md  ████████████████████████████████████████████░░  472 / 500
-                                                      ▲
-                                            28 lines left
+start     ███████████████████████████████████████████████░░░  472 / 500
+Phase 1   ████████████████████████████████████████████░░░░░░  439 / 500   rendered 392
+Phase 2   ███████████████████████████████████████████████░░░  471 / 500   rendered 418
+Phase 3   █████████████████████████████████████████████████░  485 / 500   rendered 432
 ```
 
-Every item on your list adds instructions. Naively written, your list needs
-roughly 150 new lines. It does not fit.
+Phase 4 starts with **15 body lines** of room.
 
 Three consequences, which the phases are built around:
 
@@ -53,13 +62,13 @@ The other standing limits: `pytest` stays green at every commit, and
 
 ---
 
-## 🧱 Phase 1 — Space and hierarchy
+## 🧱 Phase 1 — Space and hierarchy ✅ complete
 
 **Goal:** a reply that can be taken in at a glance, not decoded.
 
 ### What changes for the reader
 
-Today a section is a 4-sentence, 80-word paragraph. That is still a block. You
+Before Phase 1, a section was allowed to be a 4-sentence, 80-word paragraph. That is still a block. You
 asked for air, so the target drops and the blank line becomes structural rather
 than incidental.
 
@@ -108,23 +117,23 @@ not somewhere else.
 
 ---
 
-## 💬 Phase 2 — Human voice
+## 💬 Phase 2 — Human voice ✅ complete
 
 **Goal:** the answer reads like a person explaining to a person, not a reference
 manual being recited.
 
 ### What changes for the reader
 
-This is the phase with the least existing support. Checked against the current
-skill:
+This was the phase with the least existing support. Here is each ask, checked
+against the skill before and after Phase 2:
 
-| Your ask | Status today |
-| --- | --- |
-| Analogy | ⚠️ Present but **actively deprioritised** — `op:examples` says "prefer a direct case… over an analogy" |
-| Scenario | ❌ Absent as a concept |
-| Two-person conversational flow | ❌ Absent — the closest rule says "a knowledgeable person talking to **this reader**", which is one-directional |
-| Sequential explanation | ✅ Covered by `op:sequencing` |
-| No unexplained jargon | ✅ Covered by `op:terms`, needs tightening only |
+| Your ask | Before Phase 2 | After |
+| --- | --- | --- |
+| Analogy | ⚠️ Deprioritised in `op:examples` | ✅ Equal standing |
+| Scenario | ❌ Absent | ✅ Opens teaching answers |
+| Two-person flow | ❌ One-directional only | ✅ `op:conversational` |
+| Sequential explanation | ✅ `op:sequencing` | ✅ Unchanged |
+| No unexplained jargon | ✅ `op:terms`, loose | ✅ Gloss before use |
 
 So Phase 2 is mostly **new behaviour**, and it needs Phase 1's reclaimed lines.
 
@@ -148,7 +157,7 @@ heading and two sentences, and it is what makes prose feel like speech.
 | `op:examples` | **Reverse the analogy demotion.** Analogy becomes a first-class tool for a beginner or an unfamiliar mechanism. Keep the existing guard: it must preserve the causal structure, and the answer must say where it stops holding. |
 | `op:examples` | New rule: **scenario**. Open a teaching answer with a concrete situation — someone doing something, and something going wrong — before any definition. |
 | `op:examples` | New rule: trace an example as **state → action → result**, so the reader sees change, not a static snapshot. |
-| **New** `op:conversational` | A new operation, or a renamed `op:plain` if the line budget is tight. Carries: the reader's-question move; direct address ("you"); the contraction-friendly register; the ban on announcing ("In this section we will…"). |
+| **New** `op:conversational` | A new operation, or a renamed `op:plain` if the line budget is tight. **Shipped as a new 13th operation.** Carries: the reader's-question move; direct address ("you"); the contraction-friendly register; the ban on announcing ("In this section we will…"). |
 | `op:terms` | Tighten to a hard rule: **no term, acronym or phrase appears before a plain-language gloss in the same sentence or the one before it.** No exception for "obvious" terms. |
 | **New** `references/conversation-grammar.md` | The bulk material: 8–10 worked question-and-answer patterns, a register ladder, and weak/better pairs. Kept out of `SKILL.md`; one pointer line added to "Reference files". |
 | `SKILL.md` Step 3 | Two new checks: "Does the answer surface the reader's next question at least once in a teaching answer?" and "Does any term appear before its gloss?" |
@@ -172,7 +181,7 @@ sake.
 
 ---
 
-## 🎨 Phase 3 — Visual and colour
+## 🎨 Phase 3 — Visual and colour ✅ complete
 
 **Goal:** the page is colourful and diagrammatic in **markdown**, with SVG and
 artifacts as rare exceptions.
@@ -191,9 +200,9 @@ techniques rather than gesture at colour.
 
 ### The emoji change
 
-Today's rule is a **closed set of six** — ✅ ❌ ⚠️ 🟢 🟡 🔴 — with the words "and no
-other symbols". You asked for a huge set to choose from. That rule is replaced by
-a **two-layer system**:
+The old rule was a **closed set of six** — ✅ ❌ ⚠️ 🟢 🟡 🔴 — with the words "and
+no other symbols". You asked for a huge set to choose from, so Phase 3 replaced
+that rule with a **two-layer system**:
 
 | Layer | Set | Rule |
 | --- | --- | --- |
@@ -215,7 +224,7 @@ Hard limits that keep it from becoming noise:
 | `op:visual` | Name the three rendering techniques explicitly (`diff` fence, Mermaid `classDef`, status emoji) in place of any general colour promise. |
 | `op:visual` | Strengthen diagram coverage: **a flowchart or sequence diagram for every branching or time-ordered mechanism**, not only when prose would take three-plus sentences. |
 | `op:visual` | Keep the markdown-first stance and narrow the SVG/artifact exception: only on explicit request, only on claude.ai, and the markdown answer stays complete without it. |
-| `scripts/structural_metrics.py` | Extend `NAV_ICONS` to the full palette. Exempt the intended emoji-led bullet and heading forms so correct output does not flag. Add `visual_count` and `icon_count` as **heuristics that never gate**. |
+| `scripts/structural_metrics.py` | Extend `NAV_ICONS` to the full palette. Exempt the intended emoji-led bullet and heading forms so correct output does not flag. Add `visual_count` and `icon_count` as **heuristics that never gate**. **Shipped:** `NAV_ICONS` is parsed from the palette file; `visual_count` already existed, so only `icon_count` was added. |
 
 ### ✅ Acceptance
 
@@ -237,7 +246,7 @@ never-in-code rule. If an answer has more icons than headings, it has failed.
 
 ---
 
-## 🛡️ Phase 4 — Durability
+## 🛡️ Phase 4 — Durability ⬜ not started
 
 **Goal:** the markdown never breaks, and Phases 1–3 cannot silently regress.
 
@@ -255,7 +264,7 @@ things that render as garbage when they go wrong.
 | 📐 Table rupture | An unescaped pipe inside a cell | Escape it, or move the content under the table |
 | 🧩 Mermaid blank render | A parenthesis, quote or arrow inside a node label | Keep labels to plain words, four or fewer |
 | 📱 Mobile overflow | More than four table columns | The existing four-column cap, enforced |
-| 🔤 Tofu boxes | An emoji outside the common set | The palette is pre-checked for rendering |
+| 🔤 Tofu boxes | An emoji outside the common set | The palette is limited to Emoji 11 single code points; your render check confirms it |
 | 🪜 Heading jump | `##` straight to `####` | The existing no-skip rule, checked |
 
 ### Edits
@@ -271,11 +280,12 @@ things that render as garbage when they go wrong.
 
 ### ✅ Acceptance
 
-- `python scripts/lint_markdown.py` catches all six break classes on crafted
+- ⬜ `python scripts/lint_markdown.py` catches all six break classes on crafted
   samples.
-- `python -m pytest -q` green, and the new suite fails if any Phase 1–3 rule is
+- ⬜ `python -m pytest -q` green, and the new suite fails if any Phase 1–3 rule is
   removed from `SKILL.md`.
-- The 500-line budget still holds, with the headroom spent deliberately.
+- ⬜ The 500-line budget still holds, with the headroom spent deliberately. Phase 4
+  starts with **15 body lines** (485/500) and **28 rendered lines** (432/460).
 
 ### 🚨 Risk
 
@@ -306,15 +316,17 @@ and keep what you have.
   `evaluation/` is the only thing that could show that, and running it is a
   separate decision.
 
-## ❓ Open decisions for you
+## ❓ Decisions
 
-| # | Decision | Why it is yours |
+| # | Decision | Outcome |
 | --- | --- | --- |
-| 1 | Paragraph ceiling at 3 sentences, or 2? | 2 is more spacious and more likely to fragment an argument. |
-| 2 | Thirteen operations, or fold the conversational rules into `op:plain`? | A count change affects the evaluation sweep arms. |
-| 3 | Is ~150 icons the right palette size, or do you want a tighter curated set? | Larger means more choice and more drift risk. |
-| 4 | Stop after Phase 2, or run all four? | Phases 3–4 are polish and insurance; 1–2 carry most of the reading experience. |
+| 1 | Paragraph ceiling at 3 sentences, or 2? | ✅ 3 sentences, about 50 words |
+| 2 | Thirteen operations, or fold into `op:plain`? | ✅ Thirteen; no new sweep arm |
+| 3 | About 150 icons, or a tighter set? | ✅ 153 icons, 42 inline |
+| 4 | Stop after Phase 2, or run all four? | ⬜ Open: Phase 4 not started |
 
-**The takeaway:** your fifteen asks are really four, they have a forced order, and
-the binding constraint is 28 lines of headroom — which is why Phase 1 starts by
-making room rather than by adding rules.
+Each resolved decision is recorded with its reasoning under "Decisions" in
+`AGENTS.md`.
+
+**The takeaway:** your fifteen asks became four phases with a forced order. Three
+are done, and the 15 body lines left are Phase 4's whole budget.
