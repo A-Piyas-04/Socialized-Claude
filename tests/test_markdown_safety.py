@@ -20,6 +20,7 @@ BROKEN = {
     "mermaid_label": ("The flow.\n\n```mermaid\nflowchart TD\n  A[Start] --> B[Call f(x)]\n```\n", [5]),
     "heading_jump": ("## Top\n\nText here.\n\n#### Too deep\n\nMore text.\n", [5]),
     "emoji_outside_palette": ("## Setup\n\nThis is done 🎃 now.\n", [3]),
+    "broken_table_separator": ("The table shows it.\n\n| Kind | Cost |\n|---\\|---|\n| a | b |\n", [4]),
 }
 
 CLEAN = """## 🔑 How a cache hit works

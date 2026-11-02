@@ -14,6 +14,8 @@ Break codes (each reported with the 1-based line where it starts):
   table_pipe_mismatch    a table row whose cell count (split on unescaped pipes) differs from the
                          header's
   wide_table             a table with more than four columns
+  broken_table_separator a pipe row followed by a separator row whose pipes are escaped (\\|), so no
+                         table renders at all
   mermaid_label          in a Mermaid flowchart, a node or edge label holding ( ) " [ ] { } or an arrow
   heading_jump           a heading more than one level below the previous heading
   emoji_outside_palette  outside code: an emoji in U+1F000-U+1FAFF that is not in the status legend
@@ -173,6 +175,9 @@ def check(markdown: str) -> list[Break]:
                     breaks.append(Break("table_pipe_mismatch", i + 1, f"{cells} cells under a {width}-cell header"))
                 i += 1
             continue
+        elif (line.strip().startswith("|") and i + 1 < len(lines) and "\\|" in lines[i + 1]
+              and sm.TABLE_SEP_RE.match(lines[i + 1].replace("\\|", "|"))):
+            breaks.append(Break("broken_table_separator", i + 2, "escaped pipes in the separator row; no table renders"))
         i += 1
     if fence:
         breaks.append(Break("unclosed_fence", fence.line, "this fence never closes"))

@@ -56,7 +56,7 @@ with a dense paragraph. The shape is fixed; the wording never is.
 - **Map and sections:** a one-line map, then numbered `##` sections split by `---`.
 <!-- /op:presentation -->
 <!-- op:conversational -->
-- **Question:** at least one `> 🙋 **…?**` line, answered right below it.
+- **Question:** at least one `> 🙋 **…?**` line, answered in body text below it.
 <!-- /op:conversational -->
 <!-- op:examples -->
 - **Analogy:** one `> 🧠 **Think of it like:**` callout with its limit named.
@@ -204,8 +204,8 @@ Apply this to every sentence of an explanation.
 Use this for teaching and decision answers, so the prose anticipates the reader.
 
 - Where the answer makes a turn the reader would stop and question, write that
-  question as a `> 🙋 **…?**` line, then answer it in the one or two sentences
-  directly below. Write at least one in every teaching and decision answer.
+  question alone as a `> 🙋 **…?**` line, then a blank line, then answer it in one
+  or two sentences of body text.
 - Ask only a question the content then answers. Delete a question left hanging, or
   asked to sound lively.
 - Address the reader as "you" and name what they do, rather than what "one" does.
@@ -223,7 +223,7 @@ shape of the content. Prose is one of the forms, not the fallback.
 
 - Give each idea its own unit: a short paragraph, a list item, a table row, or a
   step. Start a new unit when the idea changes, with a blank line before it.
-- Keep the opening paragraph to two sentences; put any qualifier in its own unit.
+- Keep the opener to two sentences, a bold lead-in included; qualifiers get their own unit.
 - End a paragraph at three sentences or about 50 words, as a ceiling, not a
   target. Keep sentences that make one continuous argument together, and let
   that chain override the ceiling.
@@ -243,8 +243,8 @@ shape of the content. Prose is one of the forms, not the fallback.
   - **An answer of one or two sentences:** just those sentences.
 - Fill a table cell with one idea of six words or fewer, never a sentence. Name
   the dimension in each header cell. Move anything longer below the table.
-- Name what the answer establishes in its `#` title, use `##` for every section,
-  and put a heading wherever a bold line would announce one.
+- Name what the answer establishes in a `#` title of about eight words, use `##`
+  for every section, and put a heading wherever a bold line would announce one.
 - Build depth below a `##` from a `---`, a numbered or labelled list, or a
   callout, not from `###` or `####`, which render at the `##` size on claude.ai.
   Use bold, italic, `code`, and blockquote for style.
@@ -410,7 +410,7 @@ Use this at the end of an answer that taught something.
 Check the markdown of every reply, whatever the request type:
 
 - Close every fence, and give an outer fence more backticks than any inside it.
-- Escape a pipe inside a table cell as `\|`, or move that content below the table.
+- Escape a cell's pipe as `\|` or move it below the table; keep the `|---|` row plain.
 - Give every table row the header's cell count, and keep tables to four columns.
 - Keep each Mermaid label to plain words, with no parentheses, quotes, or arrows.
 - Step headings down one level at a time: `#`, then `##`, then `###`.

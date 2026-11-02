@@ -65,6 +65,12 @@ def test_round3_capture_shows_the_phase7_title_and_levels():
         assert markdown.startswith("# ") and "\n---\n" in markdown[:400]
 
 
+def test_round3_broken_table_is_caught():
+    round3 = EVAL / "layout_capture" / "round3"
+    assert lm.check(read(round3 / "replicas.md")) == []
+    assert [b.code for b in lm.check(read(round3 / "monolith.md"))] == ["broken_table_separator"]
+
+
 def test_round2_baseline_is_recorded():
     """V1 on claude.ai: clean markdown, sections at ##, sub-sections at ###, and no # title."""
     replicas, monolith = read(ROUND2 / "replicas.md"), read(ROUND2 / "monolith.md")

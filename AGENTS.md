@@ -325,3 +325,15 @@ needs to decide. No progress narrative.
   its `## Operation:` heading (`op_block`), because Page shape slots share the markers.
 - Phase 7 counts: the body is 480 lines (validator count, guard 480 or fewer), 415
   rendered (guard 460). That leaves 20 lines for Phases 8 and 9.
+- Phase 7 follow-up (user, 2026-11-02), from the round-3 answers in
+  `evaluation/layout_capture/round3/`:
+  - The monolith table's separator row was written `|---\|---\|…|`, so no table
+    rendered. The markdown rule now says to keep the `|---|` row plain, and
+    `lint_markdown.py` gains `broken_table_separator`, which fires on that round-3
+    answer.
+  - The 🙋 question stands alone, then a blank line, then the answer in body text,
+    because the answers had been written inside the dim callout.
+  - The `#` title is about eight words.
+  - A bold lead-in counts as one of the opener's two sentences.
+  - Duplicate wording was trimmed to keep the body at 480.
+

@@ -624,6 +624,19 @@ What still fails:
 - **Monolith flowchart:** no `classDef` colour; one label of five words.
 - **Unglossed:** "GC pause" and "vacuum".
 
+**Follow-up fixes (2026-11-02), body still 480:**
+
+| Failure | Fix |
+| --- | --- |
+| Escaped separator row | Markdown rule: keep the `\|---\|` row plain |
+| Linter blind to it | New `lint_markdown` code `broken_table_separator` |
+| Answer inside 🙋 callout | Question alone, a blank line, the answer in body text |
+| 17-word title | `#` title of about eight words |
+| Three-sentence opener | A bold lead-in counts as one of the two sentences |
+
+The six-link takeaway stays with Phase 9. The overview order, the announcing
+sentence, the uncoloured flowchart and the two glosses are not addressed yet.
+
 ---
 
 ### 📝 Phase 8 — Rewrite the examples to match the rules

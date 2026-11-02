@@ -1,6 +1,5 @@
 Linter output for the round-3 answers (claude.ai, build e14f024, after Phase 7). Regenerate with:
   python scripts/lint_response.py <file>; python scripts/lint_markdown.py <file>
-Known gap: lint_markdown does not see the monolith table, because its separator row is broken by escaped pipes.
 
 == lint_response.py replicas.md (exit 1) ==
 word_count: 963
@@ -60,6 +59,6 @@ icon_count: 4  (heuristic; descriptive only, never gates anything)
 decorative_structure_flags: dense_paragraph, dense_paragraph, dense_paragraph, emphasis_overuse
 (Structural descriptors, not a comprehension score. A response can score perfectly on every metric here and still be wrong, and the linter cannot tell.)
 
-== lint_markdown.py monolith.md (exit 0) ==
-no breaks found
+== lint_markdown.py monolith.md (exit 1) ==
+line 37: broken_table_separator (escaped pipes in the separator row; no table renders)
 (Renderer-safety checks on the text given, not a quality score. It cannot watch a live conversation, and a response that passes can still be wrong.)
