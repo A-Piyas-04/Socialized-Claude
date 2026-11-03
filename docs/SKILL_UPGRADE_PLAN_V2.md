@@ -729,8 +729,39 @@ The gloss allowance is tied to `GLOSS_MAX_WORDS`.
 **Budget:** the body is still 480 lines. The pointer line was paid for by
 shortening two Reference files entries.
 
-**Not verified:** whether claude.ai answers become more consistent, for example the
-missing title line in round 4's replicas answer.
+**Round 5 (claude.ai, build `208b8aa`):** the answers are in
+`evaluation/layout_capture/round5/`. Your verdict was "both worked very fine".
+
+| Target | Replicas | Monolith |
+| --- | --- | --- |
+| `#` title, then `---` | ✅ | ✅ |
+| Icons on every section, `---` between | ✅ | ✅ |
+| 🙋 alone, answer in body text | ✅ one | ✅ two |
+| 🧠 analogy, limit named | ✅ | ✅ |
+| Glosses on first use | ✅ | ✅ |
+| Status legend before its visual | ❌ after the table | ✅ |
+| Coloured diagram, legend first | — | ✅ |
+| 🎯 takeaway | ✅ | ✅ |
+| 🧪 check | ✅ | — (decision) |
+| `lint_markdown` clean | ✅ | ✅ |
+
+The title line now holds in both answers, which was round 4's consistency gap.
+
+Still open, all small:
+
+- **Openers run long:** replicas has four sentences, the last a bold one, against a
+  limit of two. This is the most persistent miss across every round.
+- **No overview diagram** at the start of the replicas chain answer.
+- **Dense paragraphs:** five in replicas and two in monolith, mostly four-sentence
+  paragraphs and the 🧠 callouts at 53 to 58 words.
+- **A false positive:** monolith's "2 a.m." splits into extra sentences.
+- **An unnumbered section:** "What people do instead" in replicas; numbering is meant
+  to cover every section.
+- **An announcing sentence:** in replicas, "Here is one order with synchronous
+  replication" announces instead of teaching, which `empty_transition` catches.
+
+**Not verified:** round 5 was a single run per prompt, so consistency across runs is
+not measured. Phase 10's automated runs measure it.
 
 ---
 

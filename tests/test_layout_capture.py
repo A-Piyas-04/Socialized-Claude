@@ -79,6 +79,15 @@ def test_round4_capture_renders_cleanly():
         assert lm.check(markdown) == [] and heading_levels(markdown) == {1, 2}
 
 
+def test_round5_capture_renders_cleanly_with_the_title_line():
+    round5 = EVAL / "layout_capture" / "round5"
+    assert json.loads(read(round5 / "capture.json"))["build"]["commit"] == "208b8aa"
+    for name in ("replicas.md", "monolith.md"):
+        markdown = read(round5 / name)
+        assert lm.check(markdown) == [] and heading_levels(markdown) == {1, 2}
+        assert markdown.split("\n")[1:3] == ["", "---"]
+
+
 def test_round2_baseline_is_recorded():
     """V1 on claude.ai: clean markdown, sections at ##, sub-sections at ###, and no # title."""
     replicas, monolith = read(ROUND2 / "replicas.md"), read(ROUND2 / "monolith.md")
