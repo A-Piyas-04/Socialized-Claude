@@ -361,4 +361,37 @@ needs to decide. No progress narrative.
   fenced answer in both example references to pass both linters with zero flags.
   The body stays at 480 lines; the exemplar pointer was paid for by shortening two
   Reference files entries.
+- Skill upgrade V2 Phase 9 (close the gaps), user 2026-11-03. Your three choices:
+  - two or more compared numbers become bars, or a table with two or more data
+    columns, and `table_thin` is unchanged;
+  - the pitfall callout uses 🛑, not ⚠️, so status markers stay in lists and tables;
+  - no new opener rule.
+- Phase 9 rules, each inside `op:visual` unless noted:
+  - the Overview slot names a `flowchart LR`;
+  - a linear flow of five or more steps becomes a Mermaid `flowchart LR` with its
+    key node classed;
+  - a sequence diagram shades its key step with `rect rgb(...)`;
+  - each callout opens with its kind: 💡 🛑 🧠 🙋 🎯 🧪;
+  - icon-led bullet labels are allowed only in lists of three or more;
+  - compared numbers in a sentence become bars or a table;
+  - in `op:close`, the takeaway is a chain of three or four links.
+- The icon budget changed from "more icons than headings" to "more icons than
+  headings, callouts and list labels", in `SKILL.md`, `treatment-selection.md` and
+  `emoji-palette.md`.
+- Phase 9 linter (flags only, never gates):
+  - `DENSE_ITEM_WORDS` goes from 40 to 30;
+  - new `linear_ascii_flow`: an untagged, `text`, `txt` or `plaintext` fence with
+    arrows on two or more lines. A language-tagged fence and a drawn tree (lines
+    opening `|`, `` `-- ``, `├`, `└`, `+--`) are exempt, so the `branching_diagram`
+    fixture stays clean;
+  - a list item that opens with an icon and then a bold label counts as labelled, for
+    both `bullets_unconnected` and `emphasis_overuse`.
+- Phase 9 changes to recorded results:
+  - in `research/baseline_structural_metrics.json`, the databases/tutor answer gains
+    one `dense_paragraph` flag (six to seven);
+  - in `tests/fixtures/structural/expected.json`, `wall_of_text` gains one (one to
+    two);
+  - new fixture `linear_ascii_flow.md`.
+- Phase 9 counts: the body is 485 lines, with the guard raised from 480 to 485, and
+  420 rendered (guard 460).
 

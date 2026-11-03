@@ -58,7 +58,7 @@ Because of what the leader does before it says "committed" to your app. It waits
 
 In synchronous replication (replicas confirm before the leader does), the leader sends each change as a WAL record (an entry in the change log) and holds the commit until replicas acknowledge it. Your app's wait ends at the last ack the leader needs, not at the average one.
 
-One commit with three replicas shows it, and the app waits for the 40 ms ack.
+One commit with three replicas shows it, and the shaded step is the 40 ms ack the app waits for.
 
 ```mermaid
 sequenceDiagram
@@ -73,7 +73,9 @@ sequenceDiagram
     Leader->>C: send WAL record
     A-->>Leader: ack after 1 ms
     B-->>Leader: ack after 2 ms
+    rect rgb(255, 228, 228)
     C-->>Leader: ack after 40 ms
+    end
     Leader-->>App: committed after 40 ms
 ```
 
@@ -115,10 +117,12 @@ So one hot row commits at most about one write per lock-hold time. The bars show
 
 Each option trades a little safety or effort for commit time.
 
-- **Wait for fewer acks:** use a quorum such as "any 2 of N", so the slowest replicas stop setting commit time.
-- **Make most replicas asynchronous:** they still serve reads, but commits stop waiting on them. The cost is that an async replica can miss the last writes if the leader fails.
-- **Shorten the hot transaction:** commit the counter update on its own, so each lock is held for less time.
-- **Shard when writes are the limit:** splitting the data across several leaders (sharding) is the only option that adds write capacity.
+- ⏱️ **Wait for fewer acks:** use a quorum such as "any 2 of N", so the slowest replicas stop setting commit time.
+- ⏭️ **Make most replicas asynchronous:** they still serve reads, but commits stop waiting on them.
+- 🔒 **Shorten the hot transaction:** commit the counter update on its own, so each lock is held for less time.
+- 📦 **Shard when writes are the limit:** splitting the data across several leaders (sharding) is the only option that adds write capacity.
+
+> 🛑 **Pitfall:** an asynchronous replica can miss the last few writes if the leader fails, so keep at least one synchronous replica for data you cannot lose.
 
 > **For implementers:** in Postgres, `synchronous_standby_names = 'ANY 2 (a, b, c)'` makes a commit wait for any two of three standbys rather than all of them.
 
@@ -141,6 +145,8 @@ Want an interactive version where you move the replica count and watch the ceili
 - **Order:** title and `---`, a two-sentence answer, the overview diagram with its legend, then the map. The scenario opens section 1.
 - **Questions:** each 🙋 line stands alone, and the answer follows in body text, never inside the callout.
 - **Glosses:** every specialist term gets a parenthesis of six words or fewer on first use.
+- **Highlights:** the sequence diagram shades the step to notice with `rect rgb(...)`, and the four options are a labelled list led by icons.
+- **Pitfall:** the cost of the async option sits in a 🛑 callout, not inside its bullet.
 - **Close:** a four-link 🎯 takeaway, then a 🧪 check with listed options and **Answer:** inside it.
 
 ## 2. Monolith: a practitioner's decision
@@ -184,7 +190,9 @@ The table scores each option for a team of six. Legend: ✅ fits, ⚠️ fits on
 | Monolith plus two services | ⚠️ Three | ⚠️ A few | ⚠️ Moderate |
 | Full microservices | ❌ One per service | ❌ Many | ❌ High |
 
-The obvious plan is to split by feature so people move faster. It fails here because six people rarely block each other, yet every split turns a function call into a network call that can time out.
+The obvious plan is to split by feature so people move faster. It fails here because six people rarely block each other, and you pay for every split anyway.
+
+> 💡 **Key idea:** every split turns a function call into a network call, and a network call can time out, retry, or half-succeed.
 
 Take checkout, which charges the card and then reserves stock. Split into three services, it can fail halfway, as the last arrow shows.
 
@@ -258,6 +266,7 @@ If you tell me which part hurts today, I can say whether it is worth splitting.
 - **Decision answers ask too:** one 🙋 question, answered in body text.
 - **Status table:** the legend comes before the table, and every marker opens its cell.
 - **Running example:** checkout runs through the cost section, with the obvious plan named and refuted first.
+- **Key idea:** the one fact the decision turns on sits in a 💡 callout.
 - **Takeaway:** a single three-link chain, not two chains joined.
 
 ## 3. Cache coherence: a beginner's mechanism question

@@ -215,8 +215,8 @@ produced these failures. The rules in `SKILL.md` exist to prevent them.
   encoded. Name one code and reuse it in every figure.
 - **Quantities left in sentences.** Ratios and ranges stated as numbers when
   their scale is the point. Draw the bars.
-- **Emoji soup.** More icons than headings, so nothing stands out. Delete every
-  icon that does not help the reader find something.
+- **Emoji soup.** More icons than headings, callouts and list labels, so nothing
+  stands out. Delete every icon that does not help the reader find something.
 - **A colour promise markdown cannot keep.** Text described as red or blue in a
   reply that has no `diff` fence, `classDef`, or status emoji to carry it.
 <!-- /op:visual -->

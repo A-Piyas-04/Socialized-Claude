@@ -50,7 +50,7 @@ with a dense paragraph. The shape is fixed; the wording never is.
 <!-- /op:presentation -->
 - **Answer:** the first one or two sentences, as Step 2 requires.
 <!-- op:visual -->
-- **Overview:** for a chain or a process, its diagram right after the answer.
+- **Overview:** for a chain or a process, a `flowchart LR` after the answer, before the map.
 <!-- /op:visual -->
 <!-- op:presentation -->
 - **Map and sections:** a one-line map, then numbered `##` sections split by `---`.
@@ -284,12 +284,14 @@ branching or time-ordered mechanism, however few sentences it would take.
   practitioner or expert lookup, as sentences.
 - Give the hardest section its visual before giving any section a second one.
   Give the last third of the answer at least the visual support of the first.
-- Show a linear flow of four steps or fewer as an inline arrow chain (`A → B → C`).
+- Show a linear flow of four steps or fewer as an inline arrow chain (`A → B → C`),
+  and one of five or more as a Mermaid `flowchart LR` with its key node classed,
+  never as arrows or boxes in a plain code block.
 - Show a branch, a loop, or a return arrow as a Mermaid `flowchart` of ten nodes
   or fewer, with every label four words or fewer.
 - Show order in time as a Mermaid `sequenceDiagram`, with each arrow labelled by
-  what triggers it. Show work that runs at once as parallel branches from one
-  node, with a note naming what runs together.
+  what triggers it, and wrap the step to notice in `rect rgb(...)` and `end`.
+  Show work that runs at once as parallel branches with a note naming them.
 - Show two states at the same moment side by side: a two-column table, one row
   per element and one column per state, or two fenced blocks under bold state
   labels. Put the broken case in a `diff` fence when the states are text or code.
@@ -299,8 +301,9 @@ branching or time-ordered mechanism, however few sentences it would take.
   Mark the load-bearing node with a distinct shape (`[[like this]]`), give peers
   one shared `classDef` class and a different kind its own, and reuse those
   classes and `diff` colours in every later visual.
-- Show every range, ratio, or magnitude as block-character bars (`█`) in a fenced
-  block, one labelled bar per quantity, scaled to the largest.
+- Show every range, ratio, or magnitude, and any two numbers a sentence compares,
+  as block-character bars (`█`) in a fenced block, one labelled bar per quantity,
+  scaled to the largest, or as a table with two or more data columns.
 - Show a process that changes over time as a table with one row per moment and
   the state in that row. End the answer with one line offering an interactive
   version. In a terminal, add one short command the reader can run when safe.
@@ -308,14 +311,16 @@ branching or time-ordered mechanism, however few sentences it would take.
   for degrees of one property. Use at least two distinct markers, put each at the
   start of its list item or table cell, and name what they mean in the caption.
   Keep status markers off headings and step numbers.
-- In a teaching or long answer, open a heading, a callout, or a bullet label with
-  one navigation icon whose meaning matches what it labels, and keep that icon for
-  that meaning throughout. Pick from 💡 🎯 📌 🔑 🧩 ⭐ ✨ (state), 🔄 ➡️ 🔀 🔁 ↪️ ⏭️
+- In a teaching or long answer, open a heading, a callout, or the bold label of a
+  bullet in a list of three or more with one navigation icon whose meaning
+  matches what it labels, and keep that icon for that meaning throughout. Pick from 💡 🎯 📌 🔑 🧩 ⭐ ✨ (state), 🔄 ➡️ 🔀 🔁 ↪️ ⏭️
   🚀 (flow), ⚡ 🛑 🔒 🔓 💥 🧯 🐛 (risk), 📊 📈 📉 🗂️ 📦 🧮 ⚖️ (data), 👤 👥 🧠 💬
   (people), ⏱️ ⏳ 📅 ⏰ (time), ⚙️ 🛠️ 🧪 💻 📝 🔍 (tooling), or from `references/emoji-palette.md`.
+- Open each callout with its kind and a bold label: 💡 key idea, 🛑 pitfall,
+  🧠 analogy, 🙋 question, 🎯 takeaway, 🧪 check.
 - Keep every icon out of code, JSON, paths, and identifiers, and out of formal,
   casual, and one-line replies. Delete any icon that does not help the reader
-  find something; an answer with more icons than headings has too many.
+  find something; more icons than headings, callouts and list labels is too many.
 - Before each visual, write one line naming what it shows and the thing to notice.
 - Render every visual as markdown in the reply. Build one artifact on claude.ai
   when the person explicitly asks for an artifact, an SVG, an interactive control,
@@ -378,8 +383,8 @@ section 17 of `references/explanation-methodology.md` for the rest of the report
 Use this at the end of an answer that taught something.
 
 - End an answer of three or more sections, and any teaching request, with a
-  `> 🎯 **Takeaway:**` callout that compresses the mechanism: an arrow chain
-  (`A → B → C`) or one line of 25 words or fewer. Write it fresh rather than
+  `> 🎯 **Takeaway:**` callout that compresses the mechanism: an arrow chain of
+  three or four links (`A → B → C`) or one line of 25 words or fewer. Write it fresh rather than
   copying a body sentence.
 - End a teaching request, a beginner explanation, and a follow-up about
   confusion with a `> 🧪 **Check yourself:**` callout holding one question the

@@ -17,14 +17,14 @@
     "work-report"
   ],
   "zip": "socialized.zip",
-  "zip_sha256": "3cde16d4d8b9cb466d6aa14f4ee9e7c523e80f49abafb5141ad4323399fa7bfd",
+  "zip_sha256": "8e1a2c0adb9b893e0f2d51f234024237d1607c6bdedc2d53fbcf3f12f9bed5b0",
   "files": {
-    "SKILL.md": "1a22ee4a712f4ed9ad43f199224220e602c9344a8ec30ea554ff46b786078d1e",
+    "SKILL.md": "5f203d2b1813f8bb8c9d741dda44f2198ffc7216ea6743f340026d601070ad00",
     "references/conversation-grammar.md": "38acbea2e0450024992b7df15a981fe29d8b5e7156df0a68a7ddcc649ed6f4ca",
-    "references/emoji-palette.md": "a96099a27b3e13823a50b2970e7979eab3feaf9b479d09a6a26061d7214ccaff",
+    "references/emoji-palette.md": "3513d56533279c8be1352dd84cd5079e479cc7bfe74417ddc4d3601974453302",
     "references/explanation-examples.md": "eab5d2334e6ddbd9729cc8878d8160316d4a931ece690dfc9b8559b587ec5000",
     "references/explanation-methodology.md": "83ad6e747a65cfc7141f3d9890678675f57245e0851322e6dd26764b12afc6c6",
-    "references/layout-exemplars.md": "83058687c2fa0bb9fb70e55744208643b1dcb5763654fe053bb165799942bab6",
-    "references/treatment-selection.md": "9f76a67389a8ef6d488c5a22f3445d29a46da3b9088d933b909ed7f48e1f16b2"
+    "references/layout-exemplars.md": "b189038ce1d6e7997b5cd21e8e91fa5daf41a332ff6d7581692ede4962476049",
+    "references/treatment-selection.md": "0c56da5f7ca36aac7d335050b6d3ba07d4474e76ec17a9a9b4fabb1f764583d9"
   }
 }

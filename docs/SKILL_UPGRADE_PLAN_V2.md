@@ -772,9 +772,9 @@ not measured. Phase 10's automated runs measure it.
 | Chain or process question | Open with an overview `flowchart LR` right after the answer |
 | Linear flow of 5+ steps | Mermaid `flowchart LR`, key node classed; never box-art text |
 | Highlight in a sequence diagram | `rect rgb(...)` around the step to notice |
-| Callout kinds | 💡 key idea · ⚠️ pitfall · 🧠 analogy · 🙋 question · 🎯 takeaway · 🧪 check |
+| Callout kinds | 💡 key idea · 🛑 pitfall · 🧠 analogy · 🙋 question · 🎯 takeaway · 🧪 check |
 | Labelled bullets | A palette icon may lead the bold label when the list has three or more items |
-| Quantities in a sentence | Two or more numbers compared → bars or a two-column table |
+| Quantities in a sentence | Two or more numbers compared → bars or a table with two or more data columns |
 | Takeaway length | Three or four links in a chain, not six |
 
 `scripts/structural_metrics.py`: `DENSE_ITEM_WORDS` 40 → 30, matching the skill's
@@ -783,6 +783,56 @@ box characters outside Mermaid.
 
 **Acceptance:** each gap has its rule, a test fixture, and an example in
 `layout-exemplars.md`.
+
+#### Status (2026-11-03): ✅ done, uncommitted on `skill-upgrade-phase-9`
+
+✅ Each gap has its rule, a test, and an example in a gold answer.
+
+**Your decisions:**
+
+- Compared numbers become bars, or a table with two or more data columns.
+  `table_thin` is unchanged.
+- The pitfall callout uses 🛑, so status markers stay in lists and tables. The
+  table above is corrected from ⚠️ to 🛑.
+- No new opener rule in this phase.
+
+| Gap | Rule (operation) | Gold-answer example |
+| --- | --- | --- |
+| Overview | Page shape slot names `flowchart LR` (visual) | Replicas, cache |
+| 5+ step flow | Mermaid `flowchart LR`, key node classed (visual) | Replicas overview |
+| Sequence highlight | `rect rgb(...)` and `end` (visual) | Replicas 40 ms ack |
+| Callout kinds | One bullet listing all six (visual) | 💡 monolith, 🛑 replicas |
+| Icon-led labels | Lists of three or more only (visual) | Replicas section 4 |
+| Compared numbers | Bars, or 2+ data columns (visual) | Replicas table and bars |
+| Takeaway length | Three or four links (close) | All three, tested |
+
+**Also changed:** "more icons than headings" became "more icons than headings,
+callouts and list labels". The plan's own risk note asked for this, because Phase
+9 adds icons to callouts and labels. `SKILL.md`, `treatment-selection.md` and
+`emoji-palette.md` are updated to match.
+
+**Linter:**
+
+- `DENSE_ITEM_WORDS` is 30.
+- `linear_ascii_flow` fires on an untagged or `text` fence with arrows on two or
+  more lines. A fence with a language tag is code, and a drawn tree (`|--`, `├`,
+  `└`) is a branch, not a linear flow, so neither fires.
+- A list item that opens with an icon and then a bold label counts as labelled.
+
+**Changes to recorded results:**
+
+- The `databases/tutor` archive answer gains one `dense_paragraph` flag (six to
+  seven).
+- The `wall_of_text` fixture gains one (one to two).
+- A new fixture, `linear_ascii_flow.md`, is added.
+
+**Budget:** the body is 485 lines and the guard is raised to 485; rendered, it is
+420 lines. That leaves 15 lines.
+
+**Not verified:**
+
+- Whether claude.ai renders `rect rgb(...)` in a `sequenceDiagram`.
+- Whether answers follow the new rules.
 
 ---
 

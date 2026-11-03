@@ -1,4 +1,35 @@
 {
+  "linear_ascii_flow": {
+    "question": null,
+    "expected": {
+      "word_count": 24,
+      "block_count": 3,
+      "mean_block_words": 12.0,
+      "max_block_words": 15,
+      "heading_count": 0,
+      "bullet_count": 0,
+      "numbered_count": 0,
+      "table_count": 0,
+      "code_block_count": 1,
+      "emphasis_count": 0,
+      "mean_sentence_words": 12.0,
+      "max_sentence_words": 15,
+      "passive_sentence_count": 0,
+      "answer_first_offset": 0,
+      "visual_count": 0,
+      "visuals_first_half": 0,
+      "visuals_second_half": 0,
+      "max_table_cell_words": 0,
+      "heading_depth_max": 0,
+      "whitespace_ratio": 0.33,
+      "units_per_section": 0.0,
+      "emphasis_levels_used": 0,
+      "icon_count": 0,
+      "decorative_structure_flags": [
+        "linear_ascii_flow"
+      ]
+    }
+  },
   "branching_diagram": {
     "question": null,
     "expected": {
@@ -508,6 +539,7 @@
       "emphasis_levels_used": 0,
       "icon_count": 0,
       "decorative_structure_flags": [
+        "dense_paragraph",
         "dense_paragraph"
       ]
     }

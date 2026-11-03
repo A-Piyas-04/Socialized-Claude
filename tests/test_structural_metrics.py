@@ -72,6 +72,38 @@ def test_callout_labels_do_not_count_as_emphasis():
     assert sm.bold_spans("> Plain quote with **one** and **two** and **three** bold words.\n") == 3
 
 
+def item_of(n: int) -> str:
+    return "- " + " ".join(["word"] * n) + "\n"
+
+
+def test_list_item_limit_is_thirty_words():
+    assert sm.DENSE_ITEM_WORDS == 30
+    assert "dense_paragraph" in sm.decorative_structure_flags(item_of(31))
+    assert "dense_paragraph" not in sm.decorative_structure_flags(item_of(30))
+
+
+@pytest.mark.parametrize("text, fires", [
+    ("The deploy has five stages.\n\n```\ncommit -> build -> test\ntest -> stage -> release\n```\n", True),
+    ("The deploy has five stages.\n\n```text\nA → B\nB → C\n```\n", True),
+    ("The function returns a pointer.\n\n```rust\nfn a() -> u8 { 1 }\nfn b() -> u8 { 2 }\n```\n", False),
+    ("The deploy has five stages.\n\n```mermaid\nflowchart LR\n  A --> B\n  B --> C\n```\n", False),
+    ("Requests branch.\n\n```\nrequest\n  |-- write? --> primary\n  `-- read ---> replica\n```\n", False),
+    ("One arrow only.\n\n```\ncommit -> build\n```\n", False),
+])
+def test_linear_ascii_flow(text, fires):
+    assert ("linear_ascii_flow" in sm.decorative_structure_flags(text)) == fires
+
+
+def test_icon_led_bullet_labels_count_as_labels():
+    text = ("Three ways to cut the wait.\n\n"
+            "- ⏱️ **Wait for fewer acks:** use a quorum.\n"
+            "- 🔀 **Make replicas asynchronous:** commits stop waiting.\n"
+            "- ✨ **Shorten transactions:** each lock is held briefly.\n")
+    flags = sm.decorative_structure_flags(text)
+    assert "bullets_unconnected" not in flags and "emphasis_overuse" not in flags
+    assert sm.bold_spans(text) == 0
+
+
 def test_every_fixture_has_an_expected_entry():
     assert {p.stem for p in FIXTURES.glob("*.md")} == set(EXPECTED)
 

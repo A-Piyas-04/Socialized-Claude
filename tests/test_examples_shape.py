@@ -18,7 +18,9 @@ REFERENCES = lib.SKILL_DIR / "references"
 EXEMPLARS = REFERENCES / "layout-exemplars.md"
 EXAMPLES = REFERENCES / "explanation-examples.md"
 ANSWER_RE = re.compile(r"^````markdown\n(.*?)\n````$", re.MULTILINE | re.DOTALL)
-CALLOUTS = ("🙋", "🧠", "🎯", "🧪")
+CALLOUTS = ("🙋", "🧠", "🎯", "🧪", "💡", "🛑")
+TAKEAWAY_RE = re.compile(r"(?m)^> 🎯 \*\*Takeaway:\*\*(.*)$")
+ICON_LABEL_RE = re.compile(r"(?m)^- (\S+) \*\*[^*]+:\*\*")
 # Pairs whose better answer stays short on purpose ("a short answer stays short"), and the section
 # whose pairs demonstrate one visual form each rather than a whole answer.
 SHORT_BY_DESIGN = {"Follow-up confusion: repairing one link", "Visual forms"}
@@ -63,6 +65,26 @@ def test_gold_answers_fill_every_slot(answer):
 
 def test_there_are_three_gold_answers():
     assert len(answers(EXEMPLARS)) == 3
+
+
+def test_gold_answers_show_every_phase9_form():
+    gold = "\n".join(answers(EXEMPLARS))
+    assert re.search(r"(?m)^\s*rect rgb\(", gold), "a highlighted step in a sequence diagram"
+    assert re.search(r"(?m)^> 💡 \*\*Key idea:\*\*", gold)
+    assert re.search(r"(?m)^> 🛑 \*\*Pitfall:\*\*", gold)
+    icons = [[i.replace("\ufe0f", "") for i in ICON_LABEL_RE.findall(a)] for a in answers(EXEMPLARS)]
+    assert any(len(found) >= 3 and all(i in sm.NAV_ICONS for i in found) for found in icons), \
+        "an icon-led labelled list of three or more items"
+    assert all(re.search(r"(?m)^```mermaid\nflowchart LR", a) or "Keep the monolith" in a
+               for a in answers(EXEMPLARS)), "mechanism answers open with a flowchart LR overview"
+
+
+def test_takeaways_have_three_or_four_links():
+    skill = " ".join((lib.SKILL_DIR / "SKILL.md").read_text(encoding="utf-8").split())
+    assert "arrow chain of three or four links" in skill
+    for answer in answers(EXEMPLARS):
+        takeaway = TAKEAWAY_RE.search(answer)
+        assert takeaway and takeaway.group(1).count("→") in {2, 3}, takeaway
 
 
 def test_every_better_answer_is_laid_out_except_the_short_ones():

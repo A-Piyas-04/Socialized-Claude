@@ -56,7 +56,7 @@ decorative_structure_flags (each a short code):
   uncaptioned_visual    a table, or a fenced diagram or bar block, with no prose sentence
                         directly before it
   dense_paragraph       a prose paragraph of 4+ sentences or more than 50 words, or a list
-                        item of more than 40 words. A parenthetical gloss of 6 words or fewer
+                        item of more than 30 words. A parenthetical gloss of 6 words or fewer
                         is not counted, and a blockquote callout is checked unit by unit (split
                         at its blank `>` lines and list items)
   dense_table_cell      a table whose cells include one of more than 6 words or more than one
@@ -68,10 +68,14 @@ decorative_structure_flags (each a short code):
                         directly before it to name it
   flat_visual           a Mermaid flowchart of 4+ nodes with no classDef, class, style, and no
                         distinct node shape ([[ ]], (( )), {{ }}, [( )], [/ /], or { })
+  linear_ascii_flow     a fenced block with no language tag (blank, text, txt, plaintext) and an
+                        arrow (→ -> ==> ↓ ⟶) on two or more lines: a flow drawn as text instead
+                        of a Mermaid flowchart. A fence tagged with a language is code, and a
+                        drawn tree (lines opening with |, `--, ├, └ or +--) is a branch
   empty_transition      a one-sentence paragraph that only announces what follows ("Let's look
                         at...", "Here's how it works."), followed by prose or a heading
-  emphasis_overuse      more than 2 bold spans (labels excluded: a bold span opening a list item,
-                        or opening a blockquote line after an optional icon)
+  emphasis_overuse      more than 2 bold spans (labels excluded: a bold span opening a list item
+                        or a blockquote line, after an optional icon)
 """
 
 from __future__ import annotations
@@ -105,7 +109,10 @@ GLOSS_RE = re.compile(r"\s*\(([^()]*)\)")
 GLOSS_MAX_WORDS = 6
 DENSE_SENTENCES = 4
 DENSE_PARAGRAPH_WORDS = 50
-DENSE_ITEM_WORDS = 40
+DENSE_ITEM_WORDS = 30
+ASCII_ARROW_RE = re.compile(r"→|->|==>|↓|⟶")
+TREE_BRANCH_RE = re.compile(r"^\s*(?:\||`--|├|└|\+--)")
+PLAIN_FENCE_INFO = frozenset({"", "text", "txt", "plaintext"})
 TABLE_CELL_WORDS = 6
 TABLE_MAX_COLUMNS = 4
 BOLD_HEADING_WORDS = 10
@@ -222,11 +229,16 @@ def density_units(block: Block) -> list[str]:
     return [strip_inline(" ".join(u)) for u in units if u]
 
 
+def without_icon(text: str) -> str:
+    """The text without one opening icon (and its variation selector)."""
+    if text[:1] and (EMOJI_RE.match(text) or text[:1] in NAV_ICONS):
+        return text[1:].lstrip("\ufe0f").lstrip()
+    return text
+
+
 def callout_body(line: str) -> str:
     """A blockquote line without its `>`, its opening icon, and its opening bold label."""
-    body = QUOTE_PREFIX_RE.sub("", line, count=1)
-    if body[:1] and (EMOJI_RE.match(body) or body[:1] in NAV_ICONS):
-        body = body[1:].lstrip("\ufe0f").lstrip()
+    body = without_icon(QUOTE_PREFIX_RE.sub("", line, count=1))
     label = LABEL_RE.match(body)
     return body[label.end():] if label else body
 
@@ -255,7 +267,7 @@ def bold_spans(markdown: str) -> int:
             continue
         raw = "\n".join(block.lines)
         if block.kind in {"bullet", "numbered"}:
-            body = BULLET_RE.sub(r"\1", NUMBERED_RE.sub(r"\1", block.lines[0]), count=1)
+            body = without_icon(BULLET_RE.sub(r"\1", NUMBERED_RE.sub(r"\1", block.lines[0]), count=1))
             label = LABEL_RE.match(body)
             raw = "\n".join([body[label.end():] if label else body, *block.lines[1:]])
         elif block.kind == "paragraph" and BLOCKQUOTE_RE.match(block.lines[0]):
@@ -419,8 +431,21 @@ def heading_level(block: Block) -> int:
 
 
 def is_labelled(block: Block) -> bool:
-    body = BULLET_RE.sub(r"\1", block.lines[0], count=1)
-    return bool(LABEL_RE.match(body)) or bool(re.match(r"^\s*[^:]{1,40}:\s", block.text))
+    body = without_icon(BULLET_RE.sub(r"\1", block.lines[0], count=1))
+    return bool(LABEL_RE.match(body)) or bool(re.match(r"^\s*[^:]{1,40}:\s", without_icon(block.text)))
+
+
+def is_linear_ascii_flow(block: Block) -> bool:
+    """A plain, untagged code block that draws a linear flow with arrows on two or more lines.
+
+    A drawn tree (lines opening with |, `--, ├, └ or +--) is a branch, not a linear flow."""
+    if block.kind != "code":
+        return False
+    info = block.lines[0].strip().lstrip("`~").strip().lower()
+    body = block.lines[1:-1]
+    if info not in PLAIN_FENCE_INFO or any(TREE_BRANCH_RE.match(line) for line in body):
+        return False
+    return sum(bool(ASCII_ARROW_RE.search(line)) for line in body) >= 2
 
 
 def decorative_structure_flags(markdown: str) -> list[str]:
@@ -461,6 +486,8 @@ def decorative_structure_flags(markdown: str) -> list[str]:
             flags.append("bold_as_heading")
         if is_flat_visual(block):
             flags.append("flat_visual")
+        if is_linear_ascii_flow(block):
+            flags.append("linear_ascii_flow")
         if block.kind == "paragraph" and any(len(sentences(u)) >= DENSE_SENTENCES
                                              or len(prose_words(u)) > DENSE_PARAGRAPH_WORDS
                                              for u in density_units(block)):

@@ -33,7 +33,7 @@ Linux, iOS, Android, and claude.ai.
 - Use one icon per meaning across the whole answer. If 🧪 marks testing in one
   section, it marks testing in every section.
 - Delete any icon that does not help the reader find something. An answer with
-  more icons than headings has drifted into decoration.
+  more icons than headings, callouts and list labels has drifted into decoration.
 
 ## 2. Status layer (closed)
 
