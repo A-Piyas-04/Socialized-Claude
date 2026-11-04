@@ -10,6 +10,12 @@ track's definition of done is green.
 
 ## Hard constraints
 
+- Agents (Cursor included) never run a git write: no commit, push, tag, merge, rebase,
+ reset, stash, branch create/delete/switch, or `gh release`/`gh pr` create. The user
+ makes every commit and push. Leave changes in the working tree, and end each report
+ with the files changed and a suggested commit message. Read-only git (`status`,
+ `diff`, `log`, `show`, `rev-parse`, `ls-remote`) is fine. This overrides any plan
+ step, including earlier ones, that says to commit, tag, push or release.
 - Nothing may require the user to run prompts, copy responses, or rate anything by hand.
 - No paid API key. A0 runs Claude Code on the subscription via `CLAUDE_CODE_OAUTH_TOKEN`;
   the judge is a free-tier non-Anthropic model.

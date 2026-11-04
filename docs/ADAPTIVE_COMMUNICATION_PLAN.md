@@ -10,6 +10,7 @@
 - **Do not replace the formatting system.** Every experiment starts from the frozen skill and must preserve useful formatting, readable visuals, and factual correctness.
 - **No evaluation bureaucracy.** Use a small number of real Claude conversations, reuse the existing offline linters where useful, and avoid manual batch copying/scoring.
 - **Add only behavior that solves an observed problem.** Prefer revising or simplifying existing operations over layering on new mandatory rules.
+- **The owner commits.** The agent edits files and runs read-only checks. It never commits, pushes, tags, branches, merges or creates releases. It hands back the changed files and a suggested commit message, and the owner runs git.
 - **Revert by default.** If improvements are weak or inconsistent, keep Approach A in production.
 
 ## Starting point
