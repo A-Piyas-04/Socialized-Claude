@@ -7,6 +7,10 @@
 > Phase 4 is on `skill-upgrade-phase-4`, branched from `d2657e2`.
 > **Status (2026-11-02):** all four phases ✅ complete. Each phase's behavioural
 > check is still open, and only you can do it.
+> **Since then (2026-11-04):** `docs/SKILL_UPGRADE_PLAN_V2.md` (Phases 5–9,
+> through `fd6a5ce`) retired or changed several rules below. They are marked
+> where they appear and listed in "Superseded by V2" at the end. For the rules
+> as they stand, read `skill/socialized/SKILL.md`.
 
 ---
 
@@ -46,6 +50,10 @@ Phase 4   ███████████████████████�
 ```
 
 After Phase 4, **6 body lines** remain. Any further rule must displace one.
+
+V2 changed this: Phase 6 moved the strategy, repair and work-report detail into
+`references/explanation-methodology.md` (body 440), and Phases 7–9 spent the
+room again. The body is now **485 / 500**, rendered **420 / 460**.
 
 Three consequences, which the phases are built around:
 
@@ -94,7 +102,7 @@ than incidental.
 | `SKILL.md` all 12 operations | Compression pass. Merge rules stated twice in different wordings. Target: reclaim 60–80 lines. **Drop no rule** — list every merge. |
 | `op:presentation` | Paragraph ceiling 4 sentences / 80 words → **3 sentences / 50 words**. State it as a ceiling, not a target. |
 | `op:presentation` | New rule: a blank line is a unit separator, and a section of three or more units gets visible separation (sub-heading, rule, or labelled list). |
-| `op:presentation` | New rule on **emphasis range** — markdown has no font sizes, so name the real ladder: `##` / `###` / `####` for size, and bold, italic, `code`, blockquote for style. Require at least three distinct levels in any answer with three or more sections. |
+| `op:presentation` | New rule on **emphasis range** — markdown has no font sizes, so name the real ladder: `##` / `###` / `####` for size, and bold, italic, `code`, blockquote for style. Require at least three distinct levels in any answer with three or more sections. **Retired in V2 Phase 7:** one `#` title over `##` sections, depth from `---`, lists and callouts. |
 | `op:presentation` | Strengthen the sectioning rule: prefer more, smaller sections over fewer, longer ones. A section running past about 12 lines gets split or sub-headed. |
 | `op:presentation` | Bullet structure: a bullet leads with a **bolded label**, then the claim. Sub-bullets carry detail, never a second top-level idea. |
 | `scripts/structural_metrics.py` | `DENSE_PARAGRAPH_WORDS` 80 → 50, `DENSE_SENTENCES` 5 → 4. Add `whitespace_ratio`, `heading_count`, `units_per_section`, `emphasis_levels_used` as **heuristics that never gate**. |
@@ -151,11 +159,15 @@ reader's next question into the page, then answer it:
 That is the whole technique: surface the objection, then resolve it. It costs one
 heading and two sentences, and it is what makes prose feel like speech.
 
+**Changed in V2 Phase 7:** the question is now a `> 🙋 **…?**` line standing
+alone, then a blank line, then the answer in body text, and it applies to
+decision answers too.
+
 ### Edits
 
 | Where | Change |
 | --- | --- |
-| `op:examples` | **Reverse the analogy demotion.** Analogy becomes a first-class tool for a beginner or an unfamiliar mechanism. Keep the existing guard: it must preserve the causal structure, and the answer must say where it stops holding. |
+| `op:examples` | **Reverse the analogy demotion.** Analogy becomes a first-class tool for a beginner or an unfamiliar mechanism. Keep the existing guard: it must preserve the causal structure, and the answer must say where it stops holding. **Changed in V2 Phase 7:** the analogy sits beside the example, as one `> 🧠` callout in every non-expert teaching or decision answer. |
 | `op:examples` | New rule: **scenario**. Open a teaching answer with a concrete situation — someone doing something, and something going wrong — before any definition. |
 | `op:examples` | New rule: trace an example as **state → action → result**, so the reader sees change, not a static snapshot. |
 | **New** `op:conversational` | A new operation, or a renamed `op:plain` if the line budget is tight. **Shipped as a new 13th operation.** Carries: the reader's-question move; direct address ("you"); the contraction-friendly register; the ban on announcing ("In this section we will…"). |
@@ -244,6 +256,8 @@ Hard limits that keep it from becoming noise:
 An open emoji set drifts into **emoji soup**, where everything is marked and so
 nothing stands out. The guard is the meaning-match requirement plus the
 never-in-code rule. If an answer has more icons than headings, it has failed.
+(V2 Phase 9 widened the count to "headings, callouts and list labels", because
+callouts and labels now carry icons.)
 
 ---
 
@@ -283,6 +297,7 @@ things that render as garbage when they go wrong.
 
 - ✅ `python scripts/lint_markdown.py` catches all six break classes on crafted
   samples, under seven codes (fences get two: `unclosed_fence`, `nested_fence`).
+  V2 Phase 7 added an eighth, `broken_table_separator`.
   `SKILL.md` and every reference file pass it. _(done 2026-11-02)_
 - ✅ `python -m pytest -q` green: **473 passed, 1 skipped**. In
   `tests/test_presentation_upgrade.py`, one removal test per rule deletes that
@@ -374,5 +389,25 @@ single-operation `seq` ablation build only. The `full` build and the frozen
 | 3 | `treatment-selection.md`: "emoji as structure" | "Emoji as decoration", plus "emoji soup" |
 | 4 | Render rules only inside operations | Always-on "Markdown that renders" section |
 
+### Superseded by V2
+
+| V2 phase | Rule at the end of Phase 4 | Now |
+| --- | --- | --- |
+| 6 | Strategy section embedded in `SKILL.md` | Methodology §15, with a 3-line pointer |
+| 6 | Repair and work-report detail in `SKILL.md` | Methodology §16 and §17 |
+| 6 | Step 3 as a flat list of questions | 12 labelled checks |
+| 7 | `##` / `###` / `####` ladder, three distinct levels | One `#` title, `---`, then `##` only |
+| 7 | Reader's question as a bolded line or heading | `> 🙋 **…?**`, answer in body below |
+| 7 | Analogy given equal standing | Analogy beside the example, one 🧠 callout |
+| 7 | Practitioner: no definitions or analogies | Practitioner glosses briefly, keeps one analogy |
+| 7 | Takeaway and check as plain lines | 🎯 and 🧪 callouts |
+| 7 | No opener limit beyond the paragraph ceiling | Opener of two sentences, a bold lead-in included |
+| 9 | More icons than headings is too many | More than headings, callouts and labels |
+| 9 | `DENSE_ITEM_WORDS` 40 | 30 |
+
+`tests/test_presentation_upgrade.py::RETIRED` keeps the retired phrases out of
+every skill file.
+
 **The takeaway:** your fifteen asks became four phases with a forced order. All
-four are done, and the 6 body lines left mean any further rule must displace one.
+four are done. V2 then reclaimed room and spent it again; the body has 15 lines
+left, so any further rule must still displace one.

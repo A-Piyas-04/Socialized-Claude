@@ -1,13 +1,29 @@
 # Skill upgrade plan V2 — from rules on paper to answers on screen
 
 > **Written for:** the project owner and whoever implements the phases.
-> **Evidence:** two rounds of real claude.ai answers.
+> **Evidence:** five rounds of real claude.ai answers, plus two render probes.
 > - **Round 1** (five screenshots, older installed build): database replicas,
 >   monolith versus microservices, CPU cache coherence.
 > - **Round 2** (nine screenshots, after re-uploading the finished V1 build):
 >   database replicas and monolith versus microservices, same prompts.
+> - **Rounds 3–5** (markdown only, after Phases 7, 7 follow-up and 8): the same
+>   two prompts. All are in `evaluation/layout_capture/`.
 >
 > **Scope:** `skill/socialized/`, its references, and the offline scripts that check it.
+> **Branch:** `skill-only-phase-10`, at the Phase 9 commit `fd6a5ce`.
+
+| Phase | Status | Commit |
+| --- | --- | --- |
+| 5 Diagnose | ✅ done | `7985453`, probes `29bbbe1`, `c88b7ba` |
+| 6 Make room | ✅ done | `9a4b081` |
+| 7 Conflicts and shape | ✅ done | `e14f024`, follow-up `725c0a1` |
+| 8 Rewrite examples | ✅ done | `208b8aa` |
+| 9 Close the gaps | ✅ done | `fd6a5ce` |
+| 10 Check real answers | ⬜ not started | — |
+
+Sections 1–4 are the diagnosis written before Phase 5, kept as the record of
+why each phase exists. Section 4's skeleton is updated to the shape that
+shipped. Each phase's **Status** block says what was actually done.
 
 ---
 
@@ -39,6 +55,17 @@ Six problems survive the reinstall, and they are what V2 is for:
 > **renderer limit** (heading sizes) or a **rule conflict** (register versus voice).
 > V2 fixes the conflicts, designs around the limit, and adds a way to check real
 > answers so this never again depends on screenshots.
+
+Where the six stand after Phase 9:
+
+| Problem | Fixed by | Round 5 (build `208b8aa`) |
+| --- | --- | --- |
+| 📏 Flat sizes | `#` title with `---`, `##` only (Phase 7) | ✅ both answers |
+| 🧠 No analogy, unglossed terms | Practitioner glosses and keeps one analogy (7) | ✅ both answers |
+| 💬 Half a conversation | 🙋 line, answer in body below (7) | ✅ both answers |
+| 🎯 Plain close | 🎯 and 🧪 callouts (7), three or four links (9) | ✅ both answers |
+| 🧱 Dense openers | Two sentences, bold lead-in counted (7) | ❌ replicas ran four |
+| ✨ Emoji only on headings | Callout icons (7); callout kinds, icon-led labels (9) | ⚠️ callouts yes, bullet labels no |
 
 ---
 
@@ -151,7 +178,8 @@ Ranked by how much of the round 2 failures each one explains.
 
 ### R1. The practitioner register switches off glosses and analogies
 
-`SKILL.md` lines 336–337, in `op:register`:
+`SKILL.md` lines 336–337 at build `e93f3c0`, in `op:register` (since rewritten
+in Phase 7):
 
 > **Practitioner:** use the field's vocabulary freely and spend the words on the
 > answer itself, not on definitions or analogies.
@@ -225,8 +253,8 @@ Design to the renderer, not to the wish.
 
 | You asked for | Markdown can do it with |
 | --- | --- |
-| Big, boldest headers | `#` or `##` title, `##` sections |
-| Gap, then sub-header | `---`, then a `###` sub-section |
+| Big, boldest headers | One `#` title, a blank line, `---`; then `##` sections |
+| Gap, then sub-header | `---` between sections; lists and callouts inside |
 | Different font styles | **bold**, *italic*, `code`, blockquote |
 | Colour | `diff` fence, Mermaid fills, emoji |
 | Space in one view | Short units, callouts, separators |
@@ -234,9 +262,10 @@ Design to the renderer, not to the wish.
 | Bars and quantities | `█` block characters in a fence |
 
 What it **cannot** do: set a font size, colour a word of prose, or render Mermaid in a
-plain terminal (Claude Code shows the source). If the render probe shows `###` and
-`####` look the same as bold text on claude.ai, V2 stops using them for structure
-and builds hierarchy from title, sections, separators and callouts instead.
+plain terminal (Claude Code shows the source). The Phase 5 render probe showed
+`##`, `###` and `####` at one size on claude.ai, so V2 stopped using `###` and
+`####` for structure and builds hierarchy from the title, sections, separators
+and callouts instead.
 
 ---
 
@@ -244,75 +273,89 @@ and builds hierarchy from title, sections, separators and callouts instead.
 
 One concrete skeleton that the skill shows and every example follows. It is a
 **shape**, not wording: a slot whose content does not exist is left out, but no slot
-is replaced by a dense paragraph. The heading levels shown here are provisional
-until the Phase 5 render probe.
+is replaced by a dense paragraph. This is the shape as shipped after Phases 7–9
+(`SKILL.md` "Page shape"); the full worked versions are in
+`references/layout-exemplars.md`.
 
 ````markdown
-## 🔑 Why more replicas can make writes slower
+# Why more replicas can slow down writes
 
-Every replica you add is one more machine the leader must **wait for** before a
-write counts.
+---
 
-> 🧭 **In this answer:** 1 · The trap  2 · The chain  3 · The exception
+Every replica (a full copy of the database) must apply every write. When the
+leader (the node that accepts writes) waits for replica acks, each extra replica
+is one more chance the wait runs long.
+
+Blue is what you change; red is the harm.
 
 ```mermaid
 flowchart LR
-  A[More replicas] --> B[More acks to wait for]
-  B --> C[[Slowest ack sets the time]]
-  C --> D[Longer commits]
-  classDef key fill:#f8b4b4
-  class C key
+  A[Add a replica] --> B[One more ack]
+  B --> C[[Wait for slowest]]
+  C --> D[Fewer writes per second]
+  classDef cause fill:#cfe3ff
+  classDef harm fill:#ffd6d6
+  class A,B cause
+  class C,D harm
 ```
 
----
-
-## 🕳️ 1 · The trap: more copies should mean more speed
-
-> 🙋 **So why doesn't it work like reads?**
-
-A read needs one replica. A write needs every replica it waits on.
-
-> 🧠 **Think of it like:** a group dinner where the bill is paid only when everyone
-> has chipped in. Add guests and the wait grows, because one slow wallet holds up
-> the table. *Where it breaks:* a quorum waits for most guests, not all.
+The answer follows that chain in three steps: 1 · copies don't share writes,
+2 · a commit waits for the slowest ack, 3 · how to keep the speed.
 
 ---
 
-## 🔗 2 · The chain, step by step
+## 1. 🧩 Copies don't share the writes
 
-- **🐢 Straggler:** one slow replica delays the whole write.
-- **📈 More replicas:** more chances that one of them is slow.
+Say your shop updates one stock counter 600 times a second.
 
-If each replica is slow 1% of the time and a write waits on all of them:
+> 🙋 **Then why would more copies make the leader slower?**
 
-| Replicas | Chance a write hits a slow one |
+Because the leader waits for acks before it says "committed", and that wait
+grows with every replica it must hear from.
+
+> 🧠 **Think of it like:** a group chat where nobody may leave until everyone has
+> replied. *Where it breaks:* replicas also do real work on every write.
+
+---
+
+## 2. ⏱️ A commit waits for the slowest ack
+
+Legend: 🟢 mild, 🔴 severe.
+
+| Replicas | Commits that hit a slow ack |
 | --- | --- |
-| 3 | 🟢 about 3% |
-| 30 | 🔴 about 26% |
+| 1 | 🟢 1% |
+| 10 | 🔴 9.6% |
 
 ---
 
-> 🎯 **Takeaway:** wait on more replicas → wait on the slowest → slower writes
+> 🎯 **Takeaway:** more replicas → wait on the slowest ack → fewer writes per second.
 
-> 🧪 **Check yourself:** a team moves from 3 to 9 replicas and waits on a
-> majority. Does write latency rise or fall?
+> 🧪 **Check yourself:** your leader waits for all 5 replicas. Which change helps most?
+> - a) Add a sixth replica
+> - b) Require acks from any 2 of the 5
+> - c) Move all reads onto the leader
 >
-> **Answer:** it rises — 5 replicas to wait on instead of 2.
+> **Answer:** b. The slowest replicas stop setting commit time.
 ````
 
 What the shape guarantees, slot by slot:
 
-- **Size:** one title, then sections at the largest level that still looks smaller
-  than the title. Nothing that renders like body text is used as a heading.
-- **Overview first:** a question about a chain or a process opens with its diagram,
-  right after the answer.
+- **Size:** one `#` title of about eight words, a blank line and `---`, then `##`
+  sections only. Nothing that renders like body text is used as a heading.
+- **Answer:** the first one or two sentences, a bold lead-in counted as one.
+- **Overview first:** a question about a chain or a process gets a
+  `flowchart LR` right after the answer and before the map.
+- **Map and sections:** a one-line map, then numbered `##` sections, each with one
+  icon, split by `---`.
 - **Voice:** at least one reader's question per teaching or decision answer, as a
-  🙋 callout line, answered right below it.
+  `> 🙋 **…?**` line standing alone, answered in body text below it.
 - **Analogy:** one 🧠 callout with a named limit, unless the reader is an expert or
   asked for brevity.
-- **Terms:** every specialist term carries a short gloss in parentheses on first use,
-  at every register except expert.
-- **Close:** takeaway and check question as 🎯 and 🧪 callouts, never plain lines.
+- **Terms:** every specialist term carries a gloss of six words or fewer in
+  parentheses on first use, at every register except expert.
+- **Close:** a 🎯 takeaway of three or four links, then a 🧪 check with listed
+  options and **Answer:** inside, never plain lines.
 
 ---
 
@@ -784,7 +827,7 @@ box characters outside Mermaid.
 **Acceptance:** each gap has its rule, a test fixture, and an example in
 `layout-exemplars.md`.
 
-#### Status (2026-11-03): ✅ done, uncommitted on `skill-upgrade-phase-9`
+#### Status (2026-11-03): ✅ done, committed as `fd6a5ce`
 
 ✅ Each gap has its rule, a test, and an example in a gold answer.
 
@@ -843,7 +886,7 @@ callouts and list labels". The plan's own risk note asked for this, because Phas
 | Where | Change |
 | --- | --- |
 | **New** `scripts/layout_conformance.py` | Scores a response: title, heading levels, icons per heading, callouts present (🙋 🧠 🎯 🧪), longest opener, longest list item, visuals, colour, glossed terms, `lint_markdown` clean |
-| **New** `evaluation/layout_prompts.json` | The three screenshot prompts plus seven more across registers and intents |
+| `evaluation/layout_prompts.json` (exists since Phase 5) | Add seven prompts across registers and intents to the three it holds (replicas, monolith, cache) |
 | `collect_cc` run | Before-and-after answers for the ten prompts, automatically, on the subscription |
 | Report | One table per run: prompt × score, before versus after |
 
@@ -856,6 +899,22 @@ framing that heuristics never gate.
 - ⬜ On the V2 answers: every long answer has a title, icons on every section heading,
   a 🙋 question and a 🎯 takeaway callout; a 🧠 analogy in every non-expert teaching
   answer; no opener past two sentences; no `lint_markdown` break.
+
+#### Status (2026-11-04): ⬜ not started
+
+This branch, `skill-only-phase-10`, is at the Phase 9 commit. Nothing below exists
+yet. Inputs carried forward from earlier phases:
+
+- **Icon after a number:** `icon_count` reads 0 for `## 1. 🧩 …` headings (Phase 5).
+  The conformance score must look past the section number.
+- **Openers:** the most persistent miss across rounds 3–5, with no new rule in
+  Phase 9 by your choice. The score's longest-opener measure tracks it.
+- **Round 5 false positive:** "2 a.m." splits into extra sentences in the
+  sentence counter.
+- **Unverified Phase 9 items:** `rect rgb(...)` rendering, and whether answers
+  follow the new rules. No round has been captured on the Phase 9 build.
+- **Budget:** the `SKILL.md` body has 15 lines left (485 / 500). Phase 10 adds
+  scripts and data, not skill text.
 
 ---
 
@@ -870,7 +929,8 @@ framing that heuristics never gate.
   the shape applies from two sections up; a short answer stays short.
 - **Emoji soup.** Callout icons plus heading icons plus label icons can crowd the
   page. Guard: one icon per heading, one per callout, labels only in lists of three
-  or more, and V1's "more icons than headings" check counts callouts as headings.
+  or more, and the icon budget is "no more icons than headings, callouts and list
+  labels" (Phase 9).
 - **Mermaid outside claude.ai.** Claude Code shows Mermaid as source. Guard: the
   conformance run records the surface.
 - **Subscription cost.** Phase 10 runs 20 answers per comparison. Guard: once per
@@ -884,14 +944,15 @@ framing that heuristics never gate.
 
 | # | Decision | Why it is yours |
 | --- | --- | --- |
-| 1 | Gloss terms and add an analogy for practitioners too? | Fixes R1; makes practitioner answers longer |
+| 1 | Gloss terms and add an analogy for practitioners too? | ✅ Yes (Phase 7): glosses of six words or fewer, one analogy; only expert drops both |
 | 2 | `#` or `##` for the title? | ✅ Decided 2026-11-02: `#`, title only, with a `---` under it |
-| 3 | Move strategy, repair and work-report detail to references? | Frees the room; rare cases read on demand |
-| 4 | Icons on bullet labels as well as headings? | More colour, more drift risk |
-| 5 | Spend subscription quota on Phase 10 runs? | 20 answers per comparison |
-| 6 | Three gold exemplars, or more? | More examples, more lines to maintain |
+| 3 | Move strategy, repair and work-report detail to references? | ✅ Yes (Phase 6): methodology §15–17 |
+| 4 | Icons on bullet labels as well as headings? | ✅ Yes (Phase 9), in lists of three or more only |
+| 5 | Spend subscription quota on Phase 10 runs? | ⬜ Open: 20 answers per comparison |
+| 6 | Three gold exemplars, or more? | ✅ Three (Phase 8): replicas, monolith, cache coherence |
 
-**The takeaway:** round 2 proved V1's layout rules work once installed. V2 removes
-the one register line that switches off glosses and analogies, builds size
-hierarchy the renderer can actually show, gives the conversation and the close a
-visible form, and measures real answers instead of screenshots.
+**The takeaway:** round 2 proved V1's layout rules work once installed. Phases
+5–9 removed the register line that switched off glosses and analogies, built a
+size hierarchy the renderer can actually show, and gave the conversation and the
+close a visible form. Phase 10, measuring real answers instead of screenshots,
+is what remains.

@@ -26,8 +26,8 @@ dist/socialized.zip
 ```
 
 It contains one folder, `socialized/`, with `SKILL.md` and a `references/`
-folder inside. That is the structure claude.ai expects. Do not unzip and re-zip
-it. If you change the skill source, rebuild it:
+folder of six files inside. That is the structure claude.ai expects. Do not
+unzip and re-zip it. If you change the skill source, rebuild it:
 
 ```
 pip install -r requirements-dev.txt
@@ -35,14 +35,21 @@ python scripts/validate_skill.py
 python scripts/package_skill.py
 ```
 
+The build is deterministic: the same source always gives the same ZIP, and
+`dist/socialized.manifest.json` records its SHA-256. `SKILL.md`'s frontmatter
+carries a version stamp (`metadata: {version: "2.0-dev"}`), so you can tell
+which build is installed.
+
 ## 3. Upload and enable
 
 1. Open claude.ai (web or desktop app).
 2. Go to **Customize → Skills**. Some interface versions show Skills under
    **Settings → Features** instead.
-3. Choose to add or upload a skill, and select `dist/socialized.zip`.
-4. Make sure the `socialized` toggle is **on**.
-5. Optional: to test this skill on its own, turn other custom skills off.
+3. If an older `socialized` is installed, delete it first. An old build stays
+   active until you do, and answers will follow its older rules.
+4. Choose to add or upload a skill, and select `dist/socialized.zip`.
+5. Make sure the `socialized` toggle is **on**.
+6. Optional: to test this skill on its own, turn other custom skills off.
 
 ## 4. Use it
 
@@ -59,11 +66,22 @@ it, and the skill itself tells Claude to answer those normally.
 
 ### Explicit invocation
 
-To ask for it directly, start your message with:
+To ask for it directly on claude.ai, start your message with `/socialized`
+(the form used for the layout captures in `evaluation/layout_capture/`), or
+with:
 
 ```
 Use the socialized skill for this.
 ```
+
+### What a long answer looks like
+
+An answer of two or more sections follows a fixed page shape: a `#` title with a
+`---` under it, the answer in one or two sentences, an overview diagram for a
+chain or process, a one-line map, numbered `##` sections with an icon each, a
+🙋 reader's question, a 🧠 analogy callout, and a 🎯 takeaway with a 🧪 check
+question. `skill/socialized/references/layout-exemplars.md` has three complete
+examples.
 
 ## 5. Check that it was used
 
@@ -99,6 +117,8 @@ The answer should not mention the skill, its steps, or labels such as
 | Skill never seems to load | Toggle off, chat started before enabling, or the description didn't match | Start a new chat after enabling. Try the explicit invocation line. Check the activity panel. |
 | Skill loads for unrelated requests | Description matching is decided by Claude | Report the prompt. The skill tells Claude to answer non-teaching requests normally, so the response itself should be unaffected. |
 | Answers became longer | Possible over-application | Report the prompt and response. Avoiding verbosity is an explicit design target (`evaluation/EVALUATION_PLAN.md`, S5). |
+| Long answers have no title, icons, or 🎯 🧪 callouts | An older build is still installed | Delete `socialized` from Skills, upload the current `dist/socialized.zip`, and start a new chat. This caused every round-1 layout failure in `docs/SKILL_UPGRADE_PLAN_V2.md`. |
+| A table prints as raw `\|` text | A broken separator row or a pipe inside a cell | Save the answer to a file and run `python scripts/lint_markdown.py answer.md`. Report what it finds. |
 | Works in claude.ai but not elsewhere | Skills don't sync across surfaces | For Claude Code, copy `skill/socialized/` to `~/.claude/skills/socialized/`. Other surfaces need their own upload. |
 
 ## 8. Other Claude surfaces (optional)
@@ -106,6 +126,6 @@ The answer should not mention the skill, its steps, or labels such as
 - **Claude Code.** Place the folder (rendered, or the source folder; the
   `<!-- op:… -->` markers in the source are HTML comments and harmless) at
   `~/.claude/skills/socialized/` or `.claude/skills/socialized/` in a
-  project.
+  project. The terminal shows Mermaid diagrams as source text, not as drawings.
 - **Claude API.** Possible through the Skills API, but that requires an API key,
-  so it is outside V0's no-key scope.
+  so it is outside this project's no-key scope.

@@ -1,6 +1,11 @@
-# Development Report — Explanation Lab V0
+# Development Report — Explanation Lab V0, and the state since
 
-Date: 2026-10-26.
+Date: 2026-10-26 (V0, §1–7). §8 brings it up to date on 2026-11-04.
+
+> **Read §8 first for the current state.** §1–7 record V0 as it was built: the
+> skill was then called `explanation-lab`, had five operations and three
+> reference files, and shipped as `dist/explanation-lab.zip`. It is now
+> `socialized` (Socialized-Claude), with thirteen operations and six references.
 
 ## 1. What was inspected
 
@@ -138,7 +143,10 @@ Full reasoning is in `research/EVIDENCE_AUDIT.md` §6–8. In short:
   issues, which the validators should report.
 - **The skill's factual examples were checked by me, not by domain experts.**
 
-## 7. Exactly what to do next to test the skill in Claude
+## 7. V0's next steps (superseded)
+
+These were the steps for the V0 build. File names and counts are V0's; the
+current steps are in §8.
 
 1. **Install it.** Upload `dist/explanation-lab.zip` following
    `docs/INSTALLATION.md`. If the upload is rejected, run
@@ -169,3 +177,49 @@ Full reasoning is in `research/EVIDENCE_AUDIT.md` §6–8. In short:
    criteria. Treat this round as a test of the instruments and of activation.
 7. **Run the full pilot** (33 cases) and then the comprehension item screening,
    in the order given in `evaluation/EVALUATION_PLAN.md`.
+
+## 8. State on 2026-11-04 (build `fd6a5ce`)
+
+### What changed since V0
+
+| Stage | What it added | Recorded in |
+|---|---|---|
+| V1 | `op:structure` became `op:presentation`; new `register`, `repair`, `persistence`, `work-report`, `plain`; automated Claude Code collection; screening judge; 45 test cases; structural linter | `CHANGELOG.md`, `AGENTS.md` Decisions |
+| Rename | Skill id `socialized`, display name Socialized-Claude; `pilot16-cc` stays frozen as `explanation-lab` | `AGENTS.md` Decisions |
+| Visual depth | New `visual` and `close` operations | `CHANGELOG.md` |
+| Upgrade Phases 1–4 | Space and hierarchy, a 13th operation `conversational`, the emoji palette, always-on "Markdown that renders", `lint_markdown.py` | `docs/SKILL_UPGRADE_PLAN.md` |
+| V2 Phases 5–9 | Version stamp, render probe, strategy moved to methodology §15, the page shape, rule conflicts resolved, `layout-exemplars.md`, callout kinds, overview flowchart | `docs/SKILL_UPGRADE_PLAN_V2.md` |
+
+### Checks, as of this date
+
+| Check | Result |
+|---|---|
+| `python -m pytest -q` | **563 passed, 1 skipped** |
+| `python scripts/validate_skill.py` (source) | Passed, 0 errors, 0 warnings |
+| `dist/socialized.zip` | Byte-identical to a fresh build (SHA-256 `8e1a2c0a…`) |
+| `SKILL.md` body | 485 of 500 lines (test guard 485); rendered full build 420 (guard 460) |
+| Description | 164 characters (claude.ai limit 200) |
+| Operations / variants | 13 / 16 |
+| References | 6 files |
+
+### What remains unverified
+
+- **No evaluation has run.** The `pilot16-cc` automated run holds no
+  responses, and no result of the Claude-only judge acceptance test is
+  recorded.
+- **The Phase 9 build has not been seen on claude.ai.** The last layout capture
+  (round 5) used build `208b8aa`, before Phase 9.
+- **Layout consistency is unmeasured.** Each round is one answer per prompt.
+- **Rendering of `rect rgb(...)` in a `sequenceDiagram`** on claude.ai.
+- **Anthropic's `quick_validate.py`** has not been re-run since V0.
+- **Every V0 item in §6** still holds, except that upload and explicit
+  invocation on claude.ai now work (layout rounds 2–5).
+
+### Next steps
+
+1. **Upload the current ZIP** to claude.ai and capture round 6 for the three
+   prompts in `evaluation/layout_prompts.json`.
+2. **Build Phase 10** of `docs/SKILL_UPGRADE_PLAN_V2.md`: an automated layout
+   conformance score and before-and-after runs through `collect_cc`.
+3. **Run the judge acceptance test** on Groq once `scripts/judge_capacity.py`
+   shows it fits in about three days; the sweep waits until it passes.

@@ -1,6 +1,7 @@
-# Limitations — Explanation Lab V0
+# Limitations — Socialized-Claude
 
 Read this before drawing any conclusion from using or testing the skill.
+Current as of build `fd6a5ce` (V2, Phase 9).
 
 ## About the skill
 
@@ -14,8 +15,12 @@ Read this before drawing any conclusion from using or testing the skill.
   It can only steer what Claude already does.
 - **It cannot guarantee a better explanation.** It encodes hypotheses about what
   makes explanations work. Some responses may be worse than Claude's default,
-  for example through over-structuring or omitting a useful example.
-- **It cannot inspect hidden reasoning.** The "silent" diagnosis and checking
+  for example through over-structuring, a forced analogy, or glosses that slow
+  a reader who knew the terms.
+- **The page shape can make answers look alike.** Every answer of two or more
+  sections gets the same slots. The guard is that the shape starts at two
+  sections and a short answer stays short.
+- **It cannot inspect hidden reasoning.** The "silent" reading and checking
   steps are instructions. Whether Claude actually performs them cannot be
   observed, only inferred from outputs.
 - **It has no independent verifier.** Nothing checks the explanation with a
@@ -24,9 +29,28 @@ Read this before drawing any conclusion from using or testing the skill.
 - **Claude account limits still apply.** Plan eligibility, usage limits, and
   code-execution availability are set by Anthropic.
 - **Surfaces are separate.** A skill uploaded to claude.ai is not available in
-  the API or Claude Code, and vice versa.
+  the API or Claude Code, and vice versa. An older build stays installed until
+  it is deleted and replaced.
 - **Interface details change.** Menu paths and what the interface shows as
   activation evidence may differ from the documentation.
+- **The line budget is nearly spent.** The `SKILL.md` body is 485 of 500 lines
+  (test guard 485). A new rule must displace or merge an old one.
+
+## About rendering
+
+Markdown has no font sizes and no text colour, and the surface decides how each
+element looks.
+
+- **Only `#` is visibly larger on claude.ai.** The render probe shows `##`,
+  `###`, `####` and a bold line at one size, so depth below `##` comes from
+  separators, lists and callouts.
+- **Callouts render dimmer than body text** on claude.ai. The one sentence that
+  must not be missed stays in body text.
+- **Colour comes only from** `diff` fences, Mermaid `classDef` fills, and emoji.
+- **Claude Code shows Mermaid as source**, so diagrams lose their value there.
+- **Unverified on claude.ai:** whether `rect rgb(...)` highlights render in a
+  `sequenceDiagram`, and whether every palette emoji renders on every device.
+  The palette is limited to single code points from Emoji 11 or earlier.
 
 ## About the evidence
 
@@ -34,13 +58,19 @@ Read this before drawing any conclusion from using or testing the skill.
   No experiment so far has measured comprehension in a way that could detect a
   difference (`research/EVIDENCE_AUDIT.md` §2.4).
 - **The operation choice is a hypothesis.** It rests on automated fidelity
-  screening of Gemini rewrites, learning-science literature, and the project
-  brief. Fidelity screening shows only that a rewrite did not obviously break
-  the text. Its best scores were partly produced by rewrites that changed
-  nothing.
+  screening of Gemini rewrites, learning-science literature, the project brief,
+  and the owner's requests. Fidelity screening shows only that a rewrite did not
+  obviously break the text. Its best scores were partly produced by rewrites
+  that changed nothing.
 - **Rewrite evidence may not transfer to generation.** All prior experiments
   rewrote existing answers with Gemini. The skill asks Claude to compose
   answers.
+- **The layout evidence is thin.** Rounds 2–5 in `evaluation/layout_capture/`
+  are one answer per prompt, two prompts per round, copied from claude.ai by the
+  owner (a recorded exception to "nothing by hand"). Only round 2 records the
+  invocation (`/socialized`), so they say nothing about natural activation, and
+  consistency across runs is not measured. No round has been captured since
+  Phase 9.
 - **The prior judge was uninformative.** It reportedly gave 5/5 to every
   answer. The judge outputs are not in the archive, so this could not be
   checked.
@@ -58,15 +88,18 @@ Read this before drawing any conclusion from using or testing the skill.
   equivalent.
 - **Rater scores are judgements.** They can be biased by length, style, or
   recognising a condition. Blinding and anchors help but do not eliminate this.
-- **The presentation, register, repair, persistence, work-report and plain-language operations
-  are untested hypotheses, and the structural linter measures form only.** No
-  data of any kind supports them yet. A response can pass every linter check and
-  still be wrong; the linter cannot tell.
+- **Most operations are untested hypotheses.** Presentation, visual, register,
+  repair, persistence, work report, plain language, conversational voice, close,
+  and the page shape have no outcome data of any kind yet.
+- **The linters measure form only.** `lint_markdown.py` and `lint_response.py`
+  read the text they are given. A response can pass every check and still be
+  wrong, and neither can watch a live conversation. Their heuristics never gate.
 - **Automated results characterise Claude Code, not claude.ai.** The harness
   runs `claude -p`, whose system prompt and scaffolding differ from claude.ai's;
   activation rates in particular do not transfer. The judge is a free-tier
   non-Anthropic model with a small daily quota, a screening instrument whose own
-  reliability is reported as its order-flip rate.
+  reliability is reported as its order-flip rate. No result of its Claude-only
+  acceptance test is recorded yet, and the `pilot16-cc` run holds no responses.
 - **The operations reach beyond the skill's trigger.** Persistence and work
   reports matter outside explanations, but the skill's description only triggers
   on explanation requests, so natural activation will rarely load them there.
@@ -80,12 +113,9 @@ Read this before drawing any conclusion from using or testing the skill.
   show skill loading, natural activation cannot be measured, and only explicit
   invocation results are interpretable.
 
-## Not in scope for V0
+## Not in scope
 
 There is no chatbot, API client, proxy, browser extension, or automated UI
-control. There is no LLM-judge pipeline: an LLM judge may be added later, only
-as a labelled secondary analysis.
-
-(V1 adds that labelled secondary analysis: `scripts/judge.py`, a screening
-instrument that never feeds S1–S7. A browser extension is planned as a separate
-deliverable that restyles and measures text and never rewrites it.)
+control. The LLM judge (`scripts/judge.py`) is a labelled screening instrument
+that never feeds S1–S7. The automated layout conformance score is planned
+(V2 Phase 10) and not built.
