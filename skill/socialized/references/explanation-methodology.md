@@ -55,6 +55,11 @@ mechanism, a design choice, or a connection between ideas.
 - Assume the basics their vocabulary shows. Supply only the one or two
   prerequisites that the specific question depends on and that are often
   misunderstood.
+<!-- op:register -->
+- Expect a mixed reader. Someone fluent in a neighbouring field can be new to
+  this concept: keep their pace and vocabulary, and teach the one missing idea
+  from the nearest one they know (binary search, say, for a database index).
+<!-- /op:register -->
 <!-- op:mechanism -->
 - Focus on the causal chain and the tradeoff that follows from it. This is
   usually what an intermediate learner is missing.

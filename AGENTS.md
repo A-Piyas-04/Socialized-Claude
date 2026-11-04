@@ -404,4 +404,26 @@ needs to decide. No progress narrative.
     stays at `f79e2fc`, and only the tag and that branch are pushed;
   - the preservation checklist lives in the plan document's "Phase 0 record", not in a
     new document.
+- Approach B Phase 1 (concept-level calibration), on the experiment branch only:
+  - Step 1 now sorts the ideas an answer rests on into known, missing and uncertain.
+    It judges from how the reader uses vocabulary, not from a job title or one term.
+    It starts from the nearest known idea, glosses an uncertain idea in place instead
+    of asking, and keeps the sorting out of the reply. The three registers and the
+    practitioner default stay;
+  - `op:sequencing` builds each missing prerequisite from an idea the reader has and
+    skips known ones individually; its Step 3 Order check now asks that nothing known
+    is re-taught. The "an expert gets the answer, not a tutorial" clause was dropped,
+    because Step 2 and `op:register` carry it;
+  - `op:register` gains a **Mixed** reader (fluent nearby, new here). Methodology §2
+    gains a matching bullet, and `explanation-examples.md` gains "Calibration: one
+    question, two readers", both inside `op:register` markers. The calibration pair
+    is short by design and is listed in `SHORT_BY_DESIGN`;
+  - the body stayed at 485 lines (guard unchanged). The two reference-file entries for
+    `emoji-palette.md` and `layout-exemplars.md` became one line each, with the pointers
+    kept. The rendered build is 420 lines;
+  - `metadata.version` is `2.1-dev`, so an installed experiment build can be told from
+    the baseline (`2.0-dev`);
+  - the B1 rules are in `tests/test_presentation_upgrade.py::RULES`, each with a removal
+    test. `evaluation/layout_prompts.json` gains `calib_beginner` and `calib_mixed`;
+  - go/no-go is pending the user's claude.ai quick check.
 

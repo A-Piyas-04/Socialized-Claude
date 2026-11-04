@@ -1,5 +1,6 @@
-"""Invariants for the skill upgrade, Phases 1-4 (docs/SKILL_UPGRADE_PLAN.md) and Phases 5-6
-(docs/SKILL_UPGRADE_PLAN_V2.md).
+"""Invariants for the skill upgrade, Phases 1-4 (docs/SKILL_UPGRADE_PLAN.md), Phases 5-9
+(docs/SKILL_UPGRADE_PLAN_V2.md), and Approach B Phase 1, tagged "B1"
+(docs/ADAPTIVE_COMMUNICATION_PLAN.md).
 
 Each rule is checked against the build that carries it, not against a pinned sentence: a rule
 owned by an operation must appear in that operation's single-op build more often than in the core
@@ -89,6 +90,14 @@ RULES = [
     (7, "Step 3 question line", "conversational", ["as a 🙋 line"]),
     (7, "Step 3 analogy", "examples", ["is there a 🧠 analogy callout"]),
     (7, "Step 3 close callouts", "close", ["compressed 🎯 takeaway"]),
+    ("B1", "known, missing, uncertain", None, ["into known, missing, and uncertain"]),
+    ("B1", "no expertise from a title or one term", None, ["a job title, or one technical term"]),
+    ("B1", "start from the nearest known idea", None, ["Start from the known idea nearest the question"]),
+    ("B1", "gloss instead of asking, sorting hidden", None, ["instead of asking", "keep this sorting out of the reply"]),
+    ("B1", "prerequisite built from a known idea", "sequencing", ["built from an idea the reader already has"]),
+    ("B1", "skip known prerequisites one by one", "sequencing", ["even beside ones they lack"]),
+    ("B1", "Step 3 no re-teaching", "sequencing", ["none the reader knows re-taught"]),
+    ("B1", "mixed reader", "register", ["**Mixed** (fluent nearby, new here)"]),
 ]
 
 # Phrases of rules that Phase 7 replaced because they switched another rule off.
@@ -273,6 +282,17 @@ def test_markdown_rules_ship_in_every_variant():
     source = body(skill_text())
     for variant, ops in lib.VARIANTS.items():
         assert "## Markdown that renders (always apply)" in lib.render_markers(source, ops), variant
+
+
+def test_calibration_example_ships_with_register():
+    examples = (lib.SKILL_DIR / "references" / "explanation-examples.md").read_text(encoding="utf-8")
+    methodology = reference_text()
+    heading = "## Calibration: one question, two readers"
+    assert heading in lib.render_markers(examples, frozenset({"register"}))
+    assert heading not in lib.render_markers(examples, frozenset())
+    mixed = "Expect a mixed reader"
+    assert mixed in lib.render_markers(methodology, frozenset({"register"}))
+    assert mixed not in lib.render_markers(methodology, frozenset())
 
 
 def test_operation_and_palette_shape():

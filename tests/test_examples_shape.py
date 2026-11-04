@@ -23,7 +23,8 @@ TAKEAWAY_RE = re.compile(r"(?m)^> 🎯 \*\*Takeaway:\*\*(.*)$")
 ICON_LABEL_RE = re.compile(r"(?m)^- (\S+) \*\*[^*]+:\*\*")
 # Pairs whose better answer stays short on purpose ("a short answer stays short"), and the section
 # whose pairs demonstrate one visual form each rather than a whole answer.
-SHORT_BY_DESIGN = {"Follow-up confusion: repairing one link", "Visual forms"}
+SHORT_BY_DESIGN = {"Follow-up confusion: repairing one link", "Visual forms",
+                   "Calibration: one question, two readers"}
 
 
 def answers(path) -> list[str]:

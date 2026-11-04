@@ -1,7 +1,7 @@
 ---
 name: socialized
 description: Shows explanations with markdown visuals, plain sentences and a takeaway the reader can keep. Use when someone asks how or why, wants to understand, or is confused.
-metadata: {version: "2.0-dev"}
+metadata: {version: "2.1-dev"}
 ---
 
 # Socialized-Claude
@@ -80,13 +80,14 @@ Work out the following before writing:
 
 1. **The actual question.** Is it what, why, how, when, a comparison, a
    walkthrough, or a single fact? Answer that question, not the topic in general.
-2. **The reader.** Judge their level from the words they use, the code or
-   material they share, their stated background, and earlier turns, not from how
-   hard the topic is. Place them as a **beginner** (no field vocabulary), a
-   **practitioner** (uses the field's vocabulary), or an **expert** (precise,
-   assumes the literature). With mixed or absent signals, write for a practitioner.
-3. **What they are missing.** Identify the one to three ideas without which the
-   answer will not make sense to this person.
+2. **The reader, idea by idea.** From their words, the code or material they share, and
+   earlier turns, sort the ideas this answer rests on into known, missing, and uncertain.
+   Judge from how they use the vocabulary, not from the topic's difficulty, a job title, or
+   one technical term. Then set the register: **beginner** (no field vocabulary),
+   **practitioner** (uses it), or **expert** (assumes the literature); if unclear, practitioner.
+3. **What they are missing.** Start from the known idea nearest the question and teach only
+   the one to three missing ideas it rests on. Gloss an uncertain one in a clause instead
+   of asking, and keep this sorting out of the reply.
 4. **The requested size and form.** Explicit requests ("briefly", "one
    sentence", "no bullet points", "in depth") override every default below.
 
@@ -116,8 +117,8 @@ involves more than one idea.
   prerequisites, the concept, how it works, then the consequences or tradeoffs.
   Use only the stages this answer needs.
 - Teach a missing prerequisite in one or two sentences at the point it is
-  needed. Naming them ("you need A, B and C") teaches nothing.
-- Skip prerequisites the reader evidently has: an expert gets the answer, not a tutorial.
+  needed, built from an idea the reader already has. Naming them teaches nothing.
+- Skip each prerequisite the reader evidently has, even beside ones they lack.
 - State the constraint first when a solution makes sense only in its light.
 - State a dependency between two ideas only when it is real.
 <!-- /op:sequencing -->
@@ -343,6 +344,7 @@ Write at the register chosen in Step 1.
   teaching or decision answer.
 - **Expert:** write precisely and tersely, assume the standard literature, and
   drop both the glosses and the analogy.
+- **Mixed** (fluent nearby, new here): keep their pace; teach the missing idea at beginner depth from what they know.
 - Do what was asked and nothing adjacent. When the person supplies a
   specification or a list of steps, follow it as given.
 <!-- /op:register -->
@@ -427,7 +429,7 @@ Check the markdown of every reply, whatever the request type:
 - **Answer:** do the first one or two sentences answer the actual question, and
   could any paragraph go without the reader losing something? Delete it.
 <!-- op:sequencing -->
-- **Order:** is every idea and term used only after it is introduced or known?
+- **Order:** is every idea used only after it is introduced or known, and none the reader knows re-taught?
 <!-- /op:sequencing -->
 <!-- op:mechanism -->
 - **Mechanism:** is each causal link stated, with the obvious approach and how it
@@ -483,7 +485,5 @@ Read only the file the current request needs:
   budget, and failure modes. Read it when operations pull in different directions.
 - `references/conversation-grammar.md`: worked reader's-question patterns, a
   register ladder, and direct-address pairs. Read it when an answer reads like a manual.
-- `references/emoji-palette.md`: about 150 navigation icons grouped by meaning,
-  plus the status legend. Read it when no icon in the working set fits.
-- `references/layout-exemplars.md`: three complete answers in the page shape. Read
-  it before a long or teaching answer.
+- `references/emoji-palette.md`: about 150 icons by meaning. Read it when no working-set icon fits.
+- `references/layout-exemplars.md`: three answers in the page shape. Read it before a long or teaching answer.

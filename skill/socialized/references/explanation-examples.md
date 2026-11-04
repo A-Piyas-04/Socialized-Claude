@@ -22,6 +22,9 @@ the right move is to add nothing.
 - Everyday: why a pressure cooker cooks faster
 - Code: explaining a debounce function
 <!-- /op:mechanism -->
+<!-- op:register -->
+- Calibration: one question, two readers
+<!-- /op:register -->
 - Follow-up confusion: repairing one link
 <!-- op:visual -->
 - Visual forms: flow, contrast, proportion, change over time, order in time,
@@ -378,6 +381,53 @@ make sense, and each one is paired with what breaks without it. The layout gives
 the purpose first, one `##` section per part of the mechanism, and a table that
 traces a burst of calls.
 <!-- /op:mechanism -->
+
+<!-- op:register -->
+## Calibration: one question, two readers
+
+The same question, from two readers who know different things. Each answer starts
+from what that reader already has and teaches only what they are missing.
+
+**Reader A:** "I'm taking an intro databases class. Why does adding an index make
+my query faster?" They know tables, rows, and queries. They are missing how a
+database finds a row.
+
+**Weak:** "An index is a B-tree that cuts lookups from O(n) to O(log n) by avoiding
+a full table scan." Every term in it is one the reader lacks.
+
+**Better:**
+> Without an index, the database finds matching rows by reading every row in the
+> table, one by one. This is called a *full table scan*. An index is a separate
+> list of one column's values, kept sorted, each pointing to its row. Because the
+> list is sorted, the database jumps straight to the value, the way you use the
+> index at the back of a book instead of reading every page.
+
+**Reader B:** "I've written Go backends for years but never looked inside a
+database. Why does adding an index make my query faster?" They know big-O, binary
+search, and sorted slices. They are missing what the database does without an
+index and what the index is. Whether they know a disk page is uncertain.
+
+**Weak:** the Reader A answer, book and all, which re-teaches sorting to someone
+who has written binary search. Also weak: "the planner switches to an index scan
+once selectivity beats sequential I/O", which assumes the database internals they
+said they lack.
+
+**Better:**
+> Without an index, `WHERE email = ?` runs a full table scan: the database reads
+> every row, so the cost is O(n). An index on `email` is usually a B-tree, a
+> balanced search tree sorted by that column. A lookup walks down it the way a
+> binary search halves a sorted slice, but with hundreds of branches per step, so
+> it costs O(log n). Each node fills one page (the block read from disk at once),
+> so finding one row among millions typically reads three or four pages.
+
+**What changed:**
+- Each answer starts from the nearest idea its reader knows: a book's index for A,
+  binary search for B.
+- B gets no definition of big-O or sorting, and the uncertain term, page, gets a
+  gloss in place rather than a question.
+- Both answers stay at one short paragraph. Calibration changes which ideas get
+  the words, not how many words there are.
+<!-- /op:register -->
 
 ## Follow-up confusion: repairing one link
 
