@@ -394,4 +394,14 @@ needs to decide. No progress narrative.
   - new fixture `linear_ascii_flow.md`.
 - Phase 9 counts: the body is 485 lines, with the guard raised from 480 to 485, and
   420 rendered (guard 460).
+- Approach B Phase 0 (`docs/ADAPTIVE_COMMUNICATION_PLAN.md`), user 2026-11-04:
+  - the baseline tag is `skill-stable-format` (the user's name, replacing the plan's
+    example `v2-approach-a-stable`), annotated, on `fd6a5ce`;
+  - the baseline ZIP is archived as a GitHub release on that tag, not as an in-repo
+    copy (user's choice). Its sha256 `8e1a2c0a…b5d0` was matched by a fresh build
+    from the tag;
+  - Approach B work happens only on `experiment/adaptive-communication`. `production`
+    stays at `f79e2fc`, and only the tag and that branch are pushed;
+  - the preservation checklist lives in the plan document's "Phase 0 record", not in a
+    new document.
 

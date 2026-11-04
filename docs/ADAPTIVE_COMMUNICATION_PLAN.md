@@ -31,6 +31,27 @@ The existing skill already has **13 operations**, including reader register, seq
 
 **Exit condition:** The current skill can be reinstalled exactly as before, even if every Approach B experiment fails.
 
+### Phase 0 record (2026-11-04)
+
+- **Tag:** `skill-stable-format` (annotated), on `fd6a5ce`. `skill/` and `dist/` are byte-identical from `fd6a5ce` through `production` at `f79e2fc`.
+- **ZIP sha256:** `8e1a2c0adb9b893e0f2d51f234024237d1607c6bdedc2d53fbcf3f12f9bed5b0`. The ZIP committed at the tag, a fresh `package_skill.py` build from the tag, the manifest, and the release download all match it.
+- **Release:** [skill-stable-format](https://github.com/A-Piyas-04/Socialized-Claude/releases/tag/skill-stable-format), with the ZIP and its manifest attached.
+- **Rollback:** in claude.ai, open Settings, then Capabilities, then Skills. Remove `socialized` and upload `socialized-skill-stable-format-fd6a5ce.zip`.
+- **Branch:** `experiment/adaptive-communication`, cut from `production` at `f79e2fc`. `production` is not changed by Approach B work.
+
+**Preservation checklist.** These must not regress. Each line names what catches a regression.
+
+| Behaviour | Checked by |
+|---|---|
+| Markdown renders (fences, tables, Mermaid labels) | `scripts/lint_markdown.py`, zero breaks |
+| `#` title, blank line, `---`, numbered `##` sections | Eye; `test_page_shape_slots_follow_their_operations` |
+| Short units: paragraphs, list items, table cells | `dense_paragraph`, `dense_table_cell` flags |
+| Mermaid for branches and time order | Eye; `linear_ascii_flow` flag |
+| 🙋 question, 🧠 analogy, 🎯 takeaway, 🧪 check | Eye, on teaching answers |
+| Icons from the palette only | `emoji_outside_palette` |
+| Short factual answers stay short | Eye, on a direct-fact prompt |
+| Examples and exemplars lint clean | `tests/test_examples_shape.py` |
+
 ---
 
 ## Phase 1 — Concept-level knowledge calibration
