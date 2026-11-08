@@ -98,7 +98,7 @@ def validate_dir(skill_dir: Path, *, surface: str = "claude-ai", packaged: bool 
     for rel, text in texts.items():
         if rel == "SKILL.md":
             continue
-        if rel not in linked_from_skill:
+        if rel not in linked_from_skill and rel not in lib.LICENSE_FILE_NAMES:
             report.warn(f"{rel}: not referenced from SKILL.md (Claude may never read it)")
         if text.count("\n") + 1 > lib.TOC_REQUIRED_OVER_LINES and not lib.has_contents_section(text):
             report.warn(f"{rel}: longer than {lib.TOC_REQUIRED_OVER_LINES} lines without a Contents section")

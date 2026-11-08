@@ -25,8 +25,8 @@ skill runs inside your existing Claude account and uses your normal usage limits
 dist/socialized.zip
 ```
 
-It contains one folder, `socialized/`, with `SKILL.md` and a `references/`
-folder of six files inside. That is the structure claude.ai expects. Do not
+It contains one folder, `socialized/`, with `SKILL.md`, `LICENSE.txt` and a
+`references/` folder of six files inside. That is the structure claude.ai expects. Do not
 unzip and re-zip it. If you change the skill source, rebuild it:
 
 ```
@@ -37,14 +37,14 @@ python scripts/package_skill.py
 
 The build is deterministic: the same source always gives the same ZIP, and
 `dist/socialized.manifest.json` records its SHA-256. `SKILL.md`'s frontmatter
-carries a version stamp (`metadata: {version: "2.0-dev"}`), so you can tell
+carries a version stamp (`metadata: {version: "2.2.0"}`), so you can tell
 which build is installed.
 
 ## 3. Upload and enable
 
 1. Open claude.ai (web or desktop app).
 2. Go to **Customize → Skills**. Some interface versions show Skills under
-   **Settings → Features** instead.
+   **Settings → Capabilities** or **Settings → Features** instead.
 3. If an older `socialized` is installed, delete it first. An old build stays
    active until you do, and answers will follow its older rules.
 4. Choose to add or upload a skill, and select `dist/socialized.zip`.
@@ -79,9 +79,10 @@ Use the socialized skill for this.
 An answer of two or more sections follows a fixed page shape: a `#` title with a
 `---` under it, the answer in one or two sentences, an overview diagram for a
 chain or process, a one-line map, numbered `##` sections with an icon each, a
-🙋 reader's question, a 🧠 analogy callout, and a 🎯 takeaway with a 🧪 check
-question. `skill/socialized/references/layout-exemplars.md` has three complete
-examples.
+🙋 reader's question, and a 🎯 takeaway. A why or how answer adds a 🧠 analogy
+callout when nothing the reader knows already shows the mechanism, and a learner
+gets a 🧪 check question. Decision and debugging answers get neither.
+`skill/socialized/references/layout-exemplars.md` has three complete examples.
 
 ## 5. Check that it was used
 

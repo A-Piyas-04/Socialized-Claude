@@ -1,7 +1,8 @@
 ---
 name: socialized
 description: Shows explanations with markdown visuals, plain sentences and a takeaway the reader can keep. Use when someone asks how or why, wants to understand, or is confused.
-metadata: {version: "2.2-dev"}
+license: MIT (see LICENSE.txt)
+metadata: {version: "2.2.0"}
 ---
 
 # Socialized-Claude

@@ -61,6 +61,7 @@ MD_LINK_RE = re.compile(r"\]\(([^)\s]+)\)")
 XML_TAG_RE = re.compile(r"<[^>]+>")
 
 FORBIDDEN_FILE_NAMES = {".env", ".DS_Store", "Thumbs.db"}
+LICENSE_FILE_NAMES = {"LICENSE", "LICENSE.txt", "LICENSE.md"}
 FORBIDDEN_DIR_NAMES = {"__pycache__", ".git", "node_modules", ".venv", "venv"}
 EXECUTABLE_SUFFIXES = {".py", ".sh", ".js", ".ts", ".ps1", ".bat", ".exe"}
 

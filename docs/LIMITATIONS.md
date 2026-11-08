@@ -1,7 +1,7 @@
 # Limitations — Socialized-Claude
 
 Read this before drawing any conclusion from using or testing the skill.
-Current as of build `fd6a5ce` (V2, Phase 9).
+Current as of version 2.2.0 (V2 Phase 9 plus Approach B Phases 1 and 2).
 
 ## About the skill
 
@@ -18,8 +18,14 @@ Current as of build `fd6a5ce` (V2, Phase 9).
   for example through over-structuring, a forced analogy, or glosses that slow
   a reader who knew the terms.
 - **The page shape can make answers look alike.** Every answer of two or more
-  sections gets the same slots. The guard is that the shape starts at two
-  sections and a short answer stays short.
+  sections gets the same slots. The guards are that the shape starts at two
+  sections, a short answer stays short, and the 🧠 and 🧪 slots depend on intent.
+- **It does not yet adapt across a conversation.** Follow-ups that build on
+  what was already taught, and repairs that change strategy rather than
+  rephrasing, are planned (Approach B Phases 3 and 4) and not built.
+- **The description triggers on explanation wording.** "How", "why", "understand"
+  and "confused" load it. A decision or debugging request may not, even though
+  the skill handles both; `/socialized` makes it apply.
 - **It cannot inspect hidden reasoning.** The "silent" reading and checking
   steps are instructions. Whether Claude actually performs them cannot be
   observed, only inferred from outputs.
@@ -70,7 +76,9 @@ element looks.
   owner (a recorded exception to "nothing by hand"). Only round 2 records the
   invocation (`/socialized`), so they say nothing about natural activation, and
   consistency across runs is not measured. No round has been captured since
-  Phase 9.
+  Phase 9. The Approach B checks were one chat per prompt, with no baseline arm:
+  the Phase 1 calibration pair (a student and a Go developer), and none yet for
+  the Phase 2 short-fact and debugging prompts.
 - **The prior judge was uninformative.** It reportedly gave 5/5 to every
   answer. The judge outputs are not in the archive, so this could not be
   checked.

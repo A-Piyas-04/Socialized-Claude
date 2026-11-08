@@ -476,4 +476,17 @@ needs to decide. No progress narrative.
   - `layout_prompts.json` gains `intent_fact`, `intent_teach` and `intent_debug`
     (with `layout_monolith` as the decision);
   - body 485 lines (guard unchanged), 420 rendered, version `2.2-dev`.
+- Publish prep (user, 2026-11-08): `experiment/adaptive-communication` is the build
+  to publish. The user chose it over the Phase 0 default of keeping Approach A.
+  - `metadata.version` is `2.2.0`, with no `-dev` suffix.
+  - The licence is MIT, the same text as `main`, in a root `LICENSE`. The frontmatter
+    gains `license: MIT (see LICENSE.txt)`. `package_skill.py` adds the file to every
+    ZIP as `socialized/LICENSE.txt`, and the validator's unreferenced-file warning
+    skips licence files. The ZIP-structure test expects it.
+  - The README is rewritten for users. Its example is the round-5 claude.ai replicas
+    answer (build 2.0-dev), labelled as such. The round-2 screenshots were not used:
+    they show an older layout. Fresh screenshots of 2.2.0 need the user.
+  - User docs (`INSTALL_AND_USE`, `INSTALLATION`, `ARCHITECTURE`, `LIMITATIONS`)
+    describe the B1/B2 behaviour. The plans and the development report are left as
+    history.
 

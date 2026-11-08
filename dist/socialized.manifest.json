@@ -17,9 +17,10 @@
     "work-report"
   ],
   "zip": "socialized.zip",
-  "zip_sha256": "8d212b14616a006dbac87a87853ae9aa3d36b7b87dc4b7560dbb4aae88f3077c",
+  "zip_sha256": "277a68aa4a7351eef3556240100fc8b8b4593e0c41e6c6fc59cb4682f690b618",
   "files": {
-    "SKILL.md": "995cfcee635855ce8eb99ce5e72afe94bae6449499b550866e0c196827b5faad",
+    "LICENSE.txt": "2729060b9de84d86a30abf9d216dbfecbfd9b952e1c4a2f314f0c9335c7307ab",
+    "SKILL.md": "1564b7ae7191684e4e68454e1ccce13dc0d0b4d6a66a9825bbf0ebe87fbfacde",
     "references/conversation-grammar.md": "38acbea2e0450024992b7df15a981fe29d8b5e7156df0a68a7ddcc649ed6f4ca",
     "references/emoji-palette.md": "3513d56533279c8be1352dd84cd5079e479cc7bfe74417ddc4d3601974453302",
     "references/explanation-examples.md": "655e226b2f0aa598440ba0ea2aa46cfafe841272f671537749b1a9f77034e083",

@@ -1,7 +1,7 @@
 # Architecture — Socialized-Claude
 
-Current as of build `fd6a5ce` (skill upgrade V2, Phase 9), version stamp
-`metadata.version: 2.0-dev`.
+Current as of version 2.2.0 (`metadata.version: 2.2.0`): the V2 Phase 9 layout
+plus Approach B Phases 1 and 2 (`docs/ADAPTIVE_COMMUNICATION_PLAN.md`).
 
 ## What the skill does
 
@@ -11,24 +11,29 @@ When Claude loads it, the skill guides Claude to compose explanations that:
 
 1. **Answer first.** The first one or two sentences reply to the question asked,
    before any background, list, or heading except the title.
-2. **Order ideas by dependency.** Nothing is used before its groundwork, and a
+2. **Lead with what the intent needs**: a fact, a causal chain, numbered steps,
+   a recommendation with its tradeoff, or a diagnosis with one fix.
+3. **Calibrate idea by idea**: sort the ideas an answer rests on into known,
+   missing and uncertain, start from the nearest known one, and teach only what
+   is missing.
+4. **Order ideas by dependency.** Nothing is used before its groundwork, and a
    missing prerequisite is taught briefly rather than merely named.
-3. **Make the causal mechanism explicit** for why and how questions: what
+5. **Make the causal mechanism explicit** for why and how questions: what
    triggers what, the obvious approach and how it fails, and the tradeoff that
    follows.
-4. **Follow one page shape** for any answer of two or more sections: a `#`
+6. **Follow one page shape** for any answer of two or more sections: a `#`
    title with a `---` under it, the answer, an overview diagram for a chain or
    process, a one-line map, numbered `##` sections split by `---`, a 🙋 reader's
-   question, a 🧠 analogy callout, short glosses on first use, and a 🎯 takeaway
-   plus 🧪 check callout.
-5. **Show shape instead of describing it**: Mermaid flowcharts and sequence
+   question, short glosses on first use, and a 🎯 takeaway. A 🧠 analogy
+   callout and a 🧪 check callout appear only where the intent calls for them.
+7. **Show shape instead of describing it**: Mermaid flowcharts and sequence
    diagrams, tables, block-character bars, `diff` contrasts, status and
    navigation emoji, all as markdown. An artifact (HTML, SVG, interactive
    widget) is built only on claude.ai, and only when the person explicitly asks.
-6. **Read like a person talking**: plain one-claim sentences, active voice,
+8. **Read like a person talking**: plain one-claim sentences, active voice,
    direct address, contractions, and the reader's next question written into
    the answer.
-7. **Render safely**: closed fences, plain table separator rows, matching cell
+9. **Render safely**: closed fences, plain table separator rows, matching cell
    counts, plain Mermaid labels, no heading jumps, palette-only emoji.
 
 It also tells Claude to **leave non-teaching requests alone**, to keep length
@@ -42,6 +47,7 @@ run code.
 ```
 socialized/
 ├── SKILL.md                         Level 2: loaded when Claude triggers the skill
+├── LICENSE.txt                      MIT; added by the build, never read by Claude
 └── references/
     ├── explanation-methodology.md   Level 3: behaviour by request type (§1–14),
     │                                strategy by intent (§15), repair (§16),
@@ -77,29 +83,32 @@ In file order:
    and work reports to their operations even when nothing is explained.
 2. **Page shape.** The slot order for answers of two or more sections. Each slot
    sits inside its operation's markers, so a single-operation build carries only
-   its own slots. "The shape is fixed; the wording never is."
-3. **Strategy by intent.** A pointer to methodology §15 for coding, debugging,
-   decision, and quick replies. A requested deliverable (code, an email, JSON)
-   comes back in its own form.
-4. **Step 1: read the request (silently).** The actual question type, the reader
-   (beginner, practitioner, or expert; practitioner by default), the one to
-   three missing ideas, and the requested size.
-5. **Step 2: size the answer.** Answer first, then defaults per request type. An
-   explicit length request overrides all of them.
-6. **Thirteen operations.** Ordering, mechanism, one running example, terms,
+   its own slots. "The shape is fixed; the wording never is." The 🧠 slot fills
+   only in a why, how or walkthrough answer with nothing known to lean on, and
+   the 🧪 slot only for a learner.
+3. **Step 1: read the request (silently).** The intent (answer, why or how,
+   walk me through, decide, debug), the reader idea by idea (known, missing,
+   uncertain) and their register (beginner, practitioner, expert, or mixed;
+   practitioner by default), the one to three missing ideas, and the requested
+   size and form.
+4. **Step 2: lead with what the intent needs.** Answer first, then one default
+   per intent, with a pointer to methodology §15 for code and mixed intents. A
+   requested deliverable (code, an email, JSON) comes back in its own form, and
+   an explicit size or form request overrides every default.
+5. **Thirteen operations.** Ordering, mechanism, one running example, terms,
    plain sentences, conversational voice, presentation, visual, register,
    repair, persistence, work report, and close. Each carries its own "use when"
    and "skip when" rules, and every rule names an action.
-7. **Accuracy rules (always on).** No invented mechanisms or facts, hedges
+6. **Accuracy rules (always on).** No invented mechanisms or facts, hedges
    preserved, simplify expression rather than substance, citations only when
    certain.
-8. **Markdown that renders (always on).** Seven rules covering fences, pipes,
+7. **Markdown that renders (always on).** Seven rules covering fences, pipes,
    the separator row, cell counts, Mermaid labels, heading steps, the blank line
    before `---`, and palette-only emoji.
-9. **Step 3: check before sending (silently).** Twelve labelled checks (Answer,
+8. **Step 3: check before sending (silently).** Twelve labelled checks (Answer,
    Order, Mechanism, Example, Terms, Sentences, Voice, Layout, Visuals, Close,
    Markdown and accuracy, Tone). Each operation's check sits inside its markers.
-10. **Reference files.** One line per reference saying when to read it.
+9. **Reference files.** One line per reference saying when to read it.
 
 ## How operations are selected
 
@@ -113,8 +122,9 @@ Conflicts are resolved by fixed rules (§2):
 - accuracy beats simplicity
 - the example carries the answer; the analogy sits beside it
 - the answer comes first; the scenario opens the first section
-- a practitioner still gets short glosses and one analogy; only an expert drops
-  both
+- a practitioner still gets short glosses, and an analogy only where nothing
+  they know shows the mechanism; an expert gets neither
+- intent picks the devices: decisions and debugging get no analogy and no quiz
 - size comes from the `#` title, not from deeper headings, because `##`, `###`
   and `####` render alike on claude.ai
 - the page shape is fixed; the wording never is
@@ -212,7 +222,8 @@ edit when the sweep runs.
   - that operation markers are balanced
   - for secrets and external-inference or network code
 - `scripts/package_skill.py` builds a **deterministic** ZIP (fixed timestamps,
-  sorted entries, LF line endings) and validates the ZIP itself after building.
+  sorted entries, LF line endings), adds the repository `LICENSE` as
+  `LICENSE.txt`, and validates the ZIP itself after building.
   It writes a manifest with SHA-256 hashes, which evaluation rows record so
   results trace back to an exact skill build.
 - Tests hold tighter line guards than the validator: the source body at 485

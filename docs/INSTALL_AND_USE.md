@@ -2,12 +2,16 @@
 
 ## The file
 
-`dist/socialized.zip`. Upload it as it is; don't unzip and re-zip it.
+`socialized.zip`, version 2.2.0, from the
+[latest release](https://github.com/A-Piyas-04/Socialized-Claude/releases/latest)
+or `dist/socialized.zip` in this repository. Upload it as it is; don't unzip and
+re-zip it.
 
 ## Upload it
 
 1. Open claude.ai (web or desktop app).
-2. Go to **Customize → Skills**. On some versions it is **Settings → Features**.
+2. Go to **Customize → Skills**. On some versions it is **Settings →
+   Capabilities** or **Settings → Features**.
 3. If an older `socialized` is already installed, delete it first.
 4. Choose to add or upload a skill, and pick `socialized.zip`.
 
@@ -37,16 +41,24 @@ get…", "explain this code", "should we do X or Y"), the answer:
 - **Explains the cause**, step by step, for why and how questions, including the
   obvious approach and why it fails.
 - **Writes your next question into the page** as a 🙋 line, then answers it.
-- **Gives one analogy** in a 🧠 callout and says where it stops holding.
+- **Gives one analogy** in a 🧠 callout, and says where it stops holding, when a
+  why or how answer has nothing you already know to lean on. Decisions,
+  debugging and expert answers get none.
 - **Explains every specialist term** in a short parenthesis the first time it
   appears.
-- **Ends with something to keep**: a 🎯 takeaway and, for teaching answers, a
-  🧪 check question with its answer.
+- **Ends with something to keep**: a 🎯 takeaway and, when you're learning (new
+  to the topic, "teach me", or still confused), a 🧪 check question with its
+  answer.
+- **Fits the request.** A quick fact stays one or two sentences. "Help me decide"
+  leads with a recommendation. "Why is this failing" leads with the likely cause
+  and one fix.
 - **Uses plain sentences**: one point each, active voice, everyday words where
   they are exact.
 - **Pitches at your level.** It reads your wording and assumes you know the
-  basics of the field unless you show otherwise. Say "I'm new to this" or "I'm an
-  expert" to move it. An expert gets no glosses and no analogy.
+  basics of the field unless you show otherwise. If you know a neighbouring field
+  ("I've written Go for years but never looked inside a database"), it starts
+  from what you know and teaches only what's missing. Say "I'm new to this" or
+  "I'm an expert" to move it. An expert gets no glosses and no analogy.
 - **Remembers how you asked it to answer** (for example "keep it under 100
   words") for the rest of the chat.
 - **After a correction, re-reads your request** and answers what you meant,

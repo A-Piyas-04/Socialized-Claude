@@ -282,11 +282,22 @@ def test_production_zip_structure(tmp_path):
         "socialized/references/conversation-grammar.md",
         "socialized/references/emoji-palette.md",
         "socialized/references/layout-exemplars.md",
+        "socialized/LICENSE.txt",
     }
     for name, text in texts.items():
         assert "op:" not in text, f"marker left in {name}"
         assert "\r\n" not in text
     assert texts["socialized/SKILL.md"].startswith("---\nname: socialized\n")
+
+
+def test_zip_carries_the_repository_licence(tmp_path):
+    out, report = build("full", out_dir=tmp_path)
+    assert report.ok, report.errors
+    licence = (lib.REPO_ROOT / "LICENSE").read_text(encoding="utf-8").replace("\r\n", "\n")
+    assert licence.startswith("MIT License\n")
+    assert zip_texts(out)["socialized/LICENSE.txt"] == licence
+    meta, _, _ = lib.split_frontmatter(zip_texts(out)["socialized/SKILL.md"])
+    assert str(meta["license"]).startswith("MIT")
 
 
 def test_zip_excludes_research_and_evaluation_material(tmp_path):

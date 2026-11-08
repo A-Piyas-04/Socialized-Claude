@@ -5,7 +5,8 @@
     python scripts/package_skill.py --all-variants     # every ablation variant
 
 The ZIP contains one top-level folder, socialized/, with SKILL.md directly
-inside it, as claude.ai expects. Operation markers are removed. Ablation variants
+inside it, as claude.ai expects, and the repository LICENSE as LICENSE.txt.
+Operation markers are removed. Ablation variants
 also drop the blocks of disabled operations. Every variant keeps the same name and
 description, so automatic activation sees identical metadata.
 
@@ -28,6 +29,12 @@ from validate_skill import print_report, validate_dir, validate_zip  # noqa: E40
 
 ZIP_DATE = (1980, 1, 1, 0, 0, 0)
 TEXT_SUFFIXES = {".md", ".txt", ".json", ".yaml", ".yml"}
+LICENSE_SOURCE = lib.REPO_ROOT / "LICENSE"
+LICENSE_NAME = "LICENSE.txt"
+
+
+def license_bytes() -> bytes:
+    return LICENSE_SOURCE.read_bytes().replace(b"\r\n", b"\n")
 
 
 def render_files(skill_dir: Path, enabled: frozenset[str]) -> dict[str, bytes]:
@@ -76,6 +83,7 @@ def build(variant: str, *, skill_dir: Path = lib.SKILL_DIR, out_dir: Path = lib.
 
     enabled = lib.VARIANTS[variant]
     files = render_files(skill_dir, enabled)
+    files[LICENSE_NAME] = license_bytes()
     root = skill_dir.name
     if variant == "full":
         out_path = out_dir / f"{root}.zip"

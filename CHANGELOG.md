@@ -1,6 +1,36 @@
 # Changelog
 
-## Unreleased
+## 2.2.0 — 2026-11-08
+
+First versioned release of the skill. The earlier `skill-stable-format`
+release is the frozen Approach A baseline (2.0-dev). Experimental: it installs
+and works on claude.ai, and has not been shown to improve comprehension.
+
+### Skill
+- **Intent first.** Step 2 is "Lead with what the intent needs": a fact, a
+  causal chain, numbered steps, a recommendation with its tradeoff, or a
+  diagnosis with one fix.
+- **Idea-level calibration.** The reader's ideas are sorted into known,
+  missing and uncertain. The answer starts from the nearest known idea, and a
+  **mixed** register covers someone fluent nearby but new here.
+- **Conditional devices.** The 🧠 analogy appears only in a why, how or
+  walkthrough answer with nothing known to lean on. The 🧪 check appears only
+  for a learner. Decisions and debugging get neither.
+- Frontmatter gains `license: MIT (see LICENSE.txt)`; `metadata.version` is
+  `2.2.0`.
+
+### Packaging
+- MIT `LICENSE` at the repository root. `package_skill.py` adds it to the ZIP
+  as `socialized/LICENSE.txt`, and the validator does not ask for licence files
+  to be referenced from `SKILL.md`.
+
+### Docs
+- README rewritten for people installing the skill, with a real claude.ai
+  answer as the example and the research material under "The lab".
+- `INSTALL_AND_USE.md`, `INSTALLATION.md`, `ARCHITECTURE.md` and
+  `LIMITATIONS.md` describe 2.2.0 behaviour.
+
+## Unreleased (history before 2.2.0)
 
 ### Communication policy modules (Phase 1, v0.1.0)
 - New `communication/` modules at the repo root: `core.md` (universal
