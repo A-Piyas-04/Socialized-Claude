@@ -1,7 +1,8 @@
 """Phase 8 (docs/SKILL_UPGRADE_PLAN_V2.md): the worked examples follow the rules they teach.
 
 Every complete answer in the two example references passes both linters with no break and no flag.
-The gold answers in layout-exemplars.md carry every page-shape slot and ship only in the full build.
+The gold answers in layout-exemplars.md carry the page-shape slots their intent needs and ship only
+in the full build.
 The "better" answers in explanation-examples.md carry the layout but no voice or close callouts, so
 a single-operation build never shows another operation's callout.
 """
@@ -52,16 +53,30 @@ def test_every_answer_renders_and_raises_no_flag(name, index, answer):
     assert sm.decorative_structure_flags(answer) == []
 
 
+# Approach B Phase 2: the analogy and the check follow the intent. The practitioner's mechanism
+# answer keeps its analogy but drops the check, the decision drops both, and the beginner keeps both.
+INTENT_DEVICES = {
+    "Why more replicas can slow down writes": {"🧠"},
+    "Keep the monolith, but make it modular": set(),
+    "How processor cores keep their caches in sync": {"🧠", "🧪"},
+}
+
+
 @pytest.mark.parametrize("answer", answers(EXEMPLARS), ids=lambda a: a.splitlines()[0][2:40])
-def test_gold_answers_fill_every_slot(answer):
+def test_gold_answers_fill_the_slots_their_intent_needs(answer):
     lines = answer.splitlines()
     assert lines[0].startswith("# ") and lines[1] == "" and lines[2] == "---"
     assert len(re.findall(r"(?m)^## ", answer)) >= 3
     assert re.search(r"(?m)^> 🙋 \*\*.+\?\*\*\n\n[^>\s]", answer), "a 🙋 line, a blank line, then body text"
-    assert re.search(r"(?m)^> 🧠 \*\*Think of it like:\*\*", answer)
     assert re.search(r"(?m)^> 🎯 \*\*Takeaway:\*\*", answer)
-    assert re.search(r"(?m)^> 🧪 \*\*Check yourself:\*\*", answer) and re.search(r"(?m)^> \*\*Answer:\*\*", answer)
     assert "###" not in answer
+    devices = set()
+    if re.search(r"(?m)^> 🧠 \*\*Think of it like:\*\*", answer):
+        devices.add("🧠")
+    if re.search(r"(?m)^> 🧪 \*\*Check yourself:\*\*", answer):
+        assert re.search(r"(?m)^> \*\*Answer:\*\*", answer)
+        devices.add("🧪")
+    assert devices == INTENT_DEVICES[lines[0][2:]]
 
 
 def test_there_are_three_gold_answers():

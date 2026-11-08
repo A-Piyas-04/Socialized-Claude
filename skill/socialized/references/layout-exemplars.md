@@ -130,13 +130,6 @@ Each option trades a little safety or effort for commit time.
 
 > 🎯 **Takeaway:** more replicas → wait on the slowest ack → locks held longer → fewer writes per second.
 
-> 🧪 **Check yourself:** Your leader waits for all 5 synchronous replicas, and write latency keeps creeping up. Which change helps most?
-> - a) Add a sixth replica
-> - b) Require acks from any 2 of the 5
-> - c) Move all reads onto the leader
->
-> **Answer:** b. It stops the slowest replicas from setting commit time, while a) adds another chance of a slow ack and c) loads the leader without shortening any commit.
-
 Want an interactive version where you move the replica count and watch the ceiling change?
 ````
 
@@ -147,7 +140,8 @@ Want an interactive version where you move the replica count and watch the ceili
 - **Glosses:** every specialist term gets a parenthesis of six words or fewer on first use.
 - **Highlights:** the sequence diagram shades the step to notice with `rect rgb(...)`, and the four options are a labelled list led by icons.
 - **Pitfall:** the cost of the async option sits in a 🛑 callout, not inside its bullet.
-- **Close:** a four-link 🎯 takeaway, then a 🧪 check with listed options and **Answer:** inside it.
+- **Analogy:** the 🧠 callout stays, because nothing a practitioner already knows shows why one slow ack sets the commit time.
+- **Close:** a four-link 🎯 takeaway and no 🧪 check, because a practitioner asking about their own system is not studying.
 
 ## 2. Monolith: a practitioner's decision
 
@@ -210,8 +204,6 @@ sequenceDiagram
 
 In the monolith, both steps sit in one database transaction (all writes succeed or none do), so this half-done state cannot happen. Across services, you must write an undo step (a compensating action) for each such gap.
 
-> 🧠 **Think of it like:** one kitchen versus a separate kitchen for every dish, with couriers carrying plates between them. A six-person restaurant gains little and spends its day walking. *Where it breaks:* a lost courier is easy to see, while a network call can half-succeed silently.
-
 ---
 
 ## 3. 🔀 One split is right only for a named pain
@@ -251,13 +243,6 @@ These steps keep a later split cheap without paying for it today.
 
 > 🎯 **Takeaway:** small team and small load → one modular app → split one piece only for a named pain.
 
-> 🧪 **Check yourself:** A nightly report job slows checkout. What is the cheapest first fix?
-> - a) Build a reports microservice
-> - b) Run the job in a background worker
-> - c) Rewrite the report in another language
->
-> **Answer:** b. It isolates the load without adding network calls or a new deployment.
-
 If you tell me which part hurts today, I can say whether it is worth splitting.
 ````
 
@@ -267,6 +252,7 @@ If you tell me which part hurts today, I can say whether it is worth splitting.
 - **Status table:** the legend comes before the table, and every marker opens its cell.
 - **Running example:** checkout runs through the cost section, with the obvious plan named and refuted first.
 - **Key idea:** the one fact the decision turns on sits in a 💡 callout.
+- **No teaching kit:** a decision gets no 🧠 analogy and no 🧪 check. The table, the checkout failure, and the split triggers do that work.
 - **Takeaway:** a single three-link chain, not two chains joined.
 
 ## 3. Cache coherence: a beginner's mechanism question
@@ -355,4 +341,5 @@ This answer simplifies one thing on purpose. Coherence keeps each single value c
 - **Beginner register:** every term is taught where it first appears, and code tokens sit in the **For implementers:** block.
 - **State, action, result:** the counter example traces 5, then a write, then 6, and the table shows each moment.
 - **Accuracy:** the answer says what it simplifies and names the topic it leaves out.
+- **Close:** the 🧪 check, with listed options and **Answer:** inside it, is here because the reader is a beginner.
 <!-- /op:presentation,visual,conversational,examples,terms,close -->

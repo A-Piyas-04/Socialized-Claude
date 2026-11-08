@@ -1,5 +1,5 @@
 """Invariants for the skill upgrade, Phases 1-4 (docs/SKILL_UPGRADE_PLAN.md), Phases 5-9
-(docs/SKILL_UPGRADE_PLAN_V2.md), and Approach B Phase 1, tagged "B1"
+(docs/SKILL_UPGRADE_PLAN_V2.md), and Approach B Phases 1 and 2, tagged "B1" and "B2"
 (docs/ADAPTIVE_COMMUNICATION_PLAN.md).
 
 Each rule is checked against the build that carries it, not against a pinned sentence: a rule
@@ -83,7 +83,7 @@ RULES = [
     (7, "close slot", "close", ["**Close:** a"]),
     (7, "takeaway callout", "close", ["callout that compresses the mechanism"]),
     (7, "check-yourself callout", "close", ["`> 🧪 **Check yourself:**` callout holding"]),
-    (7, "practitioner glosses and analogy", "register", ["parenthesis of six words or fewer", "Keep one analogy in any"]),
+    (7, "practitioner glosses and analogy", "register", ["parenthesis of six words or fewer", "Add an analogy only where"]),
     (7, "expert drops both", "register", ["drop both the glosses and the analogy"]),
     (7, "Step 3 title", "presentation", ["is there a `#` title over"]),
     (7, "Step 3 section icon", "visual", ["an icon on every section heading"]),
@@ -98,6 +98,19 @@ RULES = [
     ("B1", "skip known prerequisites one by one", "sequencing", ["even beside ones they lack"]),
     ("B1", "Step 3 no re-teaching", "sequencing", ["none the reader knows re-taught"]),
     ("B1", "mixed reader", "register", ["**Mixed** (fluent nearby, new here)"]),
+    ("B2", "intent in Step 1", None, ["Do they want the answer, why or how, a walkthrough, a decision, or a diagnosis"]),
+    ("B2", "form requests override the shape", None, ['"no diagrams") override every default below, the page shape included']),
+    ("B2", "intent guide in Step 2", None, ["## Step 2: Lead with what the intent needs"]),
+    ("B2", "walk me through", None, ["**Walk me through:** numbered steps"]),
+    ("B2", "help me decide", None, ["**Help me decide:** the recommendation"]),
+    ("B2", "debug this", None, ["**Debug this:** the likely cause"]),
+    ("B2", "Step 3 intent lead", None, ["does the rest lead with what the intent needs"]),
+    ("B2", "analogy only when nothing known shows it", "examples", ["nothing the reader knows already shows the mechanism"]),
+    ("B2", "no analogy in decisions or debugging", "examples", ["decisions, debugging, and experts get none"]),
+    ("B2", "check only for a learner", "close", ["End a learner's answer"]),
+    ("B2", "no check outside teaching", "close", ["Leave it out of decision, debugging, and walkthrough answers"]),
+    ("B2", "close slot for a learner", "close", ["then, for a learner, a"]),
+    ("B2", "overview only for one chain", "visual", ["when the sections walk one chain or process"]),
 ]
 
 # Phrases of rules that Phase 7 replaced because they switched another rule off.
@@ -107,6 +120,10 @@ RETIRED = [
     "three distinct levels",
     "its own bolded line or short heading",
     "An example beats an analogy",
+    # Approach B Phase 2 made the analogy and the check depend on the intent.
+    "every non-expert teaching or decision",
+    "Keep one analogy in any",
+    "a teaching or decision answer keeps one analogy",
 ]
 
 METHODOLOGY = "references/explanation-methodology.md"
@@ -115,7 +132,8 @@ METHODOLOGY = "references/explanation-methodology.md"
 MOVED = [
     ("strategy per intent", None,
      ["## 15. Communication strategy by intent", "Rank causes instead of listing them",
-      "Keep a requested deliverable in its own form"],
+      "Keep a requested deliverable in its own form", "Each intent leads with one kind of content",
+      "No analogy and no check question"],
      "section 15 of"),
     ("repair detail", "repair",
      ["## 16. Repair after a clarification or correction", "decide whether your earlier reading of it was wrong",

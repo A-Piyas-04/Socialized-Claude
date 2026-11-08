@@ -56,8 +56,9 @@ specific gap it fills for this reader.
 <!-- /op:visual -->
 <!-- op:close -->
 - **A takeaway** fits an answer of three or more sections and any teaching
-  request. A check question, with its answer, fits teaching, beginners, and
-  confusion follow-ups. A quick, practitioner, or expert answer ends when the
+  request. A check question, with its answer, fits a learner: a beginner, a
+  "teach me" request, or a confusion follow-up. A decision, debugging, or
+  walkthrough answer, and a quick, practitioner, or expert answer, ends when the
   content ends.
 <!-- /op:close -->
 
@@ -78,14 +79,16 @@ specific gap it fills for this reader.
 <!-- op:examples -->
 - **The example carries the answer; the analogy sits beside it.** A direct case
   from the domain runs through every section, because it cannot mislead about the
-  domain the way an analogy can. The analogy gets one 🧠 callout next to it.
+  domain the way an analogy can. When nothing the reader knows already shows the
+  mechanism, the analogy gets one 🧠 callout next to it.
 - **The answer comes first; the scenario opens the first section.** Step 2's
   answer sentences stay first, and the concrete situation follows them.
 <!-- /op:examples -->
 <!-- op:register -->
-- **A practitioner still gets glosses and an analogy.** Field vocabulary stays,
-  each specialist term gets a short gloss in parentheses on first use, and a
-  teaching or decision answer keeps one analogy. Only an expert drops both.
+- **A practitioner still gets glosses.** Field vocabulary stays, and each
+  specialist term gets a short gloss in parentheses on first use. An analogy is
+  added only where nothing they know already shows the mechanism. Only an expert
+  drops the glosses.
 <!-- /op:register -->
 <!-- op:presentation -->
 - **Size comes from the title, not from deeper headings.** On claude.ai `##`,
@@ -95,6 +98,9 @@ specific gap it fills for this reader.
 - **The page shape is fixed; the wording never is.** The strategy for the intent
   chooses priorities and words. The slots and their order come from the page
   shape in `SKILL.md`.
+- **The intent picks the devices; the page shape orders them.** A decision or
+  debugging answer keeps the title, sections, visuals, and takeaway, and leaves
+  out the analogy and the check question.
 
 ## 3. The length budget
 
@@ -221,8 +227,9 @@ produced these failures. The rules in `SKILL.md` exist to prevent them.
   reply that has no `diff` fence, `classDef`, or status emoji to carry it.
 <!-- /op:visual -->
 <!-- op:close -->
-- **A quiz on a quick answer.** A check question after a fact, a lookup, or an
-  expert reply. Those end when the content ends.
+- **A quiz on a quick or working answer.** A check question after a fact, a
+  lookup, an expert reply, a decision, a fix, or a walkthrough. Those end when
+  the content ends.
 - **A question nobody can check.** An open prompt with no options and no answer.
   Give three options or a short factual answer, then the answer itself.
 - **A recap instead of a compression.** A closing paragraph that restates the
@@ -238,3 +245,6 @@ produced these failures. The rules in `SKILL.md` exist to prevent them.
 <!-- /op:mechanism -->
 - **Over-expansion.** Every operation applied to every answer. The goal is an
   answer that is easier to understand, not one that is longer.
+- **One template for every intent.** A fix, a decision, or a set of steps given
+  the teaching kit (an analogy, a quiz, a lesson-style map) it does not need.
+  Lead with what the intent needs and leave the rest out.

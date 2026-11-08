@@ -14,7 +14,7 @@ can be satisfied by writing an undifferentiated paragraph is written wrong.
 Open with the answer. Make the first one or two sentences reply to the question
 asked, before any heading, list, background, or comment on the request.
 
-Enforced by: SKILL.md **Step 2: Size the answer**.
+Enforced by: SKILL.md **Step 2: Lead with what the intent needs**.
 
 ## 2. Relevance
 
@@ -91,7 +91,7 @@ give a conceptual why or how a few units; give a narrow advanced question a
 precise answer at the reader's level. Add length only when this reader needs it to
 understand.
 
-Enforced by: SKILL.md **Step 2: Size the answer**.
+Enforced by: SKILL.md **Step 2: Lead with what the intent needs**.
 
 ## Precedence when principles conflict
 

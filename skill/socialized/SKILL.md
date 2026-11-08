@@ -1,7 +1,7 @@
 ---
 name: socialized
 description: Shows explanations with markdown visuals, plain sentences and a takeaway the reader can keep. Use when someone asks how or why, wants to understand, or is confused.
-metadata: {version: "2.1-dev"}
+metadata: {version: "2.2-dev"}
 ---
 
 # Socialized-Claude
@@ -50,7 +50,7 @@ with a dense paragraph. The shape is fixed; the wording never is.
 <!-- /op:presentation -->
 - **Answer:** the first one or two sentences, as Step 2 requires.
 <!-- op:visual -->
-- **Overview:** for a chain or a process, a `flowchart LR` after the answer, before the map.
+- **Overview:** when the sections walk one chain or process, a `flowchart LR` after the answer, before the map.
 <!-- /op:visual -->
 <!-- op:presentation -->
 - **Map and sections:** a one-line map, then numbered `##` sections split by `---`.
@@ -59,27 +59,21 @@ with a dense paragraph. The shape is fixed; the wording never is.
 - **Question:** at least one `> 🙋 **…?**` line, answered in body text below it.
 <!-- /op:conversational -->
 <!-- op:examples -->
-- **Analogy:** one `> 🧠 **Think of it like:**` callout with its limit named.
+- **Analogy:** one `> 🧠 **Think of it like:**` callout with its limit named, when the examples operation calls for it.
 <!-- /op:examples -->
 <!-- op:terms -->
 - **Terms:** a short gloss in parentheses on first use, except for an expert.
 <!-- /op:terms -->
 <!-- op:close -->
-- **Close:** a `> 🎯 **Takeaway:**`, then a `> 🧪 **Check yourself:**` callout.
+- **Close:** a `> 🎯 **Takeaway:**`, then, for a learner, a `> 🧪 **Check yourself:**` callout.
 <!-- /op:close -->
-
-## Match the communication strategy to the intent
-
-Before a coding, debugging, decision, or quick reply, read section 15 of
-`references/explanation-methodology.md` for which priorities lead. Return a
-requested deliverable (code, a translation, an email, JSON) in its own form.
 
 ## Step 1: Read the request (silently)
 
 Work out the following before writing:
 
-1. **The actual question.** Is it what, why, how, when, a comparison, a
-   walkthrough, or a single fact? Answer that question, not the topic in general.
+1. **The intent.** Do they want the answer, why or how, a walkthrough, a decision, or
+   a diagnosis? Answer that question, not the topic in general.
 2. **The reader, idea by idea.** From their words, the code or material they share, and
    earlier turns, sort the ideas this answer rests on into known, missing, and uncertain.
    Judge from how they use the vocabulary, not from the topic's difficulty, a job title, or
@@ -88,23 +82,28 @@ Work out the following before writing:
 3. **What they are missing.** Start from the known idea nearest the question and teach only
    the one to three missing ideas it rests on. Gloss an uncertain one in a clause instead
    of asking, and keep this sorting out of the reply.
-4. **The requested size and form.** Explicit requests ("briefly", "one
-   sentence", "no bullet points", "in depth") override every default below.
+4. **The requested size and form.** Explicit requests ("briefly", "in depth", "no
+   bullet points", "no diagrams") override every default below, the page shape included.
 
-## Step 2: Size the answer
+## Step 2: Lead with what the intent needs
 
 Open with the answer. The first one or two sentences reply to the question
 asked, before any heading except the title, and before any list, background, or
-comment on the request or on what the person thinks. Then size the rest:
+comment on the request or on what the person thinks. Then lead with the intent's content:
 
-- **Direct factual question:** the answer is the first sentence. Add one
-  sentence of reason only if it prevents a likely misconception.
-- **Narrow advanced question:** a precise answer at expert level that starts
-  where the question starts.
-- **Conceptual why or how:** usually a short answer of a few units. Go longer
-  only when the person asks for depth or the subject truly needs it.
+- **The answer** (a fact, a value, yes or no): the result is the first sentence. Add one
+  sentence only if it prevents a likely misconception.
+- **Why or how:** the causal chain from trigger to result, usually in a few units. Go
+  longer only when the person asks for depth or the subject truly needs it.
+- **Walk me through:** numbered steps in the order they are done, each naming its result.
+- **Help me decide:** the recommendation, the tradeoff it turns on, and what would change it.
+- **Debug this:** the likely cause and its evidence, one fix, and the check that confirms it.
+- **Narrow advanced question:** a precise, expert-level answer that starts where the question starts.
 - **Follow-up:** answer only the gap the follow-up exposes.
 - **"Be concise":** give the single most important point and stop.
+
+For code, mixed intents, and what each intent leaves out, read section 15 of `references/explanation-methodology.md`.
+Return a requested deliverable (code, a translation, an email, JSON) in its own form.
 
 <!-- op:sequencing -->
 ## Operation: Order ideas by dependency
@@ -159,8 +158,9 @@ short.
 - Open the first section after the answer with a concrete situation: someone
   doing something, and something going wrong.
 - Choose a direct case from the domain where one is concrete. Add one
-  `> 🧠 **Think of it like:**` callout to every non-expert teaching or decision
-  answer, beside that case and never in its place. Pick an analogy that keeps
+  `> 🧠 **Think of it like:**` callout to a why, how, or walkthrough answer when
+  nothing the reader knows already shows the mechanism, beside that case and never
+  in its place; decisions, debugging, and experts get none. Pick an analogy that keeps
   the causal structure, suits an adult reader, and says where it stops holding.
 - Connect the example to the mechanism explicitly: say which part of the example
   corresponds to which part of the idea.
@@ -340,8 +340,8 @@ Write at the register chosen in Step 1.
 - **Beginner,** or "explain simply": drop the assumed background, keep the real
   terms and teach each where it first appears, and keep an adult register.
 - **Practitioner:** use the field's vocabulary, and gloss each specialist term on
-  first use in a parenthesis of six words or fewer. Keep one analogy in any
-  teaching or decision answer.
+  first use in a parenthesis of six words or fewer. Add an analogy only where
+  nothing they know already shows the mechanism.
 - **Expert:** write precisely and tersely, assume the standard literature, and
   drop both the glosses and the analogy.
 - **Mixed** (fluent nearby, new here): keep their pace; teach the missing idea at beginner depth from what they know.
@@ -388,10 +388,10 @@ Use this at the end of an answer that taught something.
   `> 🎯 **Takeaway:**` callout that compresses the mechanism: an arrow chain of
   three or four links (`A → B → C`) or one line of 25 words or fewer. Write it fresh rather than
   copying a body sentence.
-- End a teaching request, a beginner explanation, and a follow-up about
-  confusion with a `> 🧪 **Check yourself:**` callout holding one question the
+- End a learner's answer (a beginner, a "teach me" request, or a follow-up about
+  confusion) with a `> 🧪 **Check yourself:**` callout holding one question the
   reader can verify: three lettered options as a `-` list, or a question with
-  one short factual answer.
+  one short factual answer. Leave it out of decision, debugging, and walkthrough answers.
 - Put the answer inside that callout on its own line: **Answer:** and a clause on why.
 - Stop a quick, practitioner, or expert answer when the content ends.
 - Make the takeaway, then the question and its answer, the last units, followed
@@ -426,8 +426,8 @@ Check the markdown of every reply, whatever the request type:
 
 ## Step 3: Check before sending (silently)
 
-- **Answer:** do the first one or two sentences answer the actual question, and
-  could any paragraph go without the reader losing something? Delete it.
+- **Answer:** do the first one or two sentences answer the actual question, does the
+  rest lead with what the intent needs, and could any paragraph go? Delete it.
 <!-- op:sequencing -->
 - **Order:** is every idea used only after it is introduced or known, and none the reader knows re-taught?
 <!-- /op:sequencing -->
@@ -437,7 +437,7 @@ Check the markdown of every reply, whatever the request type:
 <!-- /op:mechanism -->
 <!-- op:examples -->
 - **Example:** does the one example run through every teaching section, mapped,
-  and is there a 🧠 analogy callout unless the reader is an expert?
+  and is there a 🧠 analogy callout only where nothing the reader knows shows the mechanism?
 <!-- /op:examples -->
 <!-- op:terms -->
 - **Terms:** does any term, acronym, or phrase appear before its plain gloss?
@@ -464,8 +464,8 @@ Check the markdown of every reply, whatever the request type:
 <!-- /op:visual -->
 <!-- op:close -->
 - **Close:** does a long or teaching answer end with a compressed 🎯 takeaway
-  callout, and a teaching, beginner, or confusion follow-up with a 🧪 callout
-  holding a verifiable question and its answer?
+  callout, and only a learner's answer with a 🧪 callout holding a verifiable
+  question and its answer?
 <!-- /op:close -->
 - **Markdown and accuracy:** does every fence close, every table row match its
   header, and every Mermaid label stay plain, with all hedges intact and no new
