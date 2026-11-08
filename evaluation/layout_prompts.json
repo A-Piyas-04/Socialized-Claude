@@ -1,5 +1,5 @@
 {
-  "description": "Prompts for layout conformance runs (docs/SKILL_UPGRADE_PLAN_V2.md, Phases 5 and 10). Questions are verbatim, without the /socialized prefix used on claude.ai. Phase 10 adds the rest. The calib_ pair is the Approach B Phase 1 quick check (docs/ADAPTIVE_COMMUNICATION_PLAN.md): one question, two readers, asked in separate chats.",
+  "description": "Prompts for layout conformance runs (docs/SKILL_UPGRADE_PLAN_V2.md, Phases 5 and 10). Questions are verbatim, without the /socialized prefix used on claude.ai. Phase 10 adds the rest. The calib_ pair is the Approach B Phase 1 quick check (docs/ADAPTIVE_COMMUNICATION_PLAN.md): one question, two readers, asked in separate chats. The intent_ prompts, with layout_monolith as the decision, are the Phase 2 quick check: four intents that must not share one template.",
   "prompts": [
     {
       "id": "layout_replicas",
@@ -30,6 +30,24 @@
       "intent": "mechanism",
       "register": "mixed",
       "question": "I've written Go backends for years but never looked inside a database. Why does adding an index make my query faster?"
+    },
+    {
+      "id": "intent_fact",
+      "intent": "answer",
+      "register": "practitioner",
+      "question": "What's the default port for PostgreSQL?"
+    },
+    {
+      "id": "intent_teach",
+      "intent": "mechanism",
+      "register": "beginner",
+      "question": "I'm new to networking. Teach me how HTTPS keeps my password safe on public Wi-Fi."
+    },
+    {
+      "id": "intent_debug",
+      "intent": "debug",
+      "register": "practitioner",
+      "question": "Our Node API behind nginx returns a 502 about once a minute under load, but the app logs show no errors. What's going on?"
     }
   ]
 }

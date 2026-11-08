@@ -41,7 +41,7 @@ What the brief asked to preserve, relax, or add, and what was actually done:
 |---|---|---|
 | Language, grammar, mechanism, sequencing, visuals | Preserve | Unchanged; already enforced by `op:plain`, `op:mechanism`, `op:sequencing`, `op:presentation`, `op:visual`. |
 | Mandatory headings / summaries / quizzes / examples / diagrams | Relax | Already conditional in SKILL.md (3+ sections for numbered headings; teaching/beginner/confusion for check questions; shape-driven for visuals). No further relaxation needed. |
-| Five intent strategies | Add | Full guidance in `strategies.md`; a compact priority list is also embedded in `SKILL.md` ("Match the communication strategy to the intent") so the installed skill carries it. |
+| Five intent strategies | Add | Full guidance in `strategies.md`; a compact priority list is also embedded in `SKILL.md` (now Step 2, "Lead with what the intent needs") so the installed skill carries it. |
 | Universal principles + precedence | Add | `core.md`. |
 | Depth / formatting / density controls | Add | `controls.md`, mapped to `op:presentation`, `op:visual`, `op:close`, Step 2. |
 | SKILL.md entry point and packaging | Preserve | The 4-file package and 12-operation set are unchanged; one non-operation, always-on section was added. Structural tests stay green with no edits. |

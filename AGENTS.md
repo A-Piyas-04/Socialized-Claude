@@ -432,4 +432,48 @@ needs to decide. No progress narrative.
   - the B1 rules are in `tests/test_presentation_upgrade.py::RULES`, each with a removal
     test. `evaluation/layout_prompts.json` gains `calib_beginner` and `calib_mixed`;
   - go/no-go is pending the user's claude.ai quick check.
+- Approach B Phase 1 kept (user, 2026-11-04, "let's move forward"), after the claude.ai
+  quick check of the experiment build. The Go answer started from Go maps and binary
+  search, and the student answer from a book's index. The baseline arm of the
+  comparison was not run, and the Go answer was about 10% longer by eye.
+- Approach B Phase 2 (intent-sensitive depth), user 2026-11-04. The user chose:
+  - the 🧠 analogy and 🧪 check become conditional, reversing the Phase 7 "every
+    non-expert teaching or decision answer" analogy rule and the "any teaching
+    request" check rule. 🧠 goes only in a why, how, or walkthrough answer where
+    nothing the reader knows shows the mechanism; decisions, debugging and experts
+    get none. 🧪 goes only to a learner (a beginner, "teach me", or a confusion
+    follow-up), never to decision, debugging or walkthrough answers. 🎯 and 🙋 are
+    unchanged;
+  - the intent guide lives in `SKILL.md`. Step 2 is now "Lead with what the intent
+    needs", with entries for the answer, why or how, walk me through, help me decide,
+    and debug this. The separate "Match the communication strategy to the intent"
+    section was folded into it (its §15 pointer kept). Step 1 item 1 names the five
+    intents, and item 4 adds "no diagrams" and "the page shape included";
+- Phase 2 other changes:
+  - the Overview slot now applies only "when the sections walk one chain or
+    process";
+  - `op:register`'s practitioner adds an analogy only where nothing they know
+    already shows the mechanism;
+  - Step 3's Answer, Example and Close checks follow the new rules;
+  - methodology §15 was rewritten as the intent guide: what each intent leads with,
+    what it leaves out, and that form requests override the shape. Its existing
+    anchors were kept;
+  - `treatment-selection.md`: the practitioner conflict rule no longer promises an
+    analogy; a new "intent picks the devices" rule; the quiz failure mode widened to
+    working answers; a new "one template for every intent" failure mode;
+- Phase 2 exemplars:
+  - monolith (decision) drops its 🧠 and 🧪;
+  - replicas (practitioner mechanism) keeps 🧠 and drops 🧪;
+  - cache (beginner) keeps both;
+  - `test_gold_answers_fill_every_slot` became
+    `test_gold_answers_fill_the_slots_their_intent_needs`, with an `INTENT_DEVICES`
+    map;
+- Phase 2 tests and records:
+  - the B2 rules, with removal tests;
+  - the old analogy phrases added to `RETIRED`;
+  - two §15 anchors added to `MOVED`;
+  - the always-on heading list in `test_skill_structure.py` updated;
+  - `layout_prompts.json` gains `intent_fact`, `intent_teach` and `intent_debug`
+    (with `layout_monolith` as the decision);
+  - body 485 lines (guard unchanged), 420 rendered, version `2.2-dev`.
 
